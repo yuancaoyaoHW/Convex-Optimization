@@ -22,7 +22,7 @@
     <section>
       <h2>一个检验</h2>
       <div class="check">
-        <p><strong>线段检验：</strong>集合 C 是凸的，当且仅当任取 x, y 属于 C，任取 theta 在 [0, 1]，都有 theta x + (1 - theta) y 属于 C。</p>
+        <p><strong>线段检验：</strong>集合 C 是凸的，当且仅当任取 x, y 属于 C，任取 θ 在 [0, 1]，都有 θ x + (1 - θ) y 属于 C。</p>
       </div>
       <p>这句话的含义很直接：如果两个方案都可行，那么它们的任何加权平均方案也可行。科研建模里，这常常对应“混合策略”“资源分配比例”“概率分布”“松弛变量”等结构。</p>
     </section>
@@ -40,17 +40,17 @@
         <tbody>
           <tr>
             <td>仿射集</td>
-            <td>theta x + (1 - theta) y, theta 为任意实数</td>
+            <td>θ x + (1 - θ) y, θ 为任意实数</td>
             <td>整条直线都留在集合里，例如线性方程 Ax = b 的解集。</td>
           </tr>
           <tr>
             <td>凸集</td>
-            <td>theta x + (1 - theta) y, 0 <= theta <= 1</td>
+            <td>θ x + (1 - θ) y, 0 <= θ <= 1</td>
             <td>只要求两点之间的线段留在集合里。</td>
           </tr>
           <tr>
             <td>凸锥</td>
-            <td>theta1 x + theta2 y, theta1, theta2 >= 0</td>
+            <td>θ1 x + θ2 y, θ1, θ2 >= 0</td>
             <td>允许非负缩放和相加，例如正半定锥。</td>
           </tr>
         </tbody>
