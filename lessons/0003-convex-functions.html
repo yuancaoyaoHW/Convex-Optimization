@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 0003 - Convex Functions</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <main>
+    <header>
+      <p class="kicker">Lesson 0003</p>
+      <h1>凸函数：把“形状”变成可证明的优化结构</h1>
+      <p>对应 Boyd & Vandenberghe, <a href="../bv_cvxbook.pdf">Convex Optimization</a>, Chapter 3: Convex functions。</p>
+    </header>
+
+    <section class="summary">
+      <h2>本章的科研用法</h2>
+      <p>第二章问“可行域是不是凸的”，第三章问“目标函数和约束函数是不是凸的”。从建模角度看，凸函数是把局部斜率、曲率、上图、保凸操作连接到全局最优性的语言。</p>
+    </section>
+
+    <section>
+      <h2>一个定义</h2>
+      <div class="check">
+        <p><strong>凸函数：</strong>函数 f 是凸的，如果 dom f 是凸集，并且对所有 x, y 属于 dom f 与 0 <= θ <= 1，有 f(θx + (1 - θ)y) <= θf(x) + (1 - θ)f(y)。</p>
+      </div>
+      <p>几何图像：函数图像上任意两点的弦，在函数图像上方。直觉是“插值后的函数值不超过函数值的插值”。</p>
+    </section>
+
+    <section>
+      <h2>四条证明路线</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>路线</th>
+            <th>什么时候用</th>
+            <th>你要证明什么</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>定义</td>
+            <td>范数、max、简单表达式</td>
+            <td>直接证明 Jensen 型不等式。</td>
+          </tr>
+          <tr>
+            <td>限制到直线</td>
+            <td>矩阵函数、多变量函数难直接看</td>
+            <td>任意直线上的一元函数都是凸的。</td>
+          </tr>
+          <tr>
+            <td>微分判据</td>
+            <td>函数可微或二阶可微</td>
+            <td>一阶支撑超平面不等式，或 Hessian 半正定。</td>
+          </tr>
+          <tr>
+            <td>保凸操作</td>
+            <td>表达式由已知凸函数搭出来</td>
+            <td>非负加权和、仿射复合、逐点上确界、perspective 等保凸。</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>两个判据最常用</h2>
+      <div class="grid">
+        <div class="note">
+          <h3>一阶判据</h3>
+          <p>可微函数 f 凸，当且仅当 dom f 凸且 f(y) >= f(x) + ∇f(x)^T(y - x)。它说每个切平面都是全局下界。</p>
+        </div>
+        <div class="note">
+          <h3>二阶判据</h3>
+          <p>二阶可微函数 f 凸，当且仅当 dom f 凸且 ∇²f(x) ⪰ 0。对二次函数，这直接变成矩阵 P ⪰ 0。</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>本章别漏的两个路标</h2>
+      <div class="grid">
+        <div class="note">
+          <h3>上图 epigraph</h3>
+          <p>f 凸等价于 epi f = {(x, t) | f(x) <= t} 是凸集。这个等价会把“函数凸性”转成“集合凸性”。</p>
+        </div>
+        <div class="note">
+          <h3>共轭 conjugate</h3>
+          <p>f*(y) = sup_x (y^T x - f(x))。先把它当成“用线性函数从下方探测 f 的工具”，第五章对偶性会真正用上。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="exercise">
+      <h2>快速检索练习</h2>
+      <p>要证明 f(x) = max{x1, ..., xn} 是凸函数，最自然的路线是哪一条？</p>
+      <button class="choice" data-answer="no">A. 二阶判据</button>
+      <button class="choice" data-answer="yes">B. 定义证明</button>
+      <button class="choice" data-answer="no">C. 对偶锥法</button>
+      <p class="feedback" id="feedback" aria-live="polite"></p>
+    </section>
+
+    <section>
+      <h2>今天的读书任务</h2>
+      <p>读 Chapter 3，重点顺序是：3.1 定义、一阶/二阶判据、例子和上图；3.2 保凸操作；3.3 共轭函数先抓定义和几个例子；3.4 到 3.6 先看成扩展工具。</p>
+      <p>读完后，拿一个你论文或课程里见过的目标函数给我；我会帮你选证明路线，是查 Hessian、用保凸操作，还是先改写表达式。</p>
+      <p>上一课：<a href="./0002-convex-sets.html">凸集</a>。路线图：<a href="../reference/chapter-roadmap.html">章节路线图</a>。</p>
+    </section>
+  </main>
+
+  <script>
+    const feedback = document.querySelector("#feedback");
+    for (const button of document.querySelectorAll(".choice")) {
+      button.addEventListener("click", () => {
+        if (button.dataset.answer === "yes") {
+          feedback.textContent = "正确。max 函数可以直接用定义证明：max_i(θxi + (1 - θ)yi) <= θ max_i xi + (1 - θ) max_i yi。";
+          feedback.style.color = "#166534";
+        } else {
+          feedback.textContent = "不对。max 函数不可处处二阶可微，用定义或逐点上确界更自然。";
+          feedback.style.color = "#9a3412";
+        }
+      });
+    }
+  </script>
+</body>
+</html>
