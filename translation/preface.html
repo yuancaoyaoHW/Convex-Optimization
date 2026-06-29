@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Preface · 前言 — Convex Optimization 中英对照</title>
+  <link rel="stylesheet" href="assets/bilingual.css">
+</head>
+<body>
+  <div class="topbar">
+    <div class="crumbs">
+      <a href="index.html">目录</a><span class="sep">/</span>前言
+    </div>
+    <div class="nav">
+      <a href="index.html" class="disabled">‹ 上一页</a>
+      <a href="ch01-introduction.html">下一页 ›</a>
+    </div>
+  </div>
+
+  <main class="doc">
+    <div class="doc-header">
+      <p class="kicker">Preface</p>
+      <h1>前言 / Preface</h1>
+      <p class="meta">Stephen Boyd (Stanford) · Lieven Vandenberghe (UCLA)</p>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>This book is about convex optimization, a special class of mathematical optimization problems, which includes least-squares and linear programming problems. It is well known that least-squares and linear programming problems have a fairly complete theory, arise in a variety of applications, and can be solved numerically very efficiently. The basic point of this book is that the same can be said for the larger class of convex optimization problems.</p></div>
+      <div class="zh"><p>本书讨论凸优化——一类特殊的数学优化问题，它包括最小二乘问题和线性规划问题。众所周知，最小二乘与线性规划已有相当完整的理论，出现在各种各样的应用中，并且可以非常高效地数值求解。本书的基本论点是：对于更大一类的凸优化问题，上述结论同样成立。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>While the mathematics of convex optimization has been studied for about a century, several related recent developments have stimulated new interest in the topic. The first is the recognition that interior-point methods, developed in the 1980s to solve linear programming problems, can be used to solve convex optimization problems as well. These new methods allow us to solve certain new classes of convex optimization problems, such as semidefinite programs and second-order cone programs, almost as easily as linear programs.</p></div>
+      <div class="zh"><p>虽然凸优化的数学已被研究了大约一个世纪，但若干相关的近期进展重新激发了对这一主题的兴趣。其一是人们认识到：20 世纪 80 年代为求解线性规划而发展起来的内点法，同样可以用来求解凸优化问题。这些新方法使我们几乎可以像求解线性规划一样容易地求解某些新的凸优化问题类，例如半定规划和二阶锥规划。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The second development is the discovery that convex optimization problems (beyond least-squares and linear programs) are more prevalent in practice than was previously thought. Since 1990 many applications have been discovered in areas such as automatic control systems, estimation and signal processing, communications and networks, electronic circuit design, data analysis and modeling, statistics, and finance. Convex optimization has also found wide application in combinatorial optimization and global optimization, where it is used to find bounds on the optimal value, as well as approximate solutions. We believe that many other applications of convex optimization are still waiting to be discovered.</p></div>
+      <div class="zh"><p>第二个进展是人们发现：凸优化问题（超出最小二乘和线性规划的范围）在实践中比此前认为的要普遍得多。自 1990 年以来，许多应用被相继发现，涵盖自动控制系统、估计与信号处理、通信与网络、电子电路设计、数据分析与建模、统计学以及金融等领域。凸优化在组合优化和全局优化中也有广泛应用——在那里它被用来给出最优值的界限以及近似解。我们相信，凸优化还有许多其他应用正等待被发现。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>There are great advantages to recognizing or formulating a problem as a convex optimization problem. The most basic advantage is that the problem can then be solved, very reliably and efficiently, using interior-point methods or other special methods for convex optimization. These solution methods are reliable enough to be embedded in a computer-aided design or analysis tool, or even a real-time reactive or automatic control system. There are also theoretical or conceptual advantages of formulating a problem as a convex optimization problem. The associated dual problem, for example, often has an interesting interpretation in terms of the original problem, and sometimes leads to an efficient or distributed method for solving it.</p></div>
+      <div class="zh"><p>把一个问题识别或表述为凸优化问题，会带来巨大的好处。最基本的好处是：该问题随后可以用内点法或其他凸优化的专门方法非常可靠、非常高效地求解。这些求解方法足够可靠，可以嵌入计算机辅助设计或分析工具，甚至实时响应式或自动控制系统之中。把问题表述为凸优化问题也有理论或概念上的好处。例如，与之关联的对偶问题往往可以就原问题给出有趣的解释，有时还能导出求解它的高效方法或分布式方法。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We think that convex optimization is an important enough topic that everyone who uses computational mathematics should know at least a little bit about it. In our opinion, convex optimization is a natural next topic after advanced linear algebra (topics like least-squares, singular values), and linear programming.</p></div>
+      <div class="zh"><p>我们认为凸优化是一个足够重要的主题，凡是使用计算数学的人都应该至少了解一点。在我们看来，在高等线性代数（最小二乘、奇异值等主题）和线性规划之后，凸优化是一个自然顺承的下一个主题。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h2>Goal of this book</h2></div>
+      <div class="zh"><h2>本书的目标</h2></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>For many general purpose optimization methods, the typical approach is to just try out the method on the problem to be solved. The full benefits of convex optimization, in contrast, only come when the problem is known ahead of time to be convex. Of course, many optimization problems are not convex, and it can be difficult to recognize the ones that are, or to reformulate a problem so that it is convex.</p></div>
+      <div class="zh"><p>对于许多通用优化方法，典型做法是直接把方法拿到待解问题上试一试。而凸优化的全部好处，只有在事先已知问题是凸的时候才能体现出来。当然，许多优化问题并不是凸的，而且识别其中哪些是凸问题、或把一个问题重新表述成凸问题，都可能很困难。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Our main goal is to help the reader develop a working knowledge of convex optimization, i.e., to develop the skills and background needed to recognize, formulate, and solve convex optimization problems.</p></div>
+      <div class="zh"><p>我们的主要目标是帮助读者建立对凸优化的<strong>可用知识</strong>（working knowledge），即培养识别、表述并求解凸优化问题所需的技能与背景。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Developing a working knowledge of convex optimization can be mathematically demanding, especially for the reader interested primarily in applications. In our experience (mostly with graduate students in electrical engineering and computer science), the investment often pays off well, and sometimes very well.</p></div>
+      <div class="zh"><p>建立凸优化的可用知识在数学上可能要求不低，尤其对主要关心应用的读者而言。以我们的经验（主要是电气工程与计算机科学方向的研究生），这种投入通常回报丰厚，有时回报极为丰厚。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>There are several books on linear programming, and general nonlinear programming, that focus on problem formulation, modeling, and applications. Several other books cover the theory of convex optimization, or interior-point methods and their complexity analysis. This book is meant to be something in between, a book on general convex optimization that focuses on problem formulation and modeling.</p></div>
+      <div class="zh"><p>已有若干关于线性规划和一般非线性规划的书籍，侧重问题的表述、建模与应用。也有几本书涵盖凸优化的理论，或内点法及其复杂度分析。本书定位介于两者之间——一本关于一般凸优化、侧重问题表述与建模的书。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We should also mention what this book is not. It is not a text primarily about convex analysis, or the mathematics of convex optimization; several existing texts cover these topics well. Nor is the book a survey of algorithms for convex optimization. Instead we have chosen just a few good algorithms, and describe only simple, stylized versions of them (which, however, do work well in practice). We make no attempt to cover the most recent state of the art in interior-point (or other) methods for solving convex problems. Our coverage of numerical implementation issues is also highly simplified, but we feel that it is adequate for the potential user to develop working implementations, and we do cover, in some detail, techniques for exploiting structure to improve the efficiency of the methods. We also do not cover, in more than a simplified way, the complexity theory of the algorithms we describe. We do, however, give an introduction to the important ideas of self-concordance and complexity analysis for interior-point methods.</p></div>
+      <div class="zh"><p>我们也应该说明本书不是什么。它主要不是一本关于凸分析或凸优化数学的书——已有若干现成教材很好地涵盖了这些主题。本书也不是凸优化算法的综述。我们只挑选了少数几个好算法，并且只描述它们简化的、程式化的版本（不过这些版本在实践中确实工作得很好）。我们无意涵盖求解凸问题的内点法（或其他方法）的最新前沿。我们对数值实现问题的讨论也高度简化，但认为这已足够让潜在用户开发出可用的实现；并且我们确实较为详细地讨论了利用问题结构以提升方法效率的技术。对于我们所描述算法的复杂度理论，我们也只以简化的方式涉及。不过，我们对内点法中自协调（self-concordance）与复杂度分析的重要思想做了入门介绍。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h2>Audience</h2></div>
+      <div class="zh"><h2>读者对象</h2></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>This book is meant for the researcher, scientist, or engineer who uses mathematical optimization, or more generally, computational mathematics. This includes, naturally, those working directly in optimization and operations research, and also many others who use optimization, in fields like computer science, economics, finance, statistics, data mining, and many fields of science and engineering. Our primary focus is on the latter group, the potential users of convex optimization, and not the (less numerous) experts in the field of convex optimization.</p></div>
+      <div class="zh"><p>本书面向使用数学优化、或更一般地使用计算数学的研究人员、科学家或工程师。这自然包括直接从事优化与运筹学的人，也包括许多其他领域中使用优化的人——例如计算机科学、经济学、金融、统计、数据挖掘以及众多理工领域。我们的主要关注点在后者，即凸优化的潜在使用者，而非（人数较少的）凸优化领域的专家。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The only background required of the reader is a good knowledge of advanced calculus and linear algebra. If the reader has seen basic mathematical analysis (e.g., norms, convergence, elementary topology), and basic probability theory, he or she should be able to follow every argument and discussion in the book. We hope that readers who have not seen analysis and probability, however, can still get all of the essential ideas and important points. Prior exposure to numerical computing or optimization is not needed, since we develop all of the needed material from these areas in the text or appendices.</p></div>
+      <div class="zh"><p>读者唯一需要具备的背景是良好掌握的高等微积分与线性代数。如果读者见过基础数学分析（例如范数、收敛性、初等拓扑）和基础概率论，就应当能够跟上书中所有的论证与讨论。不过我们希望，未曾学过分析与概率的读者仍能把握所有核心思想与要点。不需要事先接触过数值计算或优化，因为这些领域所需的内容我们都在正文或附录中给出。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h2>Using this book in courses</h2></div>
+      <div class="zh"><h2>本书在课程中的使用</h2></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We hope that this book will be useful as the primary or alternate textbook for several types of courses. Since 1995 we have been using drafts of this book for graduate courses on linear, nonlinear, and convex optimization (with engineering applications) at Stanford and UCLA. We are able to cover most of the material, though not in detail, in a one quarter graduate course. A one semester course allows for a more leisurely pace, more applications, more detailed treatment of theory, and perhaps a short student project. A two quarter sequence allows an expanded treatment of the more basic topics such as linear and quadratic programming (which are very useful for the applications oriented student), or a more substantial student project.</p></div>
+      <div class="zh"><p>我们希望本书能作为若干类型课程的主教材或备选教材。自 1995 年起，我们一直在 Stanford 和 UCLA 用本书的草稿开设线性、非线性和凸优化（含工程应用）的研究生课程。在一个季度的研究生课程中，我们能覆盖大部分材料，但无法深入。一个学期的课程允许更从容的节奏、更多应用、对理论更细致的处理，或许还有一个简短的学生项目。两个季度的序列课程则允许对线性规划与二次规划等更基础的主题（对面向应用的学生非常有用）作扩展讲解，或安排更实质的学生项目。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>This book can also be used as a reference or alternate text for a more traditional course on linear and nonlinear optimization, or a course on control systems (or other applications area), that includes some coverage of convex optimization. As the secondary text in a more theoretically oriented course on convex optimization, it can be used as a source of simple practical examples.</p></div>
+      <div class="zh"><p>本书也可作为更传统的线性与非线性优化课程的参考书或备选教材，或作为控制系统（或其他应用领域）课程中包含部分凸优化内容的参考。在更偏理论的凸优化课程中作为辅助教材时，本书可作为简单实用例子的来源。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h2>Acknowledgments</h2></div>
+      <div class="zh"><h2>致谢</h2></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We have been developing the material for this book for almost a decade. Over the years we have benefited from feedback and suggestions from many people, including our own graduate students, students in our courses, and our colleagues at Stanford, UCLA, and elsewhere. Unfortunately, space limitations and shoddy record keeping do not allow us to name everyone who has contributed. However, we wish to particularly thank A. Aggarwal, V. Balakrishnan, A. Bernard, B. Bray, R. Cottle, A. d'Aspremont, J. Dahl, J. Dattorro, D. Donoho, J. Doyle, L. El Ghaoui, P. Glynn, M. Grant, A. Hansson, T. Hastie, A. Lewis, M. Lobo, Z.-Q. Luo, M. Mesbahi, W. Naylor, P. Parrilo, I. Pressman, R. Tibshirani, B. Van Roy, L. Xiao, and Y. Ye. J. Jalden and A. d'Aspremont contributed the time-frequency analysis example in §6.5.4, and the consumer preference bounding example in §6.5.5, respectively. P. Parrilo suggested exercises 4.4 and 4.56. Newer printings benefited greatly from Igal Sason's meticulous reading of the book.</p></div>
+      <div class="zh"><p>我们为本书积累材料已近十年。多年来我们从许多人的反馈与建议中受益，包括我们自己的研究生、课程学生，以及 Stanford、UCLA 和其他机构的同仁。遗憾的是，篇幅所限加之记录不善，使我们无法一一列出所有贡献者。但我们特别要感谢：A. Aggarwal、V. Balakrishnan、A. Bernard、B. Bray、R. Cottle、A. d'Aspremont、J. Dahl、J. Dattorro、D. Donoho、J. Doyle、L. El Ghaoui、P. Glynn、M. Grant、A. Hansson、T. Hastie、A. Lewis、M. Lobo、Z.-Q. Luo、M. Mesbahi、W. Naylor、P. Parrilo、I. Pressman、R. Tibshirani、B. Van Roy、L. Xiao 和 Y. Ye。J. Jalden 和 A. d'Aspremont 分别贡献了 §6.5.4 的时频分析例子和 §6.5.5 的消费者偏好定界例子。P. Parrilo 提出了习题 4.4 和 4.56。新印次得益于 Igal Sason 对全书的细致阅读。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We want to single out two others for special acknowledgment. Arkadi Nemirovski incited our original interest in convex optimization, and encouraged us to write this book. We also want to thank Kishan Baheti for playing a critical role in the development of this book. In 1994 he encouraged us to apply for a National Science Foundation combined research and curriculum development grant, on convex optimization with engineering applications, and this book is a direct (if delayed) consequence.</p></div>
+      <div class="zh"><p>我们还要特别向两人致谢。Arkadi Nemirovski 最初激发了我们对凸优化的兴趣，并鼓励我们撰写此书。我们也要感谢 Kishan Baheti，他在本书的发展中扮演了关键角色。1994 年，他鼓励我们申请了一项美国国家科学基金会的"研究与课程开发联合"资助，主题是带工程应用的凸优化——本书便是这一资助直接的（虽然迟到的）成果。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p style="text-align:right; margin-top:24px">Stephen Boyd<br>Stanford, California</p></div>
+      <div class="zh"><p style="text-align:right; margin-top:24px">Stephen Boyd<br>加利福尼亚，斯坦福</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p style="text-align:right">Lieven Vandenberghe<br>Los Angeles, California</p></div>
+      <div class="zh"><p style="text-align:right">Lieven Vandenberghe<br>加利福尼亚，洛杉矶</p></div>
+    </div>
+  </main>
+
+  <script src="assets/mathjax-config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+</body>
+</html>

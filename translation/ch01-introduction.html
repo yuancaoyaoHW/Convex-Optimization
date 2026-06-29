@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chapter 1 Introduction · 引言 — Convex Optimization 中英对照</title>
+  <link rel="stylesheet" href="assets/bilingual.css">
+</head>
+<body>
+  <div class="topbar">
+    <div class="crumbs">
+      <a href="index.html">目录</a><span class="sep">/</span>第 1 章 引言
+    </div>
+    <div class="nav">
+      <a href="preface.html">‹ 上一页</a>
+      <a href="ch02-convex-sets.html">下一页 ›</a>
+    </div>
+  </div>
+
+  <main class="doc">
+    <div class="doc-header">
+      <p class="kicker">Chapter 1</p>
+      <h1>引言 / Introduction</h1>
+      <p class="meta">原书 pp. 1–16 · 翻译对照（英 / 中）</p>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>In this introduction we give an overview of mathematical optimization, focusing on the special role of convex optimization. The concepts introduced informally here will be covered in later chapters, with more care and technical detail.</p></div>
+      <div class="zh"><p>在本引言中，我们对数学优化作一概述，重点放在凸优化的特殊角色。此处非正式引入的概念将在后续章节中以更严谨、更技术化的方式加以讨论。</p></div>
+    </div>
+
+    <!-- ============== 1.1 ============== -->
+    <div class="pair head">
+      <div class="en"><h2>1.1 Mathematical optimization</h2></div>
+      <div class="zh"><h2>1.1 数学优化</h2></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>A mathematical optimization problem, or just optimization problem, has the form</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(x) \\ \text{subject to} &amp; f_i(x) \le b_i, \quad i = 1,\ldots,m. \end{array} \tag{1.1}$$</p></div>
+      <div class="zh"><p>一个数学优化问题（optimization problem）具有如下形式：</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(x) \\ \text{subject to} &amp; f_i(x) \le b_i, \quad i = 1,\ldots,m. \end{array} \tag{1.1}$$</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Here the vector $x = (x_1,\ldots,x_n)$ is the optimization variable of the problem, the function $f_0:\mathbb{R}^n \to \mathbb{R}$ is the objective function, the functions $f_i:\mathbb{R}^n \to \mathbb{R}$, $i=1,\ldots,m$, are the (inequality) constraint functions, and the constants $b_1,\ldots,b_m$ are the limits, or bounds, for the constraints. A vector $x^\star$ is called optimal, or a solution of the problem (1.1), if it has the smallest objective value among all vectors that satisfy the constraints: for any $z$ with $f_1(z)\le b_1,\ldots,f_m(z)\le b_m$, we have $f_0(z) \ge f_0(x^\star)$.</p></div>
+      <div class="zh"><p>其中向量 $x=(x_1,\ldots,x_n)$ 是该问题的<strong>优化变量</strong>，函数 $f_0:\mathbb{R}^n\to\mathbb{R}$ 是<strong>目标函数</strong>，函数 $f_i:\mathbb{R}^n\to\mathbb{R}$（$i=1,\ldots,m$）是（不等式）<strong>约束函数</strong>，常数 $b_1,\ldots,b_m$ 是约束的<strong>界限</strong>（limits / bounds）。若向量 $x^\star$ 在所有满足约束的向量中具有最小的目标值，则称其为<strong>最优的</strong>，或问题 (1.1) 的一个<strong>解</strong>：即对任意满足 $f_1(z)\le b_1,\ldots,f_m(z)\le b_m$ 的 $z$，都有 $f_0(z)\ge f_0(x^\star)$。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We generally consider families or classes of optimization problems, characterized by particular forms of the objective and constraint functions. As an important example, the optimization problem (1.1) is called a linear program if the objective and constraint functions $f_0,\ldots,f_m$ are linear, i.e., satisfy</p>
+        <p>$$ f_i(\alpha x + \beta y) = \alpha f_i(x) + \beta f_i(y) \tag{1.2}$$</p>
+        <p>for all $x, y \in \mathbb{R}^n$ and all $\alpha, \beta \in \mathbb{R}$. If the optimization problem is not linear, it is called a nonlinear program.</p></div>
+      <div class="zh"><p>我们通常考虑由目标函数和约束函数的特定形式所刻画的一族或一类优化问题。作为一个重要例子，若 (1.1) 中的目标与约束函数 $f_0,\ldots,f_m$ 都是线性的，即满足</p>
+        <p>$$ f_i(\alpha x + \beta y) = \alpha f_i(x) + \beta f_i(y) \tag{1.2}$$</p>
+        <p>对所有 $x,y\in\mathbb{R}^n$ 和所有 $\alpha,\beta\in\mathbb{R}$ 成立，则称 (1.1) 为一个<strong>线性规划</strong>。若优化问题不是线性的，则称之为<strong>非线性规划</strong>。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>This book is about a class of optimization problems called convex optimization problems. A convex optimization problem is one in which the objective and constraint functions are convex, which means they satisfy the inequality</p>
+        <p>$$ f_i(\alpha x + \beta y) \le \alpha f_i(x) + \beta f_i(y) \tag{1.3}$$</p>
+        <p>for all $x, y \in \mathbb{R}^n$ and all $\alpha, \beta \in \mathbb{R}$ with $\alpha + \beta = 1$, $\alpha \ge 0$, $\beta \ge 0$. Comparing (1.3) and (1.2), we see that convexity is more general than linearity: inequality replaces the more restrictive equality, and the inequality must hold only for certain values of $\alpha$ and $\beta$. Since any linear program is therefore a convex optimization problem, we can consider convex optimization to be a generalization of linear programming.</p></div>
+      <div class="zh"><p>本书讨论一类称为<strong>凸优化问题</strong>的优化问题。所谓凸优化问题，是指其目标函数与约束函数都是<strong>凸的</strong>，即满足不等式</p>
+        <p>$$ f_i(\alpha x + \beta y) \le \alpha f_i(x) + \beta f_i(y) \tag{1.3}$$</p>
+        <p>对所有 $x,y\in\mathbb{R}^n$ 以及满足 $\alpha+\beta=1$、$\alpha\ge 0$、$\beta\ge 0$ 的所有 $\alpha,\beta\in\mathbb{R}$ 成立。比较 (1.3) 与 (1.2) 可见，凸性比线性更宽：不等式取代了更严格的要求相等，并且该不等式只需对 $\alpha$、$\beta$ 的某些取值成立。因此任何线性规划都是凸优化问题，我们可以把凸优化视为线性规划的推广。</p></div>
+    </div>
+
+    <!-- ============== 1.1.1 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>1.1.1 Applications</h3></div>
+      <div class="zh"><h3>1.1.1 应用</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The optimization problem (1.1) is an abstraction of the problem of making the best possible choice of a vector in $\mathbb{R}^n$ from a set of candidate choices. The variable $x$ represents the choice made; the constraints $f_i(x) \le b_i$ represent firm requirements or specifications that limit the possible choices, and the objective value $f_0(x)$ represents the cost of choosing $x$. (We can also think of $-f_0(x)$ as representing the value, or utility, of choosing $x$.) A solution of the optimization problem (1.1) corresponds to a choice that has minimum cost (or maximum utility), among all choices that meet the firm requirements.</p></div>
+      <div class="zh"><p>优化问题 (1.1) 是这样一类问题的抽象：在 $\mathbb{R}^n$ 中从一组候选方案里选出最优的向量。变量 $x$ 代表所做出的选择；约束 $f_i(x)\le b_i$ 代表限制可选方案的硬性要求或规格；目标值 $f_0(x)$ 代表选择 $x$ 的代价。（也可以把 $-f_0(x)$ 看作选择 $x$ 的价值或效用。）优化问题 (1.1) 的一个解对应于：在所有满足硬性要求的选择中，具有最小代价（或最大效用）的那个选择。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>In portfolio optimization, for example, we seek the best way to invest some capital in a set of $n$ assets. The variable $x_i$ represents the investment in the $i$th asset, so the vector $x \in \mathbb{R}^n$ describes the overall portfolio allocation across the set of assets. The constraints might represent a limit on the budget (i.e., a limit on the total amount to be invested), the requirement that investments are nonnegative (assuming short positions are not allowed), and a minimum acceptable value of expected return for the whole portfolio. The objective or cost function might be a measure of the overall risk or variance of the portfolio return. In this case, the optimization problem (1.1) corresponds to choosing a portfolio allocation that minimizes risk, among all possible allocations that meet the firm requirements.</p></div>
+      <div class="zh"><p>例如在<strong>投资组合优化</strong>（portfolio optimization）中，我们寻求把一笔资金投资到 $n$ 种资产上的最优方式。变量 $x_i$ 代表对第 $i$ 种资产的投资额，于是向量 $x\in\mathbb{R}^n$ 描述了在全部资产上的整体配置。约束可能表示预算上限（即总投资额的限制）、投资非负（假设不允许做空）以及对整个组合期望收益的最低可接受值。目标函数或代价函数可能是组合收益整体风险或方差的一种度量。此时，优化问题 (1.1) 对应于：在所有满足硬性要求的可能配置中，选择使风险最小的组合配置。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Another example is device sizing in electronic design, which is the task of choosing the width and length of each device in an electronic circuit. Here the variables represent the widths and lengths of the devices. The constraints represent a variety of engineering requirements, such as limits on the device sizes imposed by the manufacturing process, timing requirements that ensure that the circuit can operate reliably at a specified speed, and a limit on the total area of the circuit. A common objective in a device sizing problem is the total power consumed by the circuit. The optimization problem (1.1) is to find the device sizes that satisfy the design requirements (on manufacturability, timing, and area) and are most power efficient.</p></div>
+      <div class="zh"><p>另一个例子是电子设计中的<strong>器件尺寸设计</strong>（device sizing），即在电子电路中为每个器件选定宽度和长度。这里变量代表器件的宽度和长度。约束代表各种工程要求，例如制造工艺对器件尺寸的限制、保证电路能在指定速度下可靠工作的时序要求，以及对电路总面积的限制。器件尺寸设计问题的一个常见目标是电路消耗的总功率。优化问题 (1.1) 就是寻找满足设计要求（可制造性、时序、面积）且功耗最低的器件尺寸。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>In data fitting, the task is to find a model, from a family of potential models, that best fits some observed data and prior information. Here the variables are the parameters in the model, and the constraints can represent prior information or required limits on the parameters (such as nonnegativity). The objective function might be a measure of misfit or prediction error between the observed data and the values predicted by the model, or a statistical measure of the unlikeliness or implausibility of the parameter values. The optimization problem (1.1) is to find the model parameter values that are consistent with the prior information, and give the smallest misfit or prediction error with the observed data (or, in a statistical framework, are most likely).</p></div>
+      <div class="zh"><p>在<strong>数据拟合</strong>（data fitting）中，任务是从一族候选模型中找出一个与观测数据和先验信息拟合得最好的模型。这里变量是模型中的参数，约束可以表示先验信息或对参数的必加限制（如非负）。目标函数可以是观测数据与模型预测值之间失配或预测误差的度量，也可以是参数值"不可能性"或"不合理性"的统计度量。优化问题 (1.1) 即是寻找与先验信息相一致、且使观测数据的失配或预测误差最小（或在统计框架下最可能）的模型参数值。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>An amazing variety of practical problems involving decision making (or system design, analysis, and operation) can be cast in the form of a mathematical optimization problem, or some variation such as a multicriterion optimization problem. Indeed, mathematical optimization has become an important tool in many areas. It is widely used in engineering, in electronic design automation, automatic control systems, and optimal design problems arising in civil, chemical, mechanical, and aerospace engineering. Optimization is used for problems arising in network design and operation, finance, supply chain management, scheduling, and many other areas. The list of applications is still steadily expanding.</p></div>
+      <div class="zh"><p>涉及决策制定（或系统设计、分析与运行）的各种实际问题，惊人地多样地可以写成数学优化问题或其某种变体（如多目标优化问题）的形式。事实上，数学优化已成为许多领域的重要工具。它被广泛用于工程、电子设计自动化、自动控制系统，以及土木、化工、机械、航空航天工程中的最优设计问题。优化也用于网络设计与运行、金融、供应链管理、调度等众多领域。应用清单仍在稳步扩展。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>For most of these applications, mathematical optimization is used as an aid to a human decision maker, system designer, or system operator, who supervises the process, checks the results, and modifies the problem (or the solution approach) when necessary. This human decision maker also carries out any actions suggested by the optimization problem, e.g., buying or selling assets to achieve the optimal portfolio.</p></div>
+      <div class="zh"><p>对于大多数这类应用，数学优化是作为人类决策者、系统设计者或系统操作者的辅助工具来使用的——由人来监督过程、检查结果，并在必要时修改问题（或求解方法）。由这名人类决策者执行优化问题所建议的任何行动，例如买卖资产以实现最优组合。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>A relatively recent phenomenon opens the possibility of many other applications for mathematical optimization. With the proliferation of computers embedded in products, we have seen a rapid growth in embedded optimization. In these embedded applications, optimization is used to automatically make real-time choices, and even carry out the associated actions, with no (or little) human intervention or oversight. In some application areas, this blending of traditional automatic control systems and embedded optimization is well under way; in others, it is just starting. Embedded real-time optimization raises some new challenges: in particular, it requires solution methods that are extremely reliable, and solve problems in a predictable amount of time (and memory).</p></div>
+      <div class="zh"><p>一个相对较新的现象为数学优化开启了更多应用的可能。随着嵌入产品中的计算机激增，我们见证了<strong>嵌入式优化</strong>（embedded optimization）的快速增长。在这些嵌入式应用中，优化被用于自动做出实时选择，甚至执行相关动作，几乎无需（或完全无需）人工干预或监督。在某些应用领域，传统自动控制系统与嵌入式优化的融合已深入开展；在另一些领域则刚刚起步。嵌入式实时优化带来了一些新挑战：它特别要求求解方法极其可靠，并能在可预测的时间（和内存）内求解问题。</p></div>
+    </div>
+
+    <!-- ============== 1.1.2 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>1.1.2 Solving optimization problems</h3></div>
+      <div class="zh"><h3>1.1.2 求解优化问题</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>A solution method for a class of optimization problems is an algorithm that computes a solution of the problem (to some given accuracy), given a particular problem from the class, i.e., an instance of the problem. Since the late 1940s, a large effort has gone into developing algorithms for solving various classes of optimization problems, analyzing their properties, and developing good software implementations. The effectiveness of these algorithms, i.e., our ability to solve the optimization problem (1.1), varies considerably, and depends on factors such as the particular forms of the objective and constraint functions, how many variables and constraints there are, and special structure, such as sparsity. (A problem is sparse if each constraint function depends on only a small number of the variables).</p></div>
+      <div class="zh"><p>一类优化问题的<strong>求解方法</strong>（solution method）是一个算法：给定该类中的某个具体问题（即问题的一个<strong>实例</strong>，instance），它能（在给定精度内）计算出该问题的一个解。自 20 世纪 40 年代末以来，人们投入大量精力开发求解各类优化问题的算法、分析其性质，并开发良好的软件实现。这些算法的有效性——即我们求解优化问题 (1.1) 的能力——差别很大，并取决于多种因素，例如目标与约束函数的具体形式、变量和约束的数目、以及特殊结构（如稀疏性：若每个约束函数只依赖于少数几个变量，则称问题是稀疏的）。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Even when the objective and constraint functions are smooth (for example, polynomials) the general optimization problem (1.1) is surprisingly difficult to solve. Approaches to the general problem therefore involve some kind of compromise, such as very long computation time, or the possibility of not finding the solution. Some of these methods are discussed in §1.4.</p></div>
+      <div class="zh"><p>即使目标与约束函数是光滑的（例如多项式），一般优化问题 (1.1) 也出奇地难以求解。因此，对一般问题的求解方法都包含某种折中，例如极长的计算时间，或者可能找不到解。这些方法中的一部分在 §1.4 中讨论。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>There are, however, some important exceptions to the general rule that most optimization problems are difficult to solve. For a few problem classes we have effective algorithms that can reliably solve even large problems, with hundreds or thousands of variables and constraints. Two important and well known examples, described in §1.2 below (and in detail in chapter 4), are least-squares problems and linear programs. It is less well known that convex optimization is another exception to the rule: Like least-squares or linear programming, there are very effective algorithms that can reliably and efficiently solve even large convex problems.</p></div>
+      <div class="zh"><p>然而，"大多数优化问题难以求解"这一一般规则也有若干重要例外。对于少数问题类，我们有高效的算法，能够可靠地求解哪怕含有成百上千变量与约束的大规模问题。两个广为人知的重要例子是<strong>最小二乘问题</strong>和<strong>线性规划</strong>（在 §1.2 中描述，第 4 章详述）。而鲜为人知的是，<strong>凸优化</strong>是这一规则的另一个例外：与最小二乘或线性规划一样，凸优化也有非常高效的算法，能可靠、高效地求解大规模凸问题。</p></div>
+    </div>
+
+    <!-- ============== 1.2 ============== -->
+    <div class="pair head">
+      <div class="en"><h2>1.2 Least-squares and linear programming</h2></div>
+      <div class="zh"><h2>1.2 最小二乘与线性规划</h2></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>In this section we describe two very widely known and used special subclasses of convex optimization: least-squares and linear programming. (A complete technical treatment of these problems will be given in chapter 4.)</p></div>
+      <div class="zh"><p>本节描述两个广为人知、被广泛使用的凸优化特殊子类：最小二乘与线性规划。（这两个问题的完整技术性处理见第 4 章。）</p></div>
+    </div>
+
+    <!-- ============== 1.2.1 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>1.2.1 Least-squares problems</h3></div>
+      <div class="zh"><h3>1.2.1 最小二乘问题</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>A least-squares problem is an optimization problem with no constraints (i.e., $m=0$) and an objective which is a sum of squares of terms of the form $a_i^T x - b_i$:</p>
+        <p>$$ \begin{array}{ll} \text{minimize} &amp; f_0(x) = \|Ax-b\|_2^2 = \sum_{i=1}^{k}(a_i^T x - b_i)^2. \end{array} \tag{1.4}$$</p>
+        <p>Here $A \in \mathbb{R}^{k\times n}$ (with $k \ge n$), $a_i^T$ are the rows of $A$, and the vector $x \in \mathbb{R}^n$ is the optimization variable.</p></div>
+      <div class="zh"><p><strong>最小二乘问题</strong>（least-squares problem）是没有约束（即 $m=0$）、目标函数为形如 $a_i^T x - b_i$ 各项平方和的优化问题：</p>
+        <p>$$ \begin{array}{ll} \text{minimize} &amp; f_0(x) = \|Ax-b\|_2^2 = \sum_{i=1}^{k}(a_i^T x - b_i)^2. \end{array} \tag{1.4}$$</p>
+        <p>其中 $A\in\mathbb{R}^{k\times n}$（$k\ge n$），$a_i^T$ 是 $A$ 的各行，向量 $x\in\mathbb{R}^n$ 是优化变量。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Solving least-squares problems</h3></div>
+      <div class="zh"><h3>求解最小二乘问题</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The solution of a least-squares problem (1.4) can be reduced to solving a set of linear equations,</p>
+        <p>$$(A^T A)x = A^T b,$$</p>
+        <p>so we have the analytical solution $x = (A^T A)^{-1}A^T b$. For least-squares problems we have good algorithms (and software implementations) for solving the problem to high accuracy, with very high reliability. The least-squares problem can be solved in a time approximately proportional to $n^2 k$, with a known constant. A current desktop computer can solve a least-squares problem with hundreds of variables, and thousands of terms, in a few seconds; more powerful computers, of course, can solve larger problems, or the same size problems, faster. (Moreover, if we are only interested in an approximate solution, very large least-squares problems, with millions of variables, can be solved in seconds on a single PC, provided the problem is sparse.)</p></div>
+      <div class="zh"><p>最小二乘问题 (1.4) 的求解可归约为求解一组线性方程</p>
+        <p>$$(A^T A)x = A^T b,$$</p>
+        <p>由此得到解析解 $x=(A^T A)^{-1}A^T b$。对于最小二乘问题，我们有良好的算法（及软件实现），能以极高的可靠性高精度地求解。最小二乘问题的求解时间大约正比于 $n^2 k$，且常数已知。当前的台式计算机能在几秒内求解含数百变量、数千项的最小二乘问题；更强的计算机当然能求解更大的问题，或更快地求解同等规模的问题。（此外，若只需近似解，只要问题是稀疏的，带有数百万变量的超大规模最小二乘问题也可在一台 PC 上几秒内求解。）</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Since least-squares problems arise in many applications, it is not surprising that they have been studied extensively. Some basic methods (e.g., QR factorization) date back to the 19th century. We will see in chapter 10 that least-squares problems are a basic component in algorithms for solving more general convex optimization problems, e.g., Newton's method.</p></div>
+      <div class="zh"><p>由于最小二乘问题在众多应用中出现，它被广泛研究也就不足为奇。一些基本方法（如 QR 分解）可追溯到 19 世纪。我们将在第 10 章看到，最小二乘问题是求解更一般凸优化问题的算法（例如牛顿法）的基本构件。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Using least-squares</h3></div>
+      <div class="zh"><h3>使用最小二乘</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Because least-squares problems are so well understood, and can be solved very efficiently, there is a basic method for using them: when a problem is recognized as a least-squares problem, it can be considered solved. The main trick, and art, in using least-squares is in recognizing or formulating a problem as one. Many practical problems are not, initially, in the form of a least-squares problem, but can be transformed, sometimes via a nontrivial transformation, into one.</p></div>
+      <div class="zh"><p>由于最小二乘问题已被充分理解、并且能非常高效地求解，使用它的基本方法是：一旦一个问题被识别为最小二乘问题，就可以认为它已被解决。使用最小二乘的主要诀窍与艺术，在于识别或把问题表述成最小二乘形式。许多实际问题最初并非最小二乘形式，但有时可以通过非平凡的变换转化为该形式。</p></div>
+    </div>
+
+    <!-- ============== 1.2.2 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>1.2.2 Linear programming</h3></div>
+      <div class="zh"><h3>1.2.2 线性规划</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>A linear program (LP) is an optimization problem with a linear objective function and linear constraint functions. We use the standard form</p>
+        <p>$$ \begin{array}{ll} \text{minimize} &amp; c^T x \\ \text{subject to} &amp; Gx \preceq h \end{array} \tag{1.5}$$</p>
+        <p>where $G \in \mathbb{R}^{m\times n}$. Here, the symbol $\preceq$ denotes componentwise inequality between vectors: $Gx \preceq h$ means that $(Gx)_i \le h_i$ for $i=1,\ldots,m$.</p></div>
+      <div class="zh"><p><strong>线性规划</strong>（linear program, LP）是目标函数与约束函数均为线性的优化问题。我们采用标准形式</p>
+        <p>$$ \begin{array}{ll} \text{minimize} &amp; c^T x \\ \text{subject to} &amp; Gx \preceq h \end{array} \tag{1.5}$$</p>
+        <p>其中 $G\in\mathbb{R}^{m\times n}$。这里符号 $\preceq$ 表示向量间的分量式不等式：$Gx\preceq h$ 意即对 $i=1,\ldots,m$ 有 $(Gx)_i\le h_i$。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Solving linear programs</h3></div>
+      <div class="zh"><h3>求解线性规划</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>There is no simple analytical formula for the solution of a linear program, but there are a variety of very effective methods for solving them, including Dantzig's simplex method, and interior-point methods. These algorithms are quite reliable, and can solve problems with hundreds of variables and thousands of constraints in a few seconds on a desktop computer. Like least-squares, the computational effort required is predictable: we can give an upper bound on the number of arithmetic operations required, and this bound grows as a polynomial of the problem dimensions.</p></div>
+      <div class="zh"><p>线性规划没有简单的解析求解公式，但有多种非常有效的求解方法，包括 Dantzig 的单纯形法（simplex method）以及内点法。这些算法相当可靠，能在台式计算机上几秒内求解含数百变量、数千约束的问题。与最小二乘类似，所需计算量是可预测的：我们可以给出所需算术运算次数的一个上界，且该上界随问题规模的多项式增长。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Using linear programming</h3></div>
+      <div class="zh"><h3>使用线性规划</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>As with least-squares, the use of linear programming is a basic method, with the solution of the problem considered done once it is recognized as a linear program and formulated as such. The art of using linear programming is in recognizing or formulating a problem as a linear program. There are some standard tricks that can be used to transform a variety of problems into linear programs, which we describe in chapter 4.</p></div>
+      <div class="zh"><p>与最小二乘类似，使用线性规划是一种基本方法：一旦问题被识别为线性规划并表述成该形式，即可认为问题已解决。使用线性规划的艺术在于识别或把问题表述为线性规划。有一些标准技巧可以把多种问题转化为线性规划，我们将在第 4 章描述。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Some problems have natural linear programming formulations. The diet problem, for instance, in which the variables represent the quantities of different foods in a diet, and the constraints represent nutritional requirements and budget limits, is a classic example. Many other problems that involve allocation of resources, scheduling, and routing can be formulated as linear programs, or extensions of linear programs.</p></div>
+      <div class="zh"><p>有些问题天然具有线性规划形式。例如经典的<strong>饮食问题</strong>（diet problem），其中变量代表饮食中各种食物的数量，约束代表营养需求和预算限制。许多涉及资源分配、调度和路由的问题也可以表述为线性规划或其扩展。</p></div>
+    </div>
+
+    <!-- ============== 1.3 ============== -->
+    <div class="pair head">
+      <div class="en"><h2>1.3 Convex optimization</h2></div>
+      <div class="zh"><h2>1.3 凸优化</h2></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Convex optimization is, in essence, a generalization of least-squares and linear programming. The objective and constraint functions are required to be convex, which is more general than the requirements of linearity (in linear programming) or sum-of-squares (in least-squares). We can think of least-squares and linear programming as subclasses of convex optimization, and indeed they are the most widely used subclasses. A consequence of this view is that the art of using convex optimization is, like linear programming, in recognizing and formulating problems as convex optimization problems. This can be challenging, and is certainly more difficult than recognizing a least-squares problem.</p></div>
+      <div class="zh"><p>凸优化本质上是最小二乘与线性规划的推广。它要求目标与约束函数是凸的——这比线性规划中的线性要求、或最小二乘中的平方和要求都更宽泛。我们可以把最小二乘和线性规划看作凸优化的子类，事实上它们也是最广泛使用的子类。这种视角的一个推论是：使用凸优化的艺术，如同线性规划一样，在于识别并表述问题为凸优化问题。这可能有挑战性，并且肯定比识别最小二乘问题更困难。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>As in linear programming, we use the standard form</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(x) \\ \text{subject to} &amp; f_i(x) \le 0, \quad i=1,\ldots,m \\ &amp; a_i^T x = b_i, \quad i=1,\ldots,p \end{array} \tag{1.8}$$</p>
+        <p>where $f_0,\ldots,f_m$ are convex. Unlike linear programming, the constraint functions $f_i$ are not required to be linear; only convex.</p></div>
+      <div class="zh"><p>与线性规划类似，我们采用标准形式</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(x) \\ \text{subject to} &amp; f_i(x) \le 0, \quad i=1,\ldots,m \\ &amp; a_i^T x = b_i, \quad i=1,\ldots,p \end{array} \tag{1.8}$$</p>
+        <p>其中 $f_0,\ldots,f_m$ 是凸的。与线性规划不同，约束函数 $f_i$ 不要求是线性的，只要求是凸的。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>1.3.1 Solving convex optimization problems</h3></div>
+      <div class="zh"><h3>1.3.1 求解凸优化问题</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>There is no simple analytical formula for the solution of a general convex optimization problem, but there are very effective methods for solving them, including interior-point methods. We will see that these methods can solve the problem (1.8) in a number of steps or iterations that is almost always in the range between 10 and 100. Ignoring any structure in the problem (such as sparsity), each step requires on the order of</p>
+        <p>$$\max\{n^3, n^2 m, F\}$$</p>
+        <p>operations, where $F$ is the cost of evaluating the first and second derivatives of the objective and constraint functions $f_0,\ldots,f_m$.</p></div>
+      <div class="zh"><p>一般凸优化问题没有简单的解析求解公式，但有非常有效的求解方法，包括内点法。我们将看到，这些方法求解 (1.8) 所需的步数（迭代次数）几乎总在 10 到 100 之间。忽略问题中的任何结构（如稀疏性），每步大约需要</p>
+        <p>$$\max\{n^3, n^2 m, F\}$$</p>
+        <p>次运算，其中 $F$ 是计算目标与约束函数 $f_0,\ldots,f_m$ 的一阶和二阶导数的代价。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Like methods for solving linear programs, these interior-point methods are quite reliable. We can easily solve problems with hundreds of variables and thousands of constraints on a current desktop computer, in at most a few tens of seconds. By exploiting problem structure (such as sparsity), we can solve far larger problems, with many thousands of variables and constraints.</p></div>
+      <div class="zh"><p>与求解线性规划的方法一样，这些内点法相当可靠。我们可以在当前的台式计算机上轻松求解含数百变量、数千约束的问题，最多几十秒。通过利用问题结构（如稀疏性），我们可以求解规模大得多的问题——含数万变量与约束。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We cannot yet claim that solving general convex optimization problems is a mature technology, like solving least-squares or linear programming problems. Research on interior-point methods for general nonlinear convex optimization is still a very active research area, and no consensus has emerged yet as to what the best method or methods are. But it is reasonable to expect that solving general convex optimization problems will become a technology within a few years. And for some subclasses of convex optimization problems, for example second-order cone programming or geometric programming (studied in detail in chapter 4), it is fair to say that interior-point methods are approaching a technology.</p></div>
+      <div class="zh"><p>我们尚不能声称求解一般凸优化问题是一项成熟技术，如同求解最小二乘或线性规划那样。针对一般非线性凸优化的内点法研究仍是非常活跃的研究领域，关于何种方法或哪几种方法最佳，尚无共识。但有理由预期，求解一般凸优化问题在几年内将成熟为一项技术。对于凸优化的某些子类，例如二阶锥规划或几何规划（第 4 章详述），可以说内点法已接近一门技术。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>1.3.2 Using convex optimization</h3></div>
+      <div class="zh"><h3>1.3.2 使用凸优化</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Using convex optimization is, at least conceptually, very much like using least-squares or linear programming. If we can formulate a problem as a convex optimization problem, then we can solve it efficiently, just as we can solve a least-squares problem efficiently. With only a bit of exaggeration, we can say that, if you formulate a practical problem as a convex optimization problem, then you have solved the original problem.</p></div>
+      <div class="zh"><p>使用凸优化，至少在概念上，非常像使用最小二乘或线性规划。如果我们能把一个问题表述为凸优化问题，就能高效求解它——正如我们能高效求解最小二乘问题。略带夸张地说：如果你把一个实际问题表述成了凸优化问题，你就已经解决了原问题。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>There are also some important differences. Recognizing a least-squares problem is straightforward, but recognizing a convex function can be difficult. In addition, there are many more tricks for transforming convex problems than for transforming linear programs. Recognizing convex optimization problems, or those that can be transformed to convex optimization problems, can therefore be challenging.</p></div>
+      <div class="zh"><p>但也有一些重要差异。识别最小二乘问题很直接，但识别一个凸函数可能困难。此外，转化凸问题的技巧比转化线性规划的技巧多得多。因此，识别凸优化问题（或可转化为凸优化问题的问题）可能有挑战性。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The main goal of this book is to give the reader the background needed to do this. Once the skill of recognizing or formulating convex optimization problems is developed, you will find that surprisingly many problems can be solved via convex optimization.</p></div>
+      <div class="zh"><p>本书的主要目标就是给读者这样做所需的背景。一旦培养出识别或表述凸优化问题的技能，你会发现惊人地多的问题都可以通过凸优化求解。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The challenge, and art, in using convex optimization is in recognizing and formulating the problem. Once this formulation is done, solving the problem is, like least-squares or linear programming, (almost) technology.</p></div>
+      <div class="zh"><p>使用凸优化的挑战与艺术，在于识别和表述问题。一旦表述完成，求解问题——如同最小二乘或线性规划——（几乎）已成为一门技术。</p></div>
+    </div>
+
+    <!-- ============== 1.4 ============== -->
+    <div class="pair head">
+      <div class="en"><h2>1.4 Nonlinear optimization</h2></div>
+      <div class="zh"><h2>1.4 非线性优化</h2></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Nonlinear optimization (or nonlinear programming) is the term used to describe an optimization problem when the objective or constraint functions are not linear, but not known to be convex. Sadly, there are no effective methods for solving the general nonlinear programming problem (1.1). Even simple looking problems with as few as ten variables can be extremely challenging, while problems with a few hundreds of variables can be intractable. Methods for the general nonlinear programming problem therefore take several different approaches, each of which involves some compromise.</p></div>
+      <div class="zh"><p><strong>非线性优化</strong>（或非线性规划）用来指称目标或约束函数非线性、且并不已知为凸的优化问题。遗憾的是，对于一般的非线性规划问题 (1.1)，尚无有效方法。即使是看起来简单、仅有十个变量的问题也可能极具挑战性，而几百个变量的问题可能无法求解。因此，一般非线性规划问题的方法采取了若干不同路线，每条路线都包含某种折中。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>1.4.1 Local optimization</h3></div>
+      <div class="zh"><h3>1.4.1 局部优化</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>In local optimization, the compromise is to give up seeking the optimal $x$, which minimizes the objective over all feasible points. Instead we seek a point that is only locally optimal, which means that it minimizes the objective function among feasible points that are near it, but is not guaranteed to have a lower objective value than all other feasible points. A large fraction of the research on general nonlinear programming has focused on methods for local optimization, which as a consequence are well developed.</p></div>
+      <div class="zh"><p>在<strong>局部优化</strong>（local optimization）中，折中是放弃寻找在所有可行点上使目标最小的最优 $x$。取而代之，我们寻找一个仅<strong>局部最优</strong>的点——即它在邻近的可行点中最小化目标函数，但不保证其目标值低于所有其他可行点。一般非线性规划研究的很大一部分集中在局部优化方法上，因此这些方法已相当成熟。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Local optimization methods can be fast, can handle large-scale problems, and are widely applicable, since they only require differentiability of the objective and constraint functions. As a result, local optimization methods are widely used in applications where there is value in finding a good point, if not the very best. In an engineering design application, for example, local optimization can be used to improve the performance of a design originally obtained by manual, or other, design methods.</p></div>
+      <div class="zh"><p>局部优化方法可以很快、能处理大规模问题，并且适用面广——因为它们只要求目标与约束函数可微。因此，在那些"找到一个好点（即便不是最优）也有价值"的应用中，局部优化方法被广泛使用。例如在工程设计应用中，局部优化可用来改进原先由手工或其他设计方法得到的设计的性能。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>There are several disadvantages of local optimization methods, beyond (possibly) not finding the true, globally optimal solution. The methods require an initial guess for the optimization variable. This initial guess or starting point is critical, and can greatly affect the objective value of the local solution obtained. Little information is provided about how far from (globally) optimal the local solution is. Local optimization methods are often sensitive to algorithm parameter values, which may need to be adjusted for a particular problem, or family of problems.</p></div>
+      <div class="zh"><p>除（可能）找不到真正的全局最优解之外，局部优化方法还有若干缺点。这些方法需要优化变量的初始猜测。这个初始猜测或<strong>起点</strong>（starting point）至关重要，会极大地影响所得局部解的目标值。关于局部解离（全局）最优有多远，几乎没有信息提供。局部优化方法往往对算法参数值敏感，可能需要针对特定问题或问题族进行调整。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Using a local optimization method is trickier than solving a least-squares problem, linear program, or convex optimization problem. It involves experimenting with the choice of algorithm, adjusting algorithm parameters, and finding a good enough initial guess (when one instance is to be solved) or a method for producing a good enough initial guess (when a family of problems is to be solved). Roughly speaking, local optimization methods are more art than technology. Local optimization is a well developed art, and often very effective, but it is nevertheless an art. In contrast, there is little art involved in solving a least-squares problem or a linear program (except, of course, those on the boundary of what is currently possible).</p></div>
+      <div class="zh"><p>使用局部优化方法比求解最小二乘、线性规划或凸优化问题更棘手。它涉及试验算法选择、调整算法参数、并寻找足够好的初始猜测（求解单个实例时），或寻找产生足够好初始猜测的方法（求解问题族时）。粗略地说，局部优化方法与其说是技术不如说是艺术。局部优化是一门发展成熟的艺术，往往非常有效，但它终究是艺术。相比之下，求解最小二乘问题或线性规划几乎不涉及艺术（当然，处于当前能力边界的那些问题除外）。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>An interesting comparison can be made between local optimization methods for nonlinear programming, and convex optimization. Since differentiability of the objective and constraint functions is the only requirement for most local optimization methods, formulating a practical problem as a nonlinear optimization problem is relatively straightforward. The art in local optimization is in solving the problem (in the weakened sense of finding a locally optimal point), once it is formulated. In convex optimization these are reversed: The art and challenge is in problem formulation; once a problem is formulated as a convex optimization problem, it is relatively straightforward to solve it.</p></div>
+      <div class="zh"><p>可以在非线性规划的局部优化方法与凸优化之间作一个有趣对比。由于大多数局部优化方法只要求目标与约束函数可微，把实际问题表述为非线性优化问题相对直接。局部优化的艺术在于（在找到局部最优点的弱化意义下）求解已表述好的问题。在凸优化中二者正好颠倒：艺术与挑战在于问题表述；一旦问题被表述为凸优化问题，求解就相对直接了。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>1.4.2 Global optimization</h3></div>
+      <div class="zh"><h3>1.4.2 全局优化</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>In global optimization, the true global solution of the optimization problem (1.1) is found; the compromise is efficiency. The worst-case complexity of global optimization methods grows exponentially with the problem sizes $n$ and $m$; the hope is that in practice, for the particular problem instances encountered, the method is far faster. While this favorable situation does occur, it is not typical. Even small problems, with a few tens of variables, can take a very long time (e.g., hours or days) to solve.</p></div>
+      <div class="zh"><p>在<strong>全局优化</strong>（global optimization）中，要找到优化问题 (1.1) 真正的全局解；折中的是效率。全局优化方法的最坏情况复杂度随问题规模 $n$ 和 $m$ 指数增长；所期望的是：实践中对所遇到的特定问题实例，方法要快得多。虽然这种有利情形确实会出现，但并不典型。即使是只有几十个变量的小问题，也可能花费很长的时间（例如数小时或数天）来求解。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Global optimization is used for problems with a small number of variables, where computing time is not critical, and the value of finding the true global solution is very high. One example from engineering design is worst-case analysis or verification of a high value or safety-critical system. Here the variables represent uncertain parameters, that can vary during manufacturing, or with the environment or operating condition. The objective function is a utility function, i.e., one for which smaller values are worse than larger values, and the constraints represent prior knowledge about the possible parameter values. The optimization problem (1.1) is the problem of finding the worst-case values of the parameters. If the worst-case value is acceptable, we can certify the system as safe or reliable (with respect to the parameter variations).</p></div>
+      <div class="zh"><p>全局优化用于变量数目较少、计算时间不紧迫、且找到真正全局解价值很高的问题。工程设计中的一个例子是高价值或安全关键系统的<strong>最坏情形分析</strong>或验证。这里变量代表不确定参数——它们在制造过程中、或随环境和运行条件而变化。目标函数是一个效用函数（utility function，其值越小越糟），约束代表关于参数可能取值的先验知识。优化问题 (1.1) 即是寻找参数的最坏情形取值。若该最坏情形值可接受，我们就可以（就参数变化而言）认证该系统为安全或可靠的。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>A local optimization method can rapidly find a set of parameter values that is bad, but not guaranteed to be the absolute worst possible. If a local optimization method finds parameter values that yield unacceptable performance, it has succeeded in determining that the system is not reliable. But a local optimization method cannot certify the system as reliable; it can only fail to find bad parameter values. A global optimization method, in contrast, will find the absolute worst values of the parameters, and if the associated performance is acceptable, can certify the system as safe. The cost is computation time, which can be very large, even for a relatively small number of parameters. But it may be worth it in cases where the value of certifying the performance is high, or the cost of being wrong about the reliability or safety is high.</p></div>
+      <div class="zh"><p>局部优化方法可以迅速找到一组糟糕的参数取值，但不保证是绝对最坏的。若局部优化方法找到的参数取值导致不可接受的性能，它就成功地判定系统不可靠。但局部优化方法不能认证系统可靠——它只能"未能找到糟糕的参数取值"。相比之下，全局优化方法会找到参数的绝对最坏取值，若其对应的性能可接受，就可以认证系统为安全。代价是计算时间，即使参数数目相对较少，这一时间也可能非常大。但在认证性能的价值很高、或对可靠性/安全性判断错误的代价很高的场合，这是值得的。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>1.4.3 Role of convex optimization in nonconvex problems</h3></div>
+      <div class="zh"><h3>1.4.3 凸优化在非凸问题中的角色</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>In this book we focus primarily on convex optimization problems, and applications that can be reduced to convex optimization problems. But convex optimization also plays an important role in problems that are not convex.</p></div>
+      <div class="zh"><p>本书主要关注凸优化问题，以及可归约为凸优化问题的应用。但凸优化在非凸问题中也扮演重要角色。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Initialization for local optimization</h3></div>
+      <div class="zh"><h3>局部优化的初始化</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>One obvious use is to combine convex optimization with a local optimization method. Starting with a nonconvex problem, we first find an approximate, but convex, formulation of the problem. By solving this approximate problem, which can be done easily and without an initial guess, we obtain the exact solution to the approximate convex problem. This point is then used as the starting point for a local optimization method, applied to the original nonconvex problem.</p></div>
+      <div class="zh"><p>一个明显的用法是把凸优化与局部优化方法结合。从非凸问题出发，我们先找到问题的一个近似但凸的表述。求解这一近似问题（可轻松完成、且无需初始猜测），得到近似凸问题的精确解。然后用这一点作为局部优化方法求解原非凸问题的起点。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Convex heuristics for nonconvex optimization</h3></div>
+      <div class="zh"><h3>非凸优化的凸启发式</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Convex optimization is the basis for several heuristics for solving nonconvex problems. One interesting example we will see is the problem of finding a sparse vector $x$ (i.e., one with few nonzero entries) that satisfies some constraints. While this is a difficult combinatorial problem, there are some simple heuristics, based on convex optimization, that often find fairly sparse solutions. (These are described in chapter 6.)</p></div>
+      <div class="zh"><p>凸优化是若干求解非凸问题的启发式方法的基础。我们将看到的一个有趣例子是：寻找满足某些约束的<strong>稀疏</strong>向量 $x$（即非零分量很少的向量）。虽然这是一个困难的组合问题，但有一些基于凸优化的简单启发式方法，往往能找到相当稀疏的解。（这些在第 6 章描述。）</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Another broad example is given by randomized algorithms, in which an approximate solution to a nonconvex problem is found by drawing some number of candidates from a probability distribution, and taking the best one found as the approximate solution. Now suppose the family of distributions from which we will draw the candidates is parametrized, e.g., by its mean and covariance. We can then pose the question, which of these distributions gives us the smallest expected value of the objective? It turns out that this problem is sometimes a convex problem, and therefore efficiently solved. (See, e.g., exercise 11.23.)</p></div>
+      <div class="zh"><p>另一大类例子由随机化算法给出：从某个概率分布中抽取若干候选，取其中最佳者作为非凸问题的近似解。现在假设我们抽取候选的分布族是参数化的（例如由其均值和协方差参数化）。于是可以提出问题：这些分布中哪一个使目标的期望值最小？结果表明该问题有时是一个凸问题，因此可以高效求解。（见例如习题 11.23。）</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Bounds for global optimization</h3></div>
+      <div class="zh"><h3>全局优化的界</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Many methods for global optimization require a cheaply computable lower bound on the optimal value of the nonconvex problem. Two standard methods for doing this are based on convex optimization. In relaxation, each nonconvex constraint is replaced with a looser, but convex, constraint. In Lagrangian relaxation, the Lagrangian dual problem (described in chapter 5) is solved. This problem is convex, and provides a lower bound on the optimal value of the nonconvex problem.</p></div>
+      <div class="zh"><p>许多全局优化方法都需要非凸问题最优值的一个易于计算的<strong>下界</strong>。两种标准方法基于凸优化。在<strong>松弛</strong>（relaxation）中，把每个非凸约束替换为一个更宽松但凸的约束。在<strong>拉格朗日松弛</strong>（Lagrangian relaxation）中，求解拉格朗日对偶问题（第 5 章描述）。该问题是凸的，并给出非凸问题最优值的下界。</p></div>
+    </div>
+
+    <!-- ============== 1.5 ============== -->
+    <div class="pair head">
+      <div class="en"><h2>1.5 Outline</h2></div>
+      <div class="zh"><h2>1.5 本书纲要</h2></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The book is divided into three main parts, titled Theory, Applications, and Algorithms.</p></div>
+      <div class="zh"><p>本书分为三个主要部分：理论（Theory）、应用（Applications）与算法（Algorithms）。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>1.5.1 Part I: Theory</h3></div>
+      <div class="zh"><h3>1.5.1 第一部分：理论</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>In part I, Theory, we cover basic definitions, concepts, and results from convex analysis and convex optimization. We make no attempt to be encyclopedic, and skew our selection of topics toward those that we think are useful in recognizing and formulating convex optimization problems. This is classical material, almost all of which can be found in other texts on convex analysis and optimization. We make no attempt to give the most general form of the results; for that the reader can refer to any of the standard texts on convex analysis.</p></div>
+      <div class="zh"><p>在第一部分"理论"中，我们涵盖凸分析与凸优化的基本定义、概念和结果。我们不力求百科全书式完备，而是偏向那些我们认为对识别与表述凸优化问题有用的主题进行选材。这些是经典材料，几乎全部可在其他凸分析与优化教材中找到。我们也不力求给出结果的最一般形式；为此读者可参考任何一本凸分析的标准教材。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Chapters 2 and 3 cover convex sets and convex functions, respectively. We give some common examples of convex sets and functions, as well as a number of convex calculus rules, i.e., operations on sets and functions that preserve convexity. Combining the basic examples with the convex calculus rules allows us to form (or perhaps more importantly, recognize) some fairly complicated convex sets and functions.</p></div>
+      <div class="zh"><p>第 2、3 章分别讨论凸集与凸函数。我们给出凸集与凸函数的一些常见例子，以及若干<strong>凸微积分规则</strong>（convex calculus rules）——即保持凸性的集合与函数运算。把基本例子与凸微积分规则结合起来，使我们能构造（或更重要的是，识别）一些相当复杂的凸集与凸函数。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>In chapter 4, Convex optimization problems, we give a careful treatment of optimization problems, and describe a number of transformations that can be used to reformulate problems. We also introduce some common subclasses of convex optimization, such as linear programming and geometric programming, and the more recently developed second-order cone programming and semidefinite programming.</p></div>
+      <div class="zh"><p>第 4 章"凸优化问题"对优化问题作严谨处理，并描述若干可用于重新表述问题的变换。我们还介绍凸优化的一些常见子类，如线性规划与几何规划，以及较新发展的二阶锥规划与半定规划。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Chapter 5 covers Lagrangian duality, which plays a central role in convex optimization. Here we give the classical Karush-Kuhn-Tucker conditions for optimality, and a local and global sensitivity analysis for convex optimization problems.</p></div>
+      <div class="zh"><p>第 5 章讨论拉格朗日对偶，它在凸优化中扮演核心角色。在此给出经典的 Karush-Kuhn-Tucker（KKT）最优性条件，以及凸优化问题的局部和全局灵敏度分析。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>1.5.2 Part II: Applications</h3></div>
+      <div class="zh"><h3>1.5.2 第二部分：应用</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>In part II, Applications, we describe a variety of applications of convex optimization, in areas like probability and statistics, computational geometry, and data fitting. We have described these applications in a way that is accessible, we hope, to a broad audience. To keep each application short, we consider only simple cases, sometimes adding comments about possible extensions. We are sure that our treatment of some of the applications will cause experts to cringe, and we apologize to them in advance. But our goal is to convey the flavor of the application, quickly and to a broad audience, and not to give an elegant, theoretically sound, or complete treatment. Our own backgrounds are in electrical engineering, in areas like control systems, signal processing, and circuit analysis and design. Although we include these topics in the courses we teach (using this book as the main text), only a few of these applications are broadly enough accessible to be included here.</p></div>
+      <div class="zh"><p>在第二部分"应用"中，我们描述凸优化在概率与统计、计算几何、数据拟合等领域的各种应用。我们希望以一种广受众可接受的方式描述这些应用。为使每个应用简短，我们只考虑简单情形，有时补充可能扩展的注释。我们确信我们对某些应用的处理会让专家皱眉，在此提前致歉。但我们的目标是快速、面向广受众传达应用的要旨，而非给出优雅、理论上严谨或完整的处理。我们自己的背景是电气工程，涉及控制系统、信号处理以及电路分析与设计等领域。虽然我们在所教课程中（以本书为主教材）包含了这些主题，但其中只有少数应用足够广受众可接受，能纳入此处。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The aim of part II is to show the reader, by example, how convex optimization can be applied in practice.</p></div>
+      <div class="zh"><p>第二部分的目的是通过例子向读者展示：凸优化在实践中如何应用。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>1.5.3 Part III: Algorithms</h3></div>
+      <div class="zh"><h3>1.5.3 第三部分：算法</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>In part III, Algorithms, we describe numerical methods for solving convex optimization problems, focusing on Newton's algorithm and interior-point methods. Part III is organized as three chapters, which cover unconstrained optimization, equality constrained optimization, and inequality constrained optimization, respectively. These chapters follow a natural hierarchy, in which solving a problem is reduced to solving a sequence of simpler problems. Quadratic optimization problems (including, e.g., least-squares) form the base of the hierarchy; they can be solved exactly by solving a set of linear equations. Newton's method, developed in chapters 9 and 10, is the next level in the hierarchy. In Newton's method, solving an unconstrained or equality constrained problem is reduced to solving a sequence of quadratic problems. In chapter 11, we describe interior-point methods, which form the top level of the hierarchy. These methods solve an inequality constrained problem by solving a sequence of unconstrained, or equality constrained, problems.</p></div>
+      <div class="zh"><p>在第三部分"算法"中，我们描述求解凸优化问题的数值方法，重点是牛顿算法与内点法。第三部分组织为三章，分别讨论无约束优化、等式约束优化和不等式约束优化。这三章遵循一个自然的层级结构：把求解一个问题归约为求解一系列更简单的问题。二次优化问题（包括例如最小二乘）构成该层级的基底——它们可以通过求解一组线性方程精确求解。在第 9、10 章中发展的牛顿法是层级的下一层：在牛顿法中，求解一个无约束或等式约束问题被归约为求解一系列二次问题。第 11 章描述内点法，构成层级的顶层：这些方法通过求解一系列无约束（或等式约束）问题来求解不等式约束问题。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Overall we cover just a handful of algorithms, and omit entire classes of good methods, such as quasi-Newton, conjugate-gradient, bundle, and cutting-plane algorithms. For the methods we do describe, we give simplified variants, and not the latest, most sophisticated versions. Our choice of algorithms was guided by several criteria. We chose algorithms that are simple (to describe and implement), but also reliable and robust, and effective and fast enough for most problems.</p></div>
+      <div class="zh"><p>总体上我们只涵盖少数几个算法，并省略了若干类好的方法，如拟牛顿法、共轭梯度法、束法和割平面法。对于我们所描述的方法，只给出简化变体，而非最新、最精巧的版本。我们对算法的选择受若干准则引导：我们选择那些简单（易于描述与实现），同时又可靠、稳健，并且对大多数问题足够有效和快速的算法。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Many users of convex optimization end up using (but not developing) standard software, such as a linear or semidefinite programming solver. For these users, the material in part III is meant to convey the basic flavor of the methods, and give some ideas of their basic attributes. For those few who will end up developing new algorithms, we think that part III serves as a good introduction.</p></div>
+      <div class="zh"><p>许多凸优化的使用者最终只是使用（而不开发）标准软件，例如线性或半定规划求解器。对这些用户，第三部分的材料意在传达方法的基本要旨，并给出其基本属性的一些概念。对于少数将开发新算法的人，我们认为第三部分是一个良好的入门。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>1.5.4 Appendices</h3></div>
+      <div class="zh"><h3>1.5.4 附录</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>There are three appendices. The first lists some basic facts from mathematics that we use, and serves the secondary purpose of setting out our notation. The second appendix covers a fairly particular topic, optimization problems with quadratic objective and one quadratic constraint. These are nonconvex problems that nevertheless can be effectively solved, and we use the results in several of the applications described in part II.</p></div>
+      <div class="zh"><p>共有三个附录。第一个列出我们所用的若干基本数学事实，并兼起规范符号的作用。第二个附录讨论一个相当特定的主题——具有二次目标和单个二次约束的优化问题。这些是非凸问题，但仍然可以高效求解；我们在第二部分描述的若干应用中使用了其结果。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The final appendix gives a brief introduction to numerical linear algebra, concentrating on methods that can exploit problem structure, such as sparsity, to gain efficiency. We do not cover a number of important topics, including roundoff analysis, or give any details of the methods used to carry out the required factorizations. These topics are covered by a number of excellent texts.</p></div>
+      <div class="zh"><p>最后一个附录给出数值线性代数的简要入门，重点是可以利用问题结构（如稀疏性）以获得效率的方法。我们不涵盖若干重要主题，包括舍入误差分析，也不给出执行所需分解的方法细节。这些主题由若干优秀教材涵盖。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>1.5.5 Comments on examples</h3></div>
+      <div class="zh"><h3>1.5.5 关于例子的说明</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>In many places in the text (but particularly in parts II and III, which cover applications and algorithms, respectively) we illustrate ideas using specific examples. In some cases, the examples are chosen (or designed) specifically to illustrate our point; in other cases, the examples are chosen to be 'typical'. This means that the examples were chosen as samples from some obvious or simple probability distribution. The dangers of drawing conclusions about algorithm performance from a few tens or hundreds of randomly generated examples are well known, so we will not repeat them here. These examples are meant only to give a rough idea of algorithm performance, or a rough idea of how the computational effort varies with problem dimensions, and not as accurate predictors of algorithm performance. In particular, your results may vary from ours.</p></div>
+      <div class="zh"><p>在正文许多地方（尤其是分别涵盖应用与算法的第二、第三部分），我们用具体例子来阐明思想。有些例子是专门为说明我们的论点而选择（或设计）的；另一些则选择为"典型的"——即从某个明显或简单的概率分布中抽样得到。从几十或几百个随机生成的例子中得出算法性能结论的危险是众所周知的，此处不再赘述。这些例子只是为了给出算法性能的粗略概念，或给出计算量随问题维度变化的粗略概念，而非算法性能的精确预测。特别地，你的结果可能与我们的不同。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>1.5.6 Comments on exercises</h3></div>
+      <div class="zh"><h3>1.5.6 关于习题的说明</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Each chapter concludes with a set of exercises. Some involve working out the details of an argument or claim made in the text. Others focus on determining, or establishing, convexity of some given sets, functions, or problems; or more generally, convex optimization problem formulation. Some chapters include numerical exercises, which require some (but not much) programming in an appropriate high level language. The difficulty level of the exercises is mixed, and varies without warning from quite straightforward to rather tricky.</p></div>
+      <div class="zh"><p>每章末尾有一组习题。一些习题要求推证正文中某论证或论断的细节。另一些聚焦于判定或建立给定集合、函数或问题的凸性；或更一般地，凸优化问题的表述。一些章节包含数值习题，要求用适当的高级语言进行一些（不多的）编程。习题难度参差，且毫无预警地从相当直接到相当刁钻。</p></div>
+    </div>
+
+    <!-- ============== 1.6 ============== -->
+    <div class="pair head">
+      <div class="en"><h2>1.6 Notation</h2></div>
+      <div class="zh"><h2>1.6 记号</h2></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Our notation is more or less standard, with a few exceptions. In this section we describe our basic notation; a more complete list appears on page 697.</p></div>
+      <div class="zh"><p>我们的记号大致标准，有少数例外。本节描述基本记号；更完整的列表见第 697 页。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We use $\mathbb{R}$ to denote the set of real numbers, $\mathbb{R}_+$ to denote the set of nonnegative real numbers, and $\mathbb{R}_{++}$ to denote the set of positive real numbers. The set of real $n$-vectors is denoted $\mathbb{R}^n$, and the set of real $m \times n$ matrices is denoted $\mathbb{R}^{m\times n}$. We delimit vectors and matrices with square brackets, with the components separated by space. We use parentheses to construct column vectors from comma separated lists. For example, if $a, b, c \in \mathbb{R}$, we have</p>
+        <p>$$(a,b,c) = \begin{bmatrix} a \\ b \\ c \end{bmatrix} = \begin{bmatrix} a &amp; b &amp; c \end{bmatrix}^T,$$</p>
+        <p>which is an element of $\mathbb{R}^3$. The symbol $\mathbf{1}$ denotes a vector all of whose components are one (with dimension determined from context). The notation $x_i$ can refer to the $i$th component of the vector $x$, or to the $i$th element of a set or sequence of vectors $x_1, x_2, \ldots$. The context, or the text, makes it clear which is meant.</p></div>
+      <div class="zh"><p>我们用 $\mathbb{R}$ 表示实数集，$\mathbb{R}_+$ 表示非负实数集，$\mathbb{R}_{++}$ 表示正实数集。实 $n$ 维向量集记为 $\mathbb{R}^n$，实 $m\times n$ 矩阵集记为 $\mathbb{R}^{m\times n}$。我们用方括号界定向量与矩阵，分量之间用空格分隔。我们用圆括号从逗号分隔的列表构造列向量。例如，若 $a,b,c\in\mathbb{R}$，则</p>
+        <p>$$(a,b,c) = \begin{bmatrix} a \\ b \\ c \end{bmatrix} = \begin{bmatrix} a &amp; b &amp; c \end{bmatrix}^T,$$</p>
+        <p>它是 $\mathbb{R}^3$ 的一个元素。符号 $\mathbf{1}$ 表示所有分量均为 1 的向量（其维数由上下文确定）。记号 $x_i$ 可指向向量 $x$ 的第 $i$ 个分量，也可指向向量集合或序列 $x_1,x_2,\ldots$ 的第 $i$ 个元素。由上下文或文字可明确所指。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We use $\mathbf{S}^k$ to denote the set of symmetric $k \times k$ matrices, $\mathbf{S}^k_+$ to denote the set of symmetric positive semidefinite $k \times k$ matrices, and $\mathbf{S}^k_{++}$ to denote the set of symmetric positive definite $k \times k$ matrices.</p></div>
+      <div class="zh"><p>我们用 $\mathbf{S}^k$ 表示 $k\times k$ 对称矩阵的集合，$\mathbf{S}^k_+$ 表示 $k\times k$ 对称半正定矩阵的集合，$\mathbf{S}^k_{++}$ 表示 $k\times k$ 对称正定矩阵的集合。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The curled inequality symbol $\succeq$ (and its strict form $\succ$) is used to denote generalized inequality: between vectors, it represents componentwise inequality; between symmetric matrices, it represents matrix inequality. With a subscript, the symbol $\preceq_K$ (or $\prec_K$) denotes generalized inequality with respect to the cone $K$ (explained in §2.4.1).</p></div>
+      <div class="zh"><p>卷曲的不等号 $\succeq$（及其严格形式 $\succ$）用于表示广义不等式：在向量之间表示分量式不等式；在对称矩阵之间表示矩阵不等式。带下标时，符号 $\preceq_K$（或 $\prec_K$）表示关于锥 $K$ 的广义不等式（见 §2.4.1）。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Our notation for describing functions deviates a bit from standard notation, but we hope it will cause no confusion. We use the notation $f:\mathbb{R}^p \to \mathbb{R}^q$ to mean that $f$ is an $\mathbb{R}^q$-valued function on some subset of $\mathbb{R}^p$, specifically, its domain, which we denote $\mathbf{dom}\, f$. We can think of our use of the notation $f:\mathbb{R}^p \to \mathbb{R}^q$ as a declaration of the function type, as in a computer language: $f:\mathbb{R}^p \to \mathbb{R}^q$ means that the function $f$ takes as argument a real $p$-vector, and returns a real $q$-vector. The set $\mathbf{dom}\, f$, the domain of the function $f$, specifies the subset of $\mathbb{R}^p$ of points $x$ for which $f(x)$ is defined. As an example, we describe the logarithm function as $\log:\mathbb{R} \to \mathbb{R}$, with $\mathbf{dom}\,\log = \mathbb{R}_{++}$. The notation $\log:\mathbb{R} \to \mathbb{R}$ means that the logarithm function accepts and returns a real number; $\mathbf{dom}\,\log = \mathbb{R}_{++}$ means that the logarithm is defined only for positive numbers.</p></div>
+      <div class="zh"><p>我们描述函数的记号与标准记号略有出入，但希望不致引起困惑。我们用记号 $f:\mathbb{R}^p\to\mathbb{R}^q$ 表示 $f$ 是定义在 $\mathbb{R}^p$ 某子集（即其<strong>定义域</strong>，记为 $\mathbf{dom}\,f$）上的 $\mathbb{R}^q$ 值函数。可以把我们对 $f:\mathbb{R}^p\to\mathbb{R}^q$ 的用法看作函数类型的声明（如同计算机语言中那样）：$f:\mathbb{R}^p\to\mathbb{R}^q$ 表示函数 $f$ 接受一个实 $p$ 维向量为参数，并返回一个实 $q$ 维向量。集合 $\mathbf{dom}\,f$（函数 $f$ 的定义域）指定 $\mathbb{R}^p$ 中使 $f(x)$ 有定义的点 $x$ 的子集。例如，我们把对数函数描述为 $\log:\mathbb{R}\to\mathbb{R}$，其中 $\mathbf{dom}\,\log=\mathbb{R}_{++}$。记号 $\log:\mathbb{R}\to\mathbb{R}$ 表示对数函数接受并返回一个实数；$\mathbf{dom}\,\log=\mathbb{R}_{++}$ 表示对数只对正数有定义。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We use $\mathbb{R}^n$ as a generic finite-dimensional vector space. We will encounter several other finite-dimensional vector spaces, e.g., the space of polynomials of a variable with a given maximum degree, or the space $\mathbf{S}^k$ of symmetric $k\times k$ matrices. By identifying a basis for a vector space, we can always identify it with $\mathbb{R}^n$ (where $n$ is its dimension), and therefore the generic results, stated for the vector space $\mathbb{R}^n$, can be applied. We usually leave it to the reader to translate general results or statements to other vector spaces. For example, any linear function $f:\mathbb{R}^n \to \mathbb{R}$ can be represented in the form $f(x) = c^T x$, where $c \in \mathbb{R}^n$. The corresponding statement for the vector space $\mathbf{S}^k$ can be found by choosing a basis and translating. This results in the statement: any linear function $f:\mathbf{S}^k \to \mathbb{R}$ can be represented in the form $f(X) = \mathbf{tr}(CX)$, where $C \in \mathbf{S}^k$.</p></div>
+      <div class="zh"><p>我们把 $\mathbb{R}^n$ 用作一般的有限维向量空间。我们还会遇到若干其他有限维向量空间，例如具有给定最高次数的某变量多项式空间，或 $k\times k$ 对称矩阵空间 $\mathbf{S}^k$。通过为向量空间取定一组基，我们总可以把它与 $\mathbb{R}^n$（其中 $n$ 为其维数）等同起来，因此对向量空间 $\mathbb{R}^n$ 陈述的一般结果即可应用。我们通常把将一般结果或陈述翻译到其他向量空间的工作留给读者。例如，任何线性函数 $f:\mathbb{R}^n\to\mathbb{R}$ 都可表示为 $f(x)=c^T x$，其中 $c\in\mathbb{R}^n$。对向量空间 $\mathbf{S}^k$ 的相应陈述可通过取定一组基并翻译得到。结果为：任何线性函数 $f:\mathbf{S}^k\to\mathbb{R}$ 都可表示为 $f(X)=\mathbf{tr}(CX)$，其中 $C\in\mathbf{S}^k$。</p></div>
+    </div>
+
+    <!-- ============== Bibliography ============== -->
+    <div class="pair head">
+      <div class="en"><h2>Bibliography</h2></div>
+      <div class="zh"><h2>参考文献</h2></div>
+    </div>
+
+    <div class="pair bib">
+      <div class="en"><p>Least-squares is a very old subject; see, for example, the treatise written (in Latin) by Gauss in the 1820s, and recently translated by Stewart [Gau95]. More recent work includes the books by Lawson and Hanson [LH95] and Björck [Bjö96]. References on linear programming can be found in chapter 4.</p></div>
+      <div class="zh"><p>最小二乘是一个很古老的课题；例如可见 Gauss 在 19 世纪 20 年代用拉丁文撰写、近期由 Stewart 翻译的论著 [Gau95]。更近期的工作包括 Lawson 与 Hanson [LH95] 以及 Björck [Bjö96] 的著作。关于线性规划的参考文献见第 4 章。</p></div>
+    </div>
+
+    <div class="pair bib">
+      <div class="en"><p>There are many good texts on local methods for nonlinear programming, including Gill, Murray, and Wright [GMW81], Nocedal and Wright [NW99], Luenberger [Lue84], and Bertsekas [Ber99]. Global optimization is covered in the books by Horst and Pardalos [HP94], Pinter [Pin95], and Tuy [Tuy98]. Using convex optimization to find bounds for nonconvex problems is an active research topic, and addressed in the books above on global optimization, the book by Ben-Tal and Nemirovski [BTN01, §4.3], and the survey by Nesterov, Wolkowicz, and Ye [NWY00]. Some notable papers on this subject are Goemans and Williamson [GW95], Nesterov [Nes00, Nes98], Ye [Ye99], and Parrilo [Par03]. Randomized methods are discussed in Motwani and Raghavan [MR95].</p></div>
+      <div class="zh"><p>关于非线性规划局部方法的优秀教材很多，包括 Gill、Murray 与 Wright [GMW81]，Nocedal 与 Wright [NW99]，Luenberger [Lue84] 以及 Bertsekas [Ber99]。全局优化可参考 Horst 与 Pardalos [HP94]、Pinter [Pin95]、Tuy [Tuy98] 的著作。用凸优化为非凸问题寻找界是一个活跃的研究课题，在上文全局优化的著作、Ben-Tal 与 Nemirovski [BTN01, §4.3] 以及 Nesterov、Wolkowicz 与 Ye 的综述 [NWY00] 中均有讨论。该主题的若干重要论文包括 Goemans 与 Williamson [GW95]、Nesterov [Nes00, Nes98]、Ye [Ye99] 和 Parrilo [Par03]。随机化方法见 Motwani 与 Raghavan [MR95]。</p></div>
+    </div>
+
+    <div class="pair bib">
+      <div class="en"><p>Convex analysis, the mathematics of convex sets, functions, and optimization problems, is a well developed subfield of mathematics. Basic references include the books by Rockafellar [Roc70], Hiriart-Urruty and Lemaréchal [HUL93, HUL01], Borwein and Lewis [BL00], and Bertsekas, Nedić, and Ozdaglar [Ber03]. More references on convex analysis can be found in chapters 2–5.</p></div>
+      <div class="zh"><p>凸分析——即凸集、凸函数与凸优化问题的数学——是数学中一个发展成熟的子领域。基本参考包括 Rockafellar [Roc70]、Hiriart-Urruty 与 Lemaréchal [HUL93, HUL01]、Borwein 与 Lewis [BL00] 以及 Bertsekas、Nedić 与 Ozdaglar [Ber03] 的著作。更多关于凸分析的参考文献见第 2–5 章。</p></div>
+    </div>
+
+    <div class="pair bib">
+      <div class="en"><p>Nesterov and Nemirovski [NN94] were the first to point out that interior-point methods can solve many convex optimization problems; see also the references in chapter 11. The book by Ben-Tal and Nemirovski [BTN01] covers modern convex optimization, interior-point methods, and applications.</p></div>
+      <div class="zh"><p>Nesterov 与 Nemirovski [NN94] 最先指出内点法可以求解许多凸优化问题；另见第 11 章的参考文献。Ben-Tal 与 Nemirovski [BTN01] 的著作涵盖现代凸优化、内点法及其应用。</p></div>
+    </div>
+
+    <div class="pair bib">
+      <div class="en"><p>Solution methods for convex optimization that we do not cover in this book include subgradient methods [Sho85], bundle methods [HUL93], cutting-plane methods [Kel60, EM75, GLY96], and the ellipsoid method [Sho91, BGT81].</p></div>
+      <div class="zh"><p>本书未涵盖的凸优化求解方法包括次梯度法 [Sho85]、束法 [HUL93]、割平面法 [Kel60, EM75, GLY96] 以及椭球法 [Sho91, BGT81]。</p></div>
+    </div>
+
+    <div class="pair bib">
+      <div class="en"><p>The idea that convex optimization problems are tractable is not new. It has long been recognized that the theory of convex optimization is far more straightforward (and complete) than the theory of general nonlinear optimization. In this context Rockafellar stated, in his 1993 SIAM Review survey paper [Roc93],</p></div>
+      <div class="zh"><p>凸优化问题易于求解这一思想并非新近才有。人们早已认识到，凸优化的理论远比一般非线性优化的理论直接（也更完备）。在此语境下，Rockafellar 在其 1993 年的 SIAM Review 综述 [Roc93] 中写道：</p></div>
+    </div>
+
+    <div class="pair bib">
+      <div class="en"><p style="font-style:italic; padding-left:24px; border-left:3px solid var(--rule)">In fact the great watershed in optimization isn't between linearity and nonlinearity, but convexity and nonconvexity.</p></div>
+      <div class="zh"><p style="font-style:italic; padding-left:24px; border-left:3px solid var(--rule)">"事实上，优化中巨大的分水岭不在于线性与非线性之间，而在于凸与非凸之间。"</p></div>
+    </div>
+
+    <div class="pair bib">
+      <div class="en"><p>The first formal argument that convex optimization problems are easier to solve than general nonlinear optimization problems was made by Nemirovski and Yudin, in their 1983 book <em>Problem Complexity and Method Efficiency in Optimization</em> [NY83]. They showed that the information-based complexity of convex optimization problems is far lower than that of general nonlinear optimization problems. A more recent book on this topic is Vavasis [Vav91].</p></div>
+      <div class="zh"><p>凸优化问题比一般非线性优化问题更易求解的首次形式化论证，由 Nemirovski 与 Yudin 在其 1983 年的著作《Problem Complexity and Method Efficiency in Optimization》[NY83] 中给出。他们证明了凸优化问题的基于信息的复杂度远低于一般非线性优化问题。该主题更近的著作有 Vavasis [Vav91]。</p></div>
+    </div>
+
+    <div class="pair bib">
+      <div class="en"><p>The low (theoretical) complexity of interior-point methods is integral to modern research in this area. Much of the research focuses on proving that an interior-point (or other) method can solve some class of convex optimization problems with a number of operations that grows no faster than a polynomial of the problem dimensions and $\log(1/\varepsilon)$, where $\varepsilon > 0$ is the required accuracy. (We will see some simple results like these in chapter 11.) The first comprehensive work on this topic is the book by Nesterov and Nemirovski [NN94]. Other books include Ben-Tal and Nemirovski [BTN01, lecture 5] and Renegar [Ren01]. The polynomial-time complexity of interior-point methods for various convex optimization problems is in marked contrast to the situation for a number of nonconvex optimization problems, for which all known algorithms require, in the worst case, a number of operations that is exponential in the problem dimensions.</p></div>
+      <div class="zh"><p>内点法的低（理论）复杂度是该领域现代研究的核心。许多研究聚焦于证明：某种内点法（或其他方法）可以用不超过问题维度与 $\log(1/\varepsilon)$（其中 $\varepsilon>0$ 为所要求的精度）的多项式规模的运算次数求解某类凸优化问题。（我们将在第 11 章看到一些这样的简单结果。）该主题的首次全面工作见 Nesterov 与 Nemirovski 的著作 [NN94]。其他著作包括 Ben-Tal 与 Nemirovski [BTN01, lecture 5] 和 Renegar [Ren01]。内点法对各种凸优化问题的多项式时间复杂度，与若干非凸优化问题形成鲜明对比——对后者，所有已知算法在最坏情况下所需的运算次数随问题维度指数增长。</p></div>
+    </div>
+
+    <div style="margin-top:40px; padding:16px; text-align:center; color:var(--muted); font-size:14px; border-top:1px solid var(--rule)">
+      — 第 1 章终 · 下一章：<a href="index.html" style="color:var(--accent)">返回目录</a>，等待第 2 章（凸集）翻译 —
+    </div>
+  </main>
+
+  <script src="assets/mathjax-config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+</body>
+</html>
