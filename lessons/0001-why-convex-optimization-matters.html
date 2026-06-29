@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 0001 - Why Convex Optimization Matters</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <main>
+    <header>
+      <p class="kicker">Lesson 0001</p>
+      <h1>为什么凸优化在科研里特殊</h1>
+      <p>对应 Boyd & Vandenberghe, <a href="../bv_cvxbook.pdf">Convex Optimization</a>, Chapter 1: Introduction。</p>
+    </header>
+
+    <section class="summary">
+      <h2>今天只抓一个判断</h2>
+      <p>优化问题很广，但凸优化特殊在于：局部信息通常足以支持全局结论。科研里这很关键，因为你不只是想找到一个数值答案，还想知道这个答案是不是全局可靠、约束是否真的表达了问题、算法为什么不会只是在局部乱转。</p>
+    </section>
+
+    <section>
+      <h2>三层视角</h2>
+      <div class="grid">
+        <div class="note">
+          <h3>模型</h3>
+          <p>把研究问题写成变量、目标函数和约束。第一步不是求解，而是判断结构。</p>
+        </div>
+        <div class="note">
+          <h3>结构</h3>
+          <p>凸集给出可行域的结构，凸函数给出目标或约束函数的结构。两者合在一起，才是凸优化问题。</p>
+        </div>
+        <div class="note">
+          <h3>证书</h3>
+          <p>对偶性和最优性条件会给出“为什么这是最优”的证据，而不是只给一个算法输出。</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>今天的最小知识块</h2>
+      <p>Chapter 1 把优化分成一般数学优化、最小二乘、线性规划、凸优化和非线性优化。对你后续科研最重要的不是记分类名，而是形成这个反射：</p>
+      <div class="check">
+        <p><strong>看到一个新问题时，先问：</strong>变量是什么？可行域是不是凸的？目标函数是不是凸的？如果不是，能不能通过等价变换、松弛或重新参数化暴露凸结构？</p>
+      </div>
+    </section>
+
+    <section class="exercise">
+      <h2>快速检索练习</h2>
+      <p>下面哪个问题最像“凸优化的科研价值”？</p>
+      <button class="choice" data-answer="no">A. 它总能让任何优化问题变简单。</button>
+      <button class="choice" data-answer="yes">B. 它让一类模型拥有全局可靠性和可验证性。</button>
+      <button class="choice" data-answer="no">C. 它主要是为了手算低维优化题。</button>
+      <p class="feedback" id="feedback" aria-live="polite"></p>
+    </section>
+
+    <section>
+      <h2>读书任务</h2>
+      <p>今天读 Chapter 1: Introduction，重点看这些小节：Mathematical optimization、Convex optimization、Outline、Notation。读的时候只做一件事：把每个例子归到“模型、结构、证书”三层之一。</p>
+      <p>读完后可以问我：这一章里哪些例子最像你的研究问题，或者让我检查你写下的三个归类。</p>
+      <p>下一课：<a href="../reference/chapter-roadmap.html">先看章节路线图</a>，然后进入 Chapter 2 的凸集。</p>
+    </section>
+  </main>
+
+  <script>
+    const feedback = document.querySelector("#feedback");
+    for (const button of document.querySelectorAll(".choice")) {
+      button.addEventListener("click", () => {
+        if (button.dataset.answer === "yes") {
+          feedback.textContent = "正确。凸优化的力量来自可证明的全局性质和证书，而不只是计算方便。";
+          feedback.style.color = "#166534";
+        } else {
+          feedback.textContent = "再想想。关键词不是万能、手算，而是全局可靠性和可验证性。";
+          feedback.style.color = "#9a3412";
+        }
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Convex Optimization Chapter Roadmap</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <main>
+    <header>
+      <p class="kicker">Reference</p>
+      <h1>章节路线图</h1>
+      <p>根据 `bv_cvxbook.pdf` 的目录整理。用途：每天一章时，先抓住这一章在科研能力里的作用。</p>
+    </header>
+
+    <section>
+      <h2>总结构</h2>
+      <div class="grid">
+        <div class="summary">
+          <h3>I. Theory</h3>
+          <p>凸集、凸函数、凸优化问题、对偶性。目标是建立识别结构和证明性质的语言。</p>
+        </div>
+        <div class="summary">
+          <h3>II. Applications</h3>
+          <p>逼近拟合、统计估计、几何问题。目标是把研究问题翻译成可解模型。</p>
+        </div>
+        <div class="summary">
+          <h3>III. Algorithms</h3>
+          <p>无约束优化、等式约束优化、内点法。目标是理解求解器背后的数值机制。</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>每日章节焦点</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>天</th>
+            <th>章节</th>
+            <th>科研能力焦点</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>Introduction</td><td>判断为什么凸优化比一般非线性优化更可控。</td></tr>
+          <tr><td>2</td><td>Convex sets</td><td>识别可行域结构，理解保凸操作和分离思想。</td></tr>
+          <tr><td>3</td><td>Convex functions</td><td>识别目标函数结构，使用上图、共轭、拟凸等工具。</td></tr>
+          <tr><td>4</td><td>Convex optimization problems</td><td>把数学问题写成标准凸优化问题。</td></tr>
+          <tr><td>5</td><td>Duality</td><td>用拉格朗日对偶解释界、证书、灵敏度和最优性条件。</td></tr>
+          <tr><td>6</td><td>Approximation and fitting</td><td>把拟合、正则化和鲁棒性问题模型化。</td></tr>
+          <tr><td>7</td><td>Statistical estimation</td><td>连接估计、假设检验、Chernoff bounds 与实验设计。</td></tr>
+          <tr><td>8</td><td>Geometric problems</td><td>用凸优化处理投影、分类、定位、椭球和布局问题。</td></tr>
+          <tr><td>9</td><td>Unconstrained minimization</td><td>理解下降法、梯度法、最速下降、牛顿法。</td></tr>
+          <tr><td>10</td><td>Equality constrained minimization</td><td>理解 KKT 线性系统和带等式约束的牛顿法。</td></tr>
+          <tr><td>11</td><td>Interior-point methods</td><td>理解 barrier、central path、phase I、primal-dual 方法。</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>

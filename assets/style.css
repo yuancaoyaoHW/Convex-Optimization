@@ -1,0 +1,148 @@
+:root {
+  color-scheme: light;
+  --ink: #1f2933;
+  --muted: #5f6c7b;
+  --paper: #fbfaf7;
+  --panel: #ffffff;
+  --rule: #d8d1c5;
+  --accent: #0f766e;
+  --accent-soft: #e0f2f1;
+  --warn: #9a3412;
+  --ok: #166534;
+  font-family: "Segoe UI", "Noto Sans SC", Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.65;
+}
+
+main {
+  width: min(920px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 40px 0 64px;
+}
+
+header {
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.25;
+  margin: 0 0 12px;
+}
+
+h1 {
+  font-size: 34px;
+}
+
+h2 {
+  font-size: 23px;
+  margin-top: 32px;
+}
+
+p,
+li {
+  font-size: 17px;
+}
+
+a {
+  color: var(--accent);
+}
+
+.kicker {
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: 0;
+  margin: 0 0 8px;
+}
+
+.summary,
+.exercise,
+.check,
+.note {
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 18px;
+  margin: 18px 0;
+}
+
+.summary {
+  border-left: 4px solid var(--accent);
+}
+
+.exercise {
+  border-left: 4px solid var(--warn);
+}
+
+.check {
+  border-left: 4px solid var(--ok);
+}
+
+.grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.choice {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  margin: 8px 0;
+  padding: 10px 12px;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.choice:hover,
+.choice:focus {
+  border-color: var(--accent);
+  outline: 2px solid var(--accent-soft);
+}
+
+.feedback {
+  min-height: 28px;
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+code {
+  background: #f1eee7;
+  border-radius: 4px;
+  padding: 2px 5px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--panel);
+}
+
+th,
+td {
+  border: 1px solid var(--rule);
+  padding: 10px;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background: #f3eee6;
+}
