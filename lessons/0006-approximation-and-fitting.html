@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 0006 - Approximation and Fitting</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <main>
+    <header>
+      <p class="kicker">Lesson 0006</p>
+      <h1>逼近与拟合：把“误差”设计成模型</h1>
+      <p>对应 Boyd & Vandenberghe, <a href="../bv_cvxbook.pdf">Convex Optimization</a>, Chapter 6: Approximation and fitting。</p>
+    </header>
+
+    <section class="summary">
+      <h2>本章的科研用法</h2>
+      <p>这一章把凸优化落到数据拟合、近似求解和正则化。核心不是“最小二乘会算”，而是你可以选择误差度量、正则项和鲁棒项，让模型表达不同科研偏好。</p>
+    </section>
+
+    <section>
+      <h2>基本模板</h2>
+      <div class="check">
+        <p><strong>norm approximation：</strong>minimize ||Ax - b||。残差 r = Ax - b，范数决定你如何惩罚误差。</p>
+      </div>
+      <p>L2 偏向平均误差，L1 更抗离群点，L∞ 控制最坏误差。换范数就是换“什么叫拟合得好”。</p>
+    </section>
+
+    <section>
+      <h2>三种建模旋钮</h2>
+      <table>
+        <thead>
+          <tr><th>旋钮</th><th>模型问题</th><th>科研含义</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>误差范数</td><td>||Ax - b||1, ||Ax - b||2, ||Ax - b||∞</td><td>选择平均、稀疏、最坏情形等误差观。</td></tr>
+          <tr><td>正则化</td><td>拟合误差 + λ penalty(x)</td><td>在解释能力、稳定性、稀疏性之间折中。</td></tr>
+          <tr><td>鲁棒性</td><td>考虑数据扰动下的最坏误差</td><td>让结论不被小的模型误差轻易击穿。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>本章给你的研究习惯</h2>
+      <div class="grid">
+        <div class="note">
+          <h3>先看残差</h3>
+          <p>残差是模型没有解释的部分。残差结构常常比解本身更能暴露问题。</p>
+        </div>
+        <div class="note">
+          <h3>正则项是先验</h3>
+          <p>L1、L2、TV、核范数等不是装饰，而是在说你相信解有什么结构。</p>
+        </div>
+        <div class="note">
+          <h3>鲁棒性要建模</h3>
+          <p>鲁棒不是多跑几次，而是把不确定性集合写进优化问题。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="exercise" data-quiz data-correct="正确。L1 正则常用于鼓励稀疏解，是建模偏好的表达。" data-incorrect="不对。稀疏性通常用 L1 类型惩罚来凸近似，而不是直接数非零项。">
+      <h2>快速检索练习</h2>
+      <p>想鼓励 x 稀疏，最常见的凸正则选择是什么？</p>
+      <button class="choice" data-answer="no">A. ||x||0</button>
+      <button class="choice" data-answer="yes">B. ||x||1</button>
+      <button class="choice" data-answer="no">C. max x_i</button>
+      <p class="feedback" aria-live="polite"></p>
+    </section>
+
+    <section>
+      <h2>今天的读书任务</h2>
+      <p>读 Chapter 6，重点看 6.1 norm approximation、6.2 least-norm、6.3 regularized approximation、6.4 robust approximation。函数拟合部分先抓“把函数族参数化后变成凸问题”。</p>
+      <p>读完后，写出你最常见的一类残差 r，我帮你判断应该用哪种误差范数和正则项。</p>
+      <p>上一课：<a href="./0005-duality.html">对偶性</a>。下一课：<a href="./0007-statistical-estimation.html">统计估计</a>。</p>
+    </section>
+  </main>
+  <script src="../assets/quiz.js"></script>
+</body>
+</html>

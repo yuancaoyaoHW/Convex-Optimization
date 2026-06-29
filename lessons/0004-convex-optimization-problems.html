@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 0004 - Convex Optimization Problems</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <main>
+    <header>
+      <p class="kicker">Lesson 0004</p>
+      <h1>凸优化问题：把模型写成能被理论接住的形式</h1>
+      <p>对应 Boyd & Vandenberghe, <a href="../bv_cvxbook.pdf">Convex Optimization</a>, Chapter 4: Convex optimization problems。</p>
+    </header>
+
+    <section class="summary">
+      <h2>本章的科研用法</h2>
+      <p>这一章把前两章的集合和函数语言合成一个建模标准：凸目标、凸不等式约束、仿射等式约束。研究里真正重要的是识别一个问题能不能被改写成这个形状。</p>
+    </section>
+
+    <section>
+      <h2>标准形的判断</h2>
+      <div class="check">
+        <p><strong>凸优化问题：</strong>minimize f0(x), subject to fi(x) <= 0, Ax = b，其中 f0 和 fi 是凸函数，等式约束必须是仿射的。</p>
+      </div>
+      <p>注意这个“不对称”：不等式可以是凸函数，等式通常只能是仿射。非仿射等式往往会把可行域切成非凸形状。</p>
+    </section>
+
+    <section>
+      <h2>建模时的三步</h2>
+      <table>
+        <thead>
+          <tr><th>步骤</th><th>要问的问题</th><th>常见收获</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>变量</td><td>真正要选择的量是什么？</td><td>去掉中间量，或引入辅助变量。</td></tr>
+          <tr><td>结构</td><td>目标和约束是否符合凸性规则？</td><td>把不可见的凸结构暴露出来。</td></tr>
+          <tr><td>类别</td><td>它更像 LP、QP、SOCP、GP 还是 SDP？</td><td>选择理论工具和求解器。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>本章的几个模型原型</h2>
+      <div class="grid">
+        <div class="note">
+          <h3>线性规划</h3>
+          <p>线性目标加线性不等式/等式。很多资源分配和松弛模型的第一站。</p>
+        </div>
+        <div class="note">
+          <h3>二次规划</h3>
+          <p>半正定二次目标加线性约束。最小二乘、风险模型、局部二阶近似都会出现。</p>
+        </div>
+        <div class="note">
+          <h3>几何规划</h3>
+          <p>通过对数变换把 posynomial 结构转为凸问题。它提醒你：凸性常常藏在变量变换后。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="exercise" data-quiz data-correct="正确。非仿射等式通常不保凸，标准凸优化只允许仿射等式约束。" data-incorrect="不对。凸目标和凸不等式还不够，等式约束必须是仿射的。">
+      <h2>快速检索练习</h2>
+      <p>下面哪个最可能破坏标准凸优化形式？</p>
+      <button class="choice" data-answer="no">A. 凸目标函数</button>
+      <button class="choice" data-answer="no">B. 凸不等式约束</button>
+      <button class="choice" data-answer="yes">C. 非仿射等式约束</button>
+      <p class="feedback" aria-live="polite"></p>
+    </section>
+
+    <section>
+      <h2>今天的读书任务</h2>
+      <p>读 Chapter 4，重点看 4.1 基本术语、4.2 凸优化标准形、4.3 LP、4.4 QP、4.5 GP。4.6 和 4.7 先抓广义不等式和向量优化的语言。</p>
+      <p>读完后，把一个你关心的问题写成“变量、目标、约束”三行，我帮你检查它是不是凸优化问题。</p>
+      <p>上一课：<a href="./0003-convex-functions.html">凸函数</a>。下一课：<a href="./0005-duality.html">对偶性</a>。</p>
+    </section>
+  </main>
+  <script src="../assets/quiz.js"></script>
+</body>
+</html>

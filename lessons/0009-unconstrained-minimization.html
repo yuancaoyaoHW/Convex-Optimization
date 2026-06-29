@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 0009 - Unconstrained Minimization</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <main>
+    <header>
+      <p class="kicker">Lesson 0009</p>
+      <h1>无约束最小化：从最优性方程到迭代算法</h1>
+      <p>对应 Boyd & Vandenberghe, <a href="../bv_cvxbook.pdf">Convex Optimization</a>, Chapter 9: Unconstrained minimization。</p>
+    </header>
+
+    <section class="summary">
+      <h2>本章的科研用法</h2>
+      <p>算法部分从这里开始。无约束问题的最优性条件是 ∇f(x*) = 0，但真正的问题是如何稳定地生成 x(0), x(1), ... 让 f(x(k)) 降到最优值。</p>
+    </section>
+
+    <section>
+      <h2>下降法模板</h2>
+      <div class="check">
+        <p><strong>descent method：</strong>选择下降方向 Δx，再用 line search 选择步长 t，更新 x := x + tΔx。</p>
+      </div>
+      <p>方向回答“往哪走”，步长回答“走多远”。研究算法时，不要把这两个问题混在一起。</p>
+    </section>
+
+    <section>
+      <h2>三种方向</h2>
+      <table>
+        <thead>
+          <tr><th>方法</th><th>方向</th><th>特征</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Gradient descent</td><td>-∇f(x)</td><td>便宜、通用，但受条件数影响大。</td></tr>
+          <tr><td>Steepest descent</td><td>依赖所选范数的最陡方向</td><td>提醒你“最陡”不是绝对概念。</td></tr>
+          <tr><td>Newton method</td><td>-∇²f(x)^-1 ∇f(x)</td><td>利用局部二阶模型，近最优时很快。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Newton step 的正确直觉</h2>
+      <p>Newton step 不是“更高级的梯度”。它是在当前点用二次 Taylor 模型近似 f，然后直接走到这个二次模型的极小点。如果 f 真是二次函数，一步就到；如果 f 局部近似二次，后期会很快。</p>
+    </section>
+
+    <section class="exercise" data-quiz data-correct="正确。Newton step 是二阶 Taylor 近似模型的 minimizer。" data-incorrect="不对。Newton step 的核心是二阶局部模型，不只是梯度归一化。">
+      <h2>快速检索练习</h2>
+      <p>Newton step 最准确的解释是什么？</p>
+      <button class="choice" data-answer="no">A. 负梯度的单位化</button>
+      <button class="choice" data-answer="yes">B. 二阶模型的极小点</button>
+      <button class="choice" data-answer="no">C. 随机方向的平均值</button>
+      <p class="feedback" aria-live="polite"></p>
+    </section>
+
+    <section>
+      <h2>今天的读书任务</h2>
+      <p>读 Chapter 9，重点看 9.2 descent methods、9.3 gradient descent、9.5 Newton's method。self-concordance 先抓它为什么能给内点法复杂度分析。</p>
+      <p>读完后，拿一个你熟悉的凸目标函数，我帮你写出梯度方向和 Newton 方向。</p>
+      <p>上一课：<a href="./0008-geometric-problems.html">几何问题</a>。下一课：<a href="./0010-equality-constrained-minimization.html">等式约束最小化</a>。</p>
+    </section>
+  </main>
+  <script src="../assets/quiz.js"></script>
+</body>
+</html>

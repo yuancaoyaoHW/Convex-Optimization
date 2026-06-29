@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 0011 - Interior-Point Methods</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <main>
+    <header>
+      <p class="kicker">Lesson 0011</p>
+      <h1>内点法：用 barrier 和 KKT 系统穿过不等式约束</h1>
+      <p>对应 Boyd & Vandenberghe, <a href="../bv_cvxbook.pdf">Convex Optimization</a>, Chapter 11: Interior-point methods。</p>
+    </header>
+
+    <section class="summary">
+      <h2>本章的科研用法</h2>
+      <p>内点法解释了为什么大量 LP、QP、SOCP、SDP 可以被高精度求解。它把不等式约束转成 barrier，把受约束问题变成一串等式约束 Newton 问题。</p>
+    </section>
+
+    <section>
+      <h2>Barrier 的想法</h2>
+      <div class="check">
+        <p><strong>log barrier：</strong>把 fi(x) <= 0 替换为 -Σ log(-fi(x))。越靠近边界，惩罚越大，所以迭代点留在可行域内部。</p>
+      </div>
+      <p>参数 t 控制目标函数和 barrier 的相对权重。随着 t 增大，中心路径上的解逼近原问题最优解。</p>
+    </section>
+
+    <section>
+      <h2>三种视角</h2>
+      <table>
+        <thead>
+          <tr><th>视角</th><th>你要看什么</th><th>作用</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Barrier method</td><td>一串 centering problems</td><td>概念清楚，连接第 10 章 Newton 系统。</td></tr>
+          <tr><td>Phase I</td><td>先找严格可行点</td><td>解决内点法启动问题。</td></tr>
+          <tr><td>Primal-dual method</td><td>修改后的 KKT 方程</td><td>工程求解器常用，更高效。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>中心路径的直觉</h2>
+      <p>中心路径不是玄学曲线。它是一族 barrier 子问题的解：当 barrier 还强时，点远离边界；当目标权重增强时，点沿着可行域内部逐渐靠近最优边界。</p>
+    </section>
+
+    <section class="exercise" data-quiz data-correct="正确。log barrier 在边界附近趋向无穷，迫使迭代留在内部。" data-incorrect="不对。barrier 的核心是惩罚靠近边界，而不是允许直接穿过边界。">
+      <h2>快速检索练习</h2>
+      <p>log barrier 的主要作用是什么？</p>
+      <button class="choice" data-answer="no">A. 删除所有约束</button>
+      <button class="choice" data-answer="yes">B. 惩罚靠近边界</button>
+      <button class="choice" data-answer="no">C. 随机选择初值</button>
+      <p class="feedback" aria-live="polite"></p>
+    </section>
+
+    <section>
+      <h2>今天的读书任务</h2>
+      <p>读 Chapter 11，重点看 11.2 logarithmic barrier and central path、11.3 barrier method、11.4 phase I、11.7 primal-dual methods。复杂度部分先抓 self-concordance 为什么让迭代次数可控。</p>
+      <p>读完后，选一个带不等式约束的问题，我帮你写出它的 barrier 子问题和 KKT 残差。</p>
+      <p>上一课：<a href="./0010-equality-constrained-minimization.html">等式约束最小化</a>。路线图：<a href="../reference/chapter-roadmap.html">章节路线图</a>。</p>
+    </section>
+  </main>
+  <script src="../assets/quiz.js"></script>
+</body>
+</html>

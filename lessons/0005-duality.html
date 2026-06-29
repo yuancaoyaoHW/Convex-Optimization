@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 0005 - Duality</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <main>
+    <header>
+      <p class="kicker">Lesson 0005</p>
+      <h1>对偶性：给最优性一个证书</h1>
+      <p>对应 Boyd & Vandenberghe, <a href="../bv_cvxbook.pdf">Convex Optimization</a>, Chapter 5: Duality。</p>
+    </header>
+
+    <section class="summary">
+      <h2>本章的科研用法</h2>
+      <p>对偶性把“我找到了一个解”升级成“我知道它离最优有多远，甚至能证明它最优”。它也是解释影子价格、灵敏度、KKT 条件和许多论文证明的核心语言。</p>
+    </section>
+
+    <section>
+      <h2>一个核心构造</h2>
+      <div class="check">
+        <p><strong>Lagrangian：</strong>L(x, λ, ν) = f0(x) + Σ λi fi(x) + Σ νi hi(x)，其中 λi 对应不等式约束，νi 对应等式约束。</p>
+      </div>
+      <p>对偶函数 g(λ, ν) = inf_x L(x, λ, ν)。当 λ >= 0 时，g 给出原问题最优值 p* 的下界。这就是弱对偶。</p>
+    </section>
+
+    <section>
+      <h2>对偶性的三层含义</h2>
+      <div class="grid">
+        <div class="note">
+          <h3>界</h3>
+          <p>任意对偶可行点都给原问题一个下界。数值算法可用 duality gap 判断停止。</p>
+        </div>
+        <div class="note">
+          <h3>证书</h3>
+          <p>如果 primal feasible 和 dual feasible 的目标值相等，就证明原解全局最优。</p>
+        </div>
+        <div class="note">
+          <h3>灵敏度</h3>
+          <p>最优对偶变量可解释为约束右端扰动时的边际价值，也就是 shadow prices。</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>KKT 是这一章的压缩包</h2>
+      <table>
+        <thead>
+          <tr><th>条件</th><th>含义</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>原始可行</td><td>x 满足原问题约束。</td></tr>
+          <tr><td>对偶可行</td><td>λ >= 0。</td></tr>
+          <tr><td>驻点条件</td><td>L 对 x 的一阶变化消失。</td></tr>
+          <tr><td>互补松弛</td><td>λi fi(x) = 0，只有紧约束能有非零价格。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="exercise" data-quiz data-correct="正确。弱对偶先给下界；强对偶告诉你这个下界可以达到原问题最优值。" data-incorrect="不对。对偶变量不是新目标，它先构造原问题最优值的界。">
+      <h2>快速检索练习</h2>
+      <p>对偶函数在 λ >= 0 时首先给你什么？</p>
+      <button class="choice" data-answer="yes">A. 原问题最优值的下界</button>
+      <button class="choice" data-answer="no">B. 原问题新的可行点</button>
+      <button class="choice" data-answer="no">C. Hessian 的近似矩阵</button>
+      <p class="feedback" aria-live="polite"></p>
+    </section>
+
+    <section>
+      <h2>今天的读书任务</h2>
+      <p>读 Chapter 5，重点看 5.1 Lagrange dual function、5.2 dual problem、5.5 optimality conditions、5.6 perturbation and sensitivity。几何解释和 saddle-point 先看图像。</p>
+      <p>读完后，任选一个带约束优化问题，写出它的 Lagrangian，我帮你检查符号和 KKT 条件。</p>
+      <p>上一课：<a href="./0004-convex-optimization-problems.html">凸优化问题</a>。下一课：<a href="./0006-approximation-and-fitting.html">逼近与拟合</a>。</p>
+    </section>
+  </main>
+  <script src="../assets/quiz.js"></script>
+</body>
+</html>

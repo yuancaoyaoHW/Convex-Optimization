@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 0007 - Statistical Estimation</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <main>
+    <header>
+      <p class="kicker">Lesson 0007</p>
+      <h1>统计估计：把概率模型转成凸优化</h1>
+      <p>对应 Boyd & Vandenberghe, <a href="../bv_cvxbook.pdf">Convex Optimization</a>, Chapter 7: Statistical estimation。</p>
+    </header>
+
+    <section class="summary">
+      <h2>本章的科研用法</h2>
+      <p>这一章解释为什么很多估计、检测、置信界和实验设计问题可以被凸优化统一处理。关键是把似然、风险或信息矩阵写成具有凸性或凹性的表达。</p>
+    </section>
+
+    <section>
+      <h2>最大似然的凸优化视角</h2>
+      <div class="check">
+        <p><strong>ML estimation：</strong>选择参数 x 最大化 log likelihood l(x)。如果 -l(x) 是凸函数，最大似然就等价于一个凸最小化问题。</p>
+      </div>
+      <p>所以你读统计模型时要问：负对数似然是不是凸的？约束是不是凸的？先验或正则项会不会保持凸性？</p>
+    </section>
+
+    <section>
+      <h2>本章的四类问题</h2>
+      <table>
+        <thead>
+          <tr><th>主题</th><th>优化对象</th><th>科研意义</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>参数估计</td><td>最大似然或带约束最大似然</td><td>把统计假设转为可解模型。</td></tr>
+          <tr><td>非参数估计</td><td>分布、密度或权重</td><td>估计对象从有限参数扩展到函数或概率向量。</td></tr>
+          <tr><td>检测设计</td><td>错误概率或判别边界</td><td>优化分类/检验规则。</td></tr>
+          <tr><td>实验设计</td><td>信息矩阵或误差椭球</td><td>选择实验以最大化估计信息。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>实验设计的关键词</h2>
+      <p>实验设计里，误差协方差常写成 E = (Σ ai ai^T)^-1。优化实验就是优化这个误差椭球：让它体积小、最大轴短，或某个方向上的误差小。不同标量化方式对应不同研究目标。</p>
+    </section>
+
+    <section class="exercise" data-quiz data-correct="正确。负对数似然凸时，最大似然可以写成凸最小化。" data-incorrect="不对。最大似然本身是最大化问题，常转成最小化负对数似然。">
+      <h2>快速检索练习</h2>
+      <p>最大化 log likelihood 要成为凸优化，通常检查什么？</p>
+      <button class="choice" data-answer="yes">A. 负对数似然是否凸</button>
+      <button class="choice" data-answer="no">B. 样本数量是否最大</button>
+      <button class="choice" data-answer="no">C. 参数维度是否为一</button>
+      <p class="feedback" aria-live="polite"></p>
+    </section>
+
+    <section>
+      <h2>今天的读书任务</h2>
+      <p>读 Chapter 7，重点看 7.1 maximum likelihood、7.3 detector design、7.4 Chernoff bounds、7.5 experiment design。非参数估计先抓概率向量和约束形式。</p>
+      <p>读完后，拿一个统计模型给我，我们一起判断它的负对数似然是否凸。</p>
+      <p>上一课：<a href="./0006-approximation-and-fitting.html">逼近与拟合</a>。下一课：<a href="./0008-geometric-problems.html">几何问题</a>。</p>
+    </section>
+  </main>
+  <script src="../assets/quiz.js"></script>
+</body>
+</html>
