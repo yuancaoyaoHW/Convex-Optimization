@@ -36,9 +36,7 @@ ch0X.html (C层)
   └─ 点击角标/按钮 → 打开弹窗（现有行为）
 ```
 
-数据层：Giscus `giscus-widget` custom element 的 `getDiscussionCount(term)` 方法，返回 `Promise<number>`。无需 token，适合静态站。只取数量，不取评论内容摘要（摘要留给弹窗内的 Giscus iframe 显示）。
-
-**实现前必须验证的 API 细节**：`getDiscussionCount` 的确切签名、是否需要先在页面实例化一个 `giscus-widget` 元素、是否支持跨页面 term 查询（B 层浏览页不是被批注的章节页本身），需在实现第一步查阅 [giscus 官方文档](https://giscus.app) 源码确认。若该 API 不可用或限制过严，B/C 层降级为：B 层只显示静态章节/段落索引（不显示评论数），C 层不显示徽标数字（只保留弹窗入口）。此降级路径已在"错误处理与边界"中覆盖。
+**数据层（降级方案，2026-06-30 实测确认）**：纯静态索引，不查询评论数。实测发现 `giscus@1.6.0` 的 `GiscusWidget` 类无 `getDiscussionCount` 方法（类型定义里所有方法为 private，源码 grep 为空），GitHub GraphQL 需 token 且静态站暴露 token 不安全。因此 B 层只显示章节/段落静态索引（不显评论数），C 层不加徽标数字。点击条目跳转到对应章节页打开弹窗，评论内容在弹窗内的 Giscus iframe 里查看。
 
 ## A 层 — 修通上线
 
@@ -136,57 +134,11 @@ Giscus widget 异步且对并发有限制。实现上串行 + 小批量（每 5 
 - 不用 GitHub Discussions GraphQL API（需 token，静态站不适合）
 - 不实时抓取评论内容摘要（getDiscussionCount 只给数量，摘要留给弹窗内的 Giscus iframe 显示）
 
-## C 层 — 段落徽标
+## C 层 — 段落徽标（降级后不实施）
 
-### 改动 annotations.js
+原始 C 层方案依赖 `getDiscussionCount` 查评论数显示徽标数字。2026-06-30 实测确认该 API 不存在于 `giscus@1.6.0`（见"总体架构"数据层说明）。用户已选择降级方案，**C 层不实施**。
 
-在现有 `attachAnnotations` 之后，新增 `markAnnotatedPairs` 函数。
-
-**逻辑**：
-
-1. 对页面上每个 `.pair`，构造 term = `<page>#pair-N`
-2. 调用 Giscus `getDiscussionCount(term)` 拿评论数
-3. count > 0 → 给该 `.pair` 加 CSS 类 `.has-annotations`，批注按钮文字改为"💬 N"
-4. count = 0 → 保持原样（按钮显示"批注"）
-
-### CSS 改动（annotations.css）
-
-```css
-.pair.has-annotations {
-  /* 段落左侧加一条细色条，扫读时一眼可见 */
-  border-left: 3px solid var(--accent);
-  padding-left: 10px;
-}
-
-.pair.has-annotations .annotation-button {
-  /* 按钮变实心填充，强调"有内容" */
-  background: var(--accent);
-  color: #fff;
-}
-```
-
-### 性能考量
-
-单页 `.pair` 数量约 50–150 个。实现策略：
-
-- 页面加载后，先渲染按钮（现有逻辑），再后台异步查评论数、逐个打徽标
-- 不阻塞首屏渲染
-- 查询失败的 pair 静默跳过（不报错、不阻塞其他 pair）
-
-### 与现有按钮的关系
-
-C 层不替换现有"批注"按钮，只增强它：
-
-- count = 0：按钮显示"批注"（现状）
-- count > 0：按钮显示"💬 3"，按钮变实心，段落加左侧色条
-
-点击行为不变，仍打开弹窗。
-
-### 不做
-
-- 不在段落内联展开评论内容（C2 已否决）
-- 不加右侧侧栏（C3 已否决）
-- 不改动弹窗内部逻辑（弹窗内 Giscus iframe 提交评论后会自动刷新，"加完即见"自动满足）
+C 层唯一保留的能力——"从浏览页跳转后自动开弹窗"——作为 B 层跳转链路的一部分实现（见 B 层"跳转后自动开弹窗"）。
 
 ## 错误处理与边界
 
