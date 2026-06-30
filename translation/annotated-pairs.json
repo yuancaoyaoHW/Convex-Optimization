@@ -1,3 +1,14 @@
 {
-  "pairs": []
+  "pairs": [
+    {
+      "page": "ch02-convex-sets.html",
+      "pair": 46,
+      "comments": 1
+    },
+    {
+      "page": "ch02-convex-sets.html",
+      "pair": 72,
+      "comments": 1
+    }
+  ]
 }
