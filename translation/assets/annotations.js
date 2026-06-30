@@ -176,6 +176,16 @@
     });
   }
 
+  function openPairFromHash() {
+    const m = /^#pair-(\d+)$/.exec(window.location.hash);
+    if (!m) return;
+    const n = Number(m[1]);
+    const pairs = document.querySelectorAll(".pair");
+    if (n < 1 || n > pairs.length) return;
+    const btn = pairs[n - 1].querySelector(".annotation-button");
+    if (btn) btn.click();
+  }
+
   document.addEventListener("keydown", function (event) {
     if (event.key === "Escape") closeModal();
   });
@@ -185,5 +195,6 @@
     fetchJson(giscusConfigUrl)
   ]).then(function (results) {
     attachAnnotations(results[0], results[1]);
+    openPairFromHash();
   });
 })();
