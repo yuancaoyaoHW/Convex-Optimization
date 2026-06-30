@@ -28,8 +28,8 @@ _REF_VERBS = {
     "shows", "show", "is", "are", "illustrates", "illustrate", "illustrated",
     "gives", "give", "appears", "appear", "depicts", "depict", "displays",
     "display", "plots", "plot", "compares", "compare", "summarizes",
-    "summarize", "examples", "example", "shown", "summarized", "given",
-    "displays", "displayed", "plotted", "compared", "defines", "define",
+    "summarize", "shown", "summarized", "given",
+    "displayed", "plotted", "compared", "defines", "define",
     "describes", "describe", "described", "presents", "present", "presented",
 }
 
