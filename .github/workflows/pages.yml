@@ -33,6 +33,8 @@ jobs:
           cp -R translation/assets _site/assets
           cp translation/.nojekyll _site/.nojekyll
           cp bv_cvxbook.pdf _site/bv_cvxbook.pdf
+          cp translation/giscus-config.json _site/giscus-config.json
+          cp translation/annotations.json _site/annotations.json
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
