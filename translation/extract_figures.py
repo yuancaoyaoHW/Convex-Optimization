@@ -22,16 +22,37 @@ HEADER_BOTTOM = 108   # y below the page header line
 CONTENT_LEFT = 70
 CONTENT_RIGHT = 545
 
+# Verbs that indicate an in-text reference ("Figure 2.18 shows ..."),
+# NOT a real caption ("Figure 2.18 Three ellipsoids ...").
+_REF_VERBS = {
+    "shows", "show", "is", "are", "illustrates", "illustrate", "illustrated",
+    "gives", "give", "appears", "appear", "depicts", "depict", "displays",
+    "display", "plots", "plot", "compares", "compare", "summarizes",
+    "summarize", "examples", "example", "shown", "summarized", "given",
+    "displays", "displayed", "plotted", "compared", "defines", "define",
+    "describes", "describe", "described", "presents", "present", "presented",
+}
+
 def find_caption_page(doc, fig_num, chap):
-    """Find the PDF page index where 'Figure {chap}.{fig_num}' caption appears."""
+    """Find the PDF page index where 'Figure {chap}.{fig_num}' caption appears.
+
+    Distinguishes a real caption ("Figure 2.18 Three ellipsoids ...") from an
+    in-text reference ("Figure 2.18 shows an example ...") by checking the
+    word immediately following 'Figure N.M '. Captions are followed by a
+    descriptive noun phrase; in-text references are followed by a verb.
+    """
     needle = f"Figure {chap}.{fig_num} "
     for i in range(doc.page_count):
         t = doc[i].get_text()
-        if needle in t:
-            # Verify it's a caption (not a forward reference like "in figure 2.8")
-            # Captions start with "Figure" at line start
-            if re.search(rf"(^|\n)\s*Figure {chap}\.{fig_num} ", t):
-                return i
+        for m in re.finditer(rf"(^|\n)\s*Figure {chap}\.{fig_num} ", t):
+            # Word immediately after "Figure N.M "
+            after = t[m.end():m.end()+40].split()
+            if not after:
+                continue
+            next_word = after[0].lower().rstrip(",.;:)")
+            if next_word in _REF_VERBS:
+                continue  # in-text reference, not a caption
+            return i
     return None
 
 def extract_figure(doc, chap, fig_num, dpi=300):
