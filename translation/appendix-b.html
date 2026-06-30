@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Appendix B Problems Involving Two Quadratic Functions · 涉及两个二次函数的问题 — Convex Optimization 中英对照</title>
+  <link rel="stylesheet" href="assets/bilingual.css">
+  <style>
+    /* figure block: full-width, spanning both columns */
+    .pair.fig-block {
+      grid-template-columns: 1fr;
+      border-bottom: 1px solid var(--rule-soft);
+    }
+    .pair.fig-block > .figure-wrap {
+      grid-column: 1 / -1;
+      padding: 16px 22px;
+      text-align: center;
+    }
+    .pair.fig-block .figure-wrap img {
+      max-width: 100%;
+      height: auto;
+      border: 1px solid var(--rule-soft);
+      border-radius: 4px;
+    }
+    .pair.fig-block .fig-caption {
+      max-width: 760px;
+      margin: 10px auto 4px;
+      font-size: 14px;
+      color: var(--muted);
+      text-align: left;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+    .pair.fig-block .fig-caption .cap-en {
+      color: var(--en-ink);
+      border-right: 1px solid var(--rule);
+      padding-right: 16px;
+    }
+    .pair.fig-block .fig-caption .cap-zh {
+      color: var(--ink);
+      padding-left: 16px;
+    }
+    .pair.fig-block .fig-caption .figref { font-weight: 700; color: var(--accent); }
+    @media (max-width: 760px) {
+      .pair.fig-block .fig-caption { grid-template-columns: 1fr; }
+      .pair.fig-block .fig-caption .cap-en { border-right: none; border-bottom: 1px dashed var(--rule); padding-right: 0; padding-bottom: 8px; }
+      .pair.fig-block .fig-caption .cap-zh { padding-left: 0; padding-top: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="crumbs">
+      <a href="index.html">目录</a><span class="sep">/</span>附录 B 涉及两个二次函数的问题
+    </div>
+    <div class="nav">
+      <a href="appendix-a.html">‹ 上一页</a>
+      <a href="appendix-c.html">下一页 ›</a>
+    </div>
+  </div>
+
+  <main class="doc">
+    <div class="doc-header">
+      <p class="kicker">Appendix B</p>
+      <h1>涉及两个二次函数的问题 / Problems Involving Two Quadratic Functions</h1>
+      <p class="meta">原书 pp. 653–659 · 翻译对照（英 / 中）</p>
+    </div>
+
+    <!-- ============== Appendix B intro ============== -->
+    <div class="pair">
+      <div class="en"><p>In this appendix we consider some optimization problems that involve two quadratic, but not necessarily convex, functions. Several strong results hold for these problems, even when they are not convex.</p></div>
+      <div class="zh"><p>本附录考虑一些涉及两个二次（但不一定凸）函数的优化问题。即使这些问题不是凸的，也有若干强结论成立。</p></div>
+    </div>
+
+    <!-- ============== B.1 ============== -->
+    <div class="pair head">
+      <div class="en"><h2>B.1 Single constraint quadratic optimization</h2></div>
+      <div class="zh"><h2>B.1 单约束二次优化</h2></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We consider the problem with one constraint</p>
+        <p>$$ \begin{array}{ll} \text{minimize} & x^T A_0 x + 2b_0^T x + c_0 \\ \text{subject to} & x^T A_1 x + 2b_1^T x + c_1 \le 0, \end{array} \tag{B.1} $$</p>
+        <p>with variable $x \in \mathbb{R}^n$, and problem parameters $A_i \in \mathbf{S}^n$, $b_i \in \mathbb{R}^n$, $c_i \in \mathbb{R}$. We do not assume that $A_i \succeq 0$, so problem (B.1) is not a convex optimization problem.</p></div>
+      <div class="zh"><p>考虑含一个约束的问题</p>
+        <p>$$ \begin{array}{ll} \text{minimize} & x^T A_0 x + 2b_0^T x + c_0 \\ \text{subject to} & x^T A_1 x + 2b_1^T x + c_1 \le 0, \end{array} \tag{B.1} $$</p>
+        <p>其中变量为 $x \in \mathbb{R}^n$，问题参数为 $A_i \in \mathbf{S}^n$，$b_i \in \mathbb{R}^n$，$c_i \in \mathbb{R}$。我们<strong>不</strong>假设 $A_i \succeq 0$，故问题 (B.1) 不是凸优化问题。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The Lagrangian of (B.1) is</p>
+        <p>$$ L(x, \lambda) = x^T(A_0 + \lambda A_1)x + 2(b_0 + \lambda b_1)^T x + c_0 + \lambda c_1, $$</p>
+        <p>and the dual function is</p>
+        <p>$$ g(\lambda) = \inf_x L(x, \lambda) = \begin{cases} c_0 + \lambda c_1 - (b_0 + \lambda b_1)^T(A_0 + \lambda A_1)^\dagger(b_0 + \lambda b_1) & A_0 + \lambda A_1 \succeq 0,\; b_0 + \lambda b_1 \in \mathcal{R}(A_0 + \lambda A_1) \\ -\infty & \text{otherwise} \end{cases} $$</p>
+        <p>(see §A.5.4). Using a Schur complement, we can express the dual problem as</p>
+        <p>$$ \begin{array}{ll} \text{maximize} & \gamma \\ \text{subject to} & \lambda \ge 0 \\ & \begin{bmatrix} A_0 + \lambda A_1 & b_0 + \lambda b_1 \\ (b_0 + \lambda b_1)^T & c_0 + \lambda c_1 - \gamma \end{bmatrix} \succeq 0, \end{array} \tag{B.2} $$</p></div>
+      <div class="zh"><p>(B.1) 的拉格朗日函数为</p>
+        <p>$$ L(x, \lambda) = x^T(A_0 + \lambda A_1)x + 2(b_0 + \lambda b_1)^T x + c_0 + \lambda c_1, $$</p>
+        <p>对偶函数为</p>
+        <p>$$ g(\lambda) = \inf_x L(x, \lambda) = \begin{cases} c_0 + \lambda c_1 - (b_0 + \lambda b_1)^T(A_0 + \lambda A_1)^\dagger(b_0 + \lambda b_1) & A_0 + \lambda A_1 \succeq 0,\; b_0 + \lambda b_1 \in \mathcal{R}(A_0 + \lambda A_1) \\ -\infty & \text{否则} \end{cases} $$</p>
+        <p>（见 §A.5.4）。利用 Schur 补，可将<strong>对偶问题</strong>表为</p>
+        <p>$$ \begin{array}{ll} \text{maximize} & \gamma \\ \text{subject to} & \lambda \ge 0 \\ & \begin{bmatrix} A_0 + \lambda A_1 & b_0 + \lambda b_1 \\ (b_0 + \lambda b_1)^T & c_0 + \lambda c_1 - \gamma \end{bmatrix} \succeq 0, \end{array} \tag{B.2} $$</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>an SDP with two variables $\gamma, \lambda \in \mathbb{R}$.</p>
+        <p>The first result is that strong duality holds for problem (B.1) and its Lagrange dual (B.2), provided Slater's constraint qualification is satisfied, i.e., there exists an $x$ with $x^T A_1 x + 2b_1^T x + c_1 < 0$. In other words, if (B.1) is strictly feasible, the optimal values of (B.1) and (B.2) are equal. (A proof is given in §B.4.)</p></div>
+      <div class="zh"><p>这是一个含两个变量 $\gamma, \lambda \in \mathbb{R}$ 的半定规划（SDP）。</p>
+        <p>第一个结论是：只要满足 Slater 约束规范，即存在 $x$ 使 $x^T A_1 x + 2b_1^T x + c_1 < 0$，则问题 (B.1) 与其拉格朗日对偶 (B.2) 之间<strong>强对偶</strong>成立。换言之，若 (B.1) 严格可行，则 (B.1) 与 (B.2) 的最优值相等。（证明见 §B.4。）</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Relaxation interpretation</h3></div>
+      <div class="zh"><h3>松弛解释</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The dual of the SDP (B.2) is</p>
+        <p>$$ \begin{array}{ll} \text{minimize} & \mathop{\text{tr}}(A_0 X) + 2b_0^T x + c_0 \\ \text{subject to} & \mathop{\text{tr}}(A_1 X) + 2b_1^T x + c_1 \le 0 \\ & \begin{bmatrix} X & x \\ x^T & 1 \end{bmatrix} \succeq 0, \end{array} \tag{B.3} $$</p>
+        <p>an SDP with variables $X \in \mathbf{S}^n$, $x \in \mathbb{R}^n$. This dual SDP has an interesting interpretation in terms of the original problem (B.1).</p></div>
+      <div class="zh"><p>SDP (B.2) 的对偶为</p>
+        <p>$$ \begin{array}{ll} \text{minimize} & \mathop{\text{tr}}(A_0 X) + 2b_0^T x + c_0 \\ \text{subject to} & \mathop{\text{tr}}(A_1 X) + 2b_1^T x + c_1 \le 0 \\ & \begin{bmatrix} X & x \\ x^T & 1 \end{bmatrix} \succeq 0, \end{array} \tag{B.3} $$</p>
+        <p>这是含变量 $X \in \mathbf{S}^n$、$x \in \mathbb{R}^n$ 的 SDP。此对偶 SDP 就原问题 (B.1) 而言有一种有趣的解释。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We first note that (B.1) is equivalent to</p>
+        <p>$$ \begin{array}{ll} \text{minimize} & \mathop{\text{tr}}(A_0 X) + 2b_0^T x + c_0 \\ \text{subject to} & \mathop{\text{tr}}(A_1 X) + 2b_1^T x + c_1 \le 0 \\ & X = xx^T, \end{array} \tag{B.4} $$</p>
+        <p>In this formulation we express the quadratic terms $x^T A_i x$ as $\mathop{\text{tr}}(A_i xx^T)$, and then introduce a new variable $X = xx^T$. Problem (B.4) has a linear objective function, one linear inequality constraint, and a nonlinear equality constraint $X = xx^T$. The next step is to replace the equality constraint by an inequality $X \succeq xx^T$:</p>
+        <p>$$ \begin{array}{ll} \text{minimize} & \mathop{\text{tr}}(A_0 X) + b_0^T x + c_0 \\ \text{subject to} & \mathop{\text{tr}}(A_1 X) + b_1^T x + c_1 \le 0 \\ & X \succeq xx^T. \end{array} \tag{B.5} $$</p>
+        <p>This problem is called a relaxation of (B.4), since we have replaced one of the constraints with a looser constraint. Finally we note that the inequality in (B.5) can be expressed as a linear matrix inequality by using a Schur complement, which gives (B.3).</p></div>
+      <div class="zh"><p>首先注意 (B.1) 等价于</p>
+        <p>$$ \begin{array}{ll} \text{minimize} & \mathop{\text{tr}}(A_0 X) + 2b_0^T x + c_0 \\ \text{subject to} & \mathop{\text{tr}}(A_1 X) + 2b_1^T x + c_1 \le 0 \\ & X = xx^T, \end{array} \tag{B.4} $$</p>
+        <p>在此表述中把二次项 $x^T A_i x$ 写成 $\mathop{\text{tr}}(A_i xx^T)$，再引入新变量 $X = xx^T$。问题 (B.4) 有线性目标函数、一个线性不等式约束和一个非线性等式约束 $X = xx^T$。下一步把该等式约束换成不等式 $X \succeq xx^T$：</p>
+        <p>$$ \begin{array}{ll} \text{minimize} & \mathop{\text{tr}}(A_0 X) + b_0^T x + c_0 \\ \text{subject to} & \mathop{\text{tr}}(A_1 X) + b_1^T x + c_1 \le 0 \\ & X \succeq xx^T. \end{array} \tag{B.5} $$</p>
+        <p>此问题称为 (B.4) 的<strong>松弛</strong>（relaxation），因为把其中一个约束换成了更松的约束。最后注意 (B.5) 中的不等式可用 Schur 补表为线性矩阵不等式，即得 (B.3)。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>A number of interesting facts follow immediately from this interpretation of (B.3) as a relaxation of (B.1). First, it is obvious that the optimal value of (B.3) is less than or equal to the optimal value of (B.1), since we minimize the same objective function over a larger set. Second, we can conclude that if $X = xx^T$ at the optimum of (B.3), then $x$ must be optimal in (B.1).</p></div>
+      <div class="zh"><p>由 (B.3) 作为 (B.1) 松弛的这一解释，立即可得若干有趣的事实。其一，(B.3) 的最优值显然小于或等于 (B.1) 的最优值，因为在更大的集合上极小化同一目标函数。其二，若在 (B.3) 的最优解处 $X = xx^T$，则 $x$ 必为 (B.1) 的最优解。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Combining the result above, that strong duality holds between (B.1) and (B.2) (if (B.1) is strictly feasible), with strong duality between the dual SDPs (B.2) and (B.3), we conclude that strong duality holds between the original, nonconvex quadratic problem (B.1), and the SDP relaxation (B.3), provided (B.1) is strictly feasible.</p></div>
+      <div class="zh"><p>综合上述 (B.1) 与 (B.2) 之间强对偶成立的结论（当 (B.1) 严格可行时），以及 (B.2) 与 (B.3) 这对对偶 SDP 之间的强对偶，可得：只要 (B.1) 严格可行，则原始非凸二次问题 (B.1) 与其 SDP 松弛 (B.3) 之间强对偶成立。</p></div>
+    </div>
+
+    <!-- ============== B.2 ============== -->
+    <div class="pair head">
+      <div class="en"><h2>B.2 The S-procedure</h2></div>
+      <div class="zh"><h2>B.2 S-procedure</h2></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The next result is a theorem of alternatives for a pair of (nonconvex) quadratic inequalities. Let $A_1, A_2 \in \mathbf{S}^n$, $b_1, b_2 \in \mathbb{R}^n$, $c_1, c_2 \in \mathbb{R}$, and suppose there exists an $\hat{x}$ with</p>
+        <p>$$ \hat{x}^T A_2 \hat{x} + 2b_2^T \hat{x} + c_2 < 0. $$</p>
+        <p>Then there exists an $x \in \mathbb{R}^n$ satisfying</p>
+        <p>$$ \begin{aligned} x^T A_1 x + 2b_1^T x + c_1 &< 0, \\ x^T A_2 x + 2b_2^T x + c_2 &\le 0, \end{aligned} \tag{B.6} $$</p>
+        <p>if and only if there exists no $\lambda$ such that</p>
+        <p>$$ \lambda \ge 0, \qquad \begin{bmatrix} A_1 & b_1 \\ b_1^T & c_1 \end{bmatrix} + \lambda \begin{bmatrix} A_2 & b_2 \\ b_2^T & c_2 \end{bmatrix} \succeq 0. \tag{B.7} $$</p>
+        <p>In other words, (B.6) and (B.7) are strong alternatives.</p></div>
+      <div class="zh"><p>下一个结论是关于一对（非凸）二次不等式的择一定理。设 $A_1, A_2 \in \mathbf{S}^n$，$b_1, b_2 \in \mathbb{R}^n$，$c_1, c_2 \in \mathbb{R}$，并设存在 $\hat{x}$ 使</p>
+        <p>$$ \hat{x}^T A_2 \hat{x} + 2b_2^T \hat{x} + c_2 < 0. $$</p>
+        <p>则存在 $x \in \mathbb{R}^n$ 满足</p>
+        <p>$$ \begin{aligned} x^T A_1 x + 2b_1^T x + c_1 &< 0, \\ x^T A_2 x + 2b_2^T x + c_2 &\le 0, \end{aligned} \tag{B.6} $$</p>
+        <p>当且仅当不存在 $\lambda$ 使</p>
+        <p>$$ \lambda \ge 0, \qquad \begin{bmatrix} A_1 & b_1 \\ b_1^T & c_1 \end{bmatrix} + \lambda \begin{bmatrix} A_2 & b_2 \\ b_2^T & c_2 \end{bmatrix} \succeq 0. \tag{B.7} $$</p>
+        <p>换言之，(B.6) 与 (B.7) 互为<strong>强择一</strong>（strong alternatives）。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>This result is readily shown to be equivalent to the result from §B.1, and a proof is given in §B.4. Here we point out that the two inequality systems are clearly weak alternatives, since (B.6) and (B.7) together lead to a contradiction:</p>
+        <p>$$ 0 \le \begin{bmatrix} x \\ 1 \end{bmatrix}^T \left( \begin{bmatrix} A_1 & b_1 \\ b_1^T & c_1 \end{bmatrix} + \lambda \begin{bmatrix} A_2 & b_2 \\ b_2^T & c_2 \end{bmatrix} \right) \begin{bmatrix} x \\ 1 \end{bmatrix} = x^T A_1 x + 2b_1^T x + c_1 + \lambda(x^T A_2 x + 2b_2^T x + c_2) < 0. $$</p>
+        <p>This theorem of alternatives is sometimes called the S-procedure, and is usually stated in the following form: the implication</p>
+        <p>$$ x^T F_1 x + 2g_1^T x + h_1 \le 0 \;\Longrightarrow\; x^T F_2 x + 2g_2^T x + h_2 \le 0, $$</p>
+        <p>where $F_i \in \mathbf{S}^n$, $g_i \in \mathbb{R}^n$, $h_i \in \mathbb{R}$, holds if and only if there exists a $\lambda$ such that</p>
+        <p>$$ \lambda \ge 0, \qquad \begin{bmatrix} F_2 & g_2 \\ g_2^T & h_2 \end{bmatrix} \preceq \lambda \begin{bmatrix} F_1 & g_1 \\ g_1^T & h_1 \end{bmatrix}, $$</p>
+        <p>provided there exists a point $\hat{x}$ with $\hat{x}^T F_1 \hat{x} + 2g_1^T \hat{x} + h_1 < 0$. (Note that sufficiency is clear.)</p></div>
+      <div class="zh"><p>易证此结论等价于 §B.1 的结论，证明见 §B.4。这里指出，这两个不等式系统显然是<strong>弱择一</strong>（weak alternatives），因为 (B.6) 与 (B.7) 同时成立将导致矛盾：</p>
+        <p>$$ 0 \le \begin{bmatrix} x \\ 1 \end{bmatrix}^T \left( \begin{bmatrix} A_1 & b_1 \\ b_1^T & c_1 \end{bmatrix} + \lambda \begin{bmatrix} A_2 & b_2 \\ b_2^T & c_2 \end{bmatrix} \right) \begin{bmatrix} x \\ 1 \end{bmatrix} = x^T A_1 x + 2b_1^T x + c_1 + \lambda(x^T A_2 x + 2b_2^T x + c_2) < 0. $$</p>
+        <p>这一择一定理有时称为 <strong>S-procedure</strong>，通常表述为如下形式：蕴含关系</p>
+        <p>$$ x^T F_1 x + 2g_1^T x + h_1 \le 0 \;\Longrightarrow\; x^T F_2 x + 2g_2^T x + h_2 \le 0, $$</p>
+        <p>（其中 $F_i \in \mathbf{S}^n$，$g_i \in \mathbb{R}^n$，$h_i \in \mathbb{R}$）成立当且仅当存在 $\lambda$ 使</p>
+        <p>$$ \lambda \ge 0, \qquad \begin{bmatrix} F_2 & g_2 \\ g_2^T & h_2 \end{bmatrix} \preceq \lambda \begin{bmatrix} F_1 & g_1 \\ g_1^T & h_1 \end{bmatrix}, $$</p>
+        <p>前提是存在点 $\hat{x}$ 使 $\hat{x}^T F_1 \hat{x} + 2g_1^T \hat{x} + h_1 < 0$。（注意充分性是显然的。）</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><em>Example B.1</em> <strong>Ellipsoid containment.</strong> An ellipsoid $\mathcal{E} \subseteq \mathbb{R}^n$ with nonempty interior can be represented as the sublevel set of a quadratic function,</p>
+        <p>$$ \mathcal{E} = \{x \mid x^T F x + 2g^T x + h \le 0\}, $$</p>
+        <p>where $F \in \mathbf{S}_{++}$ and $h - g^T F^{-1} g < 0$. Suppose $\tilde{\mathcal{E}}$ is another ellipsoid with similar representation,</p>
+        <p>$$ \tilde{\mathcal{E}} = \{x \mid x^T \tilde{F} x + 2\tilde{g}^T x + \tilde{h} \le 0\}, $$</p>
+        <p>with $\tilde{F} \in \mathbf{S}_{++}$, $\tilde{h} - \tilde{g}^T \tilde{F}^{-1} \tilde{g} < 0$. By the S-procedure, we see that $\mathcal{E} \subseteq \tilde{\mathcal{E}}$ if and only if there is a $\lambda > 0$ such that</p>
+        <p>$$ \begin{bmatrix} \tilde{F} & \tilde{g} \\ \tilde{g}^T & \tilde{h} \end{bmatrix} \preceq \lambda \begin{bmatrix} F & g \\ g^T & h \end{bmatrix}. $$</p></div>
+      <div class="zh"><p><em>例 B.1</em> <strong>椭球包含。</strong> 内部非空的椭球 $\mathcal{E} \subseteq \mathbb{R}^n$ 可表示为某二次函数的子水平集：</p>
+        <p>$$ \mathcal{E} = \{x \mid x^T F x + 2g^T x + h \le 0\}, $$</p>
+        <p>其中 $F \in \mathbf{S}_{++}$ 且 $h - g^T F^{-1} g < 0$。设 $\tilde{\mathcal{E}}$ 为另一具类似表示的椭球：</p>
+        <p>$$ \tilde{\mathcal{E}} = \{x \mid x^T \tilde{F} x + 2\tilde{g}^T x + \tilde{h} \le 0\}, $$</p>
+        <p>其中 $\tilde{F} \in \mathbf{S}_{++}$，$\tilde{h} - \tilde{g}^T \tilde{F}^{-1} \tilde{g} < 0$。由 S-procedure，$\mathcal{E} \subseteq \tilde{\mathcal{E}}$ 当且仅当存在 $\lambda > 0$ 使</p>
+        <p>$$ \begin{bmatrix} \tilde{F} & \tilde{g} \\ \tilde{g}^T & \tilde{h} \end{bmatrix} \preceq \lambda \begin{bmatrix} F & g \\ g^T & h \end{bmatrix}. $$</p></div>
+    </div>
+
+    <!-- ============== B.3 ============== -->
+    <div class="pair head">
+      <div class="en"><h2>B.3 The field of values of two symmetric matrices</h2></div>
+      <div class="zh"><h2>B.3 两个对称矩阵的值域</h2></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The following result is the basis for the proof of the strong duality result in §B.1 and the S-procedure in §B.2. If $A, B \in \mathbf{S}^n$, then for all $X \in \mathbf{S}^n_+$, there exists an $x \in \mathbb{R}^n$ such that</p>
+        <p>$$ \begin{aligned} x^T A x &= \mathop{\text{tr}}(AX), \\ x^T B x &= \mathop{\text{tr}}(BX). \end{aligned} \tag{B.8} $$</p></div>
+      <div class="zh"><p>下列结论是 §B.1 强对偶结论与 §B.2 S-procedure 证明的基础。若 $A, B \in \mathbf{S}^n$，则对任意 $X \in \mathbf{S}^n_+$，存在 $x \in \mathbb{R}^n$ 使</p>
+        <p>$$ \begin{aligned} x^T A x &= \mathop{\text{tr}}(AX), \\ x^T B x &= \mathop{\text{tr}}(BX). \end{aligned} \tag{B.8} $$</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><em>Remark B.1</em> <strong>Geometric interpretation.</strong> This result has an interesting interpretation in terms of the set</p>
+        <p>$$ W(A, B) = \{(x^T A x, x^T B x) \mid x \in \mathbb{R}^n\}, $$</p>
+        <p>which is a cone in $\mathbb{R}^2$. It is the cone generated by the set</p>
+        <p>$$ F(A, B) = \{(x^T A x, x^T B x) \mid \|x\|_2 = 1\}, $$</p>
+        <p>which is called the 2-dimensional field of values of the pair $(A, B)$. Geometrically, $W(A, B)$ is the image of the set of rank-one positive semidefinite matrices under the linear transformation $f : \mathbf{S}^n \to \mathbb{R}^2$ defined by</p>
+        <p>$$ f(X) = (\mathop{\text{tr}}(AX), \mathop{\text{tr}}(BX)). $$</p>
+        <p>The result that for every $X \in \mathbf{S}^n_+$ there exists an $x$ satisfying (B.8) means that $W(A, B) = f(\mathbf{S}^n_+)$. In other words, $W(A, B)$ is a convex cone.</p></div>
+      <div class="zh"><p><em>注 B.1</em> <strong>几何解释。</strong> 此结论就集合</p>
+        <p>$$ W(A, B) = \{(x^T A x, x^T B x) \mid x \in \mathbb{R}^n\} $$</p>
+        <p>而言有一种有趣的解释，它是 $\mathbb{R}^2$ 中的锥。它由集合</p>
+        <p>$$ F(A, B) = \{(x^T A x, x^T B x) \mid \|x\|_2 = 1\} $$</p>
+        <p>生成，后者称为矩阵对 $(A, B)$ 的 <strong>二维数值域</strong>（2-dimensional field of values）。几何上，$W(A, B)$ 是秩一<span style="white-space:nowrap">半正定</span>矩阵集合在由</p>
+        <p>$$ f(X) = (\mathop{\text{tr}}(AX), \mathop{\text{tr}}(BX)) $$</p>
+        <p>定义的线性变换 $f : \mathbf{S}^n \to \mathbb{R}^2$ 下的像。对每个 $X \in \mathbf{S}^n_+$ 都存在 $x$ 满足 (B.8) 这一结论意味着 $W(A, B) = f(\mathbf{S}^n_+)$。换言之，$W(A, B)$ 是凸锥。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The proof is constructive and uses induction on the rank of $X$. Suppose it is true for all $X \in \mathbf{S}^n_+$ with $1 \le \mathop{\text{rank}} X \le k$, where $k \ge 2$, that there exists an $x$ such that (B.8) holds. Then the result also holds if $\mathop{\text{rank}} X = k + 1$, as can be seen as follows. A matrix $X \in \mathbf{S}^n_+$ with $\mathop{\text{rank}} X = k + 1$ can be expressed as $X = yy^T + Z$ where $y \ne 0$ and $Z \in \mathbf{S}^n_+$ with $\mathop{\text{rank}} Z = k$. By assumption, there exists a $z$ such that $\mathop{\text{tr}}(AZ) = z^T A z$, $\mathop{\text{tr}}(BZ) = z^T B z$. Therefore</p>
+        <p>$$ \begin{aligned} \mathop{\text{tr}}(AX) &= \mathop{\text{tr}}(A(yy^T + zz^T)), \\ \mathop{\text{tr}}(BX) &= \mathop{\text{tr}}(B(yy^T + zz^T)). \end{aligned} $$</p>
+        <p>The rank of $yy^T + zz^T$ is one or two, so by assumption there exists an $x$ such that (B.8) holds.</p></div>
+      <div class="zh"><p>证明是构造性的，对 $X$ 的秩作归纳。设对所有满足 $1 \le \mathop{\text{rank}} X \le k$（其中 $k \ge 2$）的 $X \in \mathbf{S}^n_+$，存在 $x$ 使 (B.8) 成立。则当 $\mathop{\text{rank}} X = k + 1$ 时结论也成立，理由如下。秩为 $k + 1$ 的矩阵 $X \in \mathbf{S}^n_+$ 可写成 $X = yy^T + Z$，其中 $y \ne 0$ 且 $Z \in \mathbf{S}^n_+$ 满足 $\mathop{\text{rank}} Z = k$。由归纳假设，存在 $z$ 使 $\mathop{\text{tr}}(AZ) = z^T A z$，$\mathop{\text{tr}}(BZ) = z^T B z$。因此</p>
+        <p>$$ \begin{aligned} \mathop{\text{tr}}(AX) &= \mathop{\text{tr}}(A(yy^T + zz^T)), \\ \mathop{\text{tr}}(BX) &= \mathop{\text{tr}}(B(yy^T + zz^T)). \end{aligned} $$</p>
+        <p>$yy^T + zz^T$ 的秩为一或二，故由假设存在 $x$ 使 (B.8) 成立。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>It is therefore sufficient to prove the result if $\mathop{\text{rank}} X \le 2$. If $\mathop{\text{rank}} X = 0$ and $\mathop{\text{rank}} X = 1$ there is nothing to prove. If $\mathop{\text{rank}} X = 2$, we can factor $X$ as $X = VV^T$ where $V \in \mathbb{R}^{n\times 2}$, with linearly independent columns $v_1$ and $v_2$. Without loss of generality we can assume that $V^T A V$ is diagonal. (If $V^T A V$ is not diagonal we replace $V$ with $VP$ where $V^T A V = P\,\mathop{\text{diag}}(\lambda)P^T$ is the eigenvalue decomposition of $V^T A V$.) We will write $V^T A V$ and $V^T B V$ as</p>
+        <p>$$ V^T A V = \begin{bmatrix} \lambda_1 & 0 \\ 0 & \lambda_2 \end{bmatrix}, \qquad V^T B V = \begin{bmatrix} \sigma_1 & \gamma \\ \gamma & \sigma_2 \end{bmatrix}, $$</p>
+        <p>and define</p>
+        <p>$$ w = \begin{bmatrix} \mathop{\text{tr}}(AX) \\ \mathop{\text{tr}}(BX) \end{bmatrix} = \begin{bmatrix} \lambda_1 + \lambda_2 \\ \sigma_1 + \sigma_2 \end{bmatrix}. $$</p></div>
+      <div class="zh"><p>因此只需就 $\mathop{\text{rank}} X \le 2$ 的情形证明。当 $\mathop{\text{rank}} X = 0$ 或 $\mathop{\text{rank}} X = 1$ 时无需证明。若 $\mathop{\text{rank}} X = 2$，可将 $X$ 分解为 $X = VV^T$，其中 $V \in \mathbb{R}^{n\times 2}$，列 $v_1$、$v_2$ 线性无关。不妨设 $V^T A V$ 为对角阵。（若 $V^T A V$ 非对角，则以 $VP$ 替换 $V$，其中 $V^T A V = P\,\mathop{\text{diag}}(\lambda)P^T$ 为 $V^T A V$ 的特征值分解。）把 $V^T A V$ 与 $V^T B V$ 写为</p>
+        <p>$$ V^T A V = \begin{bmatrix} \lambda_1 & 0 \\ 0 & \lambda_2 \end{bmatrix}, \qquad V^T B V = \begin{bmatrix} \sigma_1 & \gamma \\ \gamma & \sigma_2 \end{bmatrix}, $$</p>
+        <p>并定义</p>
+        <p>$$ w = \begin{bmatrix} \mathop{\text{tr}}(AX) \\ \mathop{\text{tr}}(BX) \end{bmatrix} = \begin{bmatrix} \lambda_1 + \lambda_2 \\ \sigma_1 + \sigma_2 \end{bmatrix}. $$</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We need to show that $w = (x^T A x, x^T B x)$ for some $x$.</p>
+        <p>We distinguish two cases. First, assume $(0, \gamma)$ is a linear combination of the vectors $(\lambda_1, \sigma_1)$ and $(\lambda_2, \sigma_2)$:</p>
+        <p>$$ \begin{aligned} 0 &= z_1 \lambda_1 + z_2 \lambda_2, \\ \gamma &= z_1 \sigma_1 + z_2 \sigma_2, \end{aligned} $$</p>
+        <p>for some $z_1, z_2$. In this case we choose $x = \alpha v_1 + \beta v_2$, where $\alpha$ and $\beta$ are determined by solving two quadratic equations in two variables</p>
+        <p>$$ \begin{aligned} \alpha^2 + 2\alpha\beta z_1 &= 1, \\ \beta^2 + 2\alpha\beta z_2 &= 1. \end{aligned} \tag{B.9} $$</p>
+        <p>This will give the desired result, since</p>
+        <p>$$ \begin{bmatrix} (\alpha v_1 + \beta v_2)^T A(\alpha v_1 + \beta v_2) \\ (\alpha v_1 + \beta v_2)^T B(\alpha v_1 + \beta v_2) \end{bmatrix} = \alpha^2 \begin{bmatrix} \lambda_1 \\ \sigma_1 \end{bmatrix} + 2\alpha\beta \begin{bmatrix} 0 \\ \gamma \end{bmatrix} + \beta^2 \begin{bmatrix} \lambda_2 \\ \sigma_2 \end{bmatrix} = (\alpha^2 + 2\alpha\beta z_1)\begin{bmatrix} \lambda_1 \\ \sigma_1 \end{bmatrix} + (\beta^2 + 2\alpha\beta z_2)\begin{bmatrix} \lambda_2 \\ \sigma_2 \end{bmatrix} = \begin{bmatrix} \lambda_1 + \lambda_2 \\ \sigma_1 + \sigma_2 \end{bmatrix}. $$</p>
+        <p>It remains to show that the equations (B.9) are solvable. To see this, we first note that $\alpha$ and $\beta$ must be nonzero, so we can write the equations equivalently as</p>
+        <p>$$ \begin{aligned} \alpha^2(1 + 2(\beta/\alpha) z_1) &= 1, \\ (\beta/\alpha)^2 + 2(\beta/\alpha)(z_2 - z_1) &= 1. \end{aligned} $$</p>
+        <p>The equation $t^2 + 2t(z_2 - z_1) = 1$ has a positive and a negative root. At least one of these roots (the root with the same sign as $z_1$) satisfies $1 + 2tz_1 > 0$, so we can choose</p>
+        <p>$$ \alpha = \pm 1/\sqrt{1 + 2tz_1}, \qquad \beta = t\alpha. $$</p>
+        <p>This yields two solutions $(\alpha, \beta)$ that satisfy (B.9). (If both roots of $t^2 + 2t(z_2 - z_1) = 1$ satisfy $1 + 2tz_1 > 0$, we obtain four solutions.)</p></div>
+      <div class="zh"><p>需证存在 $x$ 使 $w = (x^T A x, x^T B x)$。</p>
+        <p>分两种情形。第一种，设 $(0, \gamma)$ 是向量 $(\lambda_1, \sigma_1)$ 与 $(\lambda_2, \sigma_2)$ 的线性组合：</p>
+        <p>$$ \begin{aligned} 0 &= z_1 \lambda_1 + z_2 \lambda_2, \\ \gamma &= z_1 \sigma_1 + z_2 \sigma_2, \end{aligned} $$</p>
+        <p>对某 $z_1, z_2$ 成立。此时取 $x = \alpha v_1 + \beta v_2$，其中 $\alpha$、$\beta$ 由含两个变量的两个二次方程</p>
+        <p>$$ \begin{aligned} \alpha^2 + 2\alpha\beta z_1 &= 1, \\ \beta^2 + 2\alpha\beta z_2 &= 1 \end{aligned} \tag{B.9} $$</p>
+        <p>确定。这样即可得到所需结果，因为</p>
+        <p>$$ \begin{bmatrix} (\alpha v_1 + \beta v_2)^T A(\alpha v_1 + \beta v_2) \\ (\alpha v_1 + \beta v_2)^T B(\alpha v_1 + \beta v_2) \end{bmatrix} = \alpha^2 \begin{bmatrix} \lambda_1 \\ \sigma_1 \end{bmatrix} + 2\alpha\beta \begin{bmatrix} 0 \\ \gamma \end{bmatrix} + \beta^2 \begin{bmatrix} \lambda_2 \\ \sigma_2 \end{bmatrix} = (\alpha^2 + 2\alpha\beta z_1)\begin{bmatrix} \lambda_1 \\ \sigma_1 \end{bmatrix} + (\beta^2 + 2\alpha\beta z_2)\begin{bmatrix} \lambda_2 \\ \sigma_2 \end{bmatrix} = \begin{bmatrix} \lambda_1 + \lambda_2 \\ \sigma_1 + \sigma_2 \end{bmatrix}. $$</p>
+        <p>尚需证明方程 (B.9) 可解。为此，首先注意 $\alpha$ 与 $\beta$ 必非零，故方程可等价地写成</p>
+        <p>$$ \begin{aligned} \alpha^2(1 + 2(\beta/\alpha) z_1) &= 1, \\ (\beta/\alpha)^2 + 2(\beta/\alpha)(z_2 - z_1) &= 1. \end{aligned} $$</p>
+        <p>方程 $t^2 + 2t(z_2 - z_1) = 1$ 有一正一负两个根。其中至少一个根（与 $z_1$ 同号的那个）满足 $1 + 2tz_1 > 0$，故可取</p>
+        <p>$$ \alpha = \pm 1/\sqrt{1 + 2tz_1}, \qquad \beta = t\alpha. $$</p>
+        <p>这给出两个满足 (B.9) 的解 $(\alpha, \beta)$。（若 $t^2 + 2t(z_2 - z_1) = 1$ 的两个根都满足 $1 + 2tz_1 > 0$，则得到四个解。）</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Next, assume that $(0, \gamma)$ is not a linear combination of $(\lambda_1, \sigma_1)$ and $(\lambda_2, \sigma_2)$. In particular, this means that $(\lambda_1, \sigma_1)$ and $(\lambda_2, \sigma_2)$ are linearly dependent. Therefore their sum $w = (\lambda_1 + \lambda_2, \sigma_1 + \sigma_2)$ is a nonnegative multiple of $(\lambda_1, \sigma_1)$, or $(\lambda_2, \sigma_2)$, or both. If $w = \alpha^2(\lambda_1, \sigma_1)$ for some $\alpha$, we can choose $x = \alpha v_1$. If $w = \beta^2(\lambda_2, \sigma_2)$ for some $\beta$, we can choose $x = \beta v_2$.</p></div>
+      <div class="zh"><p>第二种情形，设 $(0, \gamma)$ 不是 $(\lambda_1, \sigma_1)$ 与 $(\lambda_2, \sigma_2)$ 的线性组合。特别地，这意味着 $(\lambda_1, \sigma_1)$ 与 $(\lambda_2, \sigma_2)$ 线性相关。于是其和 $w = (\lambda_1 + \lambda_2, \sigma_1 + \sigma_2)$ 是 $(\lambda_1, \sigma_1)$、$(\lambda_2, \sigma_2)$ 之一或两者的非负倍数。若 $w = \alpha^2(\lambda_1, \sigma_1)$，可取 $x = \alpha v_1$。若 $w = \beta^2(\lambda_2, \sigma_2)$，可取 $x = \beta v_2$。</p></div>
+    </div>
+
+    <!-- ============== B.4 ============== -->
+    <div class="pair head">
+      <div class="en"><h2>B.4 Proofs of the strong duality results</h2></div>
+      <div class="zh"><h2>B.4 强对偶结论的证明</h2></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We first prove the S-procedure result given in §B.2. The assumption of strict feasibility of $\hat{x}$ implies that the matrix</p>
+        <p>$$ \begin{bmatrix} A_2 & b_2 \\ b_2^T & c_2 \end{bmatrix} $$</p>
+        <p>has at least one negative eigenvalue. Therefore</p>
+        <p>$$ \tau \ge 0, \quad \tau \begin{bmatrix} A_2 & b_2 \\ b_2^T & c_2 \end{bmatrix} \succeq 0 \;\Longrightarrow\; \tau = 0. $$</p>
+        <p>We can apply the theorem of alternatives for nonstrict linear matrix inequalities, given in example 5.14, which states that (B.7) is infeasible if and only if</p>
+        <p>$$ \begin{array}{ll} & X \succeq 0, \\ & \mathop{\text{tr}}\left(X \begin{bmatrix} A_1 & b_1 \\ b_1^T & c_1 \end{bmatrix}\right) < 0, \\ & \mathop{\text{tr}}\left(X \begin{bmatrix} A_2 & b_2 \\ b_2^T & c_2 \end{bmatrix}\right) \le 0 \end{array} $$</p>
+        <p>is feasible. From §B.3 this is equivalent to feasibility of</p>
+        <p>$$ \begin{bmatrix} v \\ w \end{bmatrix}^T \begin{bmatrix} A_1 & b_1 \\ b_1^T & c_1 \end{bmatrix} \begin{bmatrix} v \\ w \end{bmatrix} < 0, \qquad \begin{bmatrix} v \\ w \end{bmatrix}^T \begin{bmatrix} A_2 & b_2 \\ b_2^T & c_2 \end{bmatrix} \begin{bmatrix} v \\ w \end{bmatrix} \le 0. $$</p>
+        <p>If $w \ne 0$, then $x = v/w$ is feasible in (B.6). If $w = 0$, we have $v^T A_1 v < 0$, $v^T A_2 v \le 0$, so $x = \hat{x} + tv$ satisfies</p>
+        <p>$$ \begin{aligned} x^T A_1 x + 2b_1^T x + c_1 &= \hat{x}^T A_1 \hat{x} + 2b_1^T \hat{x} + c_1 + t^2 v^T A_1 v + 2t(A_1 \hat{x} + b_1)^T v \\ x^T A_2 x + 2b_2^T x + c_2 &= \hat{x}^T A_2 \hat{x} + 2b_2^T \hat{x} + c_2 + t^2 v^T A_2 v + 2t(A_2 \hat{x} + b_2)^T v \\ &< 2t(A_2 \hat{x} + b_2)^T v, \end{aligned} $$</p>
+        <p>i.e., $x$ becomes feasible as $t \to \pm\infty$, depending on the sign of $(A_2 \hat{x} + b_2)^T v$.</p></div>
+      <div class="zh"><p>先证 §B.2 给出的 S-procedure 结论。$\hat{x}$ 严格可行的假设意味着矩阵</p>
+        <p>$$ \begin{bmatrix} A_2 & b_2 \\ b_2^T & c_2 \end{bmatrix} $$</p>
+        <p>至少有一个负特征值。因此</p>
+        <p>$$ \tau \ge 0, \quad \tau \begin{bmatrix} A_2 & b_2 \\ b_2^T & c_2 \end{bmatrix} \succeq 0 \;\Longrightarrow\; \tau = 0. $$</p>
+        <p>可应用例 5.14 给出的关于非严格线性矩阵不等式的择一定理，它指出 (B.7) 不可行当且仅当</p>
+        <p>$$ \begin{array}{ll} & X \succeq 0, \\ & \mathop{\text{tr}}\left(X \begin{bmatrix} A_1 & b_1 \\ b_1^T & c_1 \end{bmatrix}\right) < 0, \\ & \mathop{\text{tr}}\left(X \begin{bmatrix} A_2 & b_2 \\ b_2^T & c_2 \end{bmatrix}\right) \le 0 \end{array} $$</p>
+        <p>可行。由 §B.3，这等价于</p>
+        <p>$$ \begin{bmatrix} v \\ w \end{bmatrix}^T \begin{bmatrix} A_1 & b_1 \\ b_1^T & c_1 \end{bmatrix} \begin{bmatrix} v \\ w \end{bmatrix} < 0, \qquad \begin{bmatrix} v \\ w \end{bmatrix}^T \begin{bmatrix} A_2 & b_2 \\ b_2^T & c_2 \end{bmatrix} \begin{bmatrix} v \\ w \end{bmatrix} \le 0 $$</p>
+        <p>可行。若 $w \ne 0$，则 $x = v/w$ 为 (B.6) 的可行点。若 $w = 0$，有 $v^T A_1 v < 0$、$v^T A_2 v \le 0$，故 $x = \hat{x} + tv$ 满足</p>
+        <p>$$ \begin{aligned} x^T A_1 x + 2b_1^T x + c_1 &= \hat{x}^T A_1 \hat{x} + 2b_1^T \hat{x} + c_1 + t^2 v^T A_1 v + 2t(A_1 \hat{x} + b_1)^T v \\ x^T A_2 x + 2b_2^T x + c_2 &= \hat{x}^T A_2 \hat{x} + 2b_2^T \hat{x} + c_2 + t^2 v^T A_2 v + 2t(A_2 \hat{x} + b_2)^T v \\ &< 2t(A_2 \hat{x} + b_2)^T v, \end{aligned} $$</p>
+        <p>即当 $t \to \pm\infty$ 时 $x$ 变为可行，取决于 $(A_2 \hat{x} + b_2)^T v$ 的符号。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Finally, we prove the result in §B.1, i.e., that the optimal values of (B.1) and (B.2) are equal if (B.1) is strictly feasible. To do this we note that $\gamma$ is a lower bound for the optimal value of (B.1) if</p>
+        <p>$$ x^T A_1 x + b_1^T x + c_1 \le 0 \;\Longrightarrow\; x^T A_0 x + b_0^T x + c_0 \ge \gamma. $$</p>
+        <p>By the S-procedure this is true if and only if there exists a $\lambda \ge 0$ such that</p>
+        <p>$$ \begin{bmatrix} A_0 & b_0 \\ b_0^T & c_0 - \gamma \end{bmatrix} + \lambda \begin{bmatrix} A_1 & b_1 \\ b_1^T & c_1 \end{bmatrix} \succeq 0, $$</p>
+        <p>i.e., $\gamma, \lambda$ are feasible in (B.2).</p></div>
+      <div class="zh"><p>最后证明 §B.1 的结论，即若 (B.1) 严格可行，则 (B.1) 与 (B.2) 的最优值相等。为此注意 $\gamma$ 是 (B.1) 最优值的下界当且仅当</p>
+        <p>$$ x^T A_1 x + b_1^T x + c_1 \le 0 \;\Longrightarrow\; x^T A_0 x + b_0^T x + c_0 \ge \gamma. $$</p>
+        <p>由 S-procedure，此成立当且仅当存在 $\lambda \ge 0$ 使</p>
+        <p>$$ \begin{bmatrix} A_0 & b_0 \\ b_0^T & c_0 - \gamma \end{bmatrix} + \lambda \begin{bmatrix} A_1 & b_1 \\ b_1^T & c_1 \end{bmatrix} \succeq 0, $$</p>
+        <p>即 $\gamma, \lambda$ 为 (B.2) 的可行点。</p></div>
+    </div>
+
+    <!-- ============== Bibliography ============== -->
+    <div class="pair head">
+      <div class="en"><h2>Bibliography</h2></div>
+      <div class="zh"><h2>参考文献</h2></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The results in this appendix are known under different names in different disciplines. The term S-procedure is from control; see Boyd, El Ghaoui, Feron, and Balakrishnan [BEFB94, pages 23, 33] for a survey and references. Variations of the S-procedure are known in linear algebra in the context of joint diagonalization of a pair of symmetric matrices; see, for example, Calabi [Cal64] and Uhlig [Uhl79]. Special cases of the strong duality result are studied in the nonlinear programming literature on trust-region methods (Stern and Wolkowicz [SW95], Nocedal and Wright [NW99, page 78]).</p></div>
+      <div class="zh"><p>本附录的结论在不同学科中以不同名称出现。术语 S-procedure 来自控制领域；综述及参考文献见 Boyd、El Ghaoui、Feron 与 Balakrishnan [BEFB94, 第 23、33 页]。S-procedure 的变形在线性代数中以一对对称矩阵联合对角化的形式为人所知，例如见 Calabi [Cal64] 与 Uhlig [Uhl79]。强对偶结论的特殊情形在关于<strong>信赖域方法</strong>的非线性规划文献中有所研究（Stern 与 Wolkowicz [SW95]，Nocedal 与 Wright [NW99, 第 78 页]）。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Brickman [Bri61] proves that the field of values of a pair of matrices $A, B \in \mathbf{S}^n$ (i.e., the set $F(A, B)$ defined in remark B.1) is a convex set if $n > 2$, and that the set $W(A, B)$ is a convex cone (for any $n$). Our proof in §B.3 is based on Hestenes [Hes68]. Many related results and additional references can be found in Horn and Johnson [HJ91, §1.8] and Ben-Tal and Nemirovski [BTN01, §4.10.5].</p></div>
+      <div class="zh"><p>Brickman [Bri61] 证明矩阵对 $A, B \in \mathbf{S}^n$ 的数值域（即注 B.1 中定义的集合 $F(A, B)$）在 $n > 2$ 时为凸集，且 $W(A, B)$ 为凸锥（对任意 $n$）。§B.3 的证明基于 Hestenes [Hes68]。更多相关结论与参考文献见 Horn 与 Johnson [HJ91, §1.8] 以及 Ben-Tal 与 Nemirovski [BTN01, §4.10.5]。</p></div>
+    </div>
+
+    <div style="margin-top:40px; padding:16px; text-align:center; color:var(--muted); font-size:14px; border-top:1px solid var(--rule)">
+      — 附录 B 完（B.1–B.4，含公式 B.1–B.9 及例 B.1）· 上一页：<a href="appendix-a.html" style="color:var(--accent)">附录 A</a> · 下一页：<a href="appendix-c.html" style="color:var(--accent)">附录 C 数值线性代数背景</a> —
+    </div>
+  </main>
+
+  <script src="assets/mathjax-config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+</body>
+</html>

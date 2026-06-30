@@ -56,7 +56,7 @@
     </div>
     <div class="nav">
       <a href="ch01-introduction.html">‹ 上一页</a>
-      <a href="index.html" class="disabled">下一页 ›</a>
+      <a href="ch03-convex-functions.html">下一页 ›</a>
     </div>
   </div>
 
@@ -773,8 +773,624 @@
         <p>是凸的。</p></div>
     </div>
 
+    <!-- ============== 2.3.3 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>2.3.3 Linear-fractional and perspective functions</h3></div>
+      <div class="zh"><h3>2.3.3 线性分式函数与透视函数</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>In this section we explore a class of functions, called linear-fractional, that is more general than affine but still preserves convexity.</p></div>
+      <div class="zh"><p>本节探讨一类函数——线性分式函数，它比仿射更广，但仍保持凸性。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>The perspective function</h3></div>
+      <div class="zh"><h3>透视函数</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We define the <em>perspective function</em> $P : \mathbb{R}^{n+1} \to \mathbb{R}^n$, with domain $\mathbf{dom}\, P = \mathbb{R}^n \times \mathbb{R}_{++}$, as $P(z, t) = z/t$. (Here $\mathbb{R}_{++}$ denotes the set of positive numbers: $\mathbb{R}_{++} = \{x \in \mathbb{R} \mid x > 0\}$.) The perspective function scales or normalizes vectors so the last component is one, and then drops the last component.</p></div>
+      <div class="zh"><p>我们定义<strong>透视函数</strong>（perspective function）$P : \mathbb{R}^{n+1} \to \mathbb{R}^n$，定义域 $\mathbf{dom}\, P = \mathbb{R}^n \times \mathbb{R}_{++}$，为 $P(z, t) = z/t$。（此处 $\mathbb{R}_{++}$ 表示正数集：$\mathbb{R}_{++} = \{x \in \mathbb{R} \mid x > 0\}$。）透视函数对向量进行缩放或归一化，使最后一项分量为 1，然后丢掉最后一项。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><em>Remark 2.1</em> We can interpret the perspective function as the action of a pin-hole camera. A pin-hole camera (in $\mathbb{R}^3$) consists of an opaque horizontal plane $x_3 = 0$, with a single pin-hole at the origin, through which light can pass, and a horizontal image plane $x_3 = -1$. An object at $x$, above the camera (i.e., with $x_3 > 0$), forms an image at the point $-(x_1/x_3, x_2/x_3, 1)$ on the image plane. Dropping the last component of the image point (since it is always $-1$), the image of a point at $x$ appears at $y = -(x_1/x_3, x_2/x_3) = -P(x)$ on the image plane. This is illustrated in figure 2.15.</p></div>
+      <div class="zh"><p><em>注 2.1</em> 可把透视函数解释为针孔相机的成像。针孔相机（在 $\mathbb{R}^3$ 中）由不透光的水平面 $x_3 = 0$（原点处有一个允许光线通过的小孔）与水平像平面 $x_3 = -1$ 组成。相机上方（即 $x_3 > 0$）物体 $x$ 在像平面上成像于点 $-(x_1/x_3, x_2/x_3, 1)$。丢掉像点的最后一个分量（因其恒为 $-1$），点 $x$ 的像出现在像平面上的 $y = -(x_1/x_3, x_2/x_3) = -P(x)$。见图 2.15。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>If $C \subseteq \mathbf{dom}\, P$ is convex, then its image</p>
+        <p>$$ P(C) = \{P(x) \mid x \in C\} $$</p>
+        <p>is convex. This result is certainly intuitive: a convex object, viewed through a pin-hole camera, yields a convex image. To establish this fact we show that line segments are mapped to line segments under the perspective function. (This too makes sense: a line segment, viewed through a pin-hole camera, yields a line segment image.) Suppose that $x = (\tilde{x}, x_{n+1})$, $y = (\tilde{y}, y_{n+1}) \in \mathbb{R}^{n+1}$ with $x_{n+1} > 0$, $y_{n+1} > 0$. Then for $0 \le \theta \le 1$,</p>
+        <p>$$ P(\theta x + (1-\theta)y) = \frac{\theta \tilde{x} + (1-\theta)\tilde{y}}{\theta x_{n+1} + (1-\theta) y_{n+1}} = \mu P(x) + (1-\mu) P(y), $$</p>
+        <p>where</p>
+        <p>$$ \mu = \frac{\theta x_{n+1}}{\theta x_{n+1} + (1-\theta) y_{n+1}} \in [0, 1]. $$</p>
+        <p>This correspondence between $\theta$ and $\mu$ is monotonic: as $\theta$ varies between 0 and 1 (which sweeps out the line segment $[x, y]$), $\mu$ varies between 0 and 1 (which sweeps out the line segment $[P(x), P(y)]$). This shows that $P([x, y]) = [P(x), P(y)]$.</p></div>
+      <div class="zh"><p>若 $C \subseteq \mathbf{dom}\, P$ 是凸的，则其像</p>
+        <p>$$ P(C) = \{P(x) \mid x \in C\} $$</p>
+        <p>是凸的。这一结果很直观：凸物体透过针孔相机得到凸的像。为证明，我们说明透视函数把线段映射为线段。（这也合理：线段透过针孔相机得到线段的像。）设 $x = (\tilde{x}, x_{n+1})$，$y = (\tilde{y}, y_{n+1}) \in \mathbb{R}^{n+1}$，$x_{n+1} > 0$，$y_{n+1} > 0$。则对 $0 \le \theta \le 1$，</p>
+        <p>$$ P(\theta x + (1-\theta)y) = \frac{\theta \tilde{x} + (1-\theta)\tilde{y}}{\theta x_{n+1} + (1-\theta) y_{n+1}} = \mu P(x) + (1-\mu) P(y), $$</p>
+        <p>其中</p>
+        <p>$$ \mu = \frac{\theta x_{n+1}}{\theta x_{n+1} + (1-\theta) y_{n+1}} \in [0, 1]. $$</p>
+        <p>$\theta$ 与 $\mu$ 间的对应是单调的：当 $\theta$ 在 0 与 1 之间变化（扫出线段 $[x, y]$）时，$\mu$ 也在 0 与 1 之间变化（扫出线段 $[P(x), P(y)]$）。故 $P([x, y]) = [P(x), P(y)]$。</p></div>
+    </div>
+
+    <!-- ===== Figure 2.15 ===== -->
+    <div class="pair fig-block">
+      <div class="figure-wrap">
+        <img src="assets/figures/fig2.15.png" alt="Figure 2.15: pin-hole camera / perspective function">
+        <div class="fig-caption">
+          <div class="cap-en"><span class="figref">Figure 2.15</span> Pin-hole camera interpretation of perspective function. The dark horizontal line represents the plane $x_3 = 0$ in $\mathbb{R}^3$, which is opaque, except for a pin-hole at the origin. Objects or light sources above the plane appear on the image plane $x_3 = -1$, which is shown as the lighter horizontal line. The mapping of the position of a source to the position of its image is related to the perspective function.</div>
+          <div class="cap-zh"><span class="figref">图 2.15</span> 透视函数的针孔相机解释。深色水平线代表 $\mathbb{R}^3$ 中的平面 $x_3 = 0$，不透光，仅在原点有一针孔。平面上方的物体或光源成像于像平面 $x_3 = -1$（浅色水平线）。光源位置到像位置的映射与透视函数相关。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Now suppose $C$ is convex with $C \subseteq \mathbf{dom}\, P$ (i.e., $x_{n+1} > 0$ for all $x \in C$), and $x, y \in C$. To establish convexity of $P(C)$ we need to show that the line segment $[P(x), P(y)]$ is in $P(C)$. But this line segment is the image of the line segment $[x, y]$ under $P$, and so lies in $P(C)$.</p></div>
+      <div class="zh"><p>现设 $C$ 凸且 $C \subseteq \mathbf{dom}\, P$（即对所有 $x \in C$，$x_{n+1} > 0$），$x, y \in C$。为证 $P(C)$ 凸，需证线段 $[P(x), P(y)]$ 在 $P(C)$ 中。但该线段正是 $[x, y]$ 在 $P$ 下的像，故在 $P(C)$ 中。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The inverse image of a convex set under the perspective function is also convex: if $C \subseteq \mathbb{R}^n$ is convex, then</p>
+        <p>$$ P^{-1}(C) = \{(x, t) \in \mathbb{R}^{n+1} \mid x/t \in C,\; t > 0\} $$</p>
+        <p>is convex.</p></div>
+      <div class="zh"><p>凸集在透视函数下的原像也是凸的：若 $C \subseteq \mathbb{R}^n$ 凸，则</p>
+        <p>$$ P^{-1}(C) = \{(x, t) \in \mathbb{R}^{n+1} \mid x/t \in C,\; t > 0\} $$</p>
+        <p>是凸的。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Linear-fractional functions</h3></div>
+      <div class="zh"><h3>线性分式函数</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>A <em>linear-fractional function</em> is formed by composing the perspective function with an affine function. Suppose $g : \mathbb{R}^n \to \mathbb{R}^{m+1}$ is affine, i.e.,</p>
+        <p>$$ g(x) = \begin{bmatrix} A \\ c^T \end{bmatrix} x + \begin{bmatrix} b \\ d \end{bmatrix}, \tag{2.12}$$</p>
+        <p>where $A \in \mathbb{R}^{m\times n}$, $b \in \mathbb{R}^m$, $c \in \mathbb{R}^n$, and $d \in \mathbb{R}$. The function $f : \mathbb{R}^n \to \mathbb{R}^m$ given by $f = P \circ g$, i.e.,</p>
+        <p>$$ f(x) = (Ax + b)/(c^T x + d), \qquad \mathbf{dom}\, f = \{x \mid c^T x + d > 0\}, \tag{2.13}$$</p>
+        <p>is called a linear-fractional (or projective) function. If $c = 0$ and $d > 0$, the domain of $f$ is $\mathbb{R}^n$, and $f$ is an affine function. So we can think of affine and linear functions as special cases of linear-fractional functions.</p></div>
+      <div class="zh"><p><strong>线性分式函数</strong>（linear-fractional function）由透视函数与仿射函数复合而成。设 $g : \mathbb{R}^n \to \mathbb{R}^{m+1}$ 仿射，即</p>
+        <p>$$ g(x) = \begin{bmatrix} A \\ c^T \end{bmatrix} x + \begin{bmatrix} b \\ d \end{bmatrix}, \tag{2.12}$$</p>
+        <p>其中 $A \in \mathbb{R}^{m\times n}$，$b \in \mathbb{R}^m$，$c \in \mathbb{R}^n$，$d \in \mathbb{R}$。函数 $f : \mathbb{R}^n \to \mathbb{R}^m$，$f = P \circ g$，即</p>
+        <p>$$ f(x) = (Ax + b)/(c^T x + d), \qquad \mathbf{dom}\, f = \{x \mid c^T x + d > 0\}, \tag{2.13}$$</p>
+        <p>称为线性分式（或射影）函数。若 $c = 0$ 且 $d > 0$，则 $f$ 的定义域为 $\mathbb{R}^n$，且 $f$ 为仿射函数。故仿射函数与线性函数可视为线性分式函数的特例。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Like the perspective function, linear-fractional functions preserve convexity. If $C$ is convex and lies in the domain of $f$ (i.e., $c^T x + d > 0$ for $x \in C$), then its image $f(C)$ is convex. This follows immediately from results above: the image of $C$ under the affine mapping (2.12) is convex, and the image of the resulting set under the perspective function $P$, which yields $f(C)$, is convex. Similarly, if $C \subseteq \mathbb{R}^m$ is convex, then the inverse image $f^{-1}(C)$ is convex.</p></div>
+      <div class="zh"><p>与透视函数一样，线性分式函数保持凸性。若 $C$ 凸且位于 $f$ 的定义域内（即对 $x \in C$ 有 $c^T x + d > 0$），则其像 $f(C)$ 凸。这由前面的结果立得：$C$ 在仿射映射 (2.12) 下的像是凸的，所得集合在透视函数 $P$ 下的像（即 $f(C)$）也是凸的。类似地，若 $C \subseteq \mathbb{R}^m$ 凸，则原像 $f^{-1}(C)$ 凸。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><em>Example 2.13</em> <strong>Conditional probabilities.</strong> Suppose $u$ and $v$ are random variables that take on values in $\{1, \ldots, n\}$ and $\{1, \ldots, m\}$, respectively, and let $p_{ij}$ denote $\mathbf{prob}(u = i, v = j)$. Then the conditional probability $f_{ij} = \mathbf{prob}(u = i \mid v = j)$ is given by</p>
+        <p>$$ f_{ij} = \frac{p_{ij}}{\sum_{k=1}^n p_{kj}}. $$</p>
+        <p>Thus $f$ is obtained by a linear-fractional mapping from $p$. It follows that if $C$ is a convex set of joint probabilities for $(u, v)$, then the associated set of conditional probabilities of $u$ given $v$ is also convex.</p></div>
+      <div class="zh"><p><em>例 2.13</em> <strong>条件概率。</strong> 设 $u$、$v$ 为分别取值于 $\{1, \ldots, n\}$ 与 $\{1, \ldots, m\}$ 的随机变量，$p_{ij}$ 表示 $\mathbf{prob}(u = i, v = j)$。则条件概率 $f_{ij} = \mathbf{prob}(u = i \mid v = j)$ 为</p>
+        <p>$$ f_{ij} = \frac{p_{ij}}{\sum_{k=1}^n p_{kj}}. $$</p>
+        <p>故 $f$ 由 $p$ 经线性分式映射得到。因此若 $C$ 是 $(u, v)$ 联合概率的凸集，则 $u$ 给定 $v$ 的条件概率的相应集合也是凸的。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Figure 2.16 shows a set $C \subseteq \mathbb{R}^2$, and its image under the linear-fractional function</p>
+        <p>$$ f(x) = \frac{1}{x_1 + x_2 + 1} x, \qquad \mathbf{dom}\, f = \{(x_1, x_2) \mid x_1 + x_2 + 1 > 0\}. $$</p></div>
+      <div class="zh"><p>图 2.16 给出了 $\mathbb{R}^2$ 中集合 $C$ 及其在线性分式函数</p>
+        <p>$$ f(x) = \frac{1}{x_1 + x_2 + 1} x, \qquad \mathbf{dom}\, f = \{(x_1, x_2) \mid x_1 + x_2 + 1 > 0\} $$</p>
+        <p>下的像。</p></div>
+    </div>
+
+    <!-- ===== Figure 2.16 ===== -->
+    <div class="pair fig-block">
+      <div class="figure-wrap">
+        <img src="assets/figures/fig2.16.png" alt="Figure 2.16: set C and image under linear-fractional f">
+        <div class="fig-caption">
+          <div class="cap-en"><span class="figref">Figure 2.16</span> <em>Left.</em> A set $C \subseteq \mathbb{R}^2$. The dashed line shows the boundary of the domain of the linear-fractional function $f(x) = x/(x_1 + x_2 + 1)$ with $\mathbf{dom}\, f = \{(x_1, x_2) \mid x_1 + x_2 + 1 > 0\}$. <em>Right.</em> Image of $C$ under $f$. The dashed line shows the boundary of the domain of $f^{-1}$.</div>
+          <div class="cap-zh"><span class="figref">图 2.16</span> <em>左</em>：集合 $C \subseteq \mathbb{R}^2$。虚线表示线性分式函数 $f(x) = x/(x_1 + x_2 + 1)$ 定义域的边界，$\mathbf{dom}\, f = \{(x_1, x_2) \mid x_1 + x_2 + 1 > 0\}$。<em>右</em>：$C$ 在 $f$ 下的像。虚线表示 $f^{-1}$ 定义域的边界。</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============== 2.4 ============== -->
+    <div class="pair head">
+      <div class="en"><h2>2.4 Generalized inequalities</h2></div>
+      <div class="zh"><h2>2.4 广义不等式</h2></div>
+    </div>
+
+    <!-- ============== 2.4.1 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>2.4.1 Proper cones and generalized inequalities</h3></div>
+      <div class="zh"><h3>2.4.1 正常锥与广义不等式</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>A cone $K \subseteq \mathbb{R}^n$ is called a <em>proper cone</em> if it satisfies the following:</p>
+        <ul>
+          <li>$K$ is convex.</li>
+          <li>$K$ is closed.</li>
+          <li>$K$ is <em>solid</em>, which means it has nonempty interior.</li>
+          <li>$K$ is <em>pointed</em>, which means that it contains no line (or equivalently, $x \in K, -x \in K \Rightarrow x = 0$).</li>
+        </ul>
+        <p>A proper cone $K$ can be used to define a generalized inequality, which is a partial ordering on $\mathbb{R}^n$ that has many of the properties of the standard ordering on $\mathbb{R}$. We associate with the proper cone $K$ the partial ordering on $\mathbb{R}^n$ defined by</p>
+        <p>$$ x \preceq_K y \iff y - x \in K. $$</p>
+        <p>We also write $x \succeq_K y$ for $y \preceq_K x$. Similarly, we define an associated strict partial ordering by</p>
+        <p>$$ x \prec_K y \iff y - x \in \mathbf{int}\, K, $$</p>
+        <p>and write $x \succ_K y$ for $y \prec_K x$.</p></div>
+      <div class="zh"><p>若锥 $K \subseteq \mathbb{R}^n$ 满足以下条件，则称之为<strong>正常锥</strong>（proper cone）：</p>
+        <ul>
+          <li>$K$ 是凸的。</li>
+          <li>$K$ 是闭的。</li>
+          <li>$K$ 是<strong>实的</strong>（solid），即内部非空。</li>
+          <li>$K$ 是<strong>尖的</strong>（pointed），即不含直线（等价地，$x \in K, -x \in K \Rightarrow x = 0$）。</li>
+        </ul>
+        <p>正常锥 $K$ 可用来定义广义不等式——$\mathbb{R}^n$ 上的一种偏序，具有 $\mathbb{R}$ 上标准序的许多性质。与正常锥 $K$ 关联的 $\mathbb{R}^n$ 上的偏序定义为</p>
+        <p>$$ x \preceq_K y \iff y - x \in K. $$</p>
+        <p>也把 $y \preceq_K x$ 记为 $x \succeq_K y$。类似地，定义关联的严格偏序</p>
+        <p>$$ x \prec_K y \iff y - x \in \mathbf{int}\, K, $$</p>
+        <p>并把 $y \prec_K x$ 记为 $x \succ_K y$。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>When $K = \mathbb{R}_+$, the partial ordering $\preceq_K$ is the usual ordering $\le$ on $\mathbb{R}$, and the strict partial ordering $\prec_K$ is the same as the usual strict ordering $<$ on $\mathbb{R}$. So generalized inequalities include as a special case ordinary (nonstrict and strict) inequality in $\mathbb{R}$.</p></div>
+      <div class="zh"><p>当 $K = \mathbb{R}_+$ 时，偏序 $\preceq_K$ 即为 $\mathbb{R}$ 上通常的序 $\le$，严格偏序 $\prec_K$ 即为 $\mathbb{R}$ 上通常的严格序 $<$。故广义不等式把 $\mathbb{R}$ 上通常的（非严格与严格的）不等式作为特例包含在内。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><em>Example 2.14</em> <strong>Nonnegative orthant and componentwise inequality.</strong> The nonnegative orthant $K = \mathbb{R}^n_+$ is a proper cone. The associated generalized inequality $\preceq_K$ corresponds to componentwise inequality between vectors: $x \preceq_K y$ means that $x_i \le y_i$, $i = 1, \ldots, n$. The associated strict inequality corresponds to componentwise strict inequality: $x \prec_K y$ means that $x_i < y_i$, $i = 1, \ldots, n$. The nonstrict and strict partial orderings associated with the nonnegative orthant arise so frequently that we drop the subscript $\mathbb{R}^n_+$; it is understood when the symbol $\preceq$ or $\prec$ appears between vectors.</p></div>
+      <div class="zh"><p><em>例 2.14</em> <strong>非负象限与分量式不等式。</strong> 非负象限 $K = \mathbb{R}^n_+$ 是正常锥。关联的广义不等式 $\preceq_K$ 对应向量间的分量式不等式：$x \preceq_K y$ 意即 $x_i \le y_i$，$i = 1, \ldots, n$。关联的严格不等式对应分量式严格不等式：$x \prec_K y$ 意即 $x_i < y_i$，$i = 1, \ldots, n$。与非负象限关联的非严格与严格偏序如此常用，以至于我们省略下标 $\mathbb{R}^n_+$；当 $\preceq$ 或 $\prec$ 出现在向量之间时即默认如此。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><em>Example 2.15</em> <strong>Positive semidefinite cone and matrix inequality.</strong> The positive semidefinite cone $\mathbf{S}^n_+$ is a proper cone in $\mathbf{S}^n$. The associated generalized inequality $\preceq_K$ is the usual matrix inequality: $X \preceq_K Y$ means $Y - X$ is positive semidefinite. The interior of $\mathbf{S}^n_+$ (in $\mathbf{S}^n$) consists of the positive definite matrices, so the strict generalized inequality also agrees with the usual strict inequality between symmetric matrices: $X \prec_K Y$ means $Y - X$ is positive definite. Here, too, the partial ordering arises so frequently that we drop the subscript: for symmetric matrices we write simply $X \preceq Y$ or $X \prec Y$. It is understood that the generalized inequalities are with respect to the positive semidefinite cone.</p></div>
+      <div class="zh"><p><em>例 2.15</em> <strong>正半定锥与矩阵不等式。</strong> 正半定锥 $\mathbf{S}^n_+$ 是 $\mathbf{S}^n$ 中的正常锥。关联的广义不等式 $\preceq_K$ 即通常的矩阵不等式：$X \preceq_K Y$ 意即 $Y - X$ 半正定。$\mathbf{S}^n_+$ 的内部（在 $\mathbf{S}^n$ 中）由正定矩阵构成，故严格广义不等式也与对称矩阵间通常的严格不等式一致：$X \prec_K Y$ 意即 $Y - X$ 正定。此处该偏序也极为常用，故省略下标：对对称矩阵直接写 $X \preceq Y$ 或 $X \prec Y$。默认该广义不等式是关于正半定锥的。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><em>Example 2.16</em> <strong>Cone of polynomials nonnegative on $[0, 1]$.</strong> Let $K$ be defined as</p>
+        <p>$$ K = \{c \in \mathbb{R}^n \mid c_1 + c_2 t + \cdots + c_n t^{n-1} \ge 0 \text{ for } t \in [0, 1]\}, \tag{2.15}$$</p>
+        <p>i.e., $K$ is the cone of (coefficients of) polynomials of degree $n-1$ that are nonnegative on the interval $[0, 1]$. It can be shown that $K$ is a proper cone; its interior is the set of coefficients of polynomials that are positive on the interval $[0, 1]$. Two vectors $c, d \in \mathbb{R}^n$ satisfy $c \preceq_K d$ if and only if</p>
+        <p>$$ c_1 + c_2 t + \cdots + c_n t^{n-1} \le d_1 + d_2 t + \cdots + d_n t^{n-1} $$</p>
+        <p>for all $t \in [0, 1]$.</p></div>
+      <div class="zh"><p><em>例 2.16</em> <strong>$[0, 1]$ 上非负多项式锥。</strong> 定义</p>
+        <p>$$ K = \{c \in \mathbb{R}^n \mid c_1 + c_2 t + \cdots + c_n t^{n-1} \ge 0 \text{ 对 } t \in [0, 1]\}, \tag{2.15}$$</p>
+        <p>即 $K$ 是 $[0, 1]$ 上非负的 $n-1$ 次多项式（的系数）构成的锥。可证 $K$ 是正常锥；其内部是 $[0, 1]$ 上严格为正的多项式的系数集合。两向量 $c, d \in \mathbb{R}^n$ 满足 $c \preceq_K d$ 当且仅当对所有 $t \in [0, 1]$，</p>
+        <p>$$ c_1 + c_2 t + \cdots + c_n t^{n-1} \le d_1 + d_2 t + \cdots + d_n t^{n-1}. $$</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Properties of generalized inequalities</h3></div>
+      <div class="zh"><h3>广义不等式的性质</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>A generalized inequality $\preceq_K$ satisfies many properties, such as</p>
+        <ul>
+          <li>$\preceq_K$ is preserved under addition: if $x \preceq_K y$ and $u \preceq_K v$, then $x + u \preceq_K y + v$.</li>
+          <li>$\preceq_K$ is transitive: if $x \preceq_K y$ and $y \preceq_K z$ then $x \preceq_K z$.</li>
+          <li>$\preceq_K$ is preserved under nonnegative scaling: if $x \preceq_K y$ and $\alpha \ge 0$ then $\alpha x \preceq_K \alpha y$.</li>
+          <li>$\preceq_K$ is reflexive: $x \preceq_K x$.</li>
+          <li>$\preceq_K$ is antisymmetric: if $x \preceq_K y$ and $y \preceq_K x$, then $x = y$.</li>
+          <li>$\preceq_K$ is preserved under limits: if $x_i \preceq_K y_i$ for $i = 1, 2, \ldots$, $x_i \to x$ and $y_i \to y$ as $i \to \infty$, then $x \preceq_K y$.</li>
+        </ul></div>
+      <div class="zh"><p>广义不等式 $\preceq_K$ 满足许多性质，如</p>
+        <ul>
+          <li>$\preceq_K$ 在加法下保持：若 $x \preceq_K y$ 且 $u \preceq_K v$，则 $x + u \preceq_K y + v$。</li>
+          <li>$\preceq_K$ 是传递的：若 $x \preceq_K y$ 且 $y \preceq_K z$，则 $x \preceq_K z$。</li>
+          <li>$\preceq_K$ 在非负数乘下保持：若 $x \preceq_K y$ 且 $\alpha \ge 0$，则 $\alpha x \preceq_K \alpha y$。</li>
+          <li>$\preceq_K$ 是自反的：$x \preceq_K x$。</li>
+          <li>$\preceq_K$ 是反对称的：若 $x \preceq_K y$ 且 $y \preceq_K x$，则 $x = y$。</li>
+          <li>$\preceq_K$ 在极限下保持：若对 $i = 1, 2, \ldots$ 有 $x_i \preceq_K y_i$，且 $i \to \infty$ 时 $x_i \to x$、$y_i \to y$，则 $x \preceq_K y$。</li>
+        </ul></div>
+    </div>
+
+    <!-- ============== 2.4.2 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>2.4.2 Minimum and minimal elements</h3></div>
+      <div class="zh"><h3>2.4.2 最小元与极小元</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The notation of generalized inequality (i.e., $\preceq_K$, $\prec_K$) is meant to suggest the analogy to ordinary inequality on $\mathbb{R}$ (i.e., $\le$, $<$). While many properties of ordinary inequality do hold for generalized inequalities, some important ones do not. The most obvious difference is that $\le$ on $\mathbb{R}$ is a linear ordering: any two points are comparable, meaning either $x \le y$ or $y \le x$. This property does not hold for other generalized inequalities. One implication is that concepts like minimum and maximum are more complicated in the context of generalized inequalities. We briefly discuss this in this section.</p></div>
+      <div class="zh"><p>广义不等式的记号（即 $\preceq_K$、$\prec_K$）意在类比 $\mathbb{R}$ 上通常的不等式（即 $\le$、$<$）。虽然通常不等式的许多性质对广义不等式也成立，但一些重要性质并不成立。最明显的差别是：$\mathbb{R}$ 上的 $\le$ 是线性序——任意两点可比较，即要么 $x \le y$ 要么 $y \le x$。该性质对其他广义不等式不成立。一个推论是：在广义不等式的语境下，最小值和最大值之类的概念更复杂。本节对此作简要讨论。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We say that $x \in S$ is the <em>minimum element</em> of $S$ (with respect to the generalized inequality $\preceq_K$) if for every $y \in S$ we have $x \preceq_K y$. We define the <em>maximum element</em> of a set $S$, with respect to a generalized inequality, in a similar way. If a set has a minimum (maximum) element, then it is unique. A related concept is <em>minimal element</em>. We say that $x \in S$ is a <em>minimal element</em> of $S$ (with respect to the generalized inequality $\preceq_K$) if $y \in S$, $y \preceq_K x$ only if $y = x$. We define maximal element in a similar way. A set can have many different minimal (maximal) elements.</p></div>
+      <div class="zh"><p>若对每个 $y \in S$ 都有 $x \preceq_K y$，则称 $x \in S$ 为 $S$（关于广义不等式 $\preceq_K$ 的）<strong>最小元</strong>（minimum element）。<strong>最大元</strong>类似定义。若集合有最小（最大）元，则它唯一。一个相关概念是<strong>极小元</strong>（minimal element）。若 $y \in S$ 且 $y \preceq_K x$ 蕴含 $y = x$，则称 $x \in S$ 为 $S$（关于 $\preceq_K$ 的）<strong>极小元</strong>。极大元类似定义。一个集合可以有多个不同的极小（极大）元。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We can describe minimum and minimal elements using simple set notation. A point $x \in S$ is the minimum element of $S$ if and only if</p>
+        <p>$$ S \subseteq x + K. $$</p>
+        <p>Here $x + K$ denotes all the points that are comparable to $x$ and greater than or equal to $x$ (according to $\preceq_K$). A point $x \in S$ is a minimal element if and only if</p>
+        <p>$$ (x - K) \cap S = \{x\}. $$</p>
+        <p>Here $x - K$ denotes all the points that are comparable to $x$ and less than or equal to $x$ (according to $\preceq_K$); the only point in common with $S$ is $x$.</p></div>
+      <div class="zh"><p>可用简单的集合记号描述最小元与极小元。点 $x \in S$ 是 $S$ 的最小元当且仅当</p>
+        <p>$$ S \subseteq x + K. $$</p>
+        <p>此处 $x + K$ 表示所有可与 $x$ 比较且（按 $\preceq_K$）大于等于 $x$ 的点。点 $x \in S$ 是极小元当且仅当</p>
+        <p>$$ (x - K) \cap S = \{x\}. $$</p>
+        <p>此处 $x - K$ 表示所有可与 $x$ 比较且小于等于 $x$ 的点；它与 $S$ 的交集只有 $x$。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><em>Example 2.17</em> Consider the cone $\mathbb{R}^2_+$, which induces componentwise inequality in $\mathbb{R}^2$. Here we can give some simple geometric descriptions of minimal and minimum elements. The inequality $x \preceq y$ means $y$ is above and to the right of $x$. To say that $x \in S$ is the minimum element of a set $S$ means that all other points of $S$ lie above and to the right. To say that $x$ is a minimal element of a set $S$ means that no other point of $S$ lies to the left and below $x$. This is illustrated in figure 2.17.</p></div>
+      <div class="zh"><p><em>例 2.17</em> 考虑锥 $\mathbb{R}^2_+$，它在 $\mathbb{R}^2$ 中诱导分量式不等式。此处可给出极小元与最小元的简单几何描述。不等式 $x \preceq y$ 意即 $y$ 在 $x$ 的右上方。$x \in S$ 是集合 $S$ 的最小元，意即 $S$ 的所有其他点都在 $x$ 的右上方。$x$ 是 $S$ 的极小元，意即 $S$ 中没有其他点在 $x$ 的左下方。见图 2.17。</p></div>
+    </div>
+
+    <!-- ===== Figure 2.17 ===== -->
+    <div class="pair fig-block">
+      <div class="figure-wrap">
+        <img src="assets/figures/fig2.17.png" alt="Figure 2.17: minimum and minimal elements">
+        <div class="fig-caption">
+          <div class="cap-en"><span class="figref">Figure 2.17</span> <em>Left.</em> The set $S_1$ has a minimum element $x_1$ with respect to componentwise inequality in $\mathbb{R}^2$. The set $x_1 + K$ is shaded lightly; $x_1$ is the minimum element of $S_1$ since $S_1 \subseteq x_1 + K$. <em>Right.</em> The point $x_2$ is a minimal point of $S_2$. The set $x_2 - K$ is shown lightly shaded. The point $x_2$ is minimal because $x_2 - K$ and $S_2$ intersect only at $x_2$.</div>
+          <div class="cap-zh"><span class="figref">图 2.17</span> <em>左</em>：集合 $S_1$ 关于 $\mathbb{R}^2$ 中分量式不等式有最小元 $x_1$。集合 $x_1 + K$ 以浅色阴影显示；因 $S_1 \subseteq x_1 + K$，$x_1$ 是 $S_1$ 的最小元。<em>右</em>：$x_2$ 是 $S_2$ 的极小点。集合 $x_2 - K$ 以浅色阴影显示。因 $x_2 - K$ 与 $S_2$ 仅在 $x_2$ 相交，$x_2$ 是极小的。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><em>Example 2.18</em> <strong>Minimum and minimal elements of a set of symmetric matrices.</strong> We associate with each $A \in \mathbf{S}^n_{++}$ an ellipsoid centered at the origin, given by</p>
+        <p>$$ \mathcal{E}_A = \{x \mid x^T A^{-1} x \le 1\}. $$</p>
+        <p>We have $A \preceq B$ if and only if $\mathcal{E}_A \subseteq \mathcal{E}_B$. Let $v_1, \ldots, v_k \in \mathbb{R}^n$ be given and define</p>
+        <p>$$ S = \{P \in \mathbf{S}^n_{++} \mid v_i^T P^{-1} v_i \le 1,\; i = 1, \ldots, k\}, $$</p>
+        <p>which corresponds to the set of ellipsoids that contain the points $v_1, \ldots, v_k$. The set $S$ does not have a minimum element: for any ellipsoid that contains the points $v_1, \ldots, v_k$ we can find another one that contains the points, and is not comparable to it. An ellipsoid is minimal if it contains the points, but no smaller ellipsoid does. Figure 2.18 shows an example in $\mathbb{R}^2$ with $k = 2$.</p></div>
+      <div class="zh"><p><em>例 2.18</em> <strong>对称矩阵集合的最小元与极小元。</strong> 对每个 $A \in \mathbf{S}^n_{++}$，关联一个以原点为中心的椭球</p>
+        <p>$$ \mathcal{E}_A = \{x \mid x^T A^{-1} x \le 1\}. $$</p>
+        <p>$A \preceq B$ 当且仅当 $\mathcal{E}_A \subseteq \mathcal{E}_B$。给定 $v_1, \ldots, v_k \in \mathbb{R}^n$，定义</p>
+        <p>$$ S = \{P \in \mathbf{S}^n_{++} \mid v_i^T P^{-1} v_i \le 1,\; i = 1, \ldots, k\}, $$</p>
+        <p>它对应包含点 $v_1, \ldots, v_k$ 的椭球构成的集合。$S$ 没有最小元：对任一包含这些点的椭球，都能找到另一个也包含这些点但与它不可比的椭球。一个椭球是极小的，如果它包含这些点，但没有更小的椭球也包含它们。图 2.18 给出了 $\mathbb{R}^2$ 中 $k = 2$ 的例子。</p></div>
+    </div>
+
+    <!-- ===== Figure 2.18 ===== -->
+    <div class="pair fig-block">
+      <div class="figure-wrap">
+        <img src="assets/figures/fig2.18.png" alt="Figure 2.18: three ellipsoids, minimal element">
+        <div class="fig-caption">
+          <div class="cap-en"><span class="figref">Figure 2.18</span> Three ellipsoids in $\mathbb{R}^2$, centered at the origin (shown as the lower dot), that contain the points shown as the upper dots. The ellipsoid $\mathcal{E}_1$ is not minimal, since there exist ellipsoids that contain the points, and are smaller (e.g., $\mathcal{E}_3$). $\mathcal{E}_3$ is not minimal for the same reason. The ellipsoid $\mathcal{E}_2$ is minimal, since no other ellipsoid (centered at the origin) contains the points and is contained in $\mathcal{E}_2$.</div>
+          <div class="cap-zh"><span class="figref">图 2.18</span> $\mathbb{R}^2$ 中三个以原点（下方点）为中心、包含上方点所示点的椭球。$\mathcal{E}_1$ 不是极小的，因为存在也包含这些点且更小的椭球（如 $\mathcal{E}_3$）。$\mathcal{E}_3$ 同理不是极小的。$\mathcal{E}_2$ 是极小的，因为没有其他（以原点为中心的）椭球既包含这些点又含于 $\mathcal{E}_2$。</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============== 2.5 ============== -->
+    <div class="pair head">
+      <div class="en"><h2>2.5 Separating and supporting hyperplanes</h2></div>
+      <div class="zh"><h2>2.5 分离与支撑超平面</h2></div>
+    </div>
+
+    <!-- ============== 2.5.1 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>2.5.1 Separating hyperplane theorem</h3></div>
+      <div class="zh"><h3>2.5.1 分离超平面定理</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>In this section we describe an idea that will be important later: the use of hyperplanes or affine functions to separate convex sets that do not intersect. The basic result is the <em>separating hyperplane theorem</em>: Suppose $C$ and $D$ are nonempty disjoint convex sets, i.e., $C \cap D = \emptyset$. Then there exist $a \ne 0$ and $b$ such that $a^T x \le b$ for all $x \in C$ and $a^T x \ge b$ for all $x \in D$. In other words, the affine function $a^T x - b$ is nonpositive on $C$ and nonnegative on $D$. The hyperplane $\{x \mid a^T x = b\}$ is called a <em>separating hyperplane</em> for the sets $C$ and $D$, or is said to separate the sets $C$ and $D$. This is illustrated in figure 2.19.</p></div>
+      <div class="zh"><p>本节描述一个后面很重要的思想：用超平面或仿射函数分离不相交的凸集。基本结果是<strong>分离超平面定理</strong>：设 $C$、$D$ 为非空不相交凸集，即 $C \cap D = \emptyset$。则存在 $a \ne 0$ 和 $b$，使得对所有 $x \in C$ 有 $a^T x \le b$，对所有 $x \in D$ 有 $a^T x \ge b$。换言之，仿射函数 $a^T x - b$ 在 $C$ 上非正、在 $D$ 上非负。超平面 $\{x \mid a^T x = b\}$ 称为 $C$ 与 $D$ 的<strong>分离超平面</strong>，或称分离集合 $C$ 与 $D$。见图 2.19。</p></div>
+    </div>
+
+    <!-- ===== Figure 2.19 ===== -->
+    <div class="pair fig-block">
+      <div class="figure-wrap">
+        <img src="assets/figures/fig2.19.png" alt="Figure 2.19: separating hyperplane">
+        <div class="fig-caption">
+          <div class="cap-en"><span class="figref">Figure 2.19</span> The hyperplane $\{x \mid a^T x = b\}$ separates the disjoint convex sets $C$ and $D$. The affine function $a^T x - b$ is nonpositive on $C$ and nonnegative on $D$.</div>
+          <div class="cap-zh"><span class="figref">图 2.19</span> 超平面 $\{x \mid a^T x = b\}$ 分离不相交凸集 $C$ 和 $D$。仿射函数 $a^T x - b$ 在 $C$ 上非正、在 $D$ 上非负。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Proof of separating hyperplane theorem</h3></div>
+      <div class="zh"><h3>分离超平面定理的证明</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Here we consider a special case, and leave the extension of the proof to the general case as an exercise (exercise 2.22). We assume that the (Euclidean) distance between $C$ and $D$, defined as</p>
+        <p>$$ \mathbf{dist}(C, D) = \inf\{\|u - v\|_2 \mid u \in C,\; v \in D\}, $$</p>
+        <p>is positive, and that there exist points $c \in C$ and $d \in D$ that achieve the minimum distance, i.e., $\|c - d\|_2 = \mathbf{dist}(C, D)$. (These conditions are satisfied, for example, when $C$ and $D$ are closed and one set is bounded.)</p></div>
+      <div class="zh"><p>此处考虑特殊情形，把一般情形的证明推广留作习题（习题 2.22）。假设 $C$ 与 $D$ 间的（欧氏）距离</p>
+        <p>$$ \mathbf{dist}(C, D) = \inf\{\|u - v\|_2 \mid u \in C,\; v \in D\} $$</p>
+        <p>为正，且存在点 $c \in C$ 与 $d \in D$ 达到最小距离，即 $\|c - d\|_2 = \mathbf{dist}(C, D)$。（例如当 $C$、$D$ 闭且其中之一有界时这些条件满足。）</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Define</p>
+        <p>$$ a = d - c, \qquad b = \frac{\|d\|_2^2 - \|c\|_2^2}{2}. $$</p>
+        <p>We will show that the affine function</p>
+        <p>$$ f(x) = a^T x - b = (d - c)^T (x - (1/2)(d + c)) $$</p>
+        <p>is nonpositive on $C$ and nonnegative on $D$, i.e., that the hyperplane $\{x \mid a^T x = b\}$ separates $C$ and $D$. This hyperplane is perpendicular to the line segment between $c$ and $d$, and passes through its midpoint, as shown in figure 2.20.</p></div>
+      <div class="zh"><p>定义</p>
+        <p>$$ a = d - c, \qquad b = \frac{\|d\|_2^2 - \|c\|_2^2}{2}. $$</p>
+        <p>我们将证明仿射函数</p>
+        <p>$$ f(x) = a^T x - b = (d - c)^T (x - (1/2)(d + c)) $$</p>
+        <p>在 $C$ 上非正、在 $D$ 上非负，即超平面 $\{x \mid a^T x = b\}$ 分离 $C$ 与 $D$。该超平面垂直于 $c$ 与 $d$ 之间的线段，并通过其中点，见图 2.20。</p></div>
+    </div>
+
+    <!-- ===== Figure 2.20 ===== -->
+    <div class="pair fig-block">
+      <div class="figure-wrap">
+        <img src="assets/figures/fig2.20.png" alt="Figure 2.20: constructing separating hyperplane">
+        <div class="fig-caption">
+          <div class="cap-en"><span class="figref">Figure 2.20</span> Construction of a separating hyperplane between two convex sets. The points $c \in C$ and $d \in D$ are the pair of points in the two sets that are closest to each other. The separating hyperplane is orthogonal to, and bisects, the line segment between $c$ and $d$.</div>
+          <div class="cap-zh"><span class="figref">图 2.20</span> 两凸集间分离超平面的构造。点 $c \in C$ 与 $d \in D$ 是两集中彼此最接近的一对点。分离超平面垂直于 $c$ 与 $d$ 之间的线段并平分之。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We first show that $f$ is nonnegative on $D$. The proof that $f$ is nonpositive on $C$ is similar (or follows by swapping $C$ and $D$ and considering $-f$). Suppose there were a point $u \in D$ for which</p>
+        <p>$$ f(u) = (d - c)^T (u - (1/2)(d + c)) < 0. \tag{2.16}$$</p>
+        <p>We can express $f(u)$ as</p>
+        <p>$$ f(u) = (d - c)^T (u - d + (1/2)(d - c)) = (d - c)^T (u - d) + (1/2)\|d - c\|_2^2. $$</p>
+        <p>We see that (2.16) implies $(d - c)^T (u - d) < 0$. Now we observe that</p>
+        <p>$$ \frac{d}{dt}\bigg\|_{t=0} \|d + t(u - d) - c\|_2^2 = 2(d - c)^T (u - d) < 0, $$</p>
+        <p>so for some small $t > 0$, with $t \le 1$, we have</p>
+        <p>$$ \|d + t(u - d) - c\|_2 < \|d - c\|_2, $$</p>
+        <p>i.e., the point $d + t(u - d)$ is closer to $c$ than $d$ is. Since $D$ is convex and contains $d$ and $u$, we have $d + t(u - d) \in D$. But this is impossible, since $d$ is assumed to be the point in $D$ that is closest to $C$.</p></div>
+      <div class="zh"><p>先证 $f$ 在 $D$ 上非负。$f$ 在 $C$ 上非正的证明类似（或交换 $C$、$D$ 并考虑 $-f$）。假设存在 $u \in D$ 使</p>
+        <p>$$ f(u) = (d - c)^T (u - (1/2)(d + c)) < 0. \tag{2.16}$$</p>
+        <p>把 $f(u)$ 写成</p>
+        <p>$$ f(u) = (d - c)^T (u - d + (1/2)(d - c)) = (d - c)^T (u - d) + (1/2)\|d - c\|_2^2. $$</p>
+        <p>可见 (2.16) 蕴含 $(d - c)^T (u - d) < 0$。观察到</p>
+        <p>$$ \frac{d}{dt}\bigg|_{t=0} \|d + t(u - d) - c\|_2^2 = 2(d - c)^T (u - d) < 0, $$</p>
+        <p>故对某个小 $t > 0$（$t \le 1$），有</p>
+        <p>$$ \|d + t(u - d) - c\|_2 < \|d - c\|_2, $$</p>
+        <p>即点 $d + t(u - d)$ 比 $d$ 更接近 $c$。由 $D$ 凸且含 $d$、$u$，得 $d + t(u - d) \in D$。但这不可能，因为 $d$ 假设为 $D$ 中最接近 $C$ 的点。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Strict separation</h3></div>
+      <div class="zh"><h3>严格分离</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The separating hyperplane we constructed above satisfies the stronger condition that $a^T x < b$ for all $x \in C$ and $a^T x > b$ for all $x \in D$. This is called <em>strict separation</em> of the sets $C$ and $D$. Simple examples show that in general, disjoint convex sets need not be strictly separable by a hyperplane (even when the sets are closed; see exercise 2.23). In many special cases, however, strict separation can be established.</p></div>
+      <div class="zh"><p>上面构造的分离超平面满足更强的条件：对所有 $x \in C$ 有 $a^T x < b$，对所有 $x \in D$ 有 $a^T x > b$。这称为 $C$ 与 $D$ 的<strong>严格分离</strong>。简单例子表明，一般地，不相交凸集未必能被超平面严格分离（即使集合是闭的；见习题 2.23）。但在许多特殊情形下可以建立严格分离。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><em>Example 2.20</em> <strong>Strict separation of a point and a closed convex set.</strong> Let $C$ be a closed convex set and $x_0 \notin C$. Then there exists a hyperplane that strictly separates $x_0$ from $C$. As an immediate consequence we can establish a fact that we already mentioned above: a closed convex set is the intersection of all halfspaces that contain it.</p></div>
+      <div class="zh"><p><em>例 2.20</em> <strong>点与闭凸集的严格分离。</strong> 设 $C$ 为闭凸集，$x_0 \notin C$。则存在超平面严格分离 $x_0$ 与 $C$。作为直接推论，可建立前面已提及的事实：闭凸集是所有包含它的半空间的交集。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Converse separating hyperplane theorems</h3></div>
+      <div class="zh"><h3>逆分离超平面定理</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The converse of the separating hyperplane theorem (i.e., existence of a separating hyperplane implies that $C$ and $D$ do not intersect) is not true, unless one imposes additional constraints on $C$ or $D$, even beyond convexity. As a simple counterexample, consider $C = D = \{0\} \subseteq \mathbb{R}$. Here the hyperplane $x = 0$ separates $C$ and $D$. By adding conditions on $C$ and $D$ various converse separation theorems can be derived. As a very simple example, suppose $C$ and $D$ are convex sets, with $C$ open, and there exists an affine function $f$ that is nonpositive on $C$ and nonnegative on $D$. Then $C$ and $D$ are disjoint. Putting this converse together with the separating hyperplane theorem, we have the following result: any two convex sets $C$ and $D$, at least one of which is open, are disjoint if and only if there exists a separating hyperplane.</p></div>
+      <div class="zh"><p>分离超平面定理的逆（即分离超平面的存在蕴含 $C$、$D$ 不相交）并不成立，除非对 $C$ 或 $D$ 施加额外限制——甚至超出凸性之外。简单反例：$C = D = \{0\} \subseteq \mathbb{R}$，超平面 $x = 0$ 分离 $C$ 与 $D$。通过对 $C$、$D$ 附加条件可导出各种逆分离定理。一个非常简单的例子：设 $C$、$D$ 凸，$C$ 开，且存在仿射函数 $f$ 在 $C$ 上非正、在 $D$ 上非负，则 $C$、$D$ 不相交。把此逆与分离超平面定理合起来：任意两个凸集 $C$、$D$（至少其一为开）不相交当且仅当存在分离超平面。</p></div>
+    </div>
+
+    <!-- ============== 2.5.2 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>2.5.2 Supporting hyperplanes</h3></div>
+      <div class="zh"><h3>2.5.2 支撑超平面</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Suppose $C \subseteq \mathbb{R}^n$, and $x_0$ is a point in its boundary $\mathbf{bd}\, C$, i.e., $x_0 \in \mathbf{bd}\, C = \mathbf{cl}\, C \,\backslash\, \mathbf{int}\, C$. If $a \ne 0$ satisfies $a^T x \le a^T x_0$ for all $x \in C$, then the hyperplane $\{x \mid a^T x = a^T x_0\}$ is called a <em>supporting hyperplane</em> to $C$ at the point $x_0$. This is equivalent to saying that the point $x_0$ and the set $C$ are separated by the hyperplane $\{x \mid a^T x = a^T x_0\}$. The geometric interpretation is that the hyperplane $\{x \mid a^T x = a^T x_0\}$ is tangent to $C$ at $x_0$, and the halfspace $\{x \mid a^T x \le a^T x_0\}$ contains $C$. This is illustrated in figure 2.21.</p></div>
+      <div class="zh"><p>设 $C \subseteq \mathbb{R}^n$，$x_0$ 为其边界 $\mathbf{bd}\, C$ 上的点，即 $x_0 \in \mathbf{bd}\, C = \mathbf{cl}\, C \,\backslash\, \mathbf{int}\, C$。若 $a \ne 0$ 满足对所有 $x \in C$ 有 $a^T x \le a^T x_0$，则超平面 $\{x \mid a^T x = a^T x_0\}$ 称为 $C$ 在点 $x_0$ 处的<strong>支撑超平面</strong>（supporting hyperplane）。这等价于点 $x_0$ 与集合 $C$ 被超平面 $\{x \mid a^T x = a^T x_0\}$ 分离。几何解释是：超平面 $\{x \mid a^T x = a^T x_0\}$ 在 $x_0$ 处与 $C$ 相切，且半空间 $\{x \mid a^T x \le a^T x_0\}$ 包含 $C$。见图 2.21。</p></div>
+    </div>
+
+    <!-- ===== Figure 2.21 ===== -->
+    <div class="pair fig-block">
+      <div class="figure-wrap">
+        <img src="assets/figures/fig2.21.png" alt="Figure 2.21: supporting hyperplane">
+        <div class="fig-caption">
+          <div class="cap-en"><span class="figref">Figure 2.21</span> The hyperplane $\{x \mid a^T x = a^T x_0\}$ supports $C$ at $x_0$.</div>
+          <div class="cap-zh"><span class="figref">图 2.21</span> 超平面 $\{x \mid a^T x = a^T x_0\}$ 在 $x_0$ 处支撑 $C$。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>A basic result, called the <em>supporting hyperplane theorem</em>, states that for any nonempty convex set $C$, and any $x_0 \in \mathbf{bd}\, C$, there exists a supporting hyperplane to $C$ at $x_0$. There is also a partial converse of the supporting hyperplane theorem: If a set is closed, has nonempty interior, and has a supporting hyperplane at every point in its boundary, then it is convex.</p></div>
+      <div class="zh"><p>一个基本结果——<strong>支撑超平面定理</strong>——指出：对任意非空凸集 $C$ 及任意 $x_0 \in \mathbf{bd}\, C$，存在 $C$ 在 $x_0$ 处的支撑超平面。还有一个部分逆：若一个集合是闭的、内部非空，且边界上每一点都有支撑超平面，则它是凸的。</p></div>
+    </div>
+
+    <!-- ============== 2.6 ============== -->
+    <div class="pair head">
+      <div class="en"><h2>2.6 Dual cones and generalized inequalities</h2></div>
+      <div class="zh"><h2>2.6 对偶锥与广义不等式</h2></div>
+    </div>
+
+    <!-- ============== 2.6.1 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>2.6.1 Dual cones</h3></div>
+      <div class="zh"><h3>2.6.1 对偶锥</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Let $K$ be a cone. The set</p>
+        <p>$$ K^* = \{y \mid x^T y \ge 0 \text{ for all } x \in K\} \tag{2.19}$$</p>
+        <p>is called the <em>dual cone</em> of $K$. As the name suggests, $K^*$ is a cone, and is always convex, even when the original cone $K$ is not. Geometrically, $y \in K^*$ if and only if $-y$ is the normal of a hyperplane that supports $K$ at the origin. This is illustrated in figure 2.22.</p></div>
+      <div class="zh"><p>设 $K$ 为锥。集合</p>
+        <p>$$ K^* = \{y \mid x^T y \ge 0 \text{ 对所有 } x \in K\} \tag{2.19}$$</p>
+        <p>称为 $K$ 的<strong>对偶锥</strong>（dual cone）。顾名思义，$K^*$ 是锥，且总是凸的——即使原锥 $K$ 不凸。几何上，$y \in K^*$ 当且仅当 $-y$ 是在原点支撑 $K$ 的超平面的法向量。见图 2.22。</p></div>
+    </div>
+
+    <!-- ===== Figure 2.22 ===== -->
+    <div class="pair fig-block">
+      <div class="figure-wrap">
+        <img src="assets/figures/fig2.22.png" alt="Figure 2.22: dual cone membership">
+        <div class="fig-caption">
+          <div class="cap-en"><span class="figref">Figure 2.22</span> <em>Left.</em> The halfspace with inward normal $y$ contains the cone $K$, so $y \in K^*$. <em>Right.</em> The halfspace with inward normal $z$ does not contain $K$, so $z \notin K^*$.</div>
+          <div class="cap-zh"><span class="figref">图 2.22</span> <em>左</em>：以内法向量 $y$ 为内法向的半空间包含锥 $K$，故 $y \in K^*$。<em>右</em>：以内法向量 $z$ 为内法向的半空间不包含 $K$，故 $z \notin K^*$。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><em>Example 2.23</em> <strong>Nonnegative orthant.</strong> The cone $\mathbb{R}^n_+$ is its own dual:</p>
+        <p>$$ x^T y \ge 0 \text{ for all } x \succeq 0 \iff y \succeq 0. $$</p>
+        <p>We call such a cone <em>self-dual</em>.</p></div>
+      <div class="zh"><p><em>例 2.23</em> <strong>非负象限。</strong> 锥 $\mathbb{R}^n_+$ 是自对偶的：</p>
+        <p>$$ x^T y \ge 0 \text{ 对所有 } x \succeq 0 \iff y \succeq 0. $$</p>
+        <p>称这样的锥为<strong>自对偶</strong>（self-dual）的。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><em>Example 2.24</em> <strong>Positive semidefinite cone.</strong> On the set of symmetric $n \times n$ matrices $\mathbf{S}^n$, we use the standard inner product $\mathbf{tr}(XY) = \sum_{i,j=1}^n X_{ij} Y_{ij}$. The positive semidefinite cone $\mathbf{S}^n_+$ is self-dual, i.e., for $X, Y \in \mathbf{S}^n$,</p>
+        <p>$$ \mathbf{tr}(XY) \ge 0 \text{ for all } X \succeq 0 \iff Y \succeq 0. $$</p></div>
+      <div class="zh"><p><em>例 2.24</em> <strong>正半定锥。</strong> 在对称 $n \times n$ 矩阵集合 $\mathbf{S}^n$ 上，使用标准内积 $\mathbf{tr}(XY) = \sum_{i,j=1}^n X_{ij} Y_{ij}$。正半定锥 $\mathbf{S}^n_+$ 是自对偶的，即对 $X, Y \in \mathbf{S}^n$，</p>
+        <p>$$ \mathbf{tr}(XY) \ge 0 \text{ 对所有 } X \succeq 0 \iff Y \succeq 0. $$</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Dual cones satisfy several properties, such as:</p>
+        <ul>
+          <li>$K^*$ is closed and convex.</li>
+          <li>$K_1 \subseteq K_2$ implies $K_2^* \subseteq K_1^*$.</li>
+          <li>If $K$ has nonempty interior, then $K^*$ is pointed.</li>
+          <li>If the closure of $K$ is pointed then $K^*$ has nonempty interior.</li>
+          <li>$K^{**}$ is the closure of the convex hull of $K$. (Hence if $K$ is convex and closed, $K^{**} = K$.)</li>
+        </ul>
+        <p>These properties show that if $K$ is a proper cone, then so is its dual $K^*$, and moreover, that $K^{**} = K$.</p></div>
+      <div class="zh"><p>对偶锥满足若干性质，如：</p>
+        <ul>
+          <li>$K^*$ 是闭凸的。</li>
+          <li>$K_1 \subseteq K_2$ 蕴含 $K_2^* \subseteq K_1^*$。</li>
+          <li>若 $K$ 内部非空，则 $K^*$ 是尖的。</li>
+          <li>若 $K$ 的闭包是尖的，则 $K^*$ 内部非空。</li>
+          <li>$K^{**}$ 是 $K$ 的凸包的闭包。（故若 $K$ 闭凸，则 $K^{**} = K$。）</li>
+        </ul>
+        <p>这些性质表明：若 $K$ 是正常锥，则其对偶 $K^*$ 也是正常锥，且 $K^{**} = K$。</p></div>
+    </div>
+
+    <!-- ============== 2.6.2 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>2.6.2 Dual generalized inequalities</h3></div>
+      <div class="zh"><h3>2.6.2 对偶广义不等式</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Now suppose that the convex cone $K$ is proper, so it induces a generalized inequality $\preceq_K$. Then its dual cone $K^*$ is also proper, and therefore induces a generalized inequality. We refer to the generalized inequality $\preceq_{K^*}$ as the dual of the generalized inequality $\preceq_K$. Some important properties relating a generalized inequality and its dual are:</p>
+        <ul>
+          <li>$x \preceq_K y$ if and only if $\lambda^T x \le \lambda^T y$ for all $\lambda \succeq_{K^*} 0$.</li>
+          <li>$x \prec_K y$ if and only if $\lambda^T x < \lambda^T y$ for all $\lambda \succeq_{K^*} 0$, $\lambda \ne 0$.</li>
+        </ul></div>
+      <div class="zh"><p>现设凸锥 $K$ 正常，故它诱导广义不等式 $\preceq_K$。则其对偶锥 $K^*$ 也正常，从而也诱导广义不等式。我们把广义不等式 $\preceq_{K^*}$ 称为 $\preceq_K$ 的对偶。广义不等式与其对偶之间的一些重要性质：</p>
+        <ul>
+          <li>$x \preceq_K y$ 当且仅当对所有 $\lambda \succeq_{K^*} 0$ 有 $\lambda^T x \le \lambda^T y$。</li>
+          <li>$x \prec_K y$ 当且仅当对所有 $\lambda \succeq_{K^*} 0$、$\lambda \ne 0$ 有 $\lambda^T x < \lambda^T y$。</li>
+        </ul></div>
+    </div>
+
+    <!-- ============== 2.6.3 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>2.6.3 Minimum and minimal elements via dual inequalities</h3></div>
+      <div class="zh"><h3>2.6.3 用对偶不等式刻画最小元与极小元</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We can use dual generalized inequalities to characterize minimum and minimal elements of a (possibly nonconvex) set $S \subseteq \mathbb{R}^m$ with respect to the generalized inequality induced by a proper cone $K$.</p></div>
+      <div class="zh"><p>可用对偶广义不等式刻画（可能非凸的）集合 $S \subseteq \mathbb{R}^m$ 关于正常锥 $K$ 诱导的广义不等式的最小元与极小元。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Dual characterization of minimum element</h3></div>
+      <div class="zh"><h3>最小元的对偶刻画</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We first consider a characterization of the minimum element: $x$ is the minimum element of $S$, with respect to the generalized inequality $\preceq_K$, if and only if for all $\lambda \succ_{K^*} 0$, $x$ is the unique minimizer of $\lambda^T z$ over $z \in S$. Geometrically, this means that for any $\lambda \succ_{K^*} 0$, the hyperplane</p>
+        <p>$$ \{z \mid \lambda^T (z - x) = 0\} $$</p>
+        <p>is a strict supporting hyperplane to $S$ at $x$. Note that convexity of the set $S$ is not required. This is illustrated in figure 2.23.</p></div>
+      <div class="zh"><p>先考虑最小元的刻画：$x$ 是 $S$（关于 $\preceq_K$）的最小元，当且仅当对所有 $\lambda \succ_{K^*} 0$，$x$ 是 $\lambda^T z$ 在 $z \in S$ 上的唯一极小点。几何上，这意味着对任意 $\lambda \succ_{K^*} 0$，超平面</p>
+        <p>$$ \{z \mid \lambda^T (z - x) = 0\} $$</p>
+        <p>是 $S$ 在 $x$ 处的严格支撑超平面。注意此处不要求 $S$ 凸。见图 2.23。</p></div>
+    </div>
+
+    <!-- ===== Figure 2.23 ===== -->
+    <div class="pair fig-block">
+      <div class="figure-wrap">
+        <img src="assets/figures/fig2.23.png" alt="Figure 2.23: dual characterization of minimum element">
+        <div class="fig-caption">
+          <div class="cap-en"><span class="figref">Figure 2.23</span> Dual characterization of minimum element. The point $x$ is the minimum element of the set $S$ with respect to $\mathbb{R}^2_+$. This is equivalent to: for every $\lambda \succ 0$, the hyperplane $\{z \mid \lambda^T (z - x) = 0\}$ strictly supports $S$ at $x$, i.e., contains $S$ on one side, and touches it only at $x$.</div>
+          <div class="cap-zh"><span class="figref">图 2.23</span> 最小元的对偶刻画。点 $x$ 是集合 $S$ 关于 $\mathbb{R}^2_+$ 的最小元。这等价于：对每个 $\lambda \succ 0$，超平面 $\{z \mid \lambda^T (z - x) = 0\}$ 在 $x$ 处严格支撑 $S$，即把 $S$ 置于一侧且仅在 $x$ 处相触。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Dual characterization of minimal elements</h3></div>
+      <div class="zh"><h3>极小元的对偶刻画</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We now turn to a similar characterization of minimal elements. Here there is a gap between the necessary and sufficient conditions. If $\lambda \succ_{K^*} 0$ and $x$ minimizes $\lambda^T z$ over $z \in S$, then $x$ is minimal. This is illustrated in figure 2.24.</p></div>
+      <div class="zh"><p>现在转向极小元的类似刻画。这里必要条件与充分条件之间存在间隙。若 $\lambda \succ_{K^*} 0$ 且 $x$ 使 $\lambda^T z$ 在 $z \in S$ 上最小，则 $x$ 是极小的。见图 2.24。</p></div>
+    </div>
+
+    <!-- ===== Figure 2.24 ===== -->
+    <div class="pair fig-block">
+      <div class="figure-wrap">
+        <img src="assets/figures/fig2.24.png" alt="Figure 2.24: minimal points and minimizers">
+        <div class="fig-caption">
+          <div class="cap-en"><span class="figref">Figure 2.24</span> A set $S \subseteq \mathbb{R}^2$. Its set of minimal points, with respect to $\mathbb{R}^2_+$, is shown as the darker section of its (lower, left) boundary. The minimizer of $\lambda_1^T z$ over $S$ is $x_1$, and is minimal since $\lambda_1 \succ 0$. The minimizer of $\lambda_2^T z$ over $S$ is $x_2$, which is another minimal point of $S$, since $\lambda_2 \succ 0$.</div>
+          <div class="cap-zh"><span class="figref">图 2.24</span> 集合 $S \subseteq \mathbb{R}^2$。它关于 $\mathbb{R}^2_+$ 的极小点集以其（左下）边界的较深部分显示。$\lambda_1^T z$ 在 $S$ 上的极小点为 $x_1$，因 $\lambda_1 \succ 0$ 故为极小。$\lambda_2^T z$ 在 $S$ 上的极小点为 $x_2$，是 $S$ 的另一个极小点，因 $\lambda_2 \succ 0$。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The converse is in general false: a point $x$ can be minimal in $S$, but not a minimizer of $\lambda^T z$ over $z \in S$, for any $\lambda$, as shown in figure 2.25. This figure suggests that convexity plays an important role in the converse, which is correct. Provided the set $S$ is convex, we can say that for any minimal element $x$ there exists a nonzero $\lambda \succeq_{K^*} 0$ such that $x$ minimizes $\lambda^T z$ over $z \in S$.</p></div>
+      <div class="zh"><p>逆一般不成立：点 $x$ 可以是 $S$ 的极小点，但对任何 $\lambda$ 都不是 $\lambda^T z$ 在 $z \in S$ 上的极小点，如图 2.25 所示。该图提示凸性在逆中起重要作用，确实如此。只要 $S$ 凸，就可说：对任一极小元 $x$，存在非零 $\lambda \succeq_{K^*} 0$ 使 $x$ 使 $\lambda^T z$ 在 $z \in S$ 上最小。</p></div>
+    </div>
+
+    <!-- ===== Figure 2.25 ===== -->
+    <div class="pair fig-block">
+      <div class="figure-wrap">
+        <img src="assets/figures/fig2.25.png" alt="Figure 2.25: minimal but not a minimizer">
+        <div class="fig-caption">
+          <div class="cap-en"><span class="figref">Figure 2.25</span> The point $x$ is a minimal element of $S \subseteq \mathbb{R}^2$ with respect to $\mathbb{R}^2_+$. However there exists no $\lambda$ for which $x$ minimizes $\lambda^T z$ over $z \in S$.</div>
+          <div class="cap-zh"><span class="figref">图 2.25</span> 点 $x$ 是 $S \subseteq \mathbb{R}^2$ 关于 $\mathbb{R}^2_+$ 的极小元。但不存在 $\lambda$ 使 $x$ 为 $\lambda^T z$ 在 $z \in S$ 上的极小点。</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Figure 2.26 ===== -->
+    <div class="pair fig-block">
+      <div class="figure-wrap">
+        <img src="assets/figures/fig2.26.png" alt="Figure 2.26: minimal vs minimizer gap">
+        <div class="fig-caption">
+          <div class="cap-en"><span class="figref">Figure 2.26</span> <em>Left.</em> The point $x_1 \in S_1$ is minimal, but is not a minimizer of $\lambda^T z$ over $S_1$ for any $\lambda \succ 0$. (It does, however, minimize $\lambda^T z$ over $z \in S_1$ for $\lambda = (1, 0)$.) <em>Right.</em> The point $x_2 \in S_2$ is not minimal, but it does minimize $\lambda^T z$ over $z \in S_2$ for $\lambda = (0, 1) \succeq 0$.</div>
+          <div class="cap-zh"><span class="figref">图 2.26</span> <em>左</em>：$x_1 \in S_1$ 是极小的，但对任何 $\lambda \succ 0$ 都不是 $\lambda^T z$ 在 $S_1$ 上的极小点。（但对 $\lambda = (1, 0)$ 它确为 $\lambda^T z$ 在 $z \in S_1$ 上的极小点。）<em>右</em>：$x_2 \in S_2$ 不是极小的，但对 $\lambda = (0, 1) \succeq 0$ 它使 $\lambda^T z$ 在 $z \in S_2$ 上最小。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><em>Example 2.27</em> <strong>Pareto optimal production frontier.</strong> We consider a product which requires $n$ resources (such as labor, electricity, natural gas, water) to manufacture. The product can be manufactured or produced in many ways. With each production method, we associate a resource vector $x \in \mathbb{R}^n$, where $x_i$ denotes the amount of resource $i$ consumed by the method to manufacture the product. We assume that $x_i \ge 0$ (i.e., resources are consumed by the production methods) and that the resources are valuable (so using less of any resource is preferred). The production set $\mathcal{P} \subseteq \mathbb{R}^n$ is defined as the set of all resource vectors $x$ that correspond to some production method. Production methods with resource vectors that are minimal elements of $\mathcal{P}$, with respect to componentwise inequality, are called <em>Pareto optimal</em> or <em>efficient</em>. The set of minimal elements of $\mathcal{P}$ is called the <em>efficient production frontier</em>.</p></div>
+      <div class="zh"><p><em>例 2.27</em> <strong>Pareto 最优生产前沿。</strong> 考虑一种需 $n$ 种资源（如劳动力、电力、天然气、水）制造的产品。产品可用多种方式生产。每种生产方式关联一个资源向量 $x \in \mathbb{R}^n$，$x_i$ 表示该方法制造产品所消耗的资源 $i$ 的量。假设 $x_i \ge 0$（即生产方式消耗资源）且资源是有价值的（少用任何一种资源更优）。生产集 $\mathcal{P} \subseteq \mathbb{R}^n$ 定义为与某生产方式对应的所有资源向量 $x$ 的集合。资源向量为 $\mathcal{P}$ 关于分量式不等式的极小元的生产方式称为 <strong>Pareto 最优</strong>或<strong>有效的</strong>。$\mathcal{P}$ 的极小元集合称为<strong>有效生产前沿</strong>。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We can find Pareto optimal production methods (i.e., minimal resource vectors) by minimizing</p>
+        <p>$$ \lambda^T x = \lambda_1 x_1 + \cdots + \lambda_n x_n $$</p>
+        <p>over the set $\mathcal{P}$ of production vectors, using any $\lambda$ that satisfies $\lambda \succ 0$. Here the vector $\lambda$ has a simple interpretation: $\lambda_i$ is the price of resource $i$. By minimizing $\lambda^T x$ over $\mathcal{P}$ we are finding the overall cheapest production method (for the resource prices $\lambda_i$). As long as the prices are positive, the resulting production method is guaranteed to be efficient. These ideas are illustrated in figure 2.27.</p></div>
+      <div class="zh"><p>可通过在所有生产向量构成的集合 $\mathcal{P}$ 上极小化</p>
+        <p>$$ \lambda^T x = \lambda_1 x_1 + \cdots + \lambda_n x_n $$</p>
+        <p>（用任意满足 $\lambda \succ 0$ 的 $\lambda$）来求 Pareto 最优生产方式（即极小资源向量）。此处向量 $\lambda$ 有简单解释：$\lambda_i$ 是资源 $i$ 的价格。在 $\mathcal{P}$ 上极小化 $\lambda^T x$ 即寻找总成本最低的生产方式（对资源价格 $\lambda_i$ 而言）。只要价格为正，所得生产方式必为有效的。这些思想见图 2.27。</p></div>
+    </div>
+
+    <!-- ===== Figure 2.27 ===== -->
+    <div class="pair fig-block">
+      <div class="figure-wrap">
+        <img src="assets/figures/fig2.27.png" alt="Figure 2.27: production set and Pareto frontier">
+        <div class="fig-caption">
+          <div class="cap-en"><span class="figref">Figure 2.27</span> The production set $\mathcal{P}$, for a product that requires labor and fuel to produce, is shown shaded. The two dark curves show the efficient production frontier. The points $x_1, x_2$ and $x_3$ are efficient. The points $x_4$ and $x_5$ are not (since in particular, $x_2$ corresponds to a production method that uses no more fuel, and less labor). The point $x_1$ is also the minimum cost production method for the price vector $\lambda$ (which is positive). The point $x_2$ is efficient, but cannot be found by minimizing the total cost $\lambda^T x$ for any price vector $\lambda \succeq 0$.</div>
+          <div class="cap-zh"><span class="figref">图 2.27</span> 需劳动力和燃料生产的产品的生产集 $\mathcal{P}$（阴影显示）。两条深色曲线为有效生产前沿。点 $x_1$、$x_2$、$x_3$ 是有效的。$x_4$、$x_5$ 不是（特别地，$x_2$ 对应一种燃料不多用、劳动力更少的生产方式）。$x_1$ 也是价格向量 $\lambda$（为正）下成本最低的生产方式。$x_2$ 是有效的，但不能通过对任何价格向量 $\lambda \succeq 0$ 极小化总成本 $\lambda^T x$ 找到。</div>
+        </div>
+      </div>
+    </div>
+
     <div style="margin-top:40px; padding:16px; text-align:center; color:var(--muted); font-size:14px; border-top:1px solid var(--rule)">
-      — 2.2–2.3.2 节完 · 下一节：2.3.3 透视函数与线性分式函数（含 Fig 2.15, 2.16）· 之后 2.4 广义不等式 —
+      — 第 2 章完（2.1–2.6，含 Fig 2.1–2.27 全部 27 张原图）· 下一章：<a href="ch03-convex-functions.html" style="color:var(--accent)">第 3 章 凸函数</a> —
     </div>
   </main>
 

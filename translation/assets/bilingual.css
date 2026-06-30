@@ -184,4 +184,45 @@ main.index {
 @media (max-width: 760px) {
   .pair { grid-template-columns: 1fr; }
   .pair > .en { border-right: none; border-bottom: 1px dashed var(--rule); }
+  .pair.fig-block .fig-caption { grid-template-columns: 1fr; }
+  .pair.fig-block .fig-caption .cap-en { border-right: none; border-bottom: 1px dashed var(--rule); padding-right: 0; padding-bottom: 8px; }
+  .pair.fig-block .fig-caption .cap-zh { padding-left: 0; padding-top: 8px; }
 }
+
+/* ---------- figure block (full-width, spans both columns) ---------- */
+.pair.fig-block {
+  grid-template-columns: 1fr;
+  border-bottom: 1px solid var(--rule-soft);
+}
+.pair.fig-block > .figure-wrap {
+  grid-column: 1 / -1;
+  padding: 16px 22px;
+  text-align: center;
+}
+.pair.fig-block .figure-wrap img {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--rule-soft);
+  border-radius: 4px;
+}
+.pair.fig-block .fig-caption {
+  max-width: 760px;
+  margin: 10px auto 4px;
+  font-size: 14px;
+  color: var(--muted);
+  text-align: left;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+.pair.fig-block .fig-caption .cap-en {
+  color: var(--en-ink);
+  border-right: 1px solid var(--rule);
+  padding-right: 16px;
+}
+.pair.fig-block .fig-caption .cap-zh {
+  color: var(--ink);
+  padding-left: 16px;
+}
+.pair.fig-block .fig-caption .figref { font-weight: 700; color: var(--accent); }
+

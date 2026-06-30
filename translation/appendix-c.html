@@ -1,0 +1,1019 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Appendix C Numerical Linear Algebra Background · 数值线性代数背景 — Convex Optimization 中英对照</title>
+  <link rel="stylesheet" href="assets/bilingual.css">
+  <style>
+    /* figure block: full-width, spanning both columns */
+    .pair.fig-block {
+      grid-template-columns: 1fr;
+      border-bottom: 1px solid var(--rule-soft);
+    }
+    .pair.fig-block > .figure-wrap {
+      grid-column: 1 / -1;
+      padding: 16px 22px;
+      text-align: center;
+    }
+    .pair.fig-block .figure-wrap img {
+      max-width: 100%;
+      height: auto;
+      border: 1px solid var(--rule-soft);
+      border-radius: 4px;
+    }
+    .pair.fig-block .fig-caption {
+      max-width: 760px;
+      margin: 10px auto 4px;
+      font-size: 14px;
+      color: var(--muted);
+      text-align: left;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+    .pair.fig-block .fig-caption .cap-en {
+      color: var(--en-ink);
+      border-right: 1px solid var(--rule);
+      padding-right: 16px;
+    }
+    .pair.fig-block .fig-caption .cap-zh {
+      color: var(--ink);
+      padding-left: 16px;
+    }
+    .pair.fig-block .fig-caption .figref { font-weight: 700; color: var(--accent); }
+    @media (max-width: 760px) {
+      .pair.fig-block .fig-caption { grid-template-columns: 1fr; }
+      .pair.fig-block .fig-caption .cap-en { border-right: none; border-bottom: 1px dashed var(--rule); padding-right: 0; padding-bottom: 8px; }
+      .pair.fig-block .fig-caption .cap-zh { padding-left: 0; padding-top: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="crumbs">
+      <a href="index.html">目录</a><span class="sep">/</span>附录 C 数值线性代数背景
+    </div>
+    <div class="nav">
+      <a href="appendix-b.html">‹ 上一页</a>
+      <a href="index.html">下一页 ›</a>
+    </div>
+  </div>
+
+  <main class="doc">
+    <div class="doc-header">
+      <p class="kicker">Appendix C</p>
+      <h1>数值线性代数背景 / Numerical Linear Algebra Background</h1>
+      <p class="meta">原书 pp. 661–684 · 翻译对照（英 / 中）</p>
+    </div>
+
+    <!-- ============== Appendix C intro ============== -->
+    <div class="pair">
+      <div class="en"><p>In this appendix we give a brief overview of some basic numerical linear algebra, concentrating on methods for solving one or more sets of linear equations. We focus on direct (i.e., noniterative) methods, and how problem structure can be exploited to improve efficiency. There are many important issues and methods in numerical linear algebra that we do not consider here, including numerical stability, details of matrix factorizations, methods for parallel or multiple processors, and iterative methods. For these (and other) topics, we refer the reader to the references given at the end of this appendix.</p></div>
+      <div class="zh"><p>本附录对一些基本的数值线性代数作简要概述，着重于求解一组或多组线性方程的方法。我们关注<strong>直接</strong>（即非迭代）方法，以及如何利用问题结构提高效率。数值线性代数中有许多重要问题和方法此处不予讨论，包括数值稳定性、矩阵分解的细节、并行或多处理器方法以及迭代方法。关于这些（及其他）主题，读者可参阅本附录末给出的参考文献。</p></div>
+    </div>
+
+    <!-- ============== C.1 ============== -->
+    <div class="pair head">
+      <div class="en"><h2>C.1 Matrix structure and algorithm complexity</h2></div>
+      <div class="zh"><h2>C.1 矩阵结构与算法复杂度</h2></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We concentrate on methods for solving the set of linear equations</p>
+        <p>$$ Ax = b \tag{C.1} $$</p>
+        <p>where $A \in \mathbb{R}^{n\times n}$ and $b \in \mathbb{R}^n$. We assume $A$ is nonsingular, so the solution is unique for all values of $b$, and given by $x = A^{-1}b$. This basic problem arises in many optimization algorithms, and often accounts for most of the computation. In the context of solving the linear equations (C.1), the matrix $A$ is often called the coefficient matrix, and the vector $b$ is called the righthand side.</p></div>
+      <div class="zh"><p>我们着重于求解线性方程组</p>
+        <p>$$ Ax = b \tag{C.1} $$</p>
+        <p>其中 $A \in \mathbb{R}^{n\times n}$，$b \in \mathbb{R}^n$。假设 $A$ 非奇异，故对所有 $b$ 解唯一，且 $x = A^{-1}b$。此基本问题在许多优化算法中出现，常占总计算量的大部。在求解线性方程组 (C.1) 的语境下，矩阵 $A$ 常称为<strong>系数矩阵</strong>（coefficient matrix），向量 $b$ 称为<strong>右端项</strong>（righthand side）。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The standard generic methods for solving (C.1) require a computational effort that grows approximately like $n^3$. These methods assume nothing more about $A$ than nonsingularity, and so are generally applicable. For $n$ several hundred or smaller, these generic methods are probably the best methods to use, except in the most demanding real-time applications. For $n$ more than a thousand or so, the generic methods of solving $Ax = b$ become less practical.</p></div>
+      <div class="zh"><p>求解 (C.1) 的标准通用方法所需计算量大致按 $n^3$ 增长。这些方法对 $A$ 除非奇异性外不作任何假设，故普遍适用。当 $n$ 为几百或更小时，除要求最高的实时应用外，这些通用方法大概是最佳选择。当 $n$ 超过一千左右时，求解 $Ax = b$ 的通用方法就变得不够实用。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Coefficient matrix structure</h3></div>
+      <div class="zh"><h3>系数矩阵的结构</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>In many cases the coefficient matrix $A$ has some special structure or form that can be exploited to solve the equation $Ax = b$ more efficiently, using methods tailored for the special structure. For example, in the Newton system $\nabla^2 f(x)\Delta x_{\text{nt}} = -\nabla f(x)$, the coefficient matrix is symmetric and positive definite, which allows us to use a solution method that is around twice as fast as the generic method (and also has better roundoff properties). There are many other types of structure that can be exploited, with computational savings (or algorithm speedup) that is usually far more than a factor of two. In many cases, the effort is reduced to something proportional to $n^2$ or even $n$, as compared to $n^3$ for the generic methods. Since these methods are usually applied when $n$ is at least a hundred, and often far larger, the savings can be dramatic.</p></div>
+      <div class="zh"><p>许多情形下系数矩阵 $A$ 具有某种特殊结构或形式，可利用针对该结构定制的方法更高效地求解 $Ax = b$。例如，在 Newton 系统 $\nabla^2 f(x)\Delta x_{\text{nt}} = -\nabla f(x)$ 中，系数矩阵对称正定，从而可用约快两倍于通用方法的方法求解（且舍入性质也更好）。可利用的结构种类很多，所得计算节省（或加速）通常远超两倍。许多情形下，计算量降为与 $n^2$ 甚至 $n$ 成比例，而通用方法为 $n^3$。由于这些方法通常用于 $n$ 至少为几百乃至更大的情形，节省十分可观。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>A wide variety of coefficient matrix structures can be exploited. Simple examples related to the sparsity pattern (i.e., the pattern of zero and nonzero entries in the matrix) include banded, block diagonal, or sparse matrices. A more subtle exploitable structure is diagonal plus low rank. Many common forms of convex optimization problems lead to linear equations with coefficient matrices that have these exploitable structures. (There are many other matrix structures that can be exploited, e.g., Toeplitz, Hankel, and circulant, that we will not consider in this appendix.)</p></div>
+      <div class="zh"><p>可利用的系数矩阵结构种类繁多。与稀疏模式（即矩阵中零元与非零元的分布模式）有关的简单例子包括<strong>带状</strong>、<strong>块对角</strong>或<strong>稀疏</strong>矩阵。一种更微妙的可利用结构是<strong>对角加低秩</strong>。许多常见的凸优化问题形式导致具有这些可利用结构的系数矩阵的线性方程组。（尚有许多其他可利用的矩阵结构，如 Toeplitz、Hankel、循环矩阵等，本附录不予讨论。）</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We refer to a generic method that does not exploit any sparsity pattern in the matrices as one for dense matrices. We refer to a method that does not exploit any structure at all in the matrices as one for unstructured matrices.</p></div>
+      <div class="zh"><p>把不利用矩阵任何稀疏模式的通用方法称为<strong>稠密矩阵</strong>方法。把完全不利用矩阵任何结构的方法称为<strong>非结构矩阵</strong>方法。</p></div>
+    </div>
+
+    <!-- ============== C.1.1 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>C.1.1 Complexity analysis via flop count</h3></div>
+      <div class="zh"><h3>C.1.1 通过 flops 计数进行复杂度分析</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The cost of a numerical linear algebra algorithm is often expressed by giving the total number of floating-point operations or flops required to carry it out, as a function of various problem dimensions. We define a flop as one addition, subtraction, multiplication, or division of two floating-point numbers. (Some authors define a flop as one multiplication followed by one addition, so their flop counts are smaller by a factor up to two.) To evaluate the complexity of an algorithm, we count the total number of flops, express it as a function (usually a polynomial) of the dimensions of the matrices and vectors involved, and simplify the expression by ignoring all terms except the leading (i.e., highest order or dominant) terms.</p></div>
+      <div class="zh"><p>数值线性代数算法的代价常用执行所需浮点运算总数（flops）关于各问题维数的函数来表达。我们把一个 <strong>flop</strong> 定义为两个浮点数的一次加、减、乘或除。（有的作者把一次乘加算作一个 flop，故其 flop 数最多小两倍。）评估算法复杂度时，统计 flop 总数，将其表为所涉矩阵与向量维数的函数（通常是多项式），并忽略除首项（即最高阶或主项）以外的所有项以化简表达式。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>As an example, suppose that a particular algorithm requires a total of</p>
+        <p>$$ m^3 + 3m^2 n + mn + 4mn^2 + 5m + 22 $$</p>
+        <p>flops, where $m$ and $n$ are problem dimensions. We would normally simplify this flop count to</p>
+        <p>$$ m^3 + 3m^2 n + 4mn^2 $$</p>
+        <p>flops, since these are the leading terms in the problem dimensions $m$ and $n$. If in addition we assumed that $m \ll n$, we would further simplify the flop count to $4mn^2$.</p></div>
+      <div class="zh"><p>例如，设某算法共需</p>
+        <p>$$ m^3 + 3m^2 n + mn + 4mn^2 + 5m + 22 $$</p>
+        <p>flops，其中 $m$、$n$ 为问题维数。通常把此 flop 数简化为</p>
+        <p>$$ m^3 + 3m^2 n + 4mn^2 $$</p>
+        <p>flops，因为这些是关于问题维数 $m$、$n$ 的首项。若还假设 $m \ll n$，则进一步简化为 $4mn^2$。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Flop counts were originally popularized when floating-point operations were relatively slow, so counting the number gave a good estimate of the total computation time. This is no longer the case: Issues such as cache boundaries and locality of reference can dramatically affect the computation time of a numerical algorithm. However, flop counts can still give us a good rough estimate of the computation time of a numerical algorithm, and how the time grows with increasing problem size. Since a flop count no longer accurately predicts the computation time of an algorithm, we usually pay most attention to its order or orders, i.e., its largest exponents, and ignore differences in flop counts smaller than a factor of two or so. For example, an algorithm with flop count $5n^2$ is considered comparable to one with a flop count $4n^2$, but faster than an algorithm with a flop count $(1/3)n^3$.</p></div>
+      <div class="zh"><p>flops 计数最初在浮点运算相对较慢时流行，统计其数目能很好地估计总计算时间。如今已非如此：缓存边界、引用局部性等问题会显著影响数值算法的计算时间。但 flops 计数仍能给出数值算法计算时间及时间随问题规模增长方式的一个粗略估计。由于 flop 数已不再能精确预测算法计算时间，我们通常最关注其阶（即最大指数），并忽略两倍以内的 flop 数差异。例如，flop 数为 $5n^2$ 的算法被认为与 $4n^2$ 相当，但比 $(1/3)n^3$ 的算法快。</p></div>
+    </div>
+
+    <!-- ============== C.1.2 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>C.1.2 Cost of basic matrix-vector operations</h3></div>
+      <div class="zh"><h3>C.1.2 基本矩阵-向量运算的代价</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><strong>Vector operations.</strong> To compute the inner product $x^T y$ of two vectors $x, y \in \mathbb{R}^n$ we form the products $x_i y_i$, and then add them, which requires $n$ multiplies and $n-1$ additions, or $2n-1$ flops. As mentioned above, we keep only the leading term, and say that the inner product requires $2n$ flops, or even more approximately, order $n$ flops. A scalar-vector multiplication $\alpha x$, where $\alpha \in \mathbb{R}$ and $x \in \mathbb{R}^n$ costs $n$ flops. The addition $x + y$ of two vectors $x, y \in \mathbb{R}^n$ also costs $n$ flops.</p>
+        <p>If the vectors $x$ and $y$ are sparse, i.e., have only a few nonzero terms, these basic operations can be carried out faster (assuming the vectors are stored using an appropriate data structure). For example, if $x$ is a sparse vector with $N$ nonzero entries, then the inner product $x^T y$ can be computed in $2N$ flops.</p></div>
+      <div class="zh"><p><strong>向量运算。</strong> 计算两个向量 $x, y \in \mathbb{R}^n$ 的内积 $x^T y$ 时，先求各 $x_i y_i$ 再相加，需 $n$ 次乘法和 $n-1$ 次加法，即 $2n-1$ flops。如前所述，只保留首项，称内积需 $2n$ flops，或更粗略地说 $n$ 阶 flops。数乘 $\alpha x$（$\alpha \in \mathbb{R}$，$x \in \mathbb{R}^n$）需 $n$ flops。两个向量 $x, y \in \mathbb{R}^n$ 相加 $x+y$ 也需 $n$ flops。</p>
+        <p>若 $x$、$y$ 为稀疏向量，即仅有少量非零项，这些基本运算可更快完成（假设向量以适当数据结构存储）。例如，若 $x$ 是含 $N$ 个非零项的稀疏向量，则内积 $x^T y$ 可在 $2N$ flops 内完成。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><strong>Matrix-vector multiplication.</strong> A matrix-vector multiplication $y = Ax$ where $A \in \mathbb{R}^{m\times n}$ costs $2mn$ flops: We have to calculate $m$ components of $y$, each of which is the product of a row of $A$ with $x$, i.e., an inner product of two vectors in $\mathbb{R}^n$.</p>
+        <p>Matrix-vector products can often be accelerated by taking advantage of structure in $A$. For example, if $A$ is diagonal, then $Ax$ can be computed in $n$ flops, instead of $2n^2$ flops for multiplication by a general $n\times n$ matrix. More generally, if $A$ is sparse, with only $N$ nonzero elements (out of $mn$), then $2N$ flops are needed to form $Ax$, since we can skip multiplications and additions with zero.</p>
+        <p>As a less obvious example, suppose the matrix $A$ has rank $p \ll \min\{m, n\}$, and is represented (stored) in the factored form $A = UV$, where $U \in \mathbb{R}^{m\times p}$, $V \in \mathbb{R}^{p\times n}$. Then we can compute $Ax$ by first computing $Vx$ (which costs $2pn$ flops), and then computing $U(Vx)$ (which costs $2mp$ flops), so the total is $2p(m+n)$ flops. Since $p \ll \min\{m, n\}$, this is small compared to $2mn$.</p></div>
+      <div class="zh"><p><strong>矩阵-向量乘法。</strong> 矩阵-向量乘积 $y = Ax$（$A \in \mathbb{R}^{m\times n}$）需 $2mn$ flops：需计算 $y$ 的 $m$ 个分量，每个为 $A$ 的一行与 $x$ 的乘积，即 $\mathbb{R}^n$ 中两个向量的内积。</p>
+        <p>利用 $A$ 的结构常可加速矩阵-向量乘积。例如，若 $A$ 为对角阵，$Ax$ 可在 $n$ flops 内完成，而一般 $n\times n$ 矩阵乘法需 $2n^2$ flops。更一般地，若 $A$ 稀疏，仅有 $N$ 个非零元（共 $mn$ 个），则形成 $Ax$ 需 $2N$ flops，因为可跳过含零的乘法和加法。</p>
+        <p>一个不太明显的例子：设矩阵 $A$ 的秩 $p \ll \min\{m, n\}$，且以分解形式 $A = UV$ 表示（存储），其中 $U \in \mathbb{R}^{m\times p}$，$V \in \mathbb{R}^{p\times n}$。则可先算 $Vx$（$2pn$ flops），再算 $U(Vx)$（$2mp$ flops），总计 $2p(m+n)$ flops。由于 $p \ll \min\{m, n\}$，此值远小于 $2mn$。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><strong>Matrix-matrix multiplication.</strong> The matrix-matrix product $C = AB$, where $A \in \mathbb{R}^{m\times n}$ and $B \in \mathbb{R}^{n\times p}$, costs $2mnp$ flops. We have $mp$ elements in $C$ to calculate, each of which is an inner product of two vectors of length $n$. Again, we can often make substantial savings by taking advantage of structure in $A$ and $B$. For example, if $A$ and $B$ are sparse, we can accelerate the multiplication by skipping additions and multiplications with zero.</p>
+        <p>If $m = p$ and we know that $C$ is symmetric, then we can calculate the matrix product in $m^2 n$ flops, since we only have to compute the $(1/2)m(m+1)$ elements in the lower triangular part.</p>
+        <p>To form the product of several matrices, we can carry out the matrix-matrix multiplications in different ways, which have different flop counts in general. The simplest example is computing the product $D = ABC$, where $A \in \mathbb{R}^{m\times n}$, $B \in \mathbb{R}^{n\times p}$, and $C \in \mathbb{R}^{p\times q}$. Here we can compute $D$ in two ways, using matrix-matrix multiplies. One method is to first form the product $AB$ ($2mnp$ flops), and then form $D = (AB)C$ ($2mpq$ flops), so the total is $2mp(n+q)$ flops. Alternatively, we can first form the product $BC$ ($2npq$ flops), and then form $D = A(BC)$ ($2mnq$ flops), with a total of $2nq(m+p)$ flops. The first method is better when $2mp(n+q) < 2nq(m+p)$, i.e., when</p>
+        <p>$$ \frac{1}{n} + \frac{1}{q} < \frac{1}{m} + \frac{1}{p}. $$</p>
+        <p>This assumes that no structure of the matrices is exploited in carrying out matrix-matrix products.</p>
+        <p>For products of more than three matrices, there are many ways to parse the product into matrix-matrix multiplications. Although it is not hard to develop an algorithm that determines the best parsing (i.e., the one with the fewest required flops) given the matrix dimensions, in most applications the best parsing is clear.</p></div>
+      <div class="zh"><p><strong>矩阵-矩阵乘法。</strong> 矩阵-矩阵乘积 $C = AB$（$A \in \mathbb{R}^{m\times n}$，$B \in \mathbb{R}^{n\times p}$）需 $2mnp$ flops。$C$ 有 $mp$ 个元素需计算，每个是长度为 $n$ 的两个向量的内积。同样，利用 $A$、$B$ 的结构常可大幅节省。例如，若 $A$、$B$ 稀疏，可跳过含零的加法和乘法以加速。</p>
+        <p>若 $m = p$ 且已知 $C$ 对称，则只需计算下三角部分的 $(1/2)m(m+1)$ 个元素，矩阵乘积可在 $m^2 n$ flops 内完成。</p>
+        <p>计算多个矩阵的乘积时，矩阵-矩阵乘法可用不同方式进行，一般 flop 数不同。最简单的例子是 $D = ABC$，其中 $A \in \mathbb{R}^{m\times n}$，$B \in \mathbb{R}^{n\times p}$，$C \in \mathbb{R}^{p\times q}$。可用两种方式经矩阵-矩阵乘法计算 $D$。一种先算 $AB$（$2mnp$ flops），再算 $D = (AB)C$（$2mpq$ flops），总计 $2mp(n+q)$ flops。另一种先算 $BC$（$2npq$ flops），再算 $D = A(BC)$（$2mnq$ flops），总计 $2nq(m+p)$ flops。当 $2mp(n+q) < 2nq(m+p)$，即</p>
+        <p>$$ \frac{1}{n} + \frac{1}{q} < \frac{1}{m} + \frac{1}{p} $$</p>
+        <p>时第一种更优。此假设矩阵-矩阵乘积中未利用任何结构。</p>
+        <p>对三个以上矩阵的乘积，将其解析为矩阵-矩阵乘法的方式很多。虽然不难设计一个给定各矩阵维数即可确定最佳解析（即所需 flops 最少者）的算法，但在大多数应用中最佳解析是显然的。</p></div>
+    </div>
+
+    <!-- ============== C.2 ============== -->
+    <div class="pair head">
+      <div class="en"><h2>C.2 Solving linear equations with factored matrices</h2></div>
+      <div class="zh"><h2>C.2 用分解矩阵求解线性方程组</h2></div>
+    </div>
+
+    <!-- ============== C.2.1 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>C.2.1 Linear equations that are easy to solve</h3></div>
+      <div class="zh"><h3>C.2.1 易解的线性方程组</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We start by examining some cases for which $Ax = b$ is easily solved, i.e., $x = A^{-1}b$ is easily computed.</p></div>
+      <div class="zh"><p>先考察 $Ax = b$ 易解、即 $x = A^{-1}b$ 易算的几种情形。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><strong>Diagonal matrices.</strong> Suppose $A$ is diagonal and nonsingular (i.e., $a_{ii} \ne 0$ for all $i$). The set of linear equations $Ax = b$ can be written as $a_{ii} x_i = b_i$, $i = 1, \ldots, n$. The solution is given by $x_i = b_i/a_{ii}$, and can be calculated in $n$ flops.</p></div>
+      <div class="zh"><p><strong>对角矩阵。</strong> 设 $A$ 对角且非奇异（即对所有 $i$ 有 $a_{ii} \ne 0$）。线性方程组 $Ax = b$ 可写成 $a_{ii} x_i = b_i$，$i = 1, \ldots, n$。解为 $x_i = b_i/a_{ii}$，可在 $n$ flops 内算出。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><strong>Lower triangular matrices.</strong> A matrix $A \in \mathbb{R}^{n\times n}$ is lower triangular if $a_{ij} = 0$ for $j > i$. A lower triangular matrix is called unit lower triangular if the diagonal elements are equal to one. A lower triangular matrix is nonsingular if and only if $a_{ii} \ne 0$ for all $i$.</p></div>
+      <div class="zh"><p><strong>下三角矩阵。</strong> 若 $a_{ij} = 0$（$j > i$），则矩阵 $A \in \mathbb{R}^{n\times n}$ 为<strong>下三角</strong>的。若对角元均为 1，则称为<strong>单位下三角</strong>。下三角矩阵非奇异当且仅当对所有 $i$ 有 $a_{ii} \ne 0$。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Suppose $A$ is lower triangular and nonsingular. The equations $Ax = b$ are</p>
+        <p>$$ \begin{bmatrix} a_{11} & 0 & \cdots & 0 \\ a_{21} & a_{22} & \cdots & 0 \\ \vdots & \vdots & & \vdots \\ a_{n1} & a_{n2} & \cdots & a_{nn} \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \\ \vdots \\ x_n \end{bmatrix} = \begin{bmatrix} b_1 \\ b_2 \\ \vdots \\ b_n \end{bmatrix}. $$</p>
+        <p>From the first row, we have $a_{11} x_1 = b_1$, from which we conclude $x_1 = b_1/a_{11}$. From the second row we have $a_{21} x_1 + a_{22} x_2 = b_2$, so we can express $x_2$ as $x_2 = (b_2 - a_{21} x_1)/a_{22}$. (We have already computed $x_1$, so every number on the righthand side is known.) Continuing this way, we can express each component of $x$ in terms of previous components, yielding the algorithm</p>
+        <p>$$ \begin{aligned} x_1 &:= b_1/a_{11} \\ x_2 &:= (b_2 - a_{21} x_1)/a_{22} \\ x_3 &:= (b_3 - a_{31} x_1 - a_{32} x_2)/a_{33} \\ &\;\;\vdots \\ x_n &:= (b_n - a_{n1} x_1 - a_{n2} x_2 - \cdots - a_{n,n-1} x_{n-1})/a_{nn}. \end{aligned} $$</p>
+        <p>This procedure is called forward substitution, since we successively compute the components of $x$ by substituting the known values into the next equation.</p>
+        <p>Let us give a flop count for forward substitution. We start by calculating $x_1$ (1 flop). We substitute $x_1$ in the second equation to find $x_2$ (3 flops), then substitute $x_1$ and $x_2$ in the third equation to find $x_3$ (5 flops), etc. The total number of flops is</p>
+        <p>$$ 1 + 3 + 5 + \cdots + (2n-1) = n^2. $$</p>
+        <p>Thus, when $A$ is lower triangular and nonsingular, we can compute $x = A^{-1}b$ in $n^2$ flops.</p>
+        <p>If the matrix $A$ has additional structure, in addition to being lower triangular, then forward substitution can be more efficient than $n^2$ flops. For example, if $A$ is sparse (or banded), with at most $k$ nonzero entries per row, then each forward substitution step requires at most $2k+1$ flops, so the overall flop count is $2(k+1)n$, or $2kn$ after dropping the term $2n$.</p></div>
+      <div class="zh"><p>设 $A$ 下三角且非奇异。方程组 $Ax = b$ 为</p>
+        <p>$$ \begin{bmatrix} a_{11} & 0 & \cdots & 0 \\ a_{21} & a_{22} & \cdots & 0 \\ \vdots & \vdots & & \vdots \\ a_{n1} & a_{n2} & \cdots & a_{nn} \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \\ \vdots \\ x_n \end{bmatrix} = \begin{bmatrix} b_1 \\ b_2 \\ \vdots \\ b_n \end{bmatrix}. $$</p>
+        <p>由第一行有 $a_{11} x_1 = b_1$，故 $x_1 = b_1/a_{11}$。由第二行有 $a_{21} x_1 + a_{22} x_2 = b_2$，故 $x_2 = (b_2 - a_{21} x_1)/a_{22}$。（$x_1$ 已算出，故右端各项已知。）如此继续，可用已算分量表达 $x$ 的每个分量，得到算法</p>
+        <p>$$ \begin{aligned} x_1 &:= b_1/a_{11} \\ x_2 &:= (b_2 - a_{21} x_1)/a_{22} \\ x_3 &:= (b_3 - a_{31} x_1 - a_{32} x_2)/a_{33} \\ &\;\;\vdots \\ x_n &:= (b_n - a_{n1} x_1 - a_{n2} x_2 - \cdots - a_{n,n-1} x_{n-1})/a_{nn}. \end{aligned} $$</p>
+        <p>此过程称为<strong>前代法</strong>（forward substitution），因为逐步代入已知值到下一方程来计算 $x$ 的各分量。</p>
+        <p>给出前代法的 flop 数。先算 $x_1$（1 flop），代入第二方程求 $x_2$（3 flops），代入 $x_1$、$x_2$ 到第三方程求 $x_3$（5 flops），依此类推。总 flop 数为</p>
+        <p>$$ 1 + 3 + 5 + \cdots + (2n-1) = n^2. $$</p>
+        <p>故当 $A$ 下三角且非奇异时，可在 $n^2$ flops 内算出 $x = A^{-1}b$。</p>
+        <p>若 $A$ 除下三角外还有其他结构，则前代法可少于 $n^2$ flops。例如，若 $A$ 稀疏（或带状），每行至多 $k$ 个非零元，则每步前代至多需 $2k+1$ flops，总 flop 数为 $2(k+1)n$，去掉 $2n$ 项后为 $2kn$。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><strong>Upper triangular matrices.</strong> A matrix $A \in \mathbb{R}^{n\times n}$ is upper triangular if $A^T$ is lower triangular, i.e., if $a_{ij} = 0$ for $j < i$. We can solve linear equations with nonsingular upper triangular coefficient matrix in a way similar to forward substitution, except that we start by calculating $x_n$, then $x_{n-1}$, and so on. The algorithm is</p>
+        <p>$$ \begin{aligned} x_n &:= b_n/a_{nn} \\ x_{n-1} &:= (b_{n-1} - a_{n-1,n} x_n)/a_{n-1,n-1} \\ x_{n-2} &:= (b_{n-2} - a_{n-2,n-1} x_{n-1} - a_{n-2,n} x_n)/a_{n-2,n-2} \\ &\;\;\vdots \\ x_1 &:= (b_1 - a_{12} x_2 - a_{13} x_3 - \cdots - a_{1n} x_n)/a_{11}. \end{aligned} $$</p>
+        <p>This is called backward substitution or back substitution since we determine the coefficients in backward order. The cost to compute $x = A^{-1}b$ via backward substitution is $n^2$ flops. If $A$ is upper triangular and sparse (or banded), with at most $k$ nonzero entries per row, then back substitution costs $2kn$ flops.</p></div>
+      <div class="zh"><p><strong>上三角矩阵。</strong> 若 $A^T$ 下三角，即 $a_{ij} = 0$（$j < i$），则矩阵 $A \in \mathbb{R}^{n\times n}$ 为<strong>上三角</strong>的。求解系数矩阵非奇异上三角的线性方程组与前代法类似，但从 $x_n$ 算起，再算 $x_{n-1}$，依次类推。算法为</p>
+        <p>$$ \begin{aligned} x_n &:= b_n/a_{nn} \\ x_{n-1} &:= (b_{n-1} - a_{n-1,n} x_n)/a_{n-1,n-1} \\ x_{n-2} &:= (b_{n-2} - a_{n-2,n-1} x_{n-1} - a_{n-2,n} x_n)/a_{n-2,n-2} \\ &\;\;\vdots \\ x_1 &:= (b_1 - a_{12} x_2 - a_{13} x_3 - \cdots - a_{1n} x_n)/a_{11}. \end{aligned} $$</p>
+        <p>此称为<strong>回代法</strong>（backward / back substitution），因为按逆序确定系数。用回代法算 $x = A^{-1}b$ 的代价为 $n^2$ flops。若 $A$ 上三角且稀疏（或带状），每行至多 $k$ 个非零元，则回代需 $2kn$ flops。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><strong>Orthogonal matrices.</strong> A matrix $A \in \mathbb{R}^{n\times n}$ is orthogonal if $A^T A = I$, i.e., $A^{-1} = A^T$. In this case we can compute $x = A^{-1}b$ by a simple matrix-vector product $x = A^T b$, which costs $2n^2$ in general.</p>
+        <p>If the matrix $A$ has additional structure, we can compute $x = A^{-1}b$ even more efficiently than $2n^2$ flops. For example, if $A$ has the form $A = I - 2uu^T$, where $\|u\|_2 = 1$, we can compute</p>
+        <p>$$ x = A^{-1}b = (I - 2uu^T)^T b = b - 2(u^T b)u $$</p>
+        <p>by first computing $u^T b$, then forming $b - 2(u^T b)u$, which costs $4n$ flops.</p></div>
+      <div class="zh"><p><strong>正交矩阵。</strong> 若 $A^T A = I$，即 $A^{-1} = A^T$，则矩阵 $A \in \mathbb{R}^{n\times n}$ 为<strong>正交</strong>的。此时可由一次矩阵-向量乘积 $x = A^T b$ 算出 $x = A^{-1}b$，一般需 $2n^2$ flops。</p>
+        <p>若 $A$ 另有结构，可少于 $2n^2$ flops 算出 $x = A^{-1}b$。例如，若 $A = I - 2uu^T$，其中 $\|u\|_2 = 1$，则</p>
+        <p>$$ x = A^{-1}b = (I - 2uu^T)^T b = b - 2(u^T b)u $$</p>
+        <p>可先算 $u^T b$，再算 $b - 2(u^T b)u$，共 $4n$ flops。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><strong>Permutation matrices.</strong> Let $\pi = (\pi_1, \ldots, \pi_n)$ be a permutation of $(1, 2, \ldots, n)$. The associated permutation matrix $A \in \mathbb{R}^{n\times n}$ is given by</p>
+        <p>$$ A_{ij} = \begin{cases} 1 & j = \pi_i \\ 0 & \text{otherwise}. \end{cases} $$</p>
+        <p>In each row (or column) of a permutation matrix there is exactly one entry with value one; all other entries are zero. Multiplying a vector by a permutation matrix simply permutes its coefficients:</p>
+        <p>$$ Ax = (x_{\pi_1}, \ldots, x_{\pi_n}). $$</p>
+        <p>The inverse of a permutation matrix is the permutation matrix associated with the inverse permutation $\pi^{-1}$. This turns out to be $A^T$, which shows that permutation matrices are orthogonal.</p>
+        <p>If $A$ is a permutation matrix, solving $Ax = b$ is very easy: $x$ is obtained by permuting the entries of $b$ by $\pi^{-1}$. This requires no floating point operations, according to our definition (but, depending on the implementation, might involve copying floating point numbers). We can reach the same conclusion from the equation $x = A^T b$. The matrix $A^T$ (like $A$) has only one nonzero entry per row, with value one. Thus no additions are required, and the only multiplications required are by one.</p></div>
+      <div class="zh"><p><strong>置换矩阵。</strong> 设 $\pi = (\pi_1, \ldots, \pi_n)$ 为 $(1, 2, \ldots, n)$ 的一个置换。相应的<strong>置换矩阵</strong> $A \in \mathbb{R}^{n\times n}$ 为</p>
+        <p>$$ A_{ij} = \begin{cases} 1 & j = \pi_i \\ 0 & \text{否则}. \end{cases} $$</p>
+        <p>置换矩阵每行（或每列）恰有一个为 1 的元素，其余为零。用置换矩阵乘向量只是重排其系数：</p>
+        <p>$$ Ax = (x_{\pi_1}, \ldots, x_{\pi_n}). $$</p>
+        <p>置换矩阵的逆是与逆置换 $\pi^{-1}$ 相应的置换矩阵，恰为 $A^T$，故置换矩阵正交。</p>
+        <p>若 $A$ 为置换矩阵，解 $Ax = b$ 很容易：$x$ 由 $b$ 的元素按 $\pi^{-1}$ 重排得到。按我们的定义，这不需要浮点运算（但视实现可能涉及浮点数的复制）。从 $x = A^T b$ 也可得同样结论。$A^T$（与 $A$ 一样）每行仅一个值为 1 的非零元，故无需加法，乘法仅是乘以 1。</p></div>
+    </div>
+
+    <!-- ============== C.2.2 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>C.2.2 The factor-solve method</h3></div>
+      <div class="zh"><h3>C.2.2 分解-求解法</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The basic approach to solving $Ax = b$ is based on expressing $A$ as a product of nonsingular matrices,</p>
+        <p>$$ A = A_1 A_2 \cdots A_k, $$</p>
+        <p>so that</p>
+        <p>$$ x = A^{-1}b = A_k^{-1} A_{k-1}^{-1} \cdots A_1^{-1} b. $$</p>
+        <p>We can compute $x$ using this formula, working from right to left:</p>
+        <p>$$ \begin{aligned} z_1 &:= A_1^{-1} b \\ z_2 &:= A_2^{-1} z_1 = A_2^{-1} A_1^{-1} b \\ &\;\;\vdots \\ z_{k-1} &:= A_{k-1}^{-1} z_{k-2} = A_{k-1}^{-1} \cdots A_1^{-1} b \\ x &:= A_k^{-1} z_{k-1} = A_k^{-1} \cdots A_1^{-1} b. \end{aligned} $$</p>
+        <p>The $i$th step of this process requires computing $z_i = A_i^{-1} z_{i-1}$, i.e., solving the linear equations $A_i z_i = z_{i-1}$. If each of these equations is easy to solve (e.g., if $A_i$ is diagonal, lower or upper triangular, a permutation, etc.), this gives a method for computing $x = A^{-1}b$.</p>
+        <p>The step of expressing $A$ in factored form (i.e., computing the factors $A_i$) is called the factorization step, and the process of computing $x = A^{-1}b$ recursively, by solving a sequence problems of the form $A_i z_i = z_{i-1}$, is often called the solve step. The total flop count for solving $Ax = b$ using this factor-solve method is $f + s$, where $f$ is the flop count for computing the factorization, and $s$ is the total flop count for the solve step. In many cases, the cost of the factorization, $f$, dominates the total solve cost $s$. In this case, the cost of solving $Ax = b$, i.e., computing $x = A^{-1}b$, is just $f$.</p></div>
+      <div class="zh"><p>求解 $Ax = b$ 的基本方法是把 $A$ 表为非奇异矩阵的乘积：</p>
+        <p>$$ A = A_1 A_2 \cdots A_k, $$</p>
+        <p>于是</p>
+        <p>$$ x = A^{-1}b = A_k^{-1} A_{k-1}^{-1} \cdots A_1^{-1} b. $$</p>
+        <p>可从右至左按此式计算 $x$：</p>
+        <p>$$ \begin{aligned} z_1 &:= A_1^{-1} b \\ z_2 &:= A_2^{-1} z_1 = A_2^{-1} A_1^{-1} b \\ &\;\;\vdots \\ z_{k-1} &:= A_{k-1}^{-1} z_{k-2} = A_{k-1}^{-1} \cdots A_1^{-1} b \\ x &:= A_k^{-1} z_{k-1} = A_k^{-1} \cdots A_1^{-1} b. \end{aligned} $$</p>
+        <p>第 $i$ 步需算 $z_i = A_i^{-1} z_{i-1}$，即解 $A_i z_i = z_{i-1}$。若每个方程组易解（如 $A_i$ 为对角、下三角或上三角、置换等），便得到计算 $x = A^{-1}b$ 的方法。</p>
+        <p>把 $A$ 表为分解形式（即计算因子 $A_i$）的步骤称为<strong>分解步</strong>（factorization step），递归地通过求解一系列形如 $A_i z_i = z_{i-1}$ 的问题来计算 $x = A^{-1}b$ 的过程常称为<strong>求解步</strong>（solve step）。用此分解-求解法解 $Ax = b$ 的总 flop 数为 $f + s$，其中 $f$ 为计算分解的 flop 数，$s$ 为求解步的总 flop 数。许多情形下分解代价 $f$ 占主导，此时解 $Ax = b$（即算 $x = A^{-1}b$）的代价就是 $f$。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><strong>Solving equations with multiple righthand sides.</strong> Suppose we need to solve the equations</p>
+        <p>$$ Ax_1 = b_1, \quad Ax_2 = b_2, \quad \ldots, \quad Ax_m = b_m, $$</p>
+        <p>where $A \in \mathbb{R}^{n\times n}$ is nonsingular. In other words, we need to solve $m$ sets of linear equations, with the same coefficient matrix, but different righthand sides. Alternatively, we can think of this as computing the matrix $X = A^{-1}B$ where</p>
+        <p>$$ X = \begin{bmatrix} x_1 & x_2 & \cdots & x_m \end{bmatrix} \in \mathbb{R}^{n\times m}, \qquad B = \begin{bmatrix} b_1 & b_2 & \cdots & b_m \end{bmatrix} \in \mathbb{R}^{n\times m}. $$</p>
+        <p>To do this, we first factor $A$, which costs $f$. Then for $i = 1, \ldots, m$ we compute $A^{-1} b_i$ using the solve step. Since we only factor $A$ once, the total effort is $f + ms$. In other words, we amortize the factorization cost over the set of $m$ solves. Had we (needlessly) repeated the factorization step for each $i$, the cost would be $m(f + s)$.</p>
+        <p>When the factorization cost $f$ dominates the solve cost $s$, the factor-solve method allows us to solve a small number of linear systems, with the same coefficient matrix, at essentially the same cost as solving one. This is because the most expensive step, the factorization, is done only once.</p></div>
+      <div class="zh"><p><strong>多右端项方程组的求解。</strong> 设需求解</p>
+        <p>$$ Ax_1 = b_1, \quad Ax_2 = b_2, \quad \ldots, \quad Ax_m = b_m, $$</p>
+        <p>其中 $A \in \mathbb{R}^{n\times n}$ 非奇异。即需求解 $m$ 组线性方程组，系数矩阵相同而右端项不同。亦可视为计算矩阵 $X = A^{-1}B$，其中</p>
+        <p>$$ X = \begin{bmatrix} x_1 & x_2 & \cdots & x_m \end{bmatrix} \in \mathbb{R}^{n\times m}, \qquad B = \begin{bmatrix} b_1 & b_2 & \cdots & b_m \end{bmatrix} \in \mathbb{R}^{n\times m}. $$</p>
+        <p>为此先分解 $A$（代价 $f$），再对 $i = 1, \ldots, m$ 用求解步算 $A^{-1} b_i$。由于只分解一次，总代价为 $f + ms$。换言之，把分解代价分摊到 $m$ 次求解上。若（不必要地）对每个 $i$ 重复分解步，代价将为 $m(f + s)$。</p>
+        <p>当分解代价 $f$ 占主导时，分解-求解法使我们能以与求解一次基本相同的代价求解若干个具有相同系数矩阵的线性系统，因为最昂贵的分解步只做一次。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We can use the factor-solve method to compute the inverse $A^{-1}$ by solving $Ax = e_i$ for $i = 1, \ldots, n$, i.e., by computing $A^{-1}I$. This requires one factorization and $n$ solves, so the cost is $f + ns$.</p></div>
+      <div class="zh"><p>可用分解-求解法通过解 $Ax = e_i$（$i = 1, \ldots, n$），即算 $A^{-1}I$，来计算逆 $A^{-1}$。这需一次分解和 $n$ 次求解，代价为 $f + ns$。</p></div>
+    </div>
+
+    <!-- ============== C.3 ============== -->
+    <div class="pair head">
+      <div class="en"><h2>C.3 LU, Cholesky, and LDL<sup>T</sup> factorization</h2></div>
+      <div class="zh"><h2>C.3 LU、Cholesky 与 LDL<sup>T</sup> 分解</h2></div>
+    </div>
+
+    <!-- ============== C.3.1 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>C.3.1 LU factorization</h3></div>
+      <div class="zh"><h3>C.3.1 LU 分解</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Every nonsingular matrix $A \in \mathbb{R}^{n\times n}$ can be factored as</p>
+        <p>$$ A = PLU $$</p>
+        <p>where $P \in \mathbb{R}^{n\times n}$ is a permutation matrix, $L \in \mathbb{R}^{n\times n}$ is unit lower triangular, and $U \in \mathbb{R}^{n\times n}$ is upper triangular and nonsingular. This is called the LU factorization of $A$. We can also write the factorization as $P^T A = LU$, where the matrix $P^T A$ is obtained from $A$ by re-ordering the rows. The standard algorithm for computing an LU factorization is called Gaussian elimination with partial pivoting or Gaussian elimination with row pivoting. The cost is $(2/3)n^3$ flops if no structure in $A$ is exploited, which is the case we consider first.</p></div>
+      <div class="zh"><p>每个非奇异矩阵 $A \in \mathbb{R}^{n\times n}$ 可分解为</p>
+        <p>$$ A = PLU $$</p>
+        <p>其中 $P \in \mathbb{R}^{n\times n}$ 为置换矩阵，$L \in \mathbb{R}^{n\times n}$ 为单位下三角，$U \in \mathbb{R}^{n\times n}$ 为上三角且非奇异。此称为 $A$ 的 <strong>LU 分解</strong>。也可写成 $P^T A = LU$，其中 $P^T A$ 由 $A$ 重排行得到。计算 LU 分解的标准算法称为<strong>带部分选主元的高斯消去</strong>（Gaussian elimination with partial pivoting）或<strong>行选主元高斯消去</strong>。若不利用 $A$ 的任何结构（这是先考虑的情形），代价为 $(2/3)n^3$ flops。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><strong>Solving sets of linear equations using the LU factorization.</strong> The LU factorization, combined with the factor-solve approach, is the standard method for solving a general set of linear equations $Ax = b$.</p></div>
+      <div class="zh"><p><strong>用 LU 分解求解线性方程组。</strong> LU 分解结合分解-求解法是求解一般线性方程组 $Ax = b$ 的标准方法。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><em>Algorithm C.1</em> <strong>Solving linear equations by LU factorization.</strong></p>
+        <p><em>given</em> a set of linear equations $Ax = b$, with $A$ nonsingular.</p>
+        <p>1. <strong>LU factorization.</strong> Factor $A$ as $A = PLU$ $\bigl($(2/3)n^3$ flops$\bigr)$.</p>
+        <p>2. <strong>Permutation.</strong> Solve $Pz_1 = b$ (0 flops).</p>
+        <p>3. <strong>Forward substitution.</strong> Solve $Lz_2 = z_1$ ($n^2$ flops).</p>
+        <p>4. <strong>Backward substitution.</strong> Solve $Ux = z_2$ ($n^2$ flops).</p>
+        <p>The total cost is $(2/3)n^3 + 2n^2$, or $(2/3)n^3$ flops if we keep only the leading term.</p>
+        <p>If we need to solve multiple sets of linear equations with different righthand sides, i.e., $Ax_i = b_i$, $i = 1, \ldots, m$, the cost is</p>
+        <p>$$ (2/3)n^3 + 2mn^2, $$</p>
+        <p>since we factor $A$ once, and carry out $m$ pairs of forward and backward substitutions. For example, we can solve two sets of linear equations, with the same coefficient matrix but different righthand sides, at essentially the same cost as solving one. We can compute the inverse $A^{-1}$ by solving the equations $Ax_i = e_i$, where $x_i$ is the $i$th column of $A^{-1}$, and $e_i$ is the $i$th unit vector. This costs $(8/3)n^3$, i.e., about $3n^3$ flops.</p>
+        <p>If the matrix $A$ has certain structure, for example banded or sparse, the LU factorization can be computed in less than $(2/3)n^3$ flops, and the associated forward and backward substitutions can also be carried out more efficiently.</p></div>
+      <div class="zh"><p><em>算法 C.1</em> <strong>用 LU 分解求解线性方程组。</strong></p>
+        <p><em>给定</em> 线性方程组 $Ax = b$，其中 $A$ 非奇异。</p>
+        <p>1. <strong>LU 分解。</strong> 把 $A$ 分解为 $A = PLU$（$(2/3)n^3$ flops）。</p>
+        <p>2. <strong>置换。</strong> 解 $Pz_1 = b$（0 flops）。</p>
+        <p>3. <strong>前代。</strong> 解 $Lz_2 = z_1$（$n^2$ flops）。</p>
+        <p>4. <strong>回代。</strong> 解 $Ux = z_2$（$n^2$ flops）。</p>
+        <p>总代价为 $(2/3)n^3 + 2n^2$，只保留首项即 $(2/3)n^3$ flops。</p>
+        <p>若需求解右端项不同的多组方程组 $Ax_i = b_i$，$i = 1, \ldots, m$，代价为</p>
+        <p>$$ (2/3)n^3 + 2mn^2, $$</p>
+        <p>因为 $A$ 只分解一次，再做 $m$ 对前代与回代。例如，以与求解一次基本相同的代价可求解两组具有相同系数矩阵但右端项不同的方程组。通过解 $Ax_i = e_i$（$x_i$ 为 $A^{-1}$ 的第 $i$ 列，$e_i$ 为第 $i$ 个单位向量）可计算 $A^{-1}$，代价为 $(8/3)n^3$，约 $3n^3$ flops。</p>
+        <p>若 $A$ 具有某种结构，如带状或稀疏，则 LU 分解可在少于 $(2/3)n^3$ flops 内完成，相应的前代与回代也更高效。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>LU factorization of banded matrices</h3></div>
+      <div class="zh"><h3>带状矩阵的 LU 分解</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Suppose the matrix $A \in \mathbb{R}^{n\times n}$ is banded, i.e., $a_{ij} = 0$ if $|i-j| > k$, where $k < n-1$ is called the bandwidth of $A$. We are interested in the case where $k \ll n$, i.e., the bandwidth is much smaller than the size of the matrix. In this case an LU factorization of $A$ can be computed in roughly $4nk^2$ flops. The resulting upper triangular matrix $U$ has bandwidth at most $2k$, and the lower triangular matrix $L$ has at most $k+1$ nonzeros per column, so the forward and back substitutions can be carried out in order $6nk$ flops. Therefore if $A$ is banded, the linear equations $Ax = b$ can be solved in about $4nk^2$ flops.</p></div>
+      <div class="zh"><p>设 $A \in \mathbb{R}^{n\times n}$ 带状，即 $|i-j| > k$ 时 $a_{ij} = 0$，其中 $k < n-1$ 称为 $A$ 的<strong>带宽</strong>。我们关心 $k \ll n$ 的情形，即带宽远小于矩阵规模。此时 $A$ 的 LU 分解约需 $4nk^2$ flops。所得上三角矩阵 $U$ 带宽至多 $2k$，下三角矩阵 $L$ 每列至多 $k+1$ 个非零元，故前代与回代约需 $6nk$ flops。因此若 $A$ 带状，$Ax = b$ 可在约 $4nk^2$ flops 内求解。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>LU factorization of sparse matrices</h3></div>
+      <div class="zh"><h3>稀疏矩阵的 LU 分解</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>When the matrix $A$ is sparse, the LU factorization usually includes both row and column permutations, i.e., $A$ is factored as</p>
+        <p>$$ A = P_1 L U P_2, $$</p>
+        <p>where $P_1$ and $P_2$ are permutation matrices, $L$ is lower triangular, and $U$ is upper triangular. If the factors $L$ and $U$ are sparse, the forward and backward substitutions can be carried out efficiently, and we have an efficient method for solving $Ax = b$. The sparsity of the factors $L$ and $U$ depends on the permutations $P_1$ and $P_2$, which are chosen in part to yield relatively sparse factors.</p>
+        <p>The cost of computing the sparse LU factorization depends in a complicated way on the size of $A$, the number of nonzero elements, its sparsity pattern, and the particular algorithm used, but is often dramatically smaller than the cost of a dense LU factorization. In many cases the cost grows approximately linearly with $n$, when $n$ is large. This means that when $A$ is sparse, we can solve $Ax = b$ very efficiently, often with an order approximately $n$.</p></div>
+      <div class="zh"><p>当 $A$ 稀疏时，LU 分解通常同时含行、列置换，即把 $A$ 分解为</p>
+        <p>$$ A = P_1 L U P_2, $$</p>
+        <p>其中 $P_1$、$P_2$ 为置换矩阵，$L$ 下三角，$U$ 上三角。若因子 $L$、$U$ 稀疏，则前代与回代可高效完成，从而得到解 $Ax = b$ 的高效方法。因子 $L$、$U$ 的稀疏性取决于置换 $P_1$、$P_2$，后者的选取部分是为了得到相对稀疏的因子。</p>
+        <p>计算稀疏 LU 分解的代价以复杂方式依赖于 $A$ 的规模、非零元个数、稀疏模式及所用具体算法，但常远小于稠密 LU 分解的代价。许多情形下当 $n$ 大时代价约随 $n$ 线性增长。这意味着当 $A$ 稀疏时，可非常高效地求解 $Ax = b$，常达 $n$ 阶。</p></div>
+    </div>
+
+    <!-- ============== C.3.2 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>C.3.2 Cholesky factorization</h3></div>
+      <div class="zh"><h3>C.3.2 Cholesky 分解</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>If $A \in \mathbb{R}^{n\times n}$ is symmetric and positive definite, then it can be factored as</p>
+        <p>$$ A = LL^T $$</p>
+        <p>where $L$ is lower triangular and nonsingular with positive diagonal elements. This is called the Cholesky factorization of $A$, and can be interpreted as a symmetric LU factorization (with $L = U^T$). The matrix $L$, which is uniquely determined by $A$, is called the Cholesky factor of $A$. The cost of computing the Cholesky factorization of a dense matrix, i.e., without exploiting any structure, is $(1/3)n^3$ flops, half the cost of an LU factorization.</p></div>
+      <div class="zh"><p>若 $A \in \mathbb{R}^{n\times n}$ 对称正定，则可分解为</p>
+        <p>$$ A = LL^T $$</p>
+        <p>其中 $L$ 为对角元正的下三角非奇异矩阵。此称为 $A$ 的 <strong>Cholesky 分解</strong>，可视为对称 LU 分解（取 $L = U^T$）。由 $A$ 唯一确定的矩阵 $L$ 称为 $A$ 的 <strong>Cholesky 因子</strong>。计算稠密矩阵（即不利用任何结构）的 Cholesky 分解的代价为 $(1/3)n^3$ flops，是 LU 分解代价的一半。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Solving positive definite sets of equations using Cholesky factorization</h3></div>
+      <div class="zh"><h3>用 Cholesky 分解求解正定方程组</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The Cholesky factorization can be used to solve $Ax = b$ when $A$ is symmetric positive definite.</p></div>
+      <div class="zh"><p>当 $A$ 对称正定时，可用 Cholesky 分解求解 $Ax = b$。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><em>Algorithm C.2</em> <strong>Solving linear equations by Cholesky factorization.</strong></p>
+        <p><em>given</em> a set of linear equations $Ax = b$, with $A \in \mathbf{S}^n_{++}$.</p>
+        <p>1. <strong>Cholesky factorization.</strong> Factor $A$ as $A = LL^T$ $\bigl($(1/3)n^3$ flops$\bigr)$.</p>
+        <p>2. <strong>Forward substitution.</strong> Solve $Lz_1 = b$ ($n^2$ flops).</p>
+        <p>3. <strong>Backward substitution.</strong> Solve $L^T x = z_1$ ($n^2$ flops).</p>
+        <p>The total cost is $(1/3)n^3 + 2n^2$, or roughly $(1/3)n^3$ flops.</p>
+        <p>There are specialized algorithms, with a complexity much lower than $(1/3)n^3$, for Cholesky factorization of banded and sparse matrices.</p></div>
+      <div class="zh"><p><em>算法 C.2</em> <strong>用 Cholesky 分解求解线性方程组。</strong></p>
+        <p><em>给定</em> 线性方程组 $Ax = b$，其中 $A \in \mathbf{S}^n_{++}$。</p>
+        <p>1. <strong>Cholesky 分解。</strong> 把 $A$ 分解为 $A = LL^T$（$(1/3)n^3$ flops）。</p>
+        <p>2. <strong>前代。</strong> 解 $Lz_1 = b$（$n^2$ flops）。</p>
+        <p>3. <strong>回代。</strong> 解 $L^T x = z_1$（$n^2$ flops）。</p>
+        <p>总代价为 $(1/3)n^3 + 2n^2$，约 $(1/3)n^3$ flops。</p>
+        <p>对带状和稀疏矩阵的 Cholesky 分解有专用算法，复杂度远低于 $(1/3)n^3$。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Cholesky factorization of banded matrices</h3></div>
+      <div class="zh"><h3>带状矩阵的 Cholesky 分解</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>If $A$ is symmetric positive definite and banded with bandwidth $k$, then its Cholesky factor $L$ is banded with bandwidth $k$, and can be calculated in $nk^2$ flops. The cost of the associated solve step is $4nk$ flops.</p></div>
+      <div class="zh"><p>若 $A$ 对称正定且带状，带宽 $k$，则其 Cholesky 因子 $L$ 带状，带宽 $k$，可在 $nk^2$ flops 内算出。相应求解步的代价为 $4nk$ flops。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Cholesky factorization of sparse matrices</h3></div>
+      <div class="zh"><h3>稀疏矩阵的 Cholesky 分解</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>When $A$ is symmetric positive definite and sparse, it is usually factored as</p>
+        <p>$$ A = PLL^T P^T, $$</p>
+        <p>where $P$ is a permutation matrix and $L$ is lower triangular with positive diagonal elements. We can also express this as $P^T A P = LL^T$, i.e., $LL^T$ is the Cholesky factorization of $P^T A P$. We can interpret this as first re-ordering the variables and equations, and then forming the (standard) Cholesky factorization of the resulting permuted matrix. Since $P^T A P$ is positive definite for any permutation matrix $P$, we are free to choose any permutation matrix; for each choice there is a unique associated Cholesky factor $L$. The choice of $P$, however, can greatly affect the sparsity of the factor $L$, which in turn can greatly affect the efficiency of solving $Ax = b$. Various heuristic methods are used to select a permutation $P$ that leads to a sparse factor $L$.</p></div>
+      <div class="zh"><p>当 $A$ 对称正定且稀疏时，通常分解为</p>
+        <p>$$ A = PLL^T P^T, $$</p>
+        <p>其中 $P$ 为置换矩阵，$L$ 为对角元正的下三角矩阵。也可写成 $P^T A P = LL^T$，即 $LL^T$ 为 $P^T A P$ 的 Cholesky 分解。可理解为先重排变量和方程，再对所得置换矩阵作（标准）Cholesky 分解。由于对任意置换矩阵 $P$，$P^T A P$ 都正定，故可任选置换矩阵；每种选择对应唯一的 Cholesky 因子 $L$。但 $P$ 的选择会极大影响因子 $L$ 的稀疏性，进而极大影响求解 $Ax = b$ 的效率。常用各种启发式方法选取使因子 $L$ 稀疏的置换 $P$。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><em>Example C.1</em> <strong>Cholesky factorization with an arrow sparsity pattern.</strong> Consider a sparse matrix of the form</p>
+        <p>$$ A = \begin{bmatrix} 1 & u^T \\ u & D \end{bmatrix} $$</p>
+        <p>where $D \in \mathbb{R}^{n\times n}$ is positive diagonal, and $u \in \mathbb{R}^n$. It can be shown that $A$ is positive definite if $u^T D^{-1} u < 1$. The Cholesky factorization of $A$ is</p>
+        <p>$$ \begin{bmatrix} 1 & u^T \\ u & D \end{bmatrix} = \begin{bmatrix} 1 & 0 \\ u & L \end{bmatrix} \begin{bmatrix} 1 & u^T \\ 0 & L^T \end{bmatrix} \tag{C.2} $$</p>
+        <p>where $L$ is lower triangular with $LL^T = D - uu^T$. For general $u$, the matrix $D - uu^T$ is dense, so we can expect $L$ to be dense. Although the matrix $A$ is very sparse (most of its rows have just two nonzero elements), its Cholesky factors are almost completely dense.</p></div>
+      <div class="zh"><p><em>例 C.1</em> <strong>箭形稀疏模式的 Cholesky 分解。</strong> 考虑形如</p>
+        <p>$$ A = \begin{bmatrix} 1 & u^T \\ u & D \end{bmatrix} $$</p>
+        <p>的稀疏矩阵，其中 $D \in \mathbb{R}^{n\times n}$ 为正对角阵，$u \in \mathbb{R}^n$。可证 $A$ 正定当且仅当 $u^T D^{-1} u < 1$。$A$ 的 Cholesky 分解为</p>
+        <p>$$ \begin{bmatrix} 1 & u^T \\ u & D \end{bmatrix} = \begin{bmatrix} 1 & 0 \\ u & L \end{bmatrix} \begin{bmatrix} 1 & u^T \\ 0 & L^T \end{bmatrix} \tag{C.2} $$</p>
+        <p>其中 $L$ 下三角且 $LL^T = D - uu^T$。对一般 $u$，矩阵 $D - uu^T$ 稠密，故可料 $L$ 稠密。尽管 $A$ 非常稀疏（多数行仅两个非零元），其 Cholesky 因子却几乎完全稠密。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>On the other hand, suppose we permute the first row and column of $A$ to the end. After this re-ordering, we obtain the Cholesky factorization</p>
+        <p>$$ \begin{bmatrix} D & u \\ u^T & 1 \end{bmatrix} = \begin{bmatrix} D^{1/2} & 0 \\ u^T D^{-1/2} & \sqrt{1 - u^T D^{-1} u} \end{bmatrix} \begin{bmatrix} D^{1/2} & D^{-1/2} u \\ 0 & \sqrt{1 - u^T D^{-1} u} \end{bmatrix}. $$</p>
+        <p>Now the Cholesky factor has a diagonal (1,1) block, so it is very sparse.</p>
+        <p>This example illustrates that the re-ordering greatly affects the sparsity of the Cholesky factors. Here it was quite obvious what the best permutation is, and all good re-ordering heuristics would select this re-ordering and permute the dense row and column to the end. For more complicated sparsity patterns, it can be very difficult to find the 'best' re-ordering (i.e., resulting in the greatest number of zero elements in $L$), but various heuristics provide good suboptimal permutations.</p>
+        <p>For the sparse Cholesky factorization, the re-ordering permutation $P$ is often determined using only sparsity pattern of the matrix $A$, and not the particular numerical values of the nonzero elements of $A$. Once $P$ is chosen, we can also determine the sparsity pattern of $L$ without knowing the numerical values of the nonzero entries of $A$. These two steps combined are called the symbolic factorization of $A$, and form the first step in a sparse Cholesky factorization. In contrast, the permutation matrices in a sparse LU factorization do depend on the numerical values in $A$, in addition to its sparsity pattern.</p>
+        <p>The symbolic factorization is then followed by the numerical factorization, i.e., the calculation of the nonzero elements of $L$. Software packages for sparse Cholesky factorization often include separate routines for the symbolic and the numerical factorization. This is useful in many applications, because the cost of the symbolic factorization is significant, and often comparable to the numerical factorization.</p>
+        <p>Suppose, for example, that we need to solve $m$ sets of linear equations</p>
+        <p>$$ A_1 x = b_1, \quad A_2 x = b_2, \quad \ldots, \quad A_m x = b_m $$</p>
+        <p>where the matrices $A_i$ are symmetric positive definite, with different numerical values, but the same sparsity pattern. Suppose the cost of a symbolic factorization is $f_{\text{symb}}$, the cost of a numerical factorization is $f_{\text{num}}$, and the cost of the solve step is $s$. Then we can solve the $m$ sets of linear equations in</p>
+        <p>$$ f_{\text{symb}} + m(f_{\text{num}} + s) $$</p>
+        <p>flops, since we only need to carry out the symbolic factorization once, for all $m$ sets of equations. If instead we carry out a separate symbolic factorization for each set of linear equations, the flop count is $m(f_{\text{symb}} + f_{\text{num}} + s)$.</p></div>
+      <div class="zh"><p>另一方面，设把 $A$ 的第一行和第一列置换到末尾。此重排后得到 Cholesky 分解</p>
+        <p>$$ \begin{bmatrix} D & u \\ u^T & 1 \end{bmatrix} = \begin{bmatrix} D^{1/2} & 0 \\ u^T D^{-1/2} & \sqrt{1 - u^T D^{-1} u} \end{bmatrix} \begin{bmatrix} D^{1/2} & D^{-1/2} u \\ 0 & \sqrt{1 - u^T D^{-1} u} \end{bmatrix}. $$</p>
+        <p>此时 Cholesky 因子的 (1,1) 块为对角，故非常稀疏。</p>
+        <p>此例说明重排对 Cholesky 因子的稀疏性影响极大。这里最佳置换显然，且所有好的重排启发式都会选择此重排，把稠密行和列置末。对更复杂的稀疏模式，寻找“最佳”重排（即使 $L$ 中零元最多者）可能非常困难，但各种启发式可提供好的次优置换。</p>
+        <p>对稀疏 Cholesky 分解，重排置换 $P$ 常仅由 $A$ 的稀疏模式决定，而不依赖 $A$ 非零元的具体数值。一旦选定 $P$，在不知 $A$ 非零元数值的情况下也可确定 $L$ 的稀疏模式。这两步合称 $A$ 的<strong>符号分解</strong>（symbolic factorization），构成稀疏 Cholesky 分解的第一步。相比之下，稀疏 LU 分解中的置换矩阵除稀疏模式外还依赖 $A$ 的数值。</p>
+        <p>符号分解之后是<strong>数值分解</strong>（numerical factorization），即计算 $L$ 的非零元。稀疏 Cholesky 分解软件包常为符号分解与数值分解提供独立例程。这在许多应用中有用，因为符号分解的代价可观，常与数值分解相当。</p>
+        <p>例如，设需求解 $m$ 组线性方程组</p>
+        <p>$$ A_1 x = b_1, \quad A_2 x = b_2, \quad \ldots, \quad A_m x = b_m $$</p>
+        <p>其中 $A_i$ 对称正定，数值不同但稀疏模式相同。设符号分解代价为 $f_{\text{symb}}$，数值分解代价为 $f_{\text{num}}$，求解步代价为 $s$。则解这 $m$ 组方程组需</p>
+        <p>$$ f_{\text{symb}} + m(f_{\text{num}} + s) $$</p>
+        <p>flops，因为只需对所有 $m$ 组方程做一次符号分解。若对每组方程分别做符号分解，则 flop 数为 $m(f_{\text{symb}} + f_{\text{num}} + s)$。</p></div>
+    </div>
+
+    <!-- ============== C.3.3 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>C.3.3 LDL<sup>T</sup> factorization</h3></div>
+      <div class="zh"><h3>C.3.3 LDL<sup>T</sup> 分解</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Every nonsingular symmetric matrix $A$ can be factored as</p>
+        <p>$$ A = PLDL^T P^T $$</p>
+        <p>where $P$ is a permutation matrix, $L$ is lower triangular with positive diagonal elements, and $D$ is block diagonal, with nonsingular $1 \times 1$ and $2 \times 2$ diagonal blocks. This is called an LDL<sup>T</sup> factorization of $A$. (The Cholesky factorization can be considered a special case of LDL<sup>T</sup> factorization, with $P = I$ and $D = I$.) An LDL<sup>T</sup> factorization can be computed in $(1/3)n^3$ flops, if no structure of $A$ is exploited.</p></div>
+      <div class="zh"><p>每个非奇异对称矩阵 $A$ 可分解为</p>
+        <p>$$ A = PLDL^T P^T $$</p>
+        <p>其中 $P$ 为置换矩阵，$L$ 为对角元正的下三角矩阵，$D$ 为块对角，其对角块为非奇异的 $1\times 1$ 和 $2\times 2$ 块。此称为 $A$ 的 <strong>LDL<sup>T</sup> 分解</strong>。（Cholesky 分解可视为 LDL<sup>T</sup> 分解的特殊情形，取 $P = I$、$D = I$。）若不利用 $A$ 的任何结构，LDL<sup>T</sup> 分解可在 $(1/3)n^3$ flops 内完成。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><em>Algorithm C.3</em> <strong>Solving linear equations by LDL<sup>T</sup> factorization.</strong></p>
+        <p><em>given</em> a set of linear equations $Ax = b$, with $A \in \mathbf{S}^n$ nonsingular.</p>
+        <p>1. <strong>LDL<sup>T</sup> factorization.</strong> Factor $A$ as $A = PLDL^T P$ $\bigl($(1/3)n^3$ flops$\bigr)$.</p>
+        <p>2. <strong>Permutation.</strong> Solve $Pz_1 = b$ (0 flops).</p>
+        <p>3. <strong>Forward substitution.</strong> Solve $Lz_2 = z_1$ ($n^2$ flops).</p>
+        <p>4. <strong>(Block) diagonal solve.</strong> Solve $Dz_3 = z_2$ (order $n$ flops).</p>
+        <p>5. <strong>Backward substitution.</strong> Solve $L^T z_4 = z_3$ ($n^2$ flops).</p>
+        <p>6. <strong>Permutation.</strong> Solve $P^T x = z_4$ (0 flops).</p>
+        <p>The total cost is, keeping only the dominant term, $(1/3)n^3$ flops.</p></div>
+      <div class="zh"><p><em>算法 C.3</em> <strong>用 LDL<sup>T</sup> 分解求解线性方程组。</strong></p>
+        <p><em>给定</em> 线性方程组 $Ax = b$，其中 $A \in \mathbf{S}^n$ 非奇异。</p>
+        <p>1. <strong>LDL<sup>T</sup> 分解。</strong> 把 $A$ 分解为 $A = PLDL^T P$（$(1/3)n^3$ flops）。</p>
+        <p>2. <strong>置换。</strong> 解 $Pz_1 = b$（0 flops）。</p>
+        <p>3. <strong>前代。</strong> 解 $Lz_2 = z_1$（$n^2$ flops）。</p>
+        <p>4. <strong>（块）对角求解。</strong> 解 $Dz_3 = z_2$（$n$ 阶 flops）。</p>
+        <p>5. <strong>回代。</strong> 解 $L^T z_4 = z_3$（$n^2$ flops）。</p>
+        <p>6. <strong>置换。</strong> 解 $P^T x = z_4$（0 flops）。</p>
+        <p>只保留主项，总代价为 $(1/3)n^3$ flops。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>LDL<sup>T</sup> factorization of banded and sparse matrices</h3></div>
+      <div class="zh"><h3>带状与稀疏矩阵的 LDL<sup>T</sup> 分解</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>As with the LU and Cholesky factorizations, there are specialized methods for calculating the LDL<sup>T</sup> factorization of a sparse or banded matrix. These are similar to the analogous methods for Cholesky factorization, with the additional factor $D$. In a sparse LDL<sup>T</sup> factorization, the permutation matrix $P$ cannot be chosen only on the basis of the sparsity pattern of $A$ (as in a sparse Cholesky factorization); it also depends on the particular nonzero values in the matrix $A$.</p></div>
+      <div class="zh"><p>与 LU 和 Cholesky 分解类似，计算稀疏或带状矩阵的 LDL<sup>T</sup> 分解也有专门方法，与 Cholesky 相应方法类似，但多一个因子 $D$。在稀疏 LDL<sup>T</sup> 分解中，置换矩阵 $P$ 不能仅依据 $A$ 的稀疏模式选取（如稀疏 Cholesky 分解那样），还依赖 $A$ 中具体的非零值。</p></div>
+    </div>
+
+    <!-- ============== C.4 ============== -->
+    <div class="pair head">
+      <div class="en"><h2>C.4 Block elimination and Schur complements</h2></div>
+      <div class="zh"><h2>C.4 块消元与 Schur 补</h2></div>
+    </div>
+
+    <!-- ============== C.4.1 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>C.4.1 Eliminating a block of variables</h3></div>
+      <div class="zh"><h3>C.4.1 消去一个变量块</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>In this section we describe a general method that can be used to solve $Ax = b$ by first eliminating a subset of the variables, and then solving a smaller system of linear equations for the remaining variables. For a dense unstructured matrix, this approach gives no advantage. But when the submatrix of $A$ associated with the eliminated variables is easily factored (for example, if it is block diagonal or banded) the method can be substantially more efficient than a general method.</p>
+        <p>Suppose we partition the variable $x \in \mathbb{R}^n$ into two blocks or subvectors,</p>
+        <p>$$ x = \begin{bmatrix} x_1 \\ x_2 \end{bmatrix}, $$</p>
+        <p>where $x_1 \in \mathbb{R}^{n_1}$, $x_2 \in \mathbb{R}^{n_2}$. We conformally partition the linear equations $Ax = b$ as</p>
+        <p>$$ \begin{bmatrix} A_{11} & A_{12} \\ A_{21} & A_{22} \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} = \begin{bmatrix} b_1 \\ b_2 \end{bmatrix} \tag{C.3} $$</p>
+        <p>where $A_{11} \in \mathbb{R}^{n_1\times n_1}$, $A_{22} \in \mathbb{R}^{n_2\times n_2}$. Assuming that the submatrix $A_{11}$ is invertible, we can eliminate $x_1$ from the equations, as follows. Using the first equation, we can express $x_1$ in terms of $x_2$:</p>
+        <p>$$ x_1 = A_{11}^{-1}(b_1 - A_{12} x_2). \tag{C.4} $$</p>
+        <p>Substituting this expression into the second equation yields</p>
+        <p>$$ (A_{22} - A_{21} A_{11}^{-1} A_{12}) x_2 = b_2 - A_{21} A_{11}^{-1} b_1. \tag{C.5} $$</p>
+        <p>We refer to this as the reduced equation obtained by eliminating $x_1$ from the original equation. The reduced equation (C.5) and the equation (C.4) together are equivalent to the original equations (C.3). The matrix appearing in the reduced equation is called the Schur complement of the first block $A_{11}$ in $A$:</p>
+        <p>$$ S = A_{22} - A_{21} A_{11}^{-1} A_{12} $$</p>
+        <p>(see also §A.5.5). The Schur complement $S$ is nonsingular if and only if $A$ is nonsingular.</p>
+        <p>The two equations (C.5) and (C.4) give us an alternative approach to solving the original system of equations (C.3). We first form the Schur complement $S$, then find $x_2$ by solving (C.5), and then calculate $x_1$ from (C.4). We can summarize this method as follows.</p></div>
+      <div class="zh"><p>本节描述一种求解 $Ax = b$ 的一般方法：先消去一部分变量，再对剩余变量求解一个更小的线性方程组。对稠密非结构矩阵，此法无优势。但当与被消变量关联的 $A$ 的子矩阵易分解时（例如块对角或带状），此法可比一般方法高效得多。</p>
+        <p>设把变量 $x \in \mathbb{R}^n$ 分为两块（子向量）：</p>
+        <p>$$ x = \begin{bmatrix} x_1 \\ x_2 \end{bmatrix}, $$</p>
+        <p>其中 $x_1 \in \mathbb{R}^{n_1}$，$x_2 \in \mathbb{R}^{n_2}$。相应地把 $Ax = b$ 分块为</p>
+        <p>$$ \begin{bmatrix} A_{11} & A_{12} \\ A_{21} & A_{22} \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} = \begin{bmatrix} b_1 \\ b_2 \end{bmatrix} \tag{C.3} $$</p>
+        <p>其中 $A_{11} \in \mathbb{R}^{n_1\times n_1}$，$A_{22} \in \mathbb{R}^{n_2\times n_2}$。设子矩阵 $A_{11}$ 可逆，则可如下消去 $x_1$。由第一方程，可用 $x_2$ 表达 $x_1$：</p>
+        <p>$$ x_1 = A_{11}^{-1}(b_1 - A_{12} x_2). \tag{C.4} $$</p>
+        <p>代入第二方程得</p>
+        <p>$$ (A_{22} - A_{21} A_{11}^{-1} A_{12}) x_2 = b_2 - A_{21} A_{11}^{-1} b_1. \tag{C.5} $$</p>
+        <p>此称为从原方程消去 $x_1$ 所得的<strong>降阶方程</strong>（reduced equation）。降阶方程 (C.5) 与方程 (C.4) 合起来与原方程组 (C.3) 等价。降阶方程中的矩阵称为 $A$ 中第一个块 $A_{11}$ 的 <strong>Schur 补</strong>：</p>
+        <p>$$ S = A_{22} - A_{21} A_{11}^{-1} A_{12} $$</p>
+        <p>（亦见 §A.5.5）。Schur 补 $S$ 非奇异当且仅当 $A$ 非奇异。</p>
+        <p>方程 (C.5) 与 (C.4) 给出求解原方程组 (C.3) 的另一途径：先形成 Schur 补 $S$，再解 (C.5) 得 $x_2$，然后由 (C.4) 算 $x_1$。此方法可归纳如下。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><em>Algorithm C.4</em> <strong>Solving linear equations by block elimination.</strong></p>
+        <p><em>given</em> a nonsingular set of linear equations (C.3), with $A_{11}$ nonsingular.</p>
+        <p>1. Form $A_{11}^{-1} A_{12}$ and $A_{11}^{-1} b_1$.</p>
+        <p>2. Form $S = A_{22} - A_{21} A_{11}^{-1} A_{12}$ and $\tilde{b} = b_2 - A_{21} A_{11}^{-1} b_1$.</p>
+        <p>3. Determine $x_2$ by solving $Sx_2 = \tilde{b}$.</p>
+        <p>4. Determine $x_1$ by solving $A_{11} x_1 = b_1 - A_{12} x_2$.</p></div>
+      <div class="zh"><p><em>算法 C.4</em> <strong>用块消元求解线性方程组。</strong></p>
+        <p><em>给定</em> 非奇异的线性方程组 (C.3)，其中 $A_{11}$ 非奇异。</p>
+        <p>1. 形成 $A_{11}^{-1} A_{12}$ 与 $A_{11}^{-1} b_1$。</p>
+        <p>2. 形成 $S = A_{22} - A_{21} A_{11}^{-1} A_{12}$ 与 $\tilde{b} = b_2 - A_{21} A_{11}^{-1} b_1$。</p>
+        <p>3. 解 $Sx_2 = \tilde{b}$ 得 $x_2$。</p>
+        <p>4. 解 $A_{11} x_1 = b_1 - A_{12} x_2$ 得 $x_1$。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><em>Remark C.1</em> <strong>Interpretation as block factor-solve.</strong> Block elimination can be interpreted in terms of the factor-solve approach described in §C.2.2, based on the factorization</p>
+        <p>$$ \begin{bmatrix} A_{11} & A_{12} \\ A_{21} & A_{22} \end{bmatrix} = \begin{bmatrix} A_{11} & 0 \\ A_{21} & S \end{bmatrix} \begin{bmatrix} I & A_{11}^{-1} A_{12} \\ 0 & I \end{bmatrix}, $$</p>
+        <p>which can be considered a block LU factorization. This block LU factorization suggests the following method for solving (C.3). We first do a 'block forward substitution' to solve</p>
+        <p>$$ \begin{bmatrix} A_{11} & 0 \\ A_{21} & S \end{bmatrix} \begin{bmatrix} z_1 \\ z_2 \end{bmatrix} = \begin{bmatrix} b_1 \\ b_2 \end{bmatrix}, $$</p>
+        <p>and then solve</p>
+        <p>$$ \begin{bmatrix} I & A_{11}^{-1} A_{12} \\ 0 & I \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} = \begin{bmatrix} z_1 \\ z_2 \end{bmatrix} $$</p>
+        <p>by 'block backward substitution'. This yields the same expressions as the block elimination method:</p>
+        <p>$$ \begin{aligned} z_1 &= A_{11}^{-1} b_1 \\ z_2 &= S^{-1}(b_2 - A_{21} z_1) \\ x_2 &= z_2 \\ x_1 &= z_1 - A_{11}^{-1} A_{12} z_2. \end{aligned} $$</p>
+        <p>In fact, the modern approach to the factor-solve method is based on block factor and solve steps like these, with the block sizes optimally chosen for the processor (or processors), cache sizes, etc.</p></div>
+      <div class="zh"><p><em>注 C.1</em> <strong>作为块分解-求解的解释。</strong> 块消元可用 §C.2.2 所述分解-求解法来解释，基于分解</p>
+        <p>$$ \begin{bmatrix} A_{11} & A_{12} \\ A_{21} & A_{22} \end{bmatrix} = \begin{bmatrix} A_{11} & 0 \\ A_{21} & S \end{bmatrix} \begin{bmatrix} I & A_{11}^{-1} A_{12} \\ 0 & I \end{bmatrix}, $$</p>
+        <p>此可视为<strong>块 LU 分解</strong>。此块 LU 分解提示如下求解 (C.3) 的方法：先做一次“块前代”解</p>
+        <p>$$ \begin{bmatrix} A_{11} & 0 \\ A_{21} & S \end{bmatrix} \begin{bmatrix} z_1 \\ z_2 \end{bmatrix} = \begin{bmatrix} b_1 \\ b_2 \end{bmatrix}, $$</p>
+        <p>再“块回代”解</p>
+        <p>$$ \begin{bmatrix} I & A_{11}^{-1} A_{12} \\ 0 & I \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} = \begin{bmatrix} z_1 \\ z_2 \end{bmatrix}. $$</p>
+        <p>这给出与块消元法相同的表达式：</p>
+        <p>$$ \begin{aligned} z_1 &= A_{11}^{-1} b_1 \\ z_2 &= S^{-1}(b_2 - A_{21} z_1) \\ x_2 &= z_2 \\ x_1 &= z_1 - A_{11}^{-1} A_{12} z_2. \end{aligned} $$</p>
+        <p>事实上，分解-求解法的现代实现正基于此类块分解与块求解步骤，块大小针对处理器（或多处理器）、缓存大小等最优选取。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Complexity analysis of block elimination method</h3></div>
+      <div class="zh"><h3>块消元法的复杂度分析</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>To analyze the (possible) advantage of solving the set of linear equations using block elimination, we carry out a flop count. We let $f$ and $s$ denote the cost of factoring $A_{11}$ and carrying out the associated solve step, respectively. To keep the analysis simple we assume (for now) that $A_{12}$, $A_{22}$, and $A_{21}$ are treated as dense, unstructured matrices. The flop counts for each of the four steps in solving $Ax = b$ using block elimination are:</p>
+        <p>1. Computing $A_{11}^{-1} A_{12}$ and $A_{11}^{-1} b_1$ requires factoring $A_{11}$ and $n_2 + 1$ solves, so it costs $f + (n_2 + 1)s$, or just $f + n_2 s$, dropping the dominated term $s$.</p>
+        <p>2. Forming the Schur complement $S$ requires the matrix multiply $A_{21}(A_{11}^{-1} A_{12})$, which costs $2n_2^2 n_1$, and an $n_2 \times n_2$ matrix subtraction, which costs $n_2^2$ (and can be dropped). The cost of forming $\tilde{b} = b_2 - A_{21} A_{11}^{-1} b_1$ is dominated by the cost of forming $S$, and so can be ignored. The total cost of step 2, ignoring dominated terms, is then $2n_2^2 n_1$.</p>
+        <p>3. To compute $x_2 = S^{-1} \tilde{b}$, we factor $S$ and solve, which costs $(2/3)n_2^3$.</p>
+        <p>4. Forming $b_1 - A_{12} x_2$ costs $2n_1 n_2 + n_1$ flops. To compute $x_1 = A_{11}^{-1}(b_1 - A_{12} x_2)$, we can use the factorization of $A_{11}$ already computed in step 1, so only the solve is necessary, which costs $s$. Both of these costs are dominated by other terms, and can be ignored.</p>
+        <p>The total cost is then</p>
+        <p>$$ f + n_2 s + 2n_2^2 n_1 + (2/3)n_2^3 \tag{C.6} $$</p>
+        <p>flops.</p></div>
+      <div class="zh"><p>为分析用块消元法解线性方程组的（可能）优势，做 flop 计数。设 $f$、$s$ 分别为分解 $A_{11}$ 及相应求解步的代价。为简化分析，（暂）设 $A_{12}$、$A_{22}$、$A_{21}$ 视为稠密非结构矩阵。用块消元解 $Ax = b$ 各步的 flop 数如下：</p>
+        <p>1. 计算 $A_{11}^{-1} A_{12}$ 与 $A_{11}^{-1} b_1$ 需分解 $A_{11}$ 并做 $n_2 + 1$ 次求解，代价为 $f + (n_2 + 1)s$，去掉被占优项 $s$ 即 $f + n_2 s$。</p>
+        <p>2. 形成 Schur 补 $S$ 需矩阵乘 $A_{21}(A_{11}^{-1} A_{12})$，代价 $2n_2^2 n_1$，以及一个 $n_2 \times n_2$ 矩阵减法，代价 $n_2^2$（可忽略）。形成 $\tilde{b} = b_2 - A_{21} A_{11}^{-1} b_1$ 的代价被形成 $S$ 的代价占优，可忽略。忽略被占优项后第 2 步总代价为 $2n_2^2 n_1$。</p>
+        <p>3. 算 $x_2 = S^{-1} \tilde{b}$ 需分解 $S$ 并求解，代价 $(2/3)n_2^3$。</p>
+        <p>4. 形成 $b_1 - A_{12} x_2$ 需 $2n_1 n_2 + n_1$ flops。算 $x_1 = A_{11}^{-1}(b_1 - A_{12} x_2)$ 可用第 1 步已算的 $A_{11}$ 分解，故只需求解步，代价 $s$。两项均被他项占优，可忽略。</p>
+        <p>故总代价为</p>
+        <p>$$ f + n_2 s + 2n_2^2 n_1 + (2/3)n_2^3 \tag{C.6} $$</p>
+        <p>flops。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><strong>Eliminating an unstructured matrix.</strong> We first consider the case when no structure in $A_{11}$ is exploited. We factor $A_{11}$ using a standard LU factorization, so $f = (2/3)n_1^3$, and then solve using a forward and a backward substitution, so $s = 2n_1^2$. The flop count for solving the equations via block elimination is then</p>
+        <p>$$ (2/3)n_1^3 + n_2(2n_1^2) + 2n_2^2 n_1 + (2/3)n_2^3 = (2/3)(n_1 + n_2)^3, $$</p>
+        <p>which is the same as just solving the larger set of equations using a standard LU factorization. In other words, solving a set of equations by block elimination gives no advantage when no structure of $A_{11}$ is exploited.</p>
+        <p>On the other hand, when the structure of $A_{11}$ allows us to factor and solve more efficiently than the standard method, block elimination can be more efficient than applying the standard method.</p></div>
+      <div class="zh"><p><strong>消去非结构矩阵。</strong> 先考虑不利用 $A_{11}$ 任何结构的情形。用标准 LU 分解分解 $A_{11}$，故 $f = (2/3)n_1^3$，再用一次前代和一次回代求解，故 $s = 2n_1^2$。用块消元解方程组的 flop 数为</p>
+        <p>$$ (2/3)n_1^3 + n_2(2n_1^2) + 2n_2^2 n_1 + (2/3)n_2^3 = (2/3)(n_1 + n_2)^3, $$</p>
+        <p>与直接用标准 LU 分解解更大方程组相同。换言之，当不利用 $A_{11}$ 的任何结构时，块消元法无优势。</p>
+        <p>另一方面，当 $A_{11}$ 的结构允许比标准方法更高效地分解和求解时，块消元可比标准方法更高效。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><strong>Eliminating a diagonal matrix.</strong> If $A_{11}$ is diagonal, no factorization is needed, and we can carry out a solve in $n_1$ flops, so we have $f = 0$ and $s = n_1$. Substituting these values into (C.6) and keeping only the leading terms yields</p>
+        <p>$$ 2n_2^2 n_1 + (2/3)n_2^3, $$</p>
+        <p>flops, which is far smaller than $(2/3)(n_1+n_2)^3$, the cost using the standard method. In particular, the flop count of the standard method grows cubicly in $n_1$, whereas for block elimination the flop count grows only linearly in $n_1$.</p></div>
+      <div class="zh"><p><strong>消去对角矩阵。</strong> 若 $A_{11}$ 对角，无需分解，求解需 $n_1$ flops，故 $f = 0$、$s = n_1$。代入 (C.6) 只保留首项得</p>
+        <p>$$ 2n_2^2 n_1 + (2/3)n_2^3, $$</p>
+        <p>flops，远小于标准方法的 $(2/3)(n_1+n_2)^3$。特别地，标准方法的 flop 数关于 $n_1$ 三次增长，而块消元仅线性增长。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><strong>Eliminating a banded matrix.</strong> If $A_{11}$ is banded with bandwidth $k$, we can carry out the factorization in about $f = 4k^2 n_1$ flops, and the solve can be done in about $s = 6kn_1$ flops. The overall complexity of solving $Ax = b$ using block elimination is</p>
+        <p>$$ 4k^2 n_1 + 6n_2 k n_1 + 2n_2^2 n_1 + (2/3)n_2^3 $$</p>
+        <p>flops. Assuming $k$ is small compared to $n_1$ and $n_2$, this simplifies to $2n_2^2 n_1 + (2/3)n_2^3$, the same as when $A_{11}$ is diagonal. In particular, the complexity grows linearly in $n_1$, as opposed to cubicly in $n_1$ for the standard method.</p>
+        <p>A matrix for which $A_{11}$ is banded is sometimes called an arrow matrix since the sparsity pattern, when $n_1 \gg n_2$, looks like an arrow pointing down and right. Block elimination can solve linear equations with arrow structure far more efficiently than the standard method.</p></div>
+      <div class="zh"><p><strong>消去带状矩阵。</strong> 若 $A_{11}$ 带状，带宽 $k$，则分解约需 $f = 4k^2 n_1$ flops，求解约需 $s = 6kn_1$ flops。用块消元解 $Ax = b$ 的总复杂度为</p>
+        <p>$$ 4k^2 n_1 + 6n_2 k n_1 + 2n_2^2 n_1 + (2/3)n_2^3 $$</p>
+        <p>flops。设 $k$ 相对 $n_1$、$n_2$ 很小，则简化为 $2n_2^2 n_1 + (2/3)n_2^3$，与 $A_{11}$ 对角时相同。特别地，复杂度关于 $n_1$ 线性增长，而非标准方法的三次增长。</p>
+        <p>$A_{11}$ 带状的矩阵有时称为<strong>箭形矩阵</strong>（arrow matrix），因为当 $n_1 \gg n_2$ 时其稀疏模式形如指向右下的箭头。块消元可远比标准方法高效地求解具箭形结构的线性方程组。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><strong>Eliminating a block diagonal matrix.</strong> Suppose that $A_{11}$ is block diagonal, with (square) block sizes $m_1, \ldots, m_k$, where $n_1 = m_1 + \cdots + m_k$. In this case we can factor $A_{11}$ by factoring each block separately, and similarly we can carry out the solve step on each block separately. Using standard methods for these we find</p>
+        <p>$$ f = (2/3)m_1^3 + \cdots + (2/3)m_k^3, \qquad s = 2m_1^2 + \cdots + 2m_k^2, $$</p>
+        <p>so the overall complexity of block elimination is</p>
+        <p>$$ (2/3)\sum_{i=1}^k m_i^3 + 2n_2 \sum_{i=1}^k m_i^2 + 2n_2^2 \sum_{i=1}^k m_i + (2/3)n_2^3. $$</p>
+        <p>If the block sizes are small compared to $n_1$ and $n_1 \gg n_2$, the savings obtained by block elimination is dramatic.</p></div>
+      <div class="zh"><p><strong>消去块对角矩阵。</strong> 设 $A_{11}$ 块对角，各（方）块大小为 $m_1, \ldots, m_k$，其中 $n_1 = m_1 + \cdots + m_k$。此时可分别分解 $A_{11}$ 的各块，求解步也分别在各块上进行。用标准方法得</p>
+        <p>$$ f = (2/3)m_1^3 + \cdots + (2/3)m_k^3, \qquad s = 2m_1^2 + \cdots + 2m_k^2, $$</p>
+        <p>故块消元的总复杂度为</p>
+        <p>$$ (2/3)\sum_{i=1}^k m_i^3 + 2n_2 \sum_{i=1}^k m_i^2 + 2n_2^2 \sum_{i=1}^k m_i + (2/3)n_2^3. $$</p>
+        <p>若各块大小相对 $n_1$ 很小且 $n_1 \gg n_2$，则块消元所得节省十分可观。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The linear equations $Ax = b$, where $A_{11}$ is block diagonal, are called partially separable for the following reason. If the subvector $x_2$ is fixed, the remaining equations decouple into $k$ sets of independent linear equations (which can be solved separately). The subvector $x_2$ is sometimes called the complicating variable since the equations are much simpler when $x_2$ is fixed. Using block elimination, we can solve partially separable linear equations far more efficiently than by using a standard method.</p></div>
+      <div class="zh"><p>$A_{11}$ 块对角时的线性方程组 $Ax = b$ 称为<strong>部分可分</strong>的（partially separable），理由如下：若固定子向量 $x_2$，剩余方程解耦为 $k$ 组独立的线性方程组（可分别求解）。子向量 $x_2$ 有时称为<strong>复杂化变量</strong>（complicating variable），因为固定 $x_2$ 后方程大为简化。用块消元可远比标准方法高效地求解部分可分线性方程组。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><strong>Eliminating a sparse matrix.</strong> If $A_{11}$ is sparse, we can eliminate $A_{11}$ using a sparse factorization and sparse solve steps, so the values of $f$ and $s$ in (C.6) are much less than for unstructured $A_{11}$. When $A_{11}$ in (C.3) is sparse and the other blocks are dense, and $n_2 \ll n_1$, we say that $A$ is a sparse matrix with a few dense rows and columns. Eliminating the sparse block $A_{11}$ provides an efficient method for solving equations which are sparse except for a few dense rows and columns.</p>
+        <p>An alternative is to simply apply a sparse factorization algorithm to the entire matrix $A$. Most sparse solvers will handle dense rows and columns, and select a permutation that results in sparse factors, and hence fast factorization and solve times. This is more straightforward than using block elimination, but often slower, especially in applications where we can exploit structure in the other blocks (see, e.g., example C.4).</p></div>
+      <div class="zh"><p><strong>消去稀疏矩阵。</strong> 若 $A_{11}$ 稀疏，可用稀疏分解和稀疏求解步消去 $A_{11}$，故 (C.6) 中 $f$、$s$ 远小于非结构 $A_{11}$ 的情形。当 (C.3) 中 $A_{11}$ 稀疏而其他块稠密且 $n_2 \ll n_1$ 时，称 $A$ 为带少量稠密行和列的稀疏矩阵。消去稀疏块 $A_{11}$ 为求解除少量稠密行和列外均稀疏的方程组提供了高效方法。</p>
+        <p>另一种做法是对整个矩阵 $A$ 直接用稀疏分解算法。大多数稀疏求解器能处理稠密行和列，并选取使因子稀疏从而加速分解和求解的置换。这比块消元更直接，但常更慢，尤其在能利用其他块结构的应用中（例如见例 C.4）。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><em>Remark C.2</em> As already suggested in remark C.1, these two methods for solving systems with a few dense rows and columns are closely related. Applying the elimination method by factoring $A_{11}$ and $S$ as</p>
+        <p>$$ A_{11} = P_1 L_1 U_1 P_2, \qquad S = P_3 L_2 U_2, $$</p>
+        <p>can be interpreted as factoring $A$ as</p>
+        <p>$$ \begin{bmatrix} A_{11} & A_{12} \\ A_{21} & A_{22} \end{bmatrix} = \begin{bmatrix} P_1 & 0 \\ 0 & P_3 \end{bmatrix} \begin{bmatrix} L_1 & 0 \\ P_3^T A_{21} P_2^T U_1^{-1} & L_2 \end{bmatrix} \begin{bmatrix} U_1 & L_1^{-1} P_1^T A_{12} \\ 0 & U_2 \end{bmatrix} \begin{bmatrix} P_2 & 0 \\ 0 & I \end{bmatrix}, $$</p>
+        <p>followed by forward and backward substitutions.</p></div>
+      <div class="zh"><p><em>注 C.2</em> 如注 C.1 所提示，求解带少量稠密行和列系统的这两种方法密切相关。用分解 $A_{11}$ 与 $S$ 的消元法，设</p>
+        <p>$$ A_{11} = P_1 L_1 U_1 P_2, \qquad S = P_3 L_2 U_2, $$</p>
+        <p>可解释为把 $A$ 分解为</p>
+        <p>$$ \begin{bmatrix} A_{11} & A_{12} \\ A_{21} & A_{22} \end{bmatrix} = \begin{bmatrix} P_1 & 0 \\ 0 & P_3 \end{bmatrix} \begin{bmatrix} L_1 & 0 \\ P_3^T A_{21} P_2^T U_1^{-1} & L_2 \end{bmatrix} \begin{bmatrix} U_1 & L_1^{-1} P_1^T A_{12} \\ 0 & U_2 \end{bmatrix} \begin{bmatrix} P_2 & 0 \\ 0 & I \end{bmatrix}, $$</p>
+        <p>再作前代与回代。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>C.4.2 Block elimination and structure</h3></div>
+      <div class="zh"><h3>C.4.2 块消元与结构</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><strong>Symmetry and positive definiteness.</strong> There are variants of the block elimination method that can be used when $A$ is symmetric, or symmetric and positive definite. When $A$ is symmetric, so are $A_{11}$ and the Schur complement $S$, so a symmetric factorization can be used for $A_{11}$ and $S$. Symmetry can also be exploited in the other operations, such as the matrix multiplies. Overall the savings over the nonsymmetric case is around a factor of two.</p>
+        <p>Positive definiteness can also be exploited in block elimination. When $A$ is symmetric and positive definite, so are $A_{11}$ and the Schur complement $S$, so Cholesky factorizations can be used.</p></div>
+      <div class="zh"><p><strong>对称性与正定性。</strong> 当 $A$ 对称或对称正定时，块消元法有相应变体。当 $A$ 对称时，$A_{11}$ 与 Schur 补 $S$ 也对称，故 $A_{11}$ 与 $S$ 可用对称分解。其他运算如矩阵乘法也可利用对称性。总体上比非对称情形约省两倍。</p>
+        <p>正定性也可在块消元中利用。当 $A$ 对称正定时，$A_{11}$ 与 Schur 补 $S$ 也对称正定，故可用 Cholesky 分解。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><strong>Exploiting structure in other blocks.</strong> Our complexity analysis above assumes that we exploit no structure in the matrices $A_{12}$, $A_{21}$, $A_{22}$, and the Schur complement $S$, i.e., they are treated as dense. But in many cases there is structure in these blocks that can be exploited in forming the Schur complement, factoring it, and carrying out the solve steps. In such cases the computational savings of the block elimination method over a standard method can be even higher.</p></div>
+      <div class="zh"><p><strong>利用其他块的结构。</strong> 上面的复杂度分析假设不利用 $A_{12}$、$A_{21}$、$A_{22}$ 及 Schur 补 $S$ 的任何结构，即视为稠密。但许多情形下这些块有结构，可在形成 Schur 补、分解及求解步中利用。此时块消元法相比标准方法的节省可更大。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><em>Example C.2</em> <strong>Block triangular equations.</strong> Suppose that $A_{12} = 0$, i.e., the linear equations $Ax = b$ have block lower triangular structure:</p>
+        <p>$$ \begin{bmatrix} A_{11} & 0 \\ A_{21} & A_{22} \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} = \begin{bmatrix} b_1 \\ b_2 \end{bmatrix}. $$</p>
+        <p>In this case the Schur complement is just $S = A_{22}$, and the block elimination method reduces to block forward substitution:</p>
+        <p>$$ \begin{aligned} x_1 &:= A_{11}^{-1} b_1 \\ x_2 &:= A_{22}^{-1}(b_2 - A_{21} x_1). \end{aligned} $$</p></div>
+      <div class="zh"><p><em>例 C.2</em> <strong>块三角方程组。</strong> 设 $A_{12} = 0$，即 $Ax = b$ 具块下三角结构：</p>
+        <p>$$ \begin{bmatrix} A_{11} & 0 \\ A_{21} & A_{22} \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} = \begin{bmatrix} b_1 \\ b_2 \end{bmatrix}. $$</p>
+        <p>此时 Schur 补即 $S = A_{22}$，块消元法化为块前代：</p>
+        <p>$$ \begin{aligned} x_1 &:= A_{11}^{-1} b_1 \\ x_2 &:= A_{22}^{-1}(b_2 - A_{21} x_1). \end{aligned} $$</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><em>Example C.3</em> <strong>Block diagonal and banded systems.</strong> Suppose that $A_{11}$ is block diagonal, with maximum block size $l \times l$, and that $A_{12}$, $A_{21}$, and $A_{22}$ are banded, say with bandwidth $k$. In this case, $A_{11}^{-1}$ is also block diagonal, with the same block sizes as $A_{11}$. Therefore the product $A_{11}^{-1} A_{12}$ is also banded, with bandwidth $k + l$, and the Schur complement, $S = A_{22} - A_{21} A_{11}^{-1} A_{12}$ is banded with bandwidth $2k + l$. This means that forming the Schur complement $S$ can be done more efficiently, and that the factorization and solve steps with $S$ can be done efficiently. In particular, for fixed maximum block size $l$ and bandwidth $k$, we can solve $Ax = b$ with a number of flops that grows linearly with $n$.</p></div>
+      <div class="zh"><p><em>例 C.3</em> <strong>块对角与带状系统。</strong> 设 $A_{11}$ 块对角，最大块大小 $l \times l$，且 $A_{12}$、$A_{21}$、$A_{22}$ 带状，带宽 $k$。此时 $A_{11}^{-1}$ 也块对角，块大小与 $A_{11}$ 相同。故乘积 $A_{11}^{-1} A_{12}$ 也带状，带宽 $k + l$，Schur 补 $S = A_{22} - A_{21} A_{11}^{-1} A_{12}$ 带状，带宽 $2k + l$。这意味着形成 Schur 补 $S$ 可更高效，$S$ 的分解与求解步也可高效完成。特别地，对固定的最大块大小 $l$ 和带宽 $k$，可用与 $n$ 线性增长的 flop 数求解 $Ax = b$。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><em>Example C.4</em> <strong>KKT structure.</strong> Suppose that the matrix $A$ has KKT structure, i.e.,</p>
+        <p>$$ A = \begin{bmatrix} A_{11} & A_{12} \\ A_{12}^T & 0 \end{bmatrix}, $$</p>
+        <p>where $A_{11} \in \mathbf{S}^p_{++}$, and $A_{12} \in \mathbb{R}^{p\times m}$ with $\mathop{\text{rank}} A_{12} = m$. Since $A_{11} \succ 0$, we can use a Cholesky factorization. The Schur complement $S = -A_{12}^T A_{11}^{-1} A_{12}$ is negative definite, so we can factor $-S$ using a Cholesky factorization.</p></div>
+      <div class="zh"><p><em>例 C.4</em> <strong>KKT 结构。</strong> 设 $A$ 具有 KKT 结构，即</p>
+        <p>$$ A = \begin{bmatrix} A_{11} & A_{12} \\ A_{12}^T & 0 \end{bmatrix}, $$</p>
+        <p>其中 $A_{11} \in \mathbf{S}^p_{++}$，$A_{12} \in \mathbb{R}^{p\times m}$ 且 $\mathop{\text{rank}} A_{12} = m$。由 $A_{11} \succ 0$ 可用 Cholesky 分解。Schur 补 $S = -A_{12}^T A_{11}^{-1} A_{12}$ 负定，故可用 Cholesky 分解分解 $-S$。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>C.4.3 The matrix inversion lemma</h3></div>
+      <div class="zh"><h3>C.4.3 矩阵求逆引理</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The idea of block elimination is to remove variables, and then solve a smaller set of equations that involve the Schur complement of the original matrix with respect to the eliminated variables. The same idea can be turned around: When we recognize a matrix as a Schur complement, we can introduce new variables, and create a larger set of equations to solve. In most cases there is no advantage to doing this, since we end up with a larger set of equations. But when the larger set of equations has some special structure that can be exploited to solve it, introducing variables can lead to an efficient method. The most common case is when another block of variables can be eliminated from the larger matrix.</p>
+        <p>We start with the linear equations</p>
+        <p>$$ (A + BC)x = b, \tag{C.7} $$</p>
+        <p>where $A \in \mathbb{R}^{n\times n}$ is nonsingular, and $B \in \mathbb{R}^{n\times p}$, $C \in \mathbb{R}^{p\times n}$. We introduce a new variable $y = Cx$, and rewrite the equations as</p>
+        <p>$$ Ax + By = b, \qquad y = Cx, $$</p>
+        <p>or, in matrix form,</p>
+        <p>$$ \begin{bmatrix} A & B \\ C & -I \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix} = \begin{bmatrix} b \\ 0 \end{bmatrix}. \tag{C.8} $$</p>
+        <p>Note that our original coefficient matrix, $A + BC$, is the Schur complement of $-I$ in the larger matrix that appears in (C.8). If we were to eliminate the variable $y$ from (C.8), we would get back the original equation (C.7).</p>
+        <p>In some cases, it can be more efficient to solve the larger set of equations (C.8) than the original, smaller set of equations (C.7). This would be the case, for example, if $A$, $B$, and $C$ were relatively sparse, but the matrix $A + BC$ were far less sparse.</p>
+        <p>After introducing the new variable $y$, we can eliminate the original variable $x$ from the larger set of equations (C.8), using $x = A^{-1}(b - By)$. Substituting this into the second equation $y = Cx$, we obtain</p>
+        <p>$$ (I + CA^{-1}B)y = CA^{-1}b, $$</p>
+        <p>so that</p>
+        <p>$$ y = (I + CA^{-1}B)^{-1} CA^{-1}b. $$</p>
+        <p>Using $x = A^{-1}(b - By)$, we get</p>
+        <p>$$ x = \left[A^{-1} - A^{-1} B\left(I + CA^{-1}B\right)^{-1} CA^{-1}\right] b. \tag{C.9} $$</p>
+        <p>Since $b$ is arbitrary, we conclude that</p>
+        <p>$$ (A + BC)^{-1} = A^{-1} - A^{-1} B\left(I + CA^{-1}B\right)^{-1} CA^{-1}. $$</p>
+        <p>This is known as the matrix inversion lemma, or the Sherman-Woodbury-Morrison formula.</p>
+        <p>The matrix inversion lemma has many applications. For example if $p$ is small (or even just not very large), it gives us a method for solving $(A + BC)x = b$, provided we have an efficient method for solving $Au = v$.</p></div>
+      <div class="zh"><p>块消元的思想是消去变量，再解一个涉及原矩阵关于被消变量的 Schur 补的更小方程组。此思想可反过来：当识别出某矩阵为 Schur 补时，可引入新变量，构造更大的方程组来解。多数情形下这样做无益，因为得到更大的方程组。但当更大的方程组具有可利用的特殊结构时，引入变量可得到高效方法。最常见的情形是更大矩阵中另一变量块可被消去。</p>
+        <p>从线性方程组</p>
+        <p>$$ (A + BC)x = b, \tag{C.7} $$</p>
+        <p>出发，其中 $A \in \mathbb{R}^{n\times n}$ 非奇异，$B \in \mathbb{R}^{n\times p}$，$C \in \mathbb{R}^{p\times n}$。引入新变量 $y = Cx$，把方程改写为</p>
+        <p>$$ Ax + By = b, \qquad y = Cx, $$</p>
+        <p>即矩阵形式</p>
+        <p>$$ \begin{bmatrix} A & B \\ C & -I \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix} = \begin{bmatrix} b \\ 0 \end{bmatrix}. \tag{C.8} $$</p>
+        <p>注意原系数矩阵 $A + BC$ 是 (C.8) 中更大矩阵关于 $-I$ 的 Schur 补。若从 (C.8) 消去 $y$，便回到原方程 (C.7)。</p>
+        <p>某些情形下，解更大的方程组 (C.8) 可比解原更小的方程组 (C.7) 更高效。例如，当 $A$、$B$、$C$ 相对稀疏而 $A + BC$ 远没那么稀疏时。</p>
+        <p>引入新变量 $y$ 后，可用 $x = A^{-1}(b - By)$ 从更大的方程组 (C.8) 消去原变量 $x$。代入第二方程 $y = Cx$ 得</p>
+        <p>$$ (I + CA^{-1}B)y = CA^{-1}b, $$</p>
+        <p>故</p>
+        <p>$$ y = (I + CA^{-1}B)^{-1} CA^{-1}b. $$</p>
+        <p>用 $x = A^{-1}(b - By)$ 得</p>
+        <p>$$ x = \left[A^{-1} - A^{-1} B\left(I + CA^{-1}B\right)^{-1} CA^{-1}\right] b. \tag{C.9} $$</p>
+        <p>由 $b$ 任意得</p>
+        <p>$$ (A + BC)^{-1} = A^{-1} - A^{-1} B\left(I + CA^{-1}B\right)^{-1} CA^{-1}. $$</p>
+        <p>此即<strong>矩阵求逆引理</strong>（matrix inversion lemma），又称 Sherman-Woodbury-Morrison 公式。</p>
+        <p>矩阵求逆引理应用广泛。例如，当 $p$ 较小（甚至仅不算很大）时，只要对求解 $Au = v$ 有高效方法，它就给出求解 $(A + BC)x = b$ 的方法。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Diagonal or sparse plus low rank</h3></div>
+      <div class="zh"><h3>对角或稀疏加低秩</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Suppose that $A$ is diagonal with nonzero diagonal elements, and we want to solve an equation of the form (C.7). The straightforward solution would consist in first forming the matrix $D = A + BC$, and then solving $Dx = b$. If the product $BC$ is dense, then the complexity of this method is $2pn^2$ flops to form $A + BC$, plus $(2/3)n^3$ flops for the LU factorization of $D$, so the total cost is</p>
+        <p>$$ 2pn^2 + (2/3)n^3 $$</p>
+        <p>flops.</p>
+        <p>The matrix inversion lemma suggests a more efficient method. We can calculate $x$ by evaluating the expression (C.9) from right to left, as follows. We first evaluate $z = A^{-1}b$ ($n$ flops, since $A$ is diagonal). Then we form the matrix $E = I + CA^{-1}B$ ($2p^2 n$ flops). Next we solve $Ew = Cz$, which is a set of $p$ linear equations in $p$ variables. The cost is $(2/3)p^3$ flops, plus $2pn$ to form $Cz$. Finally, we evaluate $x = z - A^{-1}Bw$ ($2pn$ flops for the matrix-vector product $Bw$, plus lower order terms). The total cost is</p>
+        <p>$$ 2p^2 n + (2/3)p^3 $$</p>
+        <p>flops, dropping dominated terms. Comparing with the first method, we see that the second method is more efficient when $p < n$. In particular if $p$ is small and fixed, the complexity grows linearly with $n$.</p>
+        <p>Another important application of the matrix inversion lemma occurs when $A$ is sparse and nonsingular, and the matrices $B$ and $C$ are dense. Again we can compare two methods. The first method is to form the (dense) matrix $A + BC$, and to solve (C.7) using a dense LU factorization. The cost of this method is $2pn^2 + (2/3)n^3$ flops. The second method is based on evaluating the expression (C.9), using a sparse LU factorization of $A$. Specifically, suppose that $f$ is the cost of factoring $A$ as $A = P_1 L U P_2$, and $s$ is the cost of solving the factored system $P_1 L U P_2 x = d$. We can evaluate (C.9) from right to left as follows. We first factor $A$, and solve $p+1$ linear systems</p>
+        <p>$$ Az = b, \qquad AD = B, $$</p>
+        <p>to find $z \in \mathbb{R}^n$, and $D \in \mathbb{R}^{n\times p}$. The cost is $f + (p+1)s$ flops. Next, we form the matrix $E = I + CD$, and solve</p>
+        <p>$$ Ew = Cz, $$</p>
+        <p>which is a set of $p$ linear equations in $p$ variables $w$. The cost of this step is $2p^2 n + (2/3)p^3$ plus lower order terms. Finally, we evaluate $x = z - Dw$, at a cost of $2pn$ flops. This gives us a total cost of</p>
+        <p>$$ f + ps + 2p^2 n + (2/3)p^3 $$</p>
+        <p>flops. If $f \ll (2/3)n^3$ and $s \ll 2n^2$, this is much lower than the complexity of the first method.</p></div>
+      <div class="zh"><p>设 $A$ 为对角元非零的对角矩阵，需求解形如 (C.7) 的方程。直接做法是先形成矩阵 $D = A + BC$，再解 $Dx = b$。若 $BC$ 稠密，则此法复杂度为形成 $A + BC$ 的 $2pn^2$ flops 加上 $D$ 的 LU 分解 $(2/3)n^3$ flops，总代价为</p>
+        <p>$$ 2pn^2 + (2/3)n^3 $$</p>
+        <p>flops。</p>
+        <p>矩阵求逆引理提示更高效的方法：从右至左计算表达式 (C.9)。先算 $z = A^{-1}b$（$A$ 对角，$n$ flops）。再形成矩阵 $E = I + CA^{-1}B$（$2p^2 n$ flops）。然后解 $Ew = Cz$，这是 $p$ 个变量、$p$ 个方程的方程组，代价 $(2/3)p^3$ flops 加上形成 $Cz$ 的 $2pn$。最后算 $x = z - A^{-1}Bw$（矩阵-向量乘积 $Bw$ 需 $2pn$ flops，加低阶项）。总代价为</p>
+        <p>$$ 2p^2 n + (2/3)p^3 $$</p>
+        <p>flops（去掉被占优项）。与第一种方法比较，当 $p < n$ 时第二种更高效。特别地，若 $p$ 小且固定，复杂度关于 $n$ 线性增长。</p>
+        <p>矩阵求逆引理的另一重要应用出现在 $A$ 稀疏非奇异、$B$ 与 $C$ 稠密时。同样比较两种方法。第一种形成（稠密）矩阵 $A + BC$，用稠密 LU 分解解 (C.7)，代价 $2pn^2 + (2/3)n^3$ flops。第二种基于用 $A$ 的稀疏 LU 分解计算表达式 (C.9)。设 $f$ 为把 $A$ 分解为 $A = P_1 L U P_2$ 的代价，$s$ 为求解已分解系统 $P_1 L U P_2 x = d$ 的代价。从右至左计算 (C.9)：先分解 $A$，解 $p+1$ 个线性系统</p>
+        <p>$$ Az = b, \qquad AD = B, $$</p>
+        <p>得 $z \in \mathbb{R}^n$ 与 $D \in \mathbb{R}^{n\times p}$，代价 $f + (p+1)s$ flops。再形成矩阵 $E = I + CD$，解</p>
+        <p>$$ Ew = Cz, $$</p>
+        <p>这是 $p$ 个变量 $w$、$p$ 个方程的方程组，代价 $2p^2 n + (2/3)p^3$ 加低阶项。最后算 $x = z - Dw$，需 $2pn$ flops。总代价为</p>
+        <p>$$ f + ps + 2p^2 n + (2/3)p^3 $$</p>
+        <p>flops。若 $f \ll (2/3)n^3$ 且 $s \ll 2n^2$，则远低于第一种方法的复杂度。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><em>Remark C.3</em> <strong>The augmented system approach.</strong> A different approach to exploiting sparse plus low rank structure is to solve (C.8) directly using a sparse LU-solver. The system (C.8) is a set of $p + n$ linear equations in $p + n$ variables, and is sometimes called the augmented system associated with (C.7). If $A$ is very sparse and $p$ is small, then solving the augmented system using a sparse solver can be much faster than solving the system (C.7) using a dense solver.</p>
+        <p>The augmented system approach is closely related to the method that we described above. Suppose</p>
+        <p>$$ A = P_1 L U P_2 $$</p>
+        <p>is a sparse LU factorization of $A$, and</p>
+        <p>$$ I + CA^{-1}B = P_3 \tilde{L} \tilde{U} $$</p>
+        <p>is a dense LU factorization of $I + CA^{-1}B$. Then</p>
+        <p>$$ \begin{bmatrix} A & B \\ C & -I \end{bmatrix} = \begin{bmatrix} P_1 & 0 \\ 0 & P_3 \end{bmatrix} \begin{bmatrix} L & 0 \\ P_3^T C P_2^T U^{-1} & -\tilde{L} \end{bmatrix} \begin{bmatrix} U & L^{-1} P_1^T B \\ 0 & \tilde{U} \end{bmatrix} \begin{bmatrix} P_2 & 0 \\ 0 & I \end{bmatrix}, \tag{C.10} $$</p>
+        <p>and this factorization can be used to solve the augmented system. It can be verified that this is equivalent to the method based on the matrix inversion lemma that we described above.</p>
+        <p>Of course, if we solve the augmented system using a sparse LU solver, we have no control over the permutations that are selected. The solver might choose a factorization different from (C.10), and more expensive to compute. In spite of this, the augmented system approach remains an attractive option. It is easier to implement than the method based on the matrix inversion lemma, and it is numerically more stable.</p></div>
+      <div class="zh"><p><em>注 C.3</em> <strong>增广系统法。</strong> 利用稀疏加低秩结构的另一种做法是直接用稀疏 LU 求解器解 (C.8)。系统 (C.8) 是 $p + n$ 个变量、$p + n$ 个方程的方程组，有时称为 (C.7) 相应的<strong>增广系统</strong>（augmented system）。若 $A$ 非常稀疏且 $p$ 小，则用稀疏求解器解增广系统可比用稠密求解器解 (C.7) 快得多。</p>
+        <p>增广系统法与上述方法密切相关。设</p>
+        <p>$$ A = P_1 L U P_2 $$</p>
+        <p>为 $A$ 的稀疏 LU 分解，</p>
+        <p>$$ I + CA^{-1}B = P_3 \tilde{L} \tilde{U} $$</p>
+        <p>为 $I + CA^{-1}B$ 的稠密 LU 分解。则</p>
+        <p>$$ \begin{bmatrix} A & B \\ C & -I \end{bmatrix} = \begin{bmatrix} P_1 & 0 \\ 0 & P_3 \end{bmatrix} \begin{bmatrix} L & 0 \\ P_3^T C P_2^T U^{-1} & -\tilde{L} \end{bmatrix} \begin{bmatrix} U & L^{-1} P_1^T B \\ 0 & \tilde{U} \end{bmatrix} \begin{bmatrix} P_2 & 0 \\ 0 & I \end{bmatrix}, \tag{C.10} $$</p>
+        <p>此分解可用于求解增广系统。可验证这等价于上述基于矩阵求逆引理的方法。</p>
+        <p>当然，若用稀疏 LU 求解器解增广系统，无法控制所选置换。求解器可能选取与 (C.10) 不同且计算更贵的分解。尽管如此，增广系统法仍是有吸引力的选择。它比基于矩阵求逆引理的方法更易实现，且数值上更稳定。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Low rank updates</h3></div>
+      <div class="zh"><h3>低秩更新</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Suppose $A \in \mathbb{R}^{n\times n}$ is nonsingular, $u, v \in \mathbb{R}^n$ with $1 + v^T A^{-1} u \ne 0$, and we want to solve two sets of linear equations</p>
+        <p>$$ Ax = b, \qquad (A + uv^T) \tilde{x} = b. $$</p>
+        <p>The solution $\tilde{x}$ of the second system is called a rank-one update of $x$. The matrix inversion lemma allows us to calculate the rank-one update $\tilde{x}$ very cheaply, once we have computed $x$. We have</p>
+        <p>$$ \tilde{x} = (A + uv^T)^{-1} b = \left(A^{-1} - \frac{1}{1 + v^T A^{-1} u} A^{-1} u v^T A^{-1}\right) b = x - \frac{v^T x}{1 + v^T A^{-1} u} A^{-1} u. $$</p>
+        <p>We can therefore solve both systems by factoring $A$, computing $x = A^{-1}b$ and $w = A^{-1}u$, and then evaluating</p>
+        <p>$$ \tilde{x} = x - \frac{v^T x}{1 + v^T w} w. $$</p>
+        <p>The overall cost is $f + 2s$, as opposed to $2(f + s)$ if we were to solve for $\tilde{x}$ from scratch.</p></div>
+      <div class="zh"><p>设 $A \in \mathbb{R}^{n\times n}$ 非奇异，$u, v \in \mathbb{R}^n$ 且 $1 + v^T A^{-1} u \ne 0$，需求解两组线性方程组</p>
+        <p>$$ Ax = b, \qquad (A + uv^T) \tilde{x} = b. $$</p>
+        <p>第二组的解 $\tilde{x}$ 称为 $x$ 的<strong>秩一更新</strong>（rank-one update）。矩阵求逆引理使我们在已算 $x$ 后能以很低代价计算秩一更新 $\tilde{x}$。有</p>
+        <p>$$ \tilde{x} = (A + uv^T)^{-1} b = \left(A^{-1} - \frac{1}{1 + v^T A^{-1} u} A^{-1} u v^T A^{-1}\right) b = x - \frac{v^T x}{1 + v^T A^{-1} u} A^{-1} u. $$</p>
+        <p>因此可分解 $A$，算 $x = A^{-1}b$ 与 $w = A^{-1}u$，再算</p>
+        <p>$$ \tilde{x} = x - \frac{v^T x}{1 + v^T w} w. $$</p>
+        <p>总代价为 $f + 2s$，而从头算 $\tilde{x}$ 需 $2(f + s)$。</p></div>
+    </div>
+
+    <!-- ============== C.5 ============== -->
+    <div class="pair head">
+      <div class="en"><h2>C.5 Solving underdetermined linear equations</h2></div>
+      <div class="zh"><h2>C.5 求解欠定线性方程组</h2></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>To conclude this appendix, we mention a few important facts about underdetermined linear equations</p>
+        <p>$$ Ax = b, \tag{C.11} $$</p>
+        <p>where $A \in \mathbb{R}^{p\times n}$ with $p < n$. We assume that $\mathop{\text{rank}} A = p$, so there is at least one solution for all $b$.</p>
+        <p>In many applications it is sufficient to find just one particular solution $\hat{x}$. In other situations we might need a complete parametrization of all solutions as</p>
+        <p>$$ \{x \mid Ax = b\} = \{Fz + \hat{x} \mid z \in \mathbb{R}^{n-p}\} \tag{C.12} $$</p>
+        <p>where $F$ is a matrix whose columns form a basis for the nullspace of $A$.</p></div>
+      <div class="zh"><p>作为本附录的结尾，提一下关于<strong>欠定</strong>线性方程组</p>
+        <p>$$ Ax = b, \tag{C.11} $$</p>
+        <p>（其中 $A \in \mathbb{R}^{p\times n}$，$p < n$）的一些重要事实。设 $\mathop{\text{rank}} A = p$，故对所有 $b$ 至少有一解。</p>
+        <p>许多应用只需找到一个特解 $\hat{x}$。另一些情形则需要全部解的完全参数化：</p>
+        <p>$$ \{x \mid Ax = b\} = \{Fz + \hat{x} \mid z \in \mathbb{R}^{n-p}\} \tag{C.12} $$</p>
+        <p>其中 $F$ 为列构成 $A$ 的零空间的一组基的矩阵。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Inverting a nonsingular submatrix of A</h3></div>
+      <div class="zh"><h3>求 A 的非奇异子矩阵的逆</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The solution of the underdetermined system is straightforward if a $p\times p$ nonsingular submatrix of $A$ is known. We start by assuming that the first $p$ columns of $A$ are independent. Then we can write the equation $Ax = b$ as</p>
+        <p>$$ Ax = \begin{bmatrix} A_1 & A_2 \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} = A_1 x_1 + A_2 x_2 = b, $$</p>
+        <p>where $A_1 \in \mathbb{R}^{p\times p}$ is nonsingular. We can express $x_1$ as</p>
+        <p>$$ x_1 = A_1^{-1}(b - A_2 x_2) = A_1^{-1} b - A_1^{-1} A_2 x_2. $$</p>
+        <p>This expression allows us to easily calculate a solution: we simply take $\hat{x}_2 = 0$, $\hat{x}_1 = A_1^{-1} b$. The cost is equal to the cost of solving one square set of $p$ linear equations $A_1 \hat{x}_1 = b$.</p>
+        <p>We can also parametrize all solutions of $Ax = b$, using $x_2 \in \mathbb{R}^{n-p}$ as a free parameter. The general solution of $Ax = b$ can be expressed as</p>
+        <p>$$ x = \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} = \begin{bmatrix} -A_1^{-1} A_2 \\ I \end{bmatrix} x_2 + \begin{bmatrix} A_1^{-1} b \\ 0 \end{bmatrix}. $$</p>
+        <p>This gives a parametrization of the form (C.12) with</p>
+        <p>$$ F = \begin{bmatrix} -A_1^{-1} A_2 \\ I \end{bmatrix}, \qquad \hat{x} = \begin{bmatrix} A_1^{-1} b \\ 0 \end{bmatrix}. $$</p>
+        <p>To summarize, assume that the cost of factoring $A_1$ is $f$ and the cost of solving one system of the form $A_1 x = d$ is $s$. Then the cost of finding one solution of (C.11) is $f + s$. The cost of parametrizing all solutions (i.e., calculating $F$ and $\hat{x}$) is $f + s(n - p + 1)$.</p>
+        <p>Now we consider the general case, when the first $p$ columns of $A$ need not be independent. Since $\mathop{\text{rank}} A = p$, we can select a set of $p$ columns of $A$ that is independent, permute them to the front, and then apply the method described above. In other words, we find a permutation matrix $P$ such that the first $p$ columns of $\tilde{A} = AP$ are independent, i.e.,</p>
+        <p>$$ \tilde{A} = AP = \begin{bmatrix} A_1 & A_2 \end{bmatrix}, $$</p>
+        <p>where $A_1$ is invertible. The general solution of $\tilde{A}\tilde{x} = b$, where $\tilde{x} = P^T x$, is then given by</p>
+        <p>$$ \tilde{x} = \begin{bmatrix} -A_1^{-1} A_2 \\ I \end{bmatrix} \tilde{x}_2 + \begin{bmatrix} A_1^{-1} b \\ 0 \end{bmatrix}. $$</p>
+        <p>The general solution of $Ax = b$ is then given by</p>
+        <p>$$ x = P\tilde{x} = P\begin{bmatrix} -A_1^{-1} A_2 \\ I \end{bmatrix} z + P\begin{bmatrix} A_1^{-1} b \\ 0 \end{bmatrix}, $$</p>
+        <p>where $z \in \mathbb{R}^{n-p}$ is a free parameter. This idea is useful when it is easy to identify a nonsingular or easily inverted submatrix of $A$, for example, a diagonal matrix with nonzero diagonal elements.</p></div>
+      <div class="zh"><p>若已知 $A$ 的一个 $p\times p$ 非奇异子矩阵，则欠定系统的求解很简单。先假设 $A$ 的前 $p$ 列线性无关。于是 $Ax = b$ 可写成</p>
+        <p>$$ Ax = \begin{bmatrix} A_1 & A_2 \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} = A_1 x_1 + A_2 x_2 = b, $$</p>
+        <p>其中 $A_1 \in \mathbb{R}^{p\times p}$ 非奇异。可把 $x_1$ 表为</p>
+        <p>$$ x_1 = A_1^{-1}(b - A_2 x_2) = A_1^{-1} b - A_1^{-1} A_2 x_2. $$</p>
+        <p>此式便于求一个解：取 $\hat{x}_2 = 0$，$\hat{x}_1 = A_1^{-1} b$ 即可。代价等于求解一组 $p$ 个方程的方系统 $A_1 \hat{x}_1 = b$ 的代价。</p>
+        <p>也可用 $x_2 \in \mathbb{R}^{n-p}$ 作自由参数参数化 $Ax = b$ 的所有解。$Ax = b$ 的通解可表为</p>
+        <p>$$ x = \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} = \begin{bmatrix} -A_1^{-1} A_2 \\ I \end{bmatrix} x_2 + \begin{bmatrix} A_1^{-1} b \\ 0 \end{bmatrix}. $$</p>
+        <p>这给出形如 (C.12) 的参数化，其中</p>
+        <p>$$ F = \begin{bmatrix} -A_1^{-1} A_2 \\ I \end{bmatrix}, \qquad \hat{x} = \begin{bmatrix} A_1^{-1} b \\ 0 \end{bmatrix}. $$</p>
+        <p>设分解 $A_1$ 的代价为 $f$，求解一个形如 $A_1 x = d$ 的系统的代价为 $s$。则求 (C.11) 的一个解的代价为 $f + s$。参数化所有解（即算 $F$ 和 $\hat{x}$）的代价为 $f + s(n - p + 1)$。</p>
+        <p>现考虑一般情形，即 $A$ 的前 $p$ 列未必线性无关。由 $\mathop{\text{rank}} A = p$，可选 $A$ 的 $p$ 个线性无关的列，置换到前面，再用上述方法。即找置换矩阵 $P$ 使 $\tilde{A} = AP$ 的前 $p$ 列线性无关：</p>
+        <p>$$ \tilde{A} = AP = \begin{bmatrix} A_1 & A_2 \end{bmatrix}, $$</p>
+        <p>其中 $A_1$ 可逆。$\tilde{A}\tilde{x} = b$（$\tilde{x} = P^T x$）的通解为</p>
+        <p>$$ \tilde{x} = \begin{bmatrix} -A_1^{-1} A_2 \\ I \end{bmatrix} \tilde{x}_2 + \begin{bmatrix} A_1^{-1} b \\ 0 \end{bmatrix}. $$</p>
+        <p>故 $Ax = b$ 的通解为</p>
+        <p>$$ x = P\tilde{x} = P\begin{bmatrix} -A_1^{-1} A_2 \\ I \end{bmatrix} z + P\begin{bmatrix} A_1^{-1} b \\ 0 \end{bmatrix}, $$</p>
+        <p>其中 $z \in \mathbb{R}^{n-p}$ 为自由参数。当易识别 $A$ 的非奇异或易求逆子矩阵（例如对角元非零的对角矩阵）时，此思想有用。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>The QR factorization</h3></div>
+      <div class="zh"><h3>QR 分解</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>If $C \in \mathbb{R}^{n\times p}$ with $p \le n$ and $\mathop{\text{rank}} C = p$, then it can be factored as</p>
+        <p>$$ C = \begin{bmatrix} Q_1 \\ Q_2 \end{bmatrix} \begin{bmatrix} R \\ 0 \end{bmatrix}, $$</p>
+        <p>where $Q_1 \in \mathbb{R}^{n\times p}$ and $Q_2 \in \mathbb{R}^{n\times(n-p)}$ satisfy</p>
+        <p>$$ Q_1^T Q_1 = I, \qquad Q_2^T Q_2 = I, \qquad Q_1^T Q_2 = 0, $$</p>
+        <p>and $R \in \mathbb{R}^{p\times p}$ is upper triangular with nonzero diagonal elements. This is called the QR factorization of $C$. The QR factorization can be calculated in $2p^2(n - p/3)$ flops. (The matrix $Q$ is stored in a factored form that makes it possible to efficiently compute matrix-vector products $Qx$ and $Q^T x$.)</p>
+        <p>The QR factorization can be used to solve the underdetermined set of linear equations (C.11). Suppose</p>
+        <p>$$ A^T = \begin{bmatrix} Q_1 \\ Q_2 \end{bmatrix} \begin{bmatrix} R \\ 0 \end{bmatrix} $$</p>
+        <p>is the QR factorization of $A^T$. Substituting in the equations it is clear that $\hat{x} = Q_1 R^{-T} b$ satisfies the equations:</p>
+        <p>$$ A\hat{x} = R^T Q_1^T Q_1 R^{-T} b = b. $$</p>
+        <p>Moreover, the columns of $Q_2$ form a basis for the nullspace of $A$, so the complete solution set can be parametrized as</p>
+        <p>$$ \{x = \hat{x} + Q_2 z \mid z \in \mathbb{R}^{n-p}\}. $$</p>
+        <p>The QR factorization method is the most common method for solving underdetermined equations. One drawback is that it is difficult to exploit sparsity. The factor $Q$ is usually dense, even when $C$ is very sparse.</p></div>
+      <div class="zh"><p>若 $C \in \mathbb{R}^{n\times p}$，$p \le n$ 且 $\mathop{\text{rank}} C = p$，则可分解为</p>
+        <p>$$ C = \begin{bmatrix} Q_1 \\ Q_2 \end{bmatrix} \begin{bmatrix} R \\ 0 \end{bmatrix}, $$</p>
+        <p>其中 $Q_1 \in \mathbb{R}^{n\times p}$、$Q_2 \in \mathbb{R}^{n\times(n-p)}$ 满足</p>
+        <p>$$ Q_1^T Q_1 = I, \qquad Q_2^T Q_2 = I, \qquad Q_1^T Q_2 = 0, $$</p>
+        <p>$R \in \mathbb{R}^{p\times p}$ 为对角元非零的上三角矩阵。此称为 $C$ 的 <strong>QR 分解</strong>。QR 分解可在 $2p^2(n - p/3)$ flops 内完成。（$Q$ 以分解形式存储，使得矩阵-向量乘积 $Qx$ 与 $Q^T x$ 可高效计算。）</p>
+        <p>QR 分解可用于求解欠定线性方程组 (C.11)。设</p>
+        <p>$$ A^T = \begin{bmatrix} Q_1 \\ Q_2 \end{bmatrix} \begin{bmatrix} R \\ 0 \end{bmatrix} $$</p>
+        <p>为 $A^T$ 的 QR 分解。代入方程即知 $\hat{x} = Q_1 R^{-T} b$ 满足方程：</p>
+        <p>$$ A\hat{x} = R^T Q_1^T Q_1 R^{-T} b = b. $$</p>
+        <p>且 $Q_2$ 的列构成 $A$ 的零空间的基，故完全解集可参数化为</p>
+        <p>$$ \{x = \hat{x} + Q_2 z \mid z \in \mathbb{R}^{n-p}\}. $$</p>
+        <p>QR 分解法是求解欠定方程组最常用的方法。一个缺点是难以利用稀疏性。即使 $C$ 非常稀疏，因子 $Q$ 通常也稠密。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>LU factorization of a rectangular matrix</h3></div>
+      <div class="zh"><h3>长方矩阵的 LU 分解</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>If $C \in \mathbb{R}^{n\times p}$ with $p \le n$ and $\mathop{\text{rank}} C = p$, then it can be factored as</p>
+        <p>$$ C = PLU $$</p>
+        <p>where $P \in \mathbb{R}^{n\times n}$ is a permutation matrix, $L \in \mathbb{R}^{n\times p}$ is unit lower triangular (i.e., $l_{ij} = 0$ for $i < j$ and $l_{ii} = 1$), and $U \in \mathbb{R}^{p\times p}$ is nonsingular and upper triangular. The cost is $(2/3)p^3 + p^2(n - p)$ flops if no structure in $C$ is exploited.</p>
+        <p>If the matrix $C$ is sparse, the LU factorization usually includes row and column permutations, i.e., we factor $C$ as</p>
+        <p>$$ C = P_1 L U P_2 $$</p>
+        <p>where $P_1, P_2 \in \mathbb{R}^{p\times p}$ are permutation matrices. The LU factorization of a sparse rectangular matrix can be calculated very efficiently, at a cost that is much lower than for dense matrices.</p>
+        <p>The LU factorization can be used to solve underdetermined sets of linear equations. Suppose $A^T = PLU$ is the LU factorization of the matrix $A^T$ in (C.11), and we partition $L$ as</p>
+        <p>$$ L = \begin{bmatrix} L_1 \\ L_2 \end{bmatrix}, $$</p>
+        <p>where $L_1 \in \mathbb{R}^{p\times p}$ and $L_2 \in \mathbb{R}^{(n-p)\times p}$. It is easily verified that the solution set can be parametrized as (C.12) with</p>
+        <p>$$ \hat{x} = P\begin{bmatrix} L_1^{-T} U^{-T} b \\ 0 \end{bmatrix}, \qquad F = P\begin{bmatrix} -L_1^{-T} L_2^T \\ I \end{bmatrix}. $$</p></div>
+      <div class="zh"><p>若 $C \in \mathbb{R}^{n\times p}$，$p \le n$ 且 $\mathop{\text{rank}} C = p$，则可分解为</p>
+        <p>$$ C = PLU $$</p>
+        <p>其中 $P \in \mathbb{R}^{n\times n}$ 为置换矩阵，$L \in \mathbb{R}^{n\times p}$ 为单位下三角（即 $i < j$ 时 $l_{ij} = 0$，$l_{ii} = 1$），$U \in \mathbb{R}^{p\times p}$ 非奇异且上三角。若不利用 $C$ 的任何结构，代价为 $(2/3)p^3 + p^2(n - p)$ flops。</p>
+        <p>若 $C$ 稀疏，LU 分解通常含行、列置换，即把 $C$ 分解为</p>
+        <p>$$ C = P_1 L U P_2 $$</p>
+        <p>其中 $P_1, P_2 \in \mathbb{R}^{p\times p}$ 为置换矩阵。稀疏长方矩阵的 LU 分解可非常高效地完成，代价远低于稠密矩阵。</p>
+        <p>LU 分解可用于求解欠定线性方程组。设 $A^T = PLU$ 为 (C.11) 中矩阵 $A^T$ 的 LU 分解，把 $L$ 分块为</p>
+        <p>$$ L = \begin{bmatrix} L_1 \\ L_2 \end{bmatrix}, $$</p>
+        <p>其中 $L_1 \in \mathbb{R}^{p\times p}$，$L_2 \in \mathbb{R}^{(n-p)\times p}$。易验解集可参数化为 (C.12)，其中</p>
+        <p>$$ \hat{x} = P\begin{bmatrix} L_1^{-T} U^{-T} b \\ 0 \end{bmatrix}, \qquad F = P\begin{bmatrix} -L_1^{-T} L_2^T \\ I \end{bmatrix}. $$</p></div>
+    </div>
+
+    <!-- ============== Bibliography ============== -->
+    <div class="pair head">
+      <div class="en"><h2>Bibliography</h2></div>
+      <div class="zh"><h2>参考文献</h2></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Standard references for dense numerical linear algebra are Golub and Van Loan [GL89], Demmel [Dem97], Trefethen and Bau [TB97], and Higham [Hig96]. The sparse Cholesky factorization is covered in George and Liu [GL81]. Duff, Erisman, and Reid [DER86] and Duff [Duf93] discuss the sparse LU and LDL<sup>T</sup> factorizations. The books by Gill, Murray, and Wright [GMW81, §2.2], Wright [Wri97, chapter 11], and Nocedal and Wright [NW99, §A.2] include introductions to numerical linear algebra that focus on problems arising in numerical optimization.</p></div>
+      <div class="zh"><p>稠密数值线性代数的标准参考书有 Golub 与 Van Loan [GL89]、Demmel [Dem97]、Trefethen 与 Bau [TB97] 以及 Higham [Hig96]。稀疏 Cholesky 分解见 George 与 Liu [GL81]。Duff、Erisman 与 Reid [DER86] 以及 Duff [Duf93] 讨论稀疏 LU 与 LDL<sup>T</sup> 分解。Gill、Murray 与 Wright [GMW81, §2.2]、Wright [Wri97, 第 11 章] 以及 Nocedal 与 Wright [NW99, §A.2] 的著作包含侧重于数值优化中问题的数值线性代数入门。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>High-quality implementations of common dense linear algebra algorithms are included in the LAPACK package [ABB+99]. LAPACK is built upon the Basic Linear Algebra Subprograms (BLAS), a library of routines for basic vector and matrix operations that can be easily customized to take advantage of specific computer architectures. Several codes for solving sparse linear equations are also available, including SPOOLES [APWW99], SuperLU [DGL03], UMFPACK [Dav03], and WSMP [Gup00], to mention only a few.</p></div>
+      <div class="zh"><p>常用稠密线性代数算法的高质量实现包含在 LAPACK 软件包 [ABB+99] 中。LAPACK 构建于基本线性代数子程序（BLAS）之上，后者是用于基本向量和矩阵运算的例程库，可方便地定制以利用特定计算机体系结构。求解稀疏线性方程组的若干代码也可用，包括 SPOOLES [APWW99]、SuperLU [DGL03]、UMFPACK [Dav03] 和 WSMP [Gup00]，仅举几例。</p></div>
+    </div>
+
+    <div style="margin-top:40px; padding:16px; text-align:center; color:var(--muted); font-size:14px; border-top:1px solid var(--rule)">
+      — 附录 C 完（C.1–C.5，含公式 C.1–C.12、算法 C.1–C.4 及例 C.1–C.4）· 上一页：<a href="appendix-b.html" style="color:var(--accent)">附录 B 涉及两个二次函数的问题</a> · 下一页：<a href="index.html" style="color:var(--accent)">返回目录</a> —
+    </div>
+  </main>
+
+  <script src="assets/mathjax-config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+</body>
+</html>

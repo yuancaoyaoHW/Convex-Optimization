@@ -1,0 +1,1212 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Appendix A Mathematical Background · 数学背景 — Convex Optimization 中英对照</title>
+  <link rel="stylesheet" href="assets/bilingual.css">
+  <style>
+    /* figure block: full-width, spanning both columns */
+    .pair.fig-block {
+      grid-template-columns: 1fr;
+      border-bottom: 1px solid var(--rule-soft);
+    }
+    .pair.fig-block > .figure-wrap {
+      grid-column: 1 / -1;
+      padding: 16px 22px;
+      text-align: center;
+    }
+    .pair.fig-block .figure-wrap img {
+      max-width: 100%;
+      height: auto;
+      border: 1px solid var(--rule-soft);
+      border-radius: 4px;
+    }
+    .pair.fig-block .fig-caption {
+      max-width: 760px;
+      margin: 10px auto 4px;
+      font-size: 14px;
+      color: var(--muted);
+      text-align: left;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+    .pair.fig-block .fig-caption .cap-en {
+      color: var(--en-ink);
+      border-right: 1px solid var(--rule);
+      padding-right: 16px;
+    }
+    .pair.fig-block .fig-caption .cap-zh {
+      color: var(--ink);
+      padding-left: 16px;
+    }
+    .pair.fig-block .fig-caption .figref { font-weight: 700; color: var(--accent); }
+    @media (max-width: 760px) {
+      .pair.fig-block .fig-caption { grid-template-columns: 1fr; }
+      .pair.fig-block .fig-caption .cap-en { border-right: none; border-bottom: 1px dashed var(--rule); padding-right: 0; padding-bottom: 8px; }
+      .pair.fig-block .fig-caption .cap-zh { padding-left: 0; padding-top: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="crumbs">
+      <a href="index.html">目录</a><span class="sep">/</span>附录 A 数学背景
+    </div>
+    <div class="nav">
+      <a href="ch11-interior-point.html">‹ 上一页</a>
+      <a href="appendix-b.html">下一页 ›</a>
+    </div>
+  </div>
+
+  <main class="doc">
+    <div class="doc-header">
+      <p class="kicker">Appendix A</p>
+      <h1>数学背景 / Mathematical Background</h1>
+      <p class="meta">原书 pp. 633–652 · 翻译对照（英 / 中）</p>
+    </div>
+
+    <!-- ============== Appendix A intro ============== -->
+    <div class="pair">
+      <div class="en"><p>In this appendix we give a brief review of some basic concepts from analysis and linear algebra. The treatment is by no means complete, and is meant mostly to set out our notation.</p></div>
+      <div class="zh"><p>本附录对分析和线性代数的一些基本概念作简要回顾。这里的讲述绝非完备，主要目的在于交代本书所用的记号。</p></div>
+    </div>
+
+    <!-- ============== A.1 Norms ============== -->
+    <div class="pair head">
+      <div class="en"><h2>A.1 Norms</h2></div>
+      <div class="zh"><h2>A.1 范数</h2></div>
+    </div>
+
+    <!-- ============== A.1.1 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>A.1.1 Inner product, Euclidean norm, and angle</h3></div>
+      <div class="zh"><h3>A.1.1 内积、欧氏范数与夹角</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The standard inner product on $\mathbb{R}^n$, the set of real $n$-vectors, is given by</p>
+        <p>$$ \langle x, y\rangle = x^T y = \sum_{i=1}^n x_i y_i, $$</p>
+        <p>for $x, y \in \mathbb{R}^n$. In this book we use the notation $x^T y$, instead of $\langle x, y\rangle$.</p></div>
+      <div class="zh"><p>实 $n$ 维向量集合 $\mathbb{R}^n$ 上的标准<strong>内积</strong>（inner product）为</p>
+        <p>$$ \langle x, y\rangle = x^T y = \sum_{i=1}^n x_i y_i, $$</p>
+        <p>其中 $x, y \in \mathbb{R}^n$。本书使用记号 $x^T y$ 而非 $\langle x, y\rangle$。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The Euclidean norm, or $\ell_2$-norm, of a vector $x \in \mathbb{R}^n$ is defined as</p>
+        <p>$$ \|x\|_2 = (x^T x)^{1/2} = (x_1^2 + \cdots + x_n^2)^{1/2}. \tag{A.1} $$</p>
+        <p>The Cauchy–Schwarz inequality states that $|x^T y| \le \|x\|_2\|y\|_2$ for any $x, y \in \mathbb{R}^n$.</p></div>
+      <div class="zh"><p>向量 $x \in \mathbb{R}^n$ 的<strong>欧氏范数</strong>（Euclidean norm）或 $\ell_2$ 范数定义为</p>
+        <p>$$ \|x\|_2 = (x^T x)^{1/2} = (x_1^2 + \cdots + x_n^2)^{1/2}. \tag{A.1} $$</p>
+        <p>Cauchy–Schwarz 不等式指出，对任意 $x, y \in \mathbb{R}^n$，$|x^T y| \le \|x\|_2\|y\|_2$。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The (unsigned) angle between nonzero vectors $x, y \in \mathbb{R}^n$ is defined as</p>
+        <p>$$ \angle(x, y) = \cos^{-1}\left( \frac{x^T y}{\|x\|_2\|y\|_2} \right), $$</p>
+        <p>where we take $\cos^{-1}(u) \in [0, \pi]$. We say $x$ and $y$ are orthogonal if $x^T y = 0$.</p></div>
+      <div class="zh"><p>非零向量 $x, y \in \mathbb{R}^n$ 之间的（无符号）夹角定义为</p>
+        <p>$$ \angle(x, y) = \cos^{-1}\left( \frac{x^T y}{\|x\|_2\|y\|_2} \right), $$</p>
+        <p>其中取 $\cos^{-1}(u) \in [0, \pi]$。若 $x^T y = 0$，则称 $x$ 与 $y$ <strong>正交</strong>。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The standard inner product on $\mathbb{R}^{m\times n}$, the set of $m \times n$ real matrices, is given by</p>
+        <p>$$ \langle X, Y\rangle = \mathbf{tr}(X^T Y) = \sum_{i=1}^m \sum_{j=1}^n X_{ij}Y_{ij}, $$</p>
+        <p>for $X, Y \in \mathbb{R}^{m\times n}$. (Here $\mathbf{tr}$ denotes trace of a matrix, i.e., the sum of its diagonal elements.) We use the notation $\mathbf{tr}(X^T Y)$ instead of $\langle X, Y\rangle$. Note that the inner product of two matrices is the inner product of the associated vectors, in $\mathbb{R}^{mn}$, obtained by listing the coefficients of the matrices in some order, such as row major.</p></div>
+      <div class="zh"><p>$m \times n$ 实矩阵集合 $\mathbb{R}^{m\times n}$ 上的标准<strong>内积</strong>为</p>
+        <p>$$ \langle X, Y\rangle = \mathbf{tr}(X^T Y) = \sum_{i=1}^m \sum_{j=1}^n X_{ij}Y_{ij}, $$</p>
+        <p>其中 $X, Y \in \mathbb{R}^{m\times n}$。（此处 $\mathbf{tr}$ 表示矩阵的迹，即其所有对角元之和。）我们使用记号 $\mathbf{tr}(X^T Y)$ 而非 $\langle X, Y\rangle$。注意两个矩阵的内积等于将其系数按某种顺序（例如行优先）排列后所得 $\mathbb{R}^{mn}$ 中相应向量的内积。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The Frobenius norm of a matrix $X \in \mathbb{R}^{m\times n}$ is given by</p>
+        <p>$$ \|X\|_F = \left(\mathbf{tr}(X^T X)\right)^{1/2} = \left( \sum_{i=1}^m \sum_{j=1}^n X_{ij}^2 \right)^{1/2}. \tag{A.2} $$</p>
+        <p>The Frobenius norm is the Euclidean norm of the vector obtained by listing the coefficients of the matrix. (The $\ell_2$-norm of a matrix is a different norm; see §A.1.5.)</p></div>
+      <div class="zh"><p>矩阵 $X \in \mathbb{R}^{m\times n}$ 的 <strong>Frobenius 范数</strong>为</p>
+        <p>$$ \|X\|_F = \left(\mathbf{tr}(X^T X)\right)^{1/2} = \left( \sum_{i=1}^m \sum_{j=1}^n X_{ij}^2 \right)^{1/2}. \tag{A.2} $$</p>
+        <p>Frobenius 范数就是把矩阵系数排列所得向量的欧氏范数。（矩阵的 $\ell_2$ 范数是另一种范数，见 §A.1.5。）</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The standard inner product on $\mathbf{S}^n$, the set of symmetric $n \times n$ matrices, is given by</p>
+        <p>$$ \langle X, Y\rangle = \mathbf{tr}(XY) = \sum_{i=1}^n \sum_{j=1}^n X_{ij}Y_{ij} = \sum_{i=1}^n X_{ii}Y_{ii} + 2 \sum_{i < j} X_{ij}Y_{ij}. $$</p></div>
+      <div class="zh"><p>对称 $n \times n$ 矩阵集合 $\mathbf{S}^n$ 上的标准<strong>内积</strong>为</p>
+        <p>$$ \langle X, Y\rangle = \mathbf{tr}(XY) = \sum_{i=1}^n \sum_{j=1}^n X_{ij}Y_{ij} = \sum_{i=1}^n X_{ii}Y_{ii} + 2 \sum_{i < j} X_{ij}Y_{ij}. $$</p></div>
+    </div>
+
+    <!-- ============== A.1.2 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>A.1.2 Norms, distance, and unit ball</h3></div>
+      <div class="zh"><h3>A.1.2 范数、距离与单位球</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>A function $f : \mathbb{R}^n \to \mathbb{R}$ with $\mathbf{dom}\, f = \mathbb{R}^n$ is called a norm if</p>
+        <ul>
+          <li>$f$ is nonnegative: $f(x) \ge 0$ for all $x \in \mathbb{R}^n$</li>
+          <li>$f$ is definite: $f(x) = 0$ only if $x = 0$</li>
+          <li>$f$ is homogeneous: $f(tx) = |t|f(x)$, for all $x \in \mathbb{R}^n$ and $t \in \mathbb{R}$</li>
+          <li>$f$ satisfies the triangle inequality: $f(x + y) \le f(x) + f(y)$, for all $x, y \in \mathbb{R}^n$</li>
+        </ul>
+        <p>We use the notation $f(x) = \|x\|$, which is meant to suggest that a norm is a generalization of the absolute value on $\mathbb{R}$. When we specify a particular norm, we use the notation $\|x\|_{\mathrm{symb}}$, where the subscript is a mnemonic to indicate which norm is meant.</p></div>
+      <div class="zh"><p>若函数 $f : \mathbb{R}^n \to \mathbb{R}$（$\mathbf{dom}\, f = \mathbb{R}^n$）满足下列条件，则称之为<strong>范数</strong>（norm）：</p>
+        <ul>
+          <li>$f$ 非负：对所有 $x \in \mathbb{R}^n$ 有 $f(x) \ge 0$；</li>
+          <li>$f$ 定正：仅当 $x = 0$ 时才有 $f(x) = 0$；</li>
+          <li>$f$ 齐次：对所有 $x \in \mathbb{R}^n$ 与 $t \in \mathbb{R}$ 有 $f(tx) = |t|f(x)$；</li>
+          <li>$f$ 满足三角不等式：对所有 $x, y \in \mathbb{R}^n$ 有 $f(x + y) \le f(x) + f(y)$。</li>
+        </ul>
+        <p>我们使用记号 $f(x) = \|x\|$，意在表明范数是 $\mathbb{R}$ 上绝对值的一种推广。指定某一具体范数时，用记号 $\|x\|_{\mathrm{symb}}$，其下标用作指明所采用范数的助记符。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>A norm is a measure of the length of a vector $x$; we can measure the distance between two vectors $x$ and $y$ as the length of their difference, i.e.,</p>
+        <p>$$ \mathbf{dist}(x, y) = \|x - y\|. $$</p>
+        <p>We refer to $\mathbf{dist}(x, y)$ as the distance between $x$ and $y$, in the norm $\|\cdot\|$.</p></div>
+      <div class="zh"><p>范数衡量向量 $x$ 的长度；可把两向量 $x$ 与 $y$ 之差的长度作为它们之间的<strong>距离</strong>，即</p>
+        <p>$$ \mathbf{dist}(x, y) = \|x - y\|. $$</p>
+        <p>称 $\mathbf{dist}(x, y)$ 为在范数 $\|\cdot\|$ 下 $x$ 与 $y$ 之间的距离。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The set of all vectors with norm less than or equal to one,</p>
+        <p>$$ \mathcal{B} = \{x \in \mathbb{R}^n \mid \|x\| \le 1\}, $$</p>
+        <p>is called the unit ball of the norm $\|\cdot\|$. The unit ball satisfies the following properties:</p>
+        <ul>
+          <li>$\mathcal{B}$ is symmetric about the origin, i.e., $x \in \mathcal{B}$ if and only if $-x \in \mathcal{B}$</li>
+          <li>$\mathcal{B}$ is convex</li>
+          <li>$\mathcal{B}$ is closed, bounded, and has nonempty interior</li>
+        </ul>
+        <p>Conversely, if $C \subseteq \mathbb{R}^n$ is any set satisfying these three conditions, then it is the unit ball of a norm, which is given by</p>
+        <p>$$ \|x\| = \left(\sup\{t \ge 0 \mid tx \in C\}\right)^{-1}. $$</p></div>
+      <div class="zh"><p>范数不大于 1 的所有向量构成集合</p>
+        <p>$$ \mathcal{B} = \{x \in \mathbb{R}^n \mid \|x\| \le 1\}, $$</p>
+        <p>称为范数 $\|\cdot\|$ 的<strong>单位球</strong>。单位球满足以下性质：</p>
+        <ul>
+          <li>$\mathcal{B}$ 关于原点对称，即 $x \in \mathcal{B}$ 当且仅当 $-x \in \mathcal{B}$；</li>
+          <li>$\mathcal{B}$ 是凸的；</li>
+          <li>$\mathcal{B}$ 是闭的、有界的，且内部非空。</li>
+        </ul>
+        <p>反之，若 $C \subseteq \mathbb{R}^n$ 是满足这三个条件的任一集合，则它是某范数的单位球，该范数为</p>
+        <p>$$ \|x\| = \left(\sup\{t \ge 0 \mid tx \in C\}\right)^{-1}. $$</p></div>
+    </div>
+
+    <!-- ============== A.1.3 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>A.1.3 Examples</h3></div>
+      <div class="zh"><h3>A.1.3 实例</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The simplest example of a norm is the absolute value on $\mathbb{R}$. Another simple example is the Euclidean or $\ell_2$-norm on $\mathbb{R}^n$, defined above in (A.1). Two other frequently used norms on $\mathbb{R}^n$ are the sum-absolute-value, or $\ell_1$-norm, given by</p>
+        <p>$$ \|x\|_1 = |x_1| + \cdots + |x_n|, $$</p>
+        <p>and the Chebyshev or $\ell_\infty$-norm, given by</p>
+        <p>$$ \|x\|_\infty = \max\{|x_1|, \ldots, |x_n|\}. $$</p></div>
+      <div class="zh"><p>最简单的范数例子是 $\mathbb{R}$ 上的绝对值。另一个简单例子是前面 (A.1) 定义的 $\mathbb{R}^n$ 上的欧氏范数或 $\ell_2$ 范数。$\mathbb{R}^n$ 上另外两个常用范数是求和绝对值范数即 $\ell_1$ 范数：</p>
+        <p>$$ \|x\|_1 = |x_1| + \cdots + |x_n|, $$</p>
+        <p>以及 Chebyshev 范数即 $\ell_\infty$ 范数：</p>
+        <p>$$ \|x\|_\infty = \max\{|x_1|, \ldots, |x_n|\}. $$</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>These three norms are part of a family parametrized by a constant traditionally denoted $p$, with $p \ge 1$: the $\ell_p$-norm is defined by</p>
+        <p>$$ \|x\|_p = \left(|x_1|^p + \cdots + |x_n|^p\right)^{1/p}. $$</p>
+        <p>This yields the $\ell_1$-norm when $p = 1$ and the Euclidean norm when $p = 2$. It is easy to show that for any $x \in \mathbb{R}^n$,</p>
+        <p>$$ \lim_{p \to \infty} \|x\|_p = \max\{|x_1|, \ldots, |x_n|\}, $$</p>
+        <p>so the $\ell_\infty$-norm also fits in this family, as a limit.</p></div>
+      <div class="zh"><p>这三种范数属于一个以传统记号 $p$（$p \ge 1$）为参数的范数族：$\ell_p$ 范数定义为</p>
+        <p>$$ \|x\|_p = \left(|x_1|^p + \cdots + |x_n|^p\right)^{1/p}. $$</p>
+        <p>当 $p = 1$ 时即 $\ell_1$ 范数，当 $p = 2$ 时即欧氏范数。容易证明对任意 $x \in \mathbb{R}^n$，</p>
+        <p>$$ \lim_{p \to \infty} \|x\|_p = \max\{|x_1|, \ldots, |x_n|\}, $$</p>
+        <p>因此 $\ell_\infty$ 范数也作为极限属于该族。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Another important family of norms are the quadratic norms. For $P \in \mathbf{S}^n_{++}$, we define the $P$-quadratic norm as</p>
+        <p>$$ \|x\|_P = (x^T P x)^{1/2} = \|P^{1/2}x\|_2. $$</p>
+        <p>The unit ball of a quadratic norm is an ellipsoid (and conversely, if the unit ball of a norm is an ellipsoid, the norm is a quadratic norm).</p></div>
+      <div class="zh"><p>另一类重要的范数族是二次范数。对 $P \in \mathbf{S}^n_{++}$，定义 $P$ 二次范数为</p>
+        <p>$$ \|x\|_P = (x^T P x)^{1/2} = \|P^{1/2}x\|_2. $$</p>
+        <p>二次范数的单位球是一个椭球（反之，若某范数的单位球为椭球，则该范数为二次范数）。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Some common norms on $\mathbb{R}^{m\times n}$ are the Frobenius norm, defined above in (A.2), the sum-absolute-value norm,</p>
+        <p>$$ \|X\|_{\mathrm{sav}} = \sum_{i=1}^m \sum_{j=1}^n |X_{ij}|, $$</p>
+        <p>and the maximum-absolute-value norm,</p>
+        <p>$$ \|X\|_{\mathrm{mav}} = \max\{|X_{ij}| \mid i = 1, \ldots, m, \; j = 1, \ldots, n\}. $$</p>
+        <p>We will encounter several other important norms of matrices in §A.1.5.</p></div>
+      <div class="zh"><p>$\mathbb{R}^{m\times n}$ 上一些常见的范数有：前面 (A.2) 定义的 Frobenius 范数、求和绝对值范数</p>
+        <p>$$ \|X\|_{\mathrm{sav}} = \sum_{i=1}^m \sum_{j=1}^n |X_{ij}|, $$</p>
+        <p>以及最大绝对值范数</p>
+        <p>$$ \|X\|_{\mathrm{mav}} = \max\{|X_{ij}| \mid i = 1, \ldots, m, \; j = 1, \ldots, n\}. $$</p>
+        <p>在 §A.1.5 中我们还会遇到矩阵的另外几种重要范数。</p></div>
+    </div>
+
+    <!-- ============== A.1.4 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>A.1.4 Equivalence of norms</h3></div>
+      <div class="zh"><h3>A.1.4 范数的等价性</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Suppose that $\|\cdot\|_a$ and $\|\cdot\|_b$ are norms on $\mathbb{R}^n$. A basic result of analysis is that there exist positive constants $\alpha$ and $\beta$ such that, for all $x \in \mathbb{R}^n$,</p>
+        <p>$$ \alpha \|x\|_a \le \|x\|_b \le \beta \|x\|_a. $$</p>
+        <p>This means that the norms are equivalent, i.e., they define the same set of open subsets, the same set of convergent sequences, and so on (see §A.2). (We conclude that any norms on any finite-dimensional vector space are equivalent, but on infinite-dimensional vector spaces, the result need not hold.)</p></div>
+      <div class="zh"><p>设 $\|\cdot\|_a$ 与 $\|\cdot\|_b$ 是 $\mathbb{R}^n$ 上的范数。分析学的一个基本结论是：存在正数 $\alpha$ 与 $\beta$ 使得对所有 $x \in \mathbb{R}^n$ 有</p>
+        <p>$$ \alpha \|x\|_a \le \|x\|_b \le \beta \|x\|_a. $$</p>
+        <p>这意味着这两个范数是<strong>等价的</strong>，即它们定义同样的开子集族、同样的收敛序列等等（见 §A.2）。（由此可知任意有限维向量空间上的任意范数都是等价的，但在无限维向量空间中此结论未必成立。）</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Using convex analysis, we can give a more specific result: If $\|\cdot\|$ is any norm on $\mathbb{R}^n$, then there exists a quadratic norm $\|\cdot\|_P$ for which</p>
+        <p>$$ \|x\|_P \le \|x\| \le \sqrt{n}\,\|x\|_P $$</p>
+        <p>holds for all $x$. In other words, any norm on $\mathbb{R}^n$ can be uniformly approximated, within a factor of $\sqrt{n}$, by a quadratic norm. (See §8.4.1.)</p></div>
+      <div class="zh"><p>利用凸分析，可得到更具体的结果：若 $\|\cdot\|$ 是 $\mathbb{R}^n$ 上任一范数，则存在一个二次范数 $\|\cdot\|_P$ 使得对所有 $x$ 有</p>
+        <p>$$ \|x\|_P \le \|x\| \le \sqrt{n}\,\|x\|_P. $$</p>
+        <p>换言之，$\mathbb{R}^n$ 上任一范数都可以被某二次范数在 $\sqrt{n}$ 倍因子内一致逼近。（见 §8.4.1。）</p></div>
+    </div>
+
+    <!-- ============== A.1.5 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>A.1.5 Operator norms</h3></div>
+      <div class="zh"><h3>A.1.5 算子范数</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Suppose $\|\cdot\|_a$ and $\|\cdot\|_b$ are norms on $\mathbb{R}^m$ and $\mathbb{R}^n$, respectively. We define the operator norm of $X \in \mathbb{R}^{m\times n}$, induced by the norms $\|\cdot\|_a$ and $\|\cdot\|_b$, as</p>
+        <p>$$ \|X\|_{a,b} = \sup \{\|Xu\|_a \mid \|u\|_b \le 1\}. $$</p>
+        <p>(It can be shown that this defines a norm on $\mathbb{R}^{m\times n}$.)</p></div>
+      <div class="zh"><p>设 $\|\cdot\|_a$ 与 $\|\cdot\|_b$ 分别是 $\mathbb{R}^m$ 与 $\mathbb{R}^n$ 上的范数。由范数 $\|\cdot\|_a$ 和 $\|\cdot\|_b$ 诱导的 $X \in \mathbb{R}^{m\times n}$ 的<strong>算子范数</strong>定义为</p>
+        <p>$$ \|X\|_{a,b} = \sup \{\|Xu\|_a \mid \|u\|_b \le 1\}. $$</p>
+        <p>（可证它确是 $\mathbb{R}^{m\times n}$ 上的一个范数。）</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>When $\|\cdot\|_a$ and $\|\cdot\|_b$ are both Euclidean norms, the operator norm of $X$ is its maximum singular value, and is denoted $\|X\|_2$:</p>
+        <p>$$ \|X\|_2 = \sigma_{\max}(X) = (\lambda_{\max}(X^T X))^{1/2}. $$</p>
+        <p>(This agrees with the Euclidean norm on $\mathbb{R}^m$, when $X \in \mathbb{R}^{m\times 1}$, so there is no clash of notation.) This norm is also called the spectral norm or $\ell_2$-norm of $X$.</p></div>
+      <div class="zh"><p>当 $\|\cdot\|_a$ 与 $\|\cdot\|_b$ 都是欧氏范数时，$X$ 的算子范数即其最大奇异值，记作 $\|X\|_2$：</p>
+        <p>$$ \|X\|_2 = \sigma_{\max}(X) = (\lambda_{\max}(X^T X))^{1/2}. $$</p>
+        <p>（当 $X \in \mathbb{R}^{m\times 1}$ 时它与 $\mathbb{R}^m$ 上的欧氏范数一致，因此不会产生记号冲突。）此范数也称为 $X$ 的谱范数或 $\ell_2$ 范数。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>As another example, the norm induced by the $\ell_\infty$-norm on $\mathbb{R}^m$ and $\mathbb{R}^n$, denoted $\|X\|_\infty$, is the max-row-sum norm,</p>
+        <p>$$ \|X\|_\infty = \sup \{\|Xu\|_\infty \mid \|u\|_\infty \le 1\} = \max_{i=1,\ldots,m} \sum_{j=1}^n |X_{ij}|. $$</p>
+        <p>The norm induced by the $\ell_1$-norm on $\mathbb{R}^m$ and $\mathbb{R}^n$, denoted $\|X\|_1$, is the max-column-sum norm,</p>
+        <p>$$ \|X\|_1 = \max_{j=1,\ldots,n} \sum_{i=1}^m |X_{ij}|. $$</p></div>
+      <div class="zh"><p>另一个例子，由 $\mathbb{R}^m$ 与 $\mathbb{R}^n$ 上的 $\ell_\infty$ 范数诱导的范数记为 $\|X\|_\infty$，是最大行和范数：</p>
+        <p>$$ \|X\|_\infty = \sup \{\|Xu\|_\infty \mid \|u\|_\infty \le 1\} = \max_{i=1,\ldots,m} \sum_{j=1}^n |X_{ij}|. $$</p>
+        <p>由 $\mathbb{R}^m$ 与 $\mathbb{R}^n$ 上的 $\ell_1$ 范数诱导的范数记为 $\|X\|_1$，是最大列和范数：</p>
+        <p>$$ \|X\|_1 = \max_{j=1,\ldots,n} \sum_{i=1}^m |X_{ij}|. $$</p></div>
+    </div>
+
+    <!-- ============== A.1.6 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>A.1.6 Dual norm</h3></div>
+      <div class="zh"><h3>A.1.6 对偶范数</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Let $\|\cdot\|$ be a norm on $\mathbb{R}^n$. The associated dual norm, denoted $\|\cdot\|_*$, is defined as</p>
+        <p>$$ \|z\|_* = \sup\{z^T x \mid \|x\| \le 1\}. $$</p>
+        <p>(This can be shown to be a norm.) The dual norm can be interpreted as the operator norm of $z^T$, interpreted as a $1 \times n$ matrix, with the norm $\|\cdot\|$ on $\mathbb{R}^n$, and the absolute value on $\mathbb{R}$:</p>
+        <p>$$ \|z\|_* = \sup\{|z^T x| \mid \|x\| \le 1\}. $$</p></div>
+      <div class="zh"><p>设 $\|\cdot\|$ 是 $\mathbb{R}^n$ 上的范数。与之关联的<strong>对偶范数</strong>记作 $\|\cdot\|_*$，定义为</p>
+        <p>$$ \|z\|_* = \sup\{z^T x \mid \|x\| \le 1\}. $$</p>
+        <p>（可证它确是一个范数。）对偶范数可解释为把 $z^T$ 视作 $1 \times n$ 矩阵时，在 $\mathbb{R}^n$ 取范数 $\|\cdot\|$、在 $\mathbb{R}$ 取绝对值意义下的算子范数：</p>
+        <p>$$ \|z\|_* = \sup\{|z^T x| \mid \|x\| \le 1\}. $$</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>From the definition of dual norm we have the inequality</p>
+        <p>$$ z^T x \le \|x\|\,\|z\|_*, $$</p>
+        <p>which holds for all $x$ and $z$. This inequality is tight, in the following sense: for any $x$ there is a $z$ for which the inequality holds with equality. (Similarly, for any $z$ there is an $x$ that gives equality.) The dual of the dual norm is the original norm: we have $\|x\|_{**} = \|x\|$ for all $x$. (This need not hold in infinite-dimensional vector spaces.)</p></div>
+      <div class="zh"><p>由对偶范数的定义可得不等式</p>
+        <p>$$ z^T x \le \|x\|\,\|z\|_*, $$</p>
+        <p>它对所有 $x$ 与 $z$ 都成立。此不等式在下述意义下是紧的：对任意 $x$，总存在 $z$ 使等号成立。（类似地，对任意 $z$ 也存在 $x$ 使等号成立。）对偶范数的对偶即原范数：对所有 $x$ 有 $\|x\|_{**} = \|x\|$。（在无限维向量空间中此结论未必成立。）</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The dual of the Euclidean norm is the Euclidean norm, since</p>
+        <p>$$ \sup\{z^T x \mid \|x\|_2 \le 1\} = \|z\|_2. $$</p>
+        <p>(This follows from the Cauchy–Schwarz inequality; for nonzero $z$, the value of $x$ that maximizes $z^T x$ over $\|x\|_2 \le 1$ is $z/\|z\|_2$.)</p></div>
+      <div class="zh"><p>欧氏范数的对偶仍是欧氏范数，因为</p>
+        <p>$$ \sup\{z^T x \mid \|x\|_2 \le 1\} = \|z\|_2. $$</p>
+        <p>（这由 Cauchy–Schwarz 不等式可得；当 $z \ne 0$ 时，在 $\|x\|_2 \le 1$ 上使 $z^T x$ 最大的 $x$ 为 $z/\|z\|_2$。）</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The dual of the $\ell_\infty$-norm is the $\ell_1$-norm:</p>
+        <p>$$ \sup\{z^T x \mid \|x\|_\infty \le 1\} = \sum_{i=1}^n |z_i| = \|z\|_1, $$</p>
+        <p>and the dual of the $\ell_1$-norm is the $\ell_\infty$-norm. More generally, the dual of the $\ell_p$-norm is the $\ell_q$-norm, where $q$ satisfies $1/p + 1/q = 1$, i.e., $q = p/(p - 1)$.</p></div>
+      <div class="zh"><p>$\ell_\infty$ 范数的对偶是 $\ell_1$ 范数：</p>
+        <p>$$ \sup\{z^T x \mid \|x\|_\infty \le 1\} = \sum_{i=1}^n |z_i| = \|z\|_1, $$</p>
+        <p>而 $\ell_1$ 范数的对偶是 $\ell_\infty$ 范数。更一般地，$\ell_p$ 范数的对偶是 $\ell_q$ 范数，其中 $q$ 满足 $1/p + 1/q = 1$，即 $q = p/(p - 1)$。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>As another example, consider the $\ell_2$- or spectral norm on $\mathbb{R}^{m\times n}$. The associated dual norm is</p>
+        <p>$$ \|Z\|_{2*} = \sup\{\mathbf{tr}(Z^T X) \mid \|X\|_2 \le 1\}, $$</p>
+        <p>which turns out to be the sum of the singular values,</p>
+        <p>$$ \|Z\|_{2*} = \sigma_1(Z) + \cdots + \sigma_r(Z) = \mathbf{tr}(Z^T Z)^{1/2}, $$</p>
+        <p>where $r = \mathbf{rank}\, Z$. This norm is sometimes called the nuclear norm.</p></div>
+      <div class="zh"><p>另一个例子，考虑 $\mathbb{R}^{m\times n}$ 上的 $\ell_2$ 范数或谱范数。其相应的对偶范数为</p>
+        <p>$$ \|Z\|_{2*} = \sup\{\mathbf{tr}(Z^T X) \mid \|X\|_2 \le 1\}, $$</p>
+        <p>结果等于奇异值之和：</p>
+        <p>$$ \|Z\|_{2*} = \sigma_1(Z) + \cdots + \sigma_r(Z) = \mathbf{tr}(Z^T Z)^{1/2}, $$</p>
+        <p>其中 $r = \mathbf{rank}\, Z$。此范数有时称为<strong>核范数</strong>。</p></div>
+    </div>
+
+    <!-- ============== A.2 Analysis ============== -->
+    <div class="pair head">
+      <div class="en"><h2>A.2 Analysis</h2></div>
+      <div class="zh"><h2>A.2 分析</h2></div>
+    </div>
+
+    <!-- ============== A.2.1 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>A.2.1 Open and closed sets</h3></div>
+      <div class="zh"><h3>A.2.1 开集与闭集</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>An element $x \in C \subseteq \mathbb{R}^n$ is called an interior point of $C$ if there exists an $\epsilon > 0$ for which</p>
+        <p>$$ \{y \mid \|y - x\|_2 \le \epsilon\} \subseteq C, $$</p>
+        <p>i.e., there exists a ball centered at $x$ that lies entirely in $C$. The set of all points interior to $C$ is called the interior of $C$ and is denoted $\mathbf{int}\, C$. (Since all norms on $\mathbb{R}^n$ are equivalent to the Euclidean norm, all norms generate the same set of interior points.) A set $C$ is open if $\mathbf{int}\, C = C$, i.e., every point in $C$ is an interior point. A set $C \subseteq \mathbb{R}^n$ is closed if its complement $\mathbb{R}^n \setminus C = \{x \in \mathbb{R}^n \mid x \notin C\}$ is open.</p></div>
+      <div class="zh"><p>若存在 $\epsilon > 0$ 使得</p>
+        <p>$$ \{y \mid \|y - x\|_2 \le \epsilon\} \subseteq C, $$</p>
+        <p>即存在一个以 $x$ 为中心、完全位于 $C$ 中的球，则称 $x \in C \subseteq \mathbb{R}^n$ 为 $C$ 的<strong>内点</strong>。$C$ 的所有内点构成的集合称为 $C$ 的<strong>内部</strong>，记作 $\mathbf{int}\, C$。（由于 $\mathbb{R}^n$ 上所有范数都与欧氏范数等价，所有范数都生成同样的内点集。）若 $\mathbf{int}\, C = C$，即 $C$ 中每一点都是内点，则称集合 $C$ 为<strong>开集</strong>。若集合 $C \subseteq \mathbb{R}^n$ 的补集 $\mathbb{R}^n \setminus C = \{x \in \mathbb{R}^n \mid x \notin C\}$ 是开集，则称 $C$ 为<strong>闭集</strong>。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The closure of a set $C$ is defined as</p>
+        <p>$$ \mathbf{cl}\, C = \mathbb{R}^n \setminus \mathbf{int}(\mathbb{R}^n \setminus C), $$</p>
+        <p>i.e., the complement of the interior of the complement of $C$. A point $x$ is in the closure of $C$ if for every $\epsilon > 0$, there is a $y \in C$ with $\|x - y\|_2 \le \epsilon$.</p></div>
+      <div class="zh"><p>集合 $C$ 的<strong>闭包</strong>定义为</p>
+        <p>$$ \mathbf{cl}\, C = \mathbb{R}^n \setminus \mathbf{int}(\mathbb{R}^n \setminus C), $$</p>
+        <p>即 $C$ 的补集的内部的补集。若对每个 $\epsilon > 0$ 都存在 $y \in C$ 满足 $\|x - y\|_2 \le \epsilon$，则点 $x$ 属于 $C$ 的闭包。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We can also describe closed sets and the closure in terms of convergent sequences and limit points. A set $C$ is closed if and only if it contains the limit point of every convergent sequence in it. In other words, if $x_1, x_2, \ldots$ converges to $x$, and $x_i \in C$, then $x \in C$. The closure of $C$ is the set of all limit points of convergent sequences in $C$.</p></div>
+      <div class="zh"><p>也可以用收敛序列与极限点来描述闭集和闭包。集合 $C$ 是闭集当且仅当它包含其中每个收敛序列的极限点。换言之，若 $x_1, x_2, \ldots$ 收敛到 $x$ 且 $x_i \in C$，则 $x \in C$。$C$ 的闭包就是 $C$ 中所有收敛序列极限点的集合。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The boundary of the set $C$ is defined as</p>
+        <p>$$ \mathbf{bd}\, C = \mathbf{cl}\, C \setminus \mathbf{int}\, C. $$</p>
+        <p>A boundary point $x$ (i.e., a point $x \in \mathbf{bd}\, C$) satisfies the following property: For all $\epsilon > 0$, there exists $y \in C$ and $z \notin C$ with</p>
+        <p>$$ \|y - x\|_2 \le \epsilon, \qquad \|z - x\|_2 \le \epsilon, $$</p>
+        <p>i.e., there exist arbitrarily close points in $C$, and also arbitrarily close points not in $C$. We can characterize closed and open sets in terms of the boundary operation: $C$ is closed if it contains its boundary, i.e., $\mathbf{bd}\, C \subseteq C$. It is open if it contains no boundary points, i.e., $C \cap \mathbf{bd}\, C = \emptyset$.</p></div>
+      <div class="zh"><p>集合 $C$ 的<strong>边界</strong>定义为</p>
+        <p>$$ \mathbf{bd}\, C = \mathbf{cl}\, C \setminus \mathbf{int}\, C. $$</p>
+        <p>边界点 $x$（即 $x \in \mathbf{bd}\, C$）满足如下性质：对所有 $\epsilon > 0$，存在 $y \in C$ 与 $z \notin C$ 使得</p>
+        <p>$$ \|y - x\|_2 \le \epsilon, \qquad \|z - x\|_2 \le \epsilon, $$</p>
+        <p>即存在任意接近 $x$ 且属于 $C$ 的点，也存在任意接近 $x$ 且不属于 $C$ 的点。可用边界运算来刻画闭集与开集：若 $C$ 包含其边界即 $\mathbf{bd}\, C \subseteq C$，则 $C$ 是闭集；若 $C$ 不含任何边界点即 $C \cap \mathbf{bd}\, C = \emptyset$，则 $C$ 是开集。</p></div>
+    </div>
+
+    <!-- ============== A.2.2 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>A.2.2 Supremum and infimum</h3></div>
+      <div class="zh"><h3>A.2.2 上确界与下确界</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Suppose $C \subseteq \mathbb{R}$. A number $a$ is an upper bound on $C$ if for each $x \in C$, $x \le a$. The set of upper bounds on a set $C$ is either empty (in which case we say $C$ is unbounded above), all of $\mathbb{R}$ (only when $C = \emptyset$), or a closed infinite interval $[b, \infty)$. The number $b$ is called the least upper bound or supremum of the set $C$, and is denoted $\sup C$. We take $\sup \emptyset = -\infty$, and $\sup C = \infty$ if $C$ is unbounded above. When $\sup C \in C$, we say the supremum of $C$ is attained or achieved.</p></div>
+      <div class="zh"><p>设 $C \subseteq \mathbb{R}$。若对每个 $x \in C$ 都有 $x \le a$，则称数 $a$ 为 $C$ 的一个<strong>上界</strong>。集合 $C$ 的上界集合或者为空（此时称 $C$ 上方无界），或者为整个 $\mathbb{R}$（仅当 $C = \emptyset$ 时），或者为一个闭的无穷区间 $[b, \infty)$。数 $b$ 称为 $C$ 的<strong>最小上界</strong>或<strong>上确界</strong>，记作 $\sup C$。我们取 $\sup \emptyset = -\infty$；若 $C$ 上方无界则 $\sup C = \infty$。当 $\sup C \in C$ 时，称 $C$ 的上确界是<strong>可达的</strong>。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>When the set $C$ is finite, $\sup C$ is the maximum of its elements. Some authors use the notation $\max C$ to denote supremum, when it is attained, but we follow standard mathematical convention, using $\max C$ only when the set $C$ is finite.</p></div>
+      <div class="zh"><p>当集合 $C$ 有限时，$\sup C$ 就是其元素的最大值。有些作者在 $\sup C$ 可达时用记号 $\max C$ 表示上确界，但我们遵循数学惯例，仅在 $C$ 为有限集时才用 $\max C$。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We define lower bound, and infimum, in a similar way. A number $a$ is a lower bound on $C \subseteq \mathbb{R}$ if for each $x \in C$, $a \le x$. The infimum (or greatest lower bound) of a set $C \subseteq \mathbb{R}$ is defined as $\mathbf{inf}\, C = -\sup(-C)$. When $C$ is finite, the infimum is the minimum of its elements. We take $\mathbf{inf}\, \emptyset = \infty$, and $\mathbf{inf}\, C = -\infty$ if $C$ is unbounded below, i.e., has no lower bound.</p></div>
+      <div class="zh"><p><strong>下界</strong>与<strong>下确界</strong>可类似定义。若对每个 $x \in C$ 都有 $a \le x$，则称 $a$ 为 $C \subseteq \mathbb{R}$ 的一个下界。集合 $C \subseteq \mathbb{R}$ 的下确界（或最大下界）定义为 $\mathbf{inf}\, C = -\sup(-C)$。当 $C$ 有限时，下确界就是其元素的最小值。取 $\mathbf{inf}\, \emptyset = \infty$；若 $C$ 下方无界（即没有下界），则 $\mathbf{inf}\, C = -\infty$。</p></div>
+    </div>
+
+    <!-- ============== A.3 Functions ============== -->
+    <div class="pair head">
+      <div class="en"><h2>A.3 Functions</h2></div>
+      <div class="zh"><h2>A.3 函数</h2></div>
+    </div>
+
+    <!-- ============== A.3.1 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>A.3.1 Function notation</h3></div>
+      <div class="zh"><h3>A.3.1 函数记号</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Our notation for functions is mostly standard, with one exception. When we write</p>
+        <p>$$ f : A \to B $$</p>
+        <p>we mean that $f$ is a function on the set $\mathbf{dom}\, f \subseteq A$ into the set $B$; in particular we can have $\mathbf{dom}\, f$ a proper subset of the set $A$. Thus the notation $f : \mathbb{R}^n \to \mathbb{R}^m$ means that $f$ maps (some) $n$-vectors into $m$-vectors; it does not mean that $f(x)$ is defined for every $x \in \mathbb{R}^n$. This convention is similar to function declarations in computer languages. Specifying the data types of the input and output arguments of a function gives the syntax of that function; it does not guarantee that any input argument with the specified data type is valid.</p></div>
+      <div class="zh"><p>我们对函数的记号大部分是标准的，但有一处例外。当写</p>
+        <p>$$ f : A \to B $$</p>
+        <p>时，意思是 $f$ 是定义在集合 $\mathbf{dom}\, f \subseteq A$ 上、取值于集合 $B$ 中的函数；特别地，$\mathbf{dom}\, f$ 可以是 $A$ 的一个真子集。因此记号 $f : \mathbb{R}^n \to \mathbb{R}^m$ 表示 $f$ 将（某些）$n$ 维向量映射为 $m$ 维向量；并不意味着对每个 $x \in \mathbb{R}^n$ 都有 $f(x)$ 有定义。此约定类似于计算机语言中的函数声明：指定函数输入输出参数的数据类型只是给出该函数的语法，并不保证任意具有指定数据类型的输入参数都是合法的。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>As an example consider the function $f : \mathbf{S}^n \to \mathbb{R}$, given by</p>
+        <p>$$ f(X) = \log \det X, \tag{A.3} $$</p>
+        <p>with $\mathbf{dom}\, f = \mathbf{S}^n_{++}$. The notation $f : \mathbf{S}^n \to \mathbb{R}$ specifies the syntax of $f$: it takes as argument a symmetric $n \times n$ matrix, and returns a real number. The notation $\mathbf{dom}\, f = \mathbf{S}^n_{++}$ specifies which symmetric $n \times n$ matrices are valid input arguments for $f$ (i.e., only positive definite ones). The formula (A.3) specifies what $f(X)$ is, for $X \in \mathbf{dom}\, f$.</p></div>
+      <div class="zh"><p>以函数 $f : \mathbf{S}^n \to \mathbb{R}$ 为例，其定义为</p>
+        <p>$$ f(X) = \log \det X, \tag{A.3} $$</p>
+        <p>其中 $\mathbf{dom}\, f = \mathbf{S}^n_{++}$。记号 $f : \mathbf{S}^n \to \mathbb{R}$ 规定了 $f$ 的语法：以对称 $n \times n$ 矩阵为参数，返回实数。记号 $\mathbf{dom}\, f = \mathbf{S}^n_{++}$ 规定了哪些对称 $n \times n$ 矩阵是 $f$ 的合法输入参数（即仅正定者）。式 (A.3) 规定了对 $X \in \mathbf{dom}\, f$，$f(X)$ 是什么。</p></div>
+    </div>
+
+    <!-- ============== A.3.2 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>A.3.2 Continuity</h3></div>
+      <div class="zh"><h3>A.3.2 连续性</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>A function $f : \mathbb{R}^n \to \mathbb{R}^m$ is continuous at $x \in \mathbf{dom}\, f$ if for all $\epsilon > 0$ there exists a $\delta$ such that</p>
+        <p>$$ y \in \mathbf{dom}\, f, \quad \|y - x\|_2 \le \delta \Longrightarrow \|f(y) - f(x)\|_2 \le \epsilon. $$</p>
+        <p>Continuity can be described in terms of limits: whenever the sequence $x_1, x_2, \ldots$ in $\mathbf{dom}\, f$ converges to a point $x \in \mathbf{dom}\, f$, the sequence $f(x_1), f(x_2), \ldots$ converges to $f(x)$, i.e.,</p>
+        <p>$$ \lim_{i \to \infty} f(x_i) = f\left( \lim_{i \to \infty} x_i \right). $$</p>
+        <p>A function $f$ is continuous if it is continuous at every point in its domain.</p></div>
+      <div class="zh"><p>若对所有 $\epsilon > 0$ 都存在 $\delta$ 使得</p>
+        <p>$$ y \in \mathbf{dom}\, f, \quad \|y - x\|_2 \le \delta \Longrightarrow \|f(y) - f(x)\|_2 \le \epsilon, $$</p>
+        <p>则称函数 $f : \mathbb{R}^n \to \mathbb{R}^m$ 在 $x \in \mathbf{dom}\, f$ 处<strong>连续</strong>。连续性可用极限描述：只要 $\mathbf{dom}\, f$ 中的序列 $x_1, x_2, \ldots$ 收敛到 $x \in \mathbf{dom}\, f$，序列 $f(x_1), f(x_2), \ldots$ 就收敛到 $f(x)$，即</p>
+        <p>$$ \lim_{i \to \infty} f(x_i) = f\left( \lim_{i \to \infty} x_i \right). $$</p>
+        <p>若函数 $f$ 在其定义域中每一点都连续，则称 $f$ 是连续的。</p></div>
+    </div>
+
+    <!-- ============== A.3.3 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>A.3.3 Closed functions</h3></div>
+      <div class="zh"><h3>A.3.3 闭函数</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>A function $f : \mathbb{R}^n \to \mathbb{R}$ is said to be closed if, for each $\alpha \in \mathbb{R}$, the sublevel set</p>
+        <p>$$ \{x \in \mathbf{dom}\, f \mid f(x) \le \alpha\} $$</p>
+        <p>is closed. This is equivalent to the condition that the epigraph of $f$,</p>
+        <p>$$ \mathbf{epi}\, f = \{(x, t) \in \mathbb{R}^{n+1} \mid x \in \mathbf{dom}\, f, \; f(x) \le t\}, $$</p>
+        <p>is closed. (This definition is general, but is usually only applied to convex functions.)</p></div>
+      <div class="zh"><p>若对每个 $\alpha \in \mathbb{R}$，<strong>下水平集</strong></p>
+        <p>$$ \{x \in \mathbf{dom}\, f \mid f(x) \le \alpha\} $$</p>
+        <p>都是闭集，则称函数 $f : \mathbb{R}^n \to \mathbb{R}$ 为<strong>闭函数</strong>。这等价于 $f$ 的上图</p>
+        <p>$$ \mathbf{epi}\, f = \{(x, t) \in \mathbb{R}^{n+1} \mid x \in \mathbf{dom}\, f, \; f(x) \le t\} $$</p>
+        <p>是闭集。（此定义是通用的，但通常仅用于凸函数。）</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>If $f : \mathbb{R}^n \to \mathbb{R}$ is continuous, and $\mathbf{dom}\, f$ is closed, then $f$ is closed. If $f : \mathbb{R}^n \to \mathbb{R}$ is continuous, with $\mathbf{dom}\, f$ open, then $f$ is closed if and only if $f$ converges to $\infty$ along every sequence converging to a boundary point of $\mathbf{dom}\, f$. In other words, if</p>
+        <p>$$ \lim_{i \to \infty} x_i = x \in \mathbf{bd}\, \mathbf{dom}\, f, \quad \text{with } x_i \in \mathbf{dom}\, f, $$</p>
+        <p>we have $\lim_{i \to \infty} f(x_i) = \infty$.</p></div>
+      <div class="zh"><p>若 $f : \mathbb{R}^n \to \mathbb{R}$ 连续且 $\mathbf{dom}\, f$ 为闭集，则 $f$ 是闭函数。若 $f : \mathbb{R}^n \to \mathbb{R}$ 连续且 $\mathbf{dom}\, f$ 为开集，则 $f$ 为闭函数当且仅当 $f$ 沿每条收敛到 $\mathbf{dom}\, f$ 边界点的序列都趋于 $\infty$。换言之，若</p>
+        <p>$$ \lim_{i \to \infty} x_i = x \in \mathbf{bd}\, \mathbf{dom}\, f, \quad \text{其中 } x_i \in \mathbf{dom}\, f, $$</p>
+        <p>则 $\lim_{i \to \infty} f(x_i) = \infty$。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><em>Example A.1</em> <strong>Examples on $\mathbb{R}$.</strong></p>
+        <ul>
+          <li>The function $f : \mathbb{R} \to \mathbb{R}$, with $f(x) = x \log x$, $\mathbf{dom}\, f = \mathbb{R}_{++}$, is not closed.</li>
+          <li>The function $f : \mathbb{R} \to \mathbb{R}$, with
+            $$ f(x) = \begin{cases} x \log x & x > 0 \\ 0 & x = 0, \end{cases} $$
+            $\mathbf{dom}\, f = \mathbb{R}_+$, is closed.</li>
+          <li>The function $f(x) = -\log x$, $\mathbf{dom}\, f = \mathbb{R}_{++}$, is closed.</li>
+        </ul></div>
+      <div class="zh"><p><em>例 A.1</em> <strong>$\mathbb{R}$ 上的例子。</strong></p>
+        <ul>
+          <li>函数 $f : \mathbb{R} \to \mathbb{R}$，$f(x) = x \log x$，$\mathbf{dom}\, f = \mathbb{R}_{++}$，不是闭函数。</li>
+          <li>函数 $f : \mathbb{R} \to \mathbb{R}$，
+            $$ f(x) = \begin{cases} x \log x & x > 0 \\ 0 & x = 0, \end{cases} $$
+            $\mathbf{dom}\, f = \mathbb{R}_+$，是闭函数。</li>
+          <li>函数 $f(x) = -\log x$，$\mathbf{dom}\, f = \mathbb{R}_{++}$，是闭函数。</li>
+        </ul></div>
+    </div>
+
+    <!-- ============== A.4 Derivatives ============== -->
+    <div class="pair head">
+      <div class="en"><h2>A.4 Derivatives</h2></div>
+      <div class="zh"><h2>A.4 导数</h2></div>
+    </div>
+
+    <!-- ============== A.4.1 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>A.4.1 Derivative and gradient</h3></div>
+      <div class="zh"><h3>A.4.1 导数与梯度</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Suppose $f : \mathbb{R}^n \to \mathbb{R}^m$ and $x \in \mathbf{int}\, \mathbf{dom}\, f$. The function $f$ is differentiable at $x$ if there exists a matrix $Df(x) \in \mathbb{R}^{m\times n}$ that satisfies</p>
+        <p>$$ \lim_{z \in \mathbf{dom}\, f, \, z \ne x, \, z \to x} \frac{\|f(z) - f(x) - Df(x)(z - x)\|_2}{\|z - x\|_2} = 0, \tag{A.4} $$</p>
+        <p>in which case we refer to $Df(x)$ as the derivative (or Jacobian) of $f$ at $x$. (There can be at most one matrix that satisfies (A.4).) The function $f$ is differentiable if $\mathbf{dom}\, f$ is open, and it is differentiable at every point in its domain.</p></div>
+      <div class="zh"><p>设 $f : \mathbb{R}^n \to \mathbb{R}^m$，$x \in \mathbf{int}\, \mathbf{dom}\, f$。若存在矩阵 $Df(x) \in \mathbb{R}^{m\times n}$ 满足</p>
+        <p>$$ \lim_{z \in \mathbf{dom}\, f, \, z \ne x, \, z \to x} \frac{\|f(z) - f(x) - Df(x)(z - x)\|_2}{\|z - x\|_2} = 0, \tag{A.4} $$</p>
+        <p>则称函数 $f$ 在 $x$ 处<strong>可微</strong>，此时称 $Df(x)$ 为 $f$ 在 $x$ 处的<strong>导数</strong>（或 <strong>Jacobi 矩阵</strong>）。（满足 (A.4) 的矩阵至多只有一个。）若 $\mathbf{dom}\, f$ 为开集且 $f$ 在其定义域中每一点都可微，则称 $f$ 是可微的。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The affine function of $z$ given by</p>
+        <p>$$ f(x) + Df(x)(z - x) $$</p>
+        <p>is called the first-order approximation of $f$ at (or near) $x$. Evidently this function agrees with $f$ at $z = x$; when $z$ is close to $x$, this affine function is very close to $f$.</p></div>
+      <div class="zh"><p>$z$ 的仿射函数</p>
+        <p>$$ f(x) + Df(x)(z - x) $$</p>
+        <p>称为 $f$ 在 $x$ 处（或 $x$ 附近）的<strong>一阶近似</strong>。显然此函数在 $z = x$ 处与 $f$ 相等；当 $z$ 接近 $x$ 时，此仿射函数非常接近 $f$。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The derivative can be found by deriving the first-order approximation of the function $f$ at $x$ (i.e., the matrix $Df(x)$ that satisfies (A.4)), or from partial derivatives:</p>
+        <p>$$ Df(x)_{ij} = \frac{\partial f_i(x)}{\partial x_j}, \qquad i = 1, \ldots, m, \quad j = 1, \ldots, n. $$</p></div>
+      <div class="zh"><p>导数可通过求 $f$ 在 $x$ 处的一阶近似（即满足 (A.4) 的矩阵 $Df(x)$）得到，也可由偏导数得到：</p>
+        <p>$$ Df(x)_{ij} = \frac{\partial f_i(x)}{\partial x_j}, \qquad i = 1, \ldots, m, \quad j = 1, \ldots, n. $$</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Gradient</h3></div>
+      <div class="zh"><h3>梯度</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>When $f$ is real-valued (i.e., $f : \mathbb{R}^n \to \mathbb{R}$) the derivative $Df(x)$ is a $1 \times n$ matrix, i.e., it is a row vector. Its transpose is called the gradient of the function:</p>
+        <p>$$ \nabla f(x) = Df(x)^T, $$</p>
+        <p>which is a (column) vector, i.e., in $\mathbb{R}^n$. Its components are the partial derivatives of $f$:</p>
+        <p>$$ \nabla f(x)_i = \frac{\partial f(x)}{\partial x_i}, \qquad i = 1, \ldots, n. $$</p>
+        <p>The first-order approximation of $f$ at a point $x \in \mathbf{int}\, \mathbf{dom}\, f$ can be expressed as (the affine function of $z$)</p>
+        <p>$$ f(x) + \nabla f(x)^T (z - x). $$</p></div>
+      <div class="zh"><p>当 $f$ 为实值函数（即 $f : \mathbb{R}^n \to \mathbb{R}$）时，导数 $Df(x)$ 是 $1 \times n$ 矩阵，即行向量。其转置称为该函数的<strong>梯度</strong>：</p>
+        <p>$$ \nabla f(x) = Df(x)^T, $$</p>
+        <p>它是一个（列）向量，即属于 $\mathbb{R}^n$。其分量为 $f$ 的偏导数：</p>
+        <p>$$ \nabla f(x)_i = \frac{\partial f(x)}{\partial x_i}, \qquad i = 1, \ldots, n. $$</p>
+        <p>$f$ 在点 $x \in \mathbf{int}\, \mathbf{dom}\, f$ 处的一阶近似可表为（$z$ 的仿射函数）</p>
+        <p>$$ f(x) + \nabla f(x)^T (z - x). $$</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Examples</h3></div>
+      <div class="zh"><h3>实例</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>As a simple example consider the quadratic function $f : \mathbb{R}^n \to \mathbb{R}$,</p>
+        <p>$$ f(x) = (1/2)x^T P x + q^T x + r, $$</p>
+        <p>where $P \in \mathbf{S}^n$, $q \in \mathbb{R}^n$, and $r \in \mathbb{R}$. Its derivative at $x$ is the row vector $Df(x) = x^T P + q^T$, and its gradient is</p>
+        <p>$$ \nabla f(x) = Px + q. $$</p></div>
+      <div class="zh"><p>以二次函数 $f : \mathbb{R}^n \to \mathbb{R}$ 为简单例子：</p>
+        <p>$$ f(x) = (1/2)x^T P x + q^T x + r, $$</p>
+        <p>其中 $P \in \mathbf{S}^n$，$q \in \mathbb{R}^n$，$r \in \mathbb{R}$。它在 $x$ 处的导数为行向量 $Df(x) = x^T P + q^T$，其梯度为</p>
+        <p>$$ \nabla f(x) = Px + q. $$</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>As a more interesting example, we consider the function $f : \mathbf{S}^n \to \mathbb{R}$, given by</p>
+        <p>$$ f(X) = \log \det X, \qquad \mathbf{dom}\, f = \mathbf{S}^n_{++}. $$</p>
+        <p>One (tedious) way to find the gradient of $f$ is to introduce a basis for $\mathbf{S}^n$, find the gradient of the associated function, and finally translate the result back to $\mathbf{S}^n$. Instead, we will directly find the first-order approximation of $f$ at $X \in \mathbf{S}^n_{++}$. Let $Z \in \mathbf{S}^n_{++}$ be close to $X$, and let $\Delta X = Z - X$ (which is assumed to be small). We have</p>
+        <p>$$ \begin{aligned} \log \det Z &= \log \det(X + \Delta X) \\\\ &= \log \det\left(X^{1/2}(I + X^{-1/2}\Delta X X^{-1/2})X^{1/2}\right) \\\\ &= \log \det X + \log \det(I + X^{-1/2}\Delta X X^{-1/2}) \\\\ &= \log \det X + \sum_{i=1}^n \log(1 + \lambda_i), \end{aligned} $$</p>
+        <p>where $\lambda_i$ is the $i$th eigenvalue of $X^{-1/2}\Delta X X^{-1/2}$. Now we use the fact that $\Delta X$ is small, which implies $\lambda_i$ are small, so to first order we have $\log(1 + \lambda_i) \approx \lambda_i$. Using this first-order approximation in the expression above, we get</p>
+        <p>$$ \begin{aligned} \log \det Z &\approx \log \det X + \sum_{i=1}^n \lambda_i \\\\ &= \log \det X + \mathbf{tr}(X^{-1/2}\Delta X X^{-1/2}) \\\\ &= \log \det X + \mathbf{tr}(X^{-1}\Delta X) \\\\ &= \log \det X + \mathbf{tr}\left(X^{-1}(Z - X)\right), \end{aligned} $$</p>
+        <p>where we have used the fact that the sum of the eigenvalues is the trace, and the property $\mathbf{tr}(AB) = \mathbf{tr}(BA)$.</p></div>
+      <div class="zh"><p>再看一个更有意思的例子：函数 $f : \mathbf{S}^n \to \mathbb{R}$，</p>
+        <p>$$ f(X) = \log \det X, \qquad \mathbf{dom}\, f = \mathbf{S}^n_{++}. $$</p>
+        <p>求 $f$ 的梯度的一种（繁琐的）方法是引入 $\mathbf{S}^n$ 的一组基，求相应函数的梯度，最后把结果翻译回 $\mathbf{S}^n$。我们改为直接求 $f$ 在 $X \in \mathbf{S}^n_{++}$ 处的一阶近似。设 $Z \in \mathbf{S}^n_{++}$ 接近 $X$，令 $\Delta X = Z - X$（假定它很小）。则</p>
+        <p>$$ \begin{aligned} \log \det Z &= \log \det(X + \Delta X) \\\\ &= \log \det\left(X^{1/2}(I + X^{-1/2}\Delta X X^{-1/2})X^{1/2}\right) \\\\ &= \log \det X + \log \det(I + X^{-1/2}\Delta X X^{-1/2}) \\\\ &= \log \det X + \sum_{i=1}^n \log(1 + \lambda_i), \end{aligned} $$</p>
+        <p>其中 $\lambda_i$ 为 $X^{-1/2}\Delta X X^{-1/2}$ 的第 $i$ 个特征值。利用 $\Delta X$ 很小这一事实，$\lambda_i$ 也很小，故一阶近似下 $\log(1 + \lambda_i) \approx \lambda_i$。将此一阶近似代入上式，得</p>
+        <p>$$ \begin{aligned} \log \det Z &\approx \log \det X + \sum_{i=1}^n \lambda_i \\\\ &= \log \det X + \mathbf{tr}(X^{-1/2}\Delta X X^{-1/2}) \\\\ &= \log \det X + \mathbf{tr}(X^{-1}\Delta X) \\\\ &= \log \det X + \mathbf{tr}\left(X^{-1}(Z - X)\right), \end{aligned} $$</p>
+        <p>其中用到特征值之和等于迹以及性质 $\mathbf{tr}(AB) = \mathbf{tr}(BA)$。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Thus, the first-order approximation of $f$ at $X$ is the affine function of $Z$ given by</p>
+        <p>$$ f(Z) \approx f(X) + \mathbf{tr}\left(X^{-1}(Z - X)\right). $$</p>
+        <p>Noting that the second term on the righthand side is the standard inner product of $X^{-1}$ and $Z - X$, we can identify $X^{-1}$ as the gradient of $f$ at $X$. Thus, we can write the simple formula</p>
+        <p>$$ \nabla f(X) = X^{-1}. $$</p>
+        <p>This result should not be surprising, since the derivative of $\log x$, on $\mathbb{R}_{++}$, is $1/x$.</p></div>
+      <div class="zh"><p>于是 $f$ 在 $X$ 处的一阶近似为 $Z$ 的仿射函数</p>
+        <p>$$ f(Z) \approx f(X) + \mathbf{tr}\left(X^{-1}(Z - X)\right). $$</p>
+        <p>注意右端第二项恰为 $X^{-1}$ 与 $Z - X$ 的标准内积，因此可识别 $X^{-1}$ 为 $f$ 在 $X$ 处的梯度。于是得到简洁公式</p>
+        <p>$$ \nabla f(X) = X^{-1}. $$</p>
+        <p>此结果并不意外，因为 $\log x$ 在 $\mathbb{R}_{++}$ 上的导数为 $1/x$。</p></div>
+    </div>
+
+    <!-- ============== A.4.2 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>A.4.2 Chain rule</h3></div>
+      <div class="zh"><h3>A.4.2 链式法则</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Suppose $f : \mathbb{R}^n \to \mathbb{R}^m$ is differentiable at $x \in \mathbf{int}\, \mathbf{dom}\, f$ and $g : \mathbb{R}^m \to \mathbb{R}^p$ is differentiable at $f(x) \in \mathbf{int}\, \mathbf{dom}\, g$. Define the composition $h : \mathbb{R}^n \to \mathbb{R}^p$ by $h(z) = g(f(z))$. Then $h$ is differentiable at $x$, with derivative</p>
+        <p>$$ Dh(x) = Dg(f(x))\, Df(x). \tag{A.5} $$</p>
+        <p>As an example, suppose $f : \mathbb{R}^n \to \mathbb{R}$, $g : \mathbb{R} \to \mathbb{R}$, and $h(x) = g(f(x))$. Taking the transpose of $Dh(x) = Dg(f(x))\, Df(x)$ yields</p>
+        <p>$$ \nabla h(x) = g'(f(x))\, \nabla f(x). \tag{A.6} $$</p></div>
+      <div class="zh"><p>设 $f : \mathbb{R}^n \to \mathbb{R}^m$ 在 $x \in \mathbf{int}\, \mathbf{dom}\, f$ 处可微，$g : \mathbb{R}^m \to \mathbb{R}^p$ 在 $f(x) \in \mathbf{int}\, \mathbf{dom}\, g$ 处可微。定义复合函数 $h : \mathbb{R}^n \to \mathbb{R}^p$ 为 $h(z) = g(f(z))$。则 $h$ 在 $x$ 处可微，其导数为</p>
+        <p>$$ Dh(x) = Dg(f(x))\, Df(x). \tag{A.5} $$</p>
+        <p>例如，设 $f : \mathbb{R}^n \to \mathbb{R}$，$g : \mathbb{R} \to \mathbb{R}$，$h(x) = g(f(x))$。对 $Dh(x) = Dg(f(x))\, Df(x)$ 取转置得</p>
+        <p>$$ \nabla h(x) = g'(f(x))\, \nabla f(x). \tag{A.6} $$</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Composition with affine function</h3></div>
+      <div class="zh"><h3>与仿射函数的复合</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Suppose $f : \mathbb{R}^n \to \mathbb{R}^m$ is differentiable, $A \in \mathbb{R}^{n\times p}$, and $b \in \mathbb{R}^n$. Define $g : \mathbb{R}^p \to \mathbb{R}^m$ as $g(x) = f(Ax + b)$, with $\mathbf{dom}\, g = \{x \mid Ax + b \in \mathbf{dom}\, f\}$. The derivative of $g$ is, by the chain rule (A.5), $Dg(x) = Df(Ax + b)\, A$.</p></div>
+      <div class="zh"><p>设 $f : \mathbb{R}^n \to \mathbb{R}^m$ 可微，$A \in \mathbb{R}^{n\times p}$，$b \in \mathbb{R}^n$。定义 $g : \mathbb{R}^p \to \mathbb{R}^m$ 为 $g(x) = f(Ax + b)$，其中 $\mathbf{dom}\, g = \{x \mid Ax + b \in \mathbf{dom}\, f\}$。由<strong>链式法则</strong> (A.5)，$g$ 的导数为 $Dg(x) = Df(Ax + b)\, A$。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>When $f$ is real-valued (i.e., $m = 1$), we obtain the formula for the gradient of a composition of a function with an affine function,</p>
+        <p>$$ \nabla g(x) = A^T \nabla f(Ax + b). $$</p>
+        <p>For example, suppose that $f : \mathbb{R}^n \to \mathbb{R}$, $x, v \in \mathbb{R}^n$, and we define the function $\tilde f : \mathbb{R} \to \mathbb{R}$ by $\tilde f(t) = f(x + tv)$. (Roughly speaking, $\tilde f$ is $f$, restricted to the line $\{x + tv \mid t \in \mathbb{R}\}$.) Then we have</p>
+        <p>$$ D\tilde f(t) = \tilde f'(t) = \nabla f(x + tv)^T v. $$</p>
+        <p>(The scalar $\tilde f'(0)$ is the directional derivative of $f$, at $x$, in the direction $v$.)</p></div>
+      <div class="zh"><p>当 $f$ 为实值函数（即 $m = 1$）时，得到函数与仿射函数复合的梯度公式：</p>
+        <p>$$ \nabla g(x) = A^T \nabla f(Ax + b). $$</p>
+        <p>例如，设 $f : \mathbb{R}^n \to \mathbb{R}$，$x, v \in \mathbb{R}^n$，定义函数 $\tilde f : \mathbb{R} \to \mathbb{R}$ 为 $\tilde f(t) = f(x + tv)$。（粗略地说，$\tilde f$ 是 $f$ 限制在直线 $\{x + tv \mid t \in \mathbb{R}\}$ 上的函数。）则</p>
+        <p>$$ D\tilde f(t) = \tilde f'(t) = \nabla f(x + tv)^T v. $$</p>
+        <p>（标量 $\tilde f'(0)$ 即 $f$ 在 $x$ 处沿方向 $v$ 的<strong>方向导数</strong>。）</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><em>Example A.2</em> Consider the function $f : \mathbb{R}^n \to \mathbb{R}$, with $\mathbf{dom}\, f = \mathbb{R}^n$ and</p>
+        <p>$$ f(x) = \log \sum_{i=1}^m \exp(a_i^T x + b_i), $$</p>
+        <p>where $a_1, \ldots, a_m \in \mathbb{R}^n$, and $b_1, \ldots, b_m \in \mathbb{R}$. We can find a simple expression for its gradient by noting that it is the composition of the affine function $Ax + b$, where $A \in \mathbb{R}^{m\times n}$ with rows $a_1^T, \ldots, a_m^T$, and the function $g : \mathbb{R}^m \to \mathbb{R}$ given by $g(y) = \log(\sum_{i=1}^m \exp y_i)$. Simple differentiation (or the formula (A.6)) shows that</p>
+        <p>$$ \nabla g(y) = \frac{1}{\sum_{i=1}^m \exp y_i} \begin{bmatrix} \exp y_1 \\ \vdots \\ \exp y_m \end{bmatrix}, \tag{A.7} $$</p>
+        <p>so by the composition formula we have</p>
+        <p>$$ \nabla f(x) = \frac{1}{\mathbf{1}^T z}\, A^T z $$</p>
+        <p>where $z_i = \exp(a_i^T x + b_i)$, $i = 1, \ldots, m$.</p></div>
+      <div class="zh"><p><em>例 A.2</em> 考虑函数 $f : \mathbb{R}^n \to \mathbb{R}$，$\mathbf{dom}\, f = \mathbb{R}^n$，</p>
+        <p>$$ f(x) = \log \sum_{i=1}^m \exp(a_i^T x + b_i), $$</p>
+        <p>其中 $a_1, \ldots, a_m \in \mathbb{R}^n$，$b_1, \ldots, b_m \in \mathbb{R}$。注意到它是仿射函数 $Ax + b$（其中 $A \in \mathbb{R}^{m\times n}$，其行为 $a_1^T, \ldots, a_m^T$）与函数 $g : \mathbb{R}^m \to \mathbb{R}$（$g(y) = \log(\sum_{i=1}^m \exp y_i)$）的复合，即可得到其梯度的简洁表达式。简单求导（或用公式 (A.6)）可得</p>
+        <p>$$ \nabla g(y) = \frac{1}{\sum_{i=1}^m \exp y_i} \begin{bmatrix} \exp y_1 \\ \vdots \\ \exp y_m \end{bmatrix}, \tag{A.7} $$</p>
+        <p>故由复合公式有</p>
+        <p>$$ \nabla f(x) = \frac{1}{\mathbf{1}^T z}\, A^T z, $$</p>
+        <p>其中 $z_i = \exp(a_i^T x + b_i)$，$i = 1, \ldots, m$。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><em>Example A.3</em> We derive an expression for $\nabla f(x)$, where</p>
+        <p>$$ f(x) = \log \det(F_0 + x_1 F_1 + \cdots + x_n F_n), $$</p>
+        <p>where $F_0, \ldots, F_n \in \mathbf{S}^p$, and</p>
+        <p>$$ \mathbf{dom}\, f = \{x \in \mathbb{R}^n \mid F_0 + x_1 F_1 + \cdots + x_n F_n \succ 0\}. $$</p>
+        <p>The function $f$ is the composition of the affine mapping from $x \in \mathbb{R}^n$ to $F_0 + x_1 F_1 + \cdots + x_n F_n \in \mathbf{S}^p$, with the function $\log \det X$. We use the chain rule to evaluate</p>
+        <p>$$ \frac{\partial f(x)}{\partial x_i} = \mathbf{tr}(F_i \nabla \log \det(F)) = \mathbf{tr}(F^{-1}F_i), $$</p>
+        <p>where $F = F_0 + x_1 F_1 + \cdots + x_n F_n$. Thus we have</p>
+        <p>$$ \nabla f(x) = \begin{bmatrix} \mathbf{tr}(F^{-1}F_1) \\ \vdots \\ \mathbf{tr}(F^{-1}F_n) \end{bmatrix}. $$</p></div>
+      <div class="zh"><p><em>例 A.3</em> 推导 $\nabla f(x)$ 的表达式，其中</p>
+        <p>$$ f(x) = \log \det(F_0 + x_1 F_1 + \cdots + x_n F_n), $$</p>
+        <p>其中 $F_0, \ldots, F_n \in \mathbf{S}^p$，且</p>
+        <p>$$ \mathbf{dom}\, f = \{x \in \mathbb{R}^n \mid F_0 + x_1 F_1 + \cdots + x_n F_n \succ 0\}. $$</p>
+        <p>函数 $f$ 是从 $x \in \mathbb{R}^n$ 到 $F_0 + x_1 F_1 + \cdots + x_n F_n \in \mathbf{S}^p$ 的仿射映射与函数 $\log \det X$ 的复合。用链式法则求得</p>
+        <p>$$ \frac{\partial f(x)}{\partial x_i} = \mathbf{tr}(F_i \nabla \log \det(F)) = \mathbf{tr}(F^{-1}F_i), $$</p>
+        <p>其中 $F = F_0 + x_1 F_1 + \cdots + x_n F_n$。因此</p>
+        <p>$$ \nabla f(x) = \begin{bmatrix} \mathbf{tr}(F^{-1}F_1) \\ \vdots \\ \mathbf{tr}(F^{-1}F_n) \end{bmatrix}. $$</p></div>
+    </div>
+
+    <!-- ============== A.4.3 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>A.4.3 Second derivative</h3></div>
+      <div class="zh"><h3>A.4.3 二阶导数</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>In this section we review the second derivative of a real-valued function $f : \mathbb{R}^n \to \mathbb{R}$.</p>
+        <p>The second derivative or Hessian matrix of $f$ at $x \in \mathbf{int}\, \mathbf{dom}\, f$, denoted $\nabla^2 f(x)$, is given by</p>
+        <p>$$ \nabla^2 f(x)_{ij} = \frac{\partial^2 f(x)}{\partial x_i \partial x_j}, \qquad i = 1, \ldots n, \quad j = 1, \ldots, n, $$</p>
+        <p>provided $f$ is twice differentiable at $x$, where the partial derivatives are evaluated at $x$. The second-order approximation of $f$, at or near $x$, is the quadratic function of $z$ defined by</p>
+        <p>$$ \hat f(z) = f(x) + \nabla f(x)^T (z - x) + (1/2)(z - x)^T \nabla^2 f(x)(z - x). $$</p></div>
+      <div class="zh"><p>本节回顾实值函数 $f : \mathbb{R}^n \to \mathbb{R}$ 的二阶导数。</p>
+        <p>$f$ 在 $x \in \mathbf{int}\, \mathbf{dom}\, f$ 处的二阶导数或 <strong>Hessian 矩阵</strong>记作 $\nabla^2 f(x)$，其定义为</p>
+        <p>$$ \nabla^2 f(x)_{ij} = \frac{\partial^2 f(x)}{\partial x_i \partial x_j}, \qquad i = 1, \ldots n, \quad j = 1, \ldots, n, $$</p>
+        <p>这里假定 $f$ 在 $x$ 处二阶可微，偏导数在 $x$ 处取值。$f$ 在 $x$ 处（或 $x$ 附近）的<strong>二阶近似</strong>是 $z$ 的二次函数：</p>
+        <p>$$ \hat f(z) = f(x) + \nabla f(x)^T (z - x) + (1/2)(z - x)^T \nabla^2 f(x)(z - x). $$</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>This second-order approximation satisfies</p>
+        <p>$$ \lim_{z \in \mathbf{dom}\, f, \, z \ne x, \, z \to x} \frac{|f(z) - \hat f(z)|}{\|z - x\|_2^2} = 0. $$</p>
+        <p>Not surprisingly, the second derivative can be interpreted as the derivative of the first derivative.</p>
+        <p>If $f$ is differentiable, the gradient mapping is the function $\nabla f : \mathbb{R}^n \to \mathbb{R}^n$, with $\mathbf{dom}\, \nabla f = \mathbf{dom}\, f$, with value $\nabla f(x)$ at $x$. The derivative of this mapping is</p>
+        <p>$$ D\nabla f(x) = \nabla^2 f(x). $$</p></div>
+      <div class="zh"><p>此二阶近似满足</p>
+        <p>$$ \lim_{z \in \mathbf{dom}\, f, \, z \ne x, \, z \to x} \frac{|f(z) - \hat f(z)|}{\|z - x\|_2^2} = 0. $$</p>
+        <p>不出意料，二阶导数可解释为一阶导数的导数。</p>
+        <p>若 $f$ 可微，则梯度映射是函数 $\nabla f : \mathbb{R}^n \to \mathbb{R}^n$，$\mathbf{dom}\, \nabla f = \mathbf{dom}\, f$，在 $x$ 处取值 $\nabla f(x)$。此映射的导数为</p>
+        <p>$$ D\nabla f(x) = \nabla^2 f(x). $$</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Examples</h3></div>
+      <div class="zh"><h3>实例</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>As a simple example consider the quadratic function $f : \mathbb{R}^n \to \mathbb{R}$,</p>
+        <p>$$ f(x) = (1/2)x^T P x + q^T x + r, $$</p>
+        <p>where $P \in \mathbf{S}^n$, $q \in \mathbb{R}^n$, and $r \in \mathbb{R}$. Its gradient is $\nabla f(x) = Px + q$, so its Hessian is given by $\nabla^2 f(x) = P$. The second-order approximation of a quadratic function is itself.</p></div>
+      <div class="zh"><p>以二次函数 $f : \mathbb{R}^n \to \mathbb{R}$ 为简单例子：</p>
+        <p>$$ f(x) = (1/2)x^T P x + q^T x + r, $$</p>
+        <p>其中 $P \in \mathbf{S}^n$，$q \in \mathbb{R}^n$，$r \in \mathbb{R}$。其梯度为 $\nabla f(x) = Px + q$，故其 Hessian 为 $\nabla^2 f(x) = P$。二次函数的二阶近似即其自身。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>As a more complicated example, we consider again the function $f : \mathbf{S}^n \to \mathbb{R}$, given by $f(X) = \log \det X$, with $\mathbf{dom}\, f = \mathbf{S}^n_{++}$. To find the second-order approximation (and therefore, the Hessian), we will derive a first-order approximation of the gradient, $\nabla f(X) = X^{-1}$. For $Z \in \mathbf{S}^n_{++}$ near $X \in \mathbf{S}^n_{++}$, and $\Delta X = Z - X$, we have</p>
+        <p>$$ \begin{aligned} Z^{-1} &= (X + \Delta X)^{-1} \\\\ &= \left(X^{1/2}(I + X^{-1/2}\Delta X X^{-1/2})X^{1/2}\right)^{-1} \\\\ &= X^{-1/2}(I + X^{-1/2}\Delta X X^{-1/2})^{-1} X^{-1/2} \\\\ &\approx X^{-1/2}(I - X^{-1/2}\Delta X X^{-1/2})X^{-1/2} \\\\ &= X^{-1} - X^{-1}\Delta X X^{-1}, \end{aligned} $$</p>
+        <p>using the first-order approximation $(I + A)^{-1} \approx I - A$, valid for $A$ small.</p></div>
+      <div class="zh"><p>再看一个更复杂的例子：函数 $f : \mathbf{S}^n \to \mathbb{R}$，$f(X) = \log \det X$，$\mathbf{dom}\, f = \mathbf{S}^n_{++}$。为求二阶近似（从而求 Hessian），我们来推导梯度 $\nabla f(X) = X^{-1}$ 的一阶近似。设 $Z \in \mathbf{S}^n_{++}$ 接近 $X \in \mathbf{S}^n_{++}$，$\Delta X = Z - X$，则</p>
+        <p>$$ \begin{aligned} Z^{-1} &= (X + \Delta X)^{-1} \\\\ &= \left(X^{1/2}(I + X^{-1/2}\Delta X X^{-1/2})X^{1/2}\right)^{-1} \\\\ &= X^{-1/2}(I + X^{-1/2}\Delta X X^{-1/2})^{-1} X^{-1/2} \\\\ &\approx X^{-1/2}(I - X^{-1/2}\Delta X X^{-1/2})X^{-1/2} \\\\ &= X^{-1} - X^{-1}\Delta X X^{-1}, \end{aligned} $$</p>
+        <p>其中用到一阶近似 $(I + A)^{-1} \approx I - A$（当 $A$ 很小时成立）。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>This approximation is enough for us to identify the Hessian of $f$ at $X$. The Hessian is a quadratic form on $\mathbf{S}^n$. Such a quadratic form is cumbersome to describe in the general case, since it requires four indices. But from the first-order approximation of the gradient above, the quadratic form can be expressed as</p>
+        <p>$$ -\mathbf{tr}(X^{-1} U X^{-1} V), $$</p>
+        <p>where $U, V \in \mathbf{S}^n$ are the arguments of the quadratic form. (This generalizes the expression for the scalar case: $(\log x)'' = -1/x^2$.)</p>
+        <p>Now we have the second-order approximation of $f$ near $X$:</p>
+        <p>$$ \begin{aligned} f(Z) &= f(X + \Delta X) \\\\ &\approx f(X) + \mathbf{tr}(X^{-1}\Delta X) - (1/2)\, \mathbf{tr}(X^{-1}\Delta X X^{-1}\Delta X) \\\\ &\approx f(X) + \mathbf{tr}\left(X^{-1}(Z - X)\right) - (1/2)\, \mathbf{tr}\left(X^{-1}(Z - X) X^{-1}(Z - X)\right). \end{aligned} $$</p></div>
+      <div class="zh"><p>此近似足以识别 $f$ 在 $X$ 处的 Hessian。Hessian 是 $\mathbf{S}^n$ 上的一个二次型。在一般情况下这样的二次型描述起来较为繁琐，因为它需要四个下标。但由上面梯度的一阶近似，该二次型可表为</p>
+        <p>$$ -\mathbf{tr}(X^{-1} U X^{-1} V), $$</p>
+        <p>其中 $U, V \in \mathbf{S}^n$ 为该二次型的自变量。（这推广了标量情形的表达式：$(\log x)'' = -1/x^2$。）</p>
+        <p>于是得到 $f$ 在 $X$ 附近的二阶近似：</p>
+        <p>$$ \begin{aligned} f(Z) &= f(X + \Delta X) \\\\ &\approx f(X) + \mathbf{tr}(X^{-1}\Delta X) - (1/2)\, \mathbf{tr}(X^{-1}\Delta X X^{-1}\Delta X) \\\\ &\approx f(X) + \mathbf{tr}\left(X^{-1}(Z - X)\right) - (1/2)\, \mathbf{tr}\left(X^{-1}(Z - X) X^{-1}(Z - X)\right). \end{aligned} $$</p></div>
+    </div>
+
+    <!-- ============== A.4.4 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>A.4.4 Chain rule for second derivative</h3></div>
+      <div class="zh"><h3>A.4.4 二阶导数的链式法则</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>A general chain rule for the second derivative is cumbersome in most cases, so we will state it only for some special cases that we will need.</p></div>
+      <div class="zh"><p>二阶导数的一般链式法则在多数情况下都较为繁琐，因此我们仅就后面需要的一些特殊情形加以叙述。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Composition with scalar function</h3></div>
+      <div class="zh"><h3>与标量函数的复合</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Suppose $f : \mathbb{R}^n \to \mathbb{R}$, $g : \mathbb{R} \to \mathbb{R}$, and $h(x) = g(f(x))$. Simply working out the partial derivatives yields</p>
+        <p>$$ \nabla^2 h(x) = g'(f(x))\, \nabla^2 f(x) + g''(f(x))\, \nabla f(x) \nabla f(x)^T. \tag{A.8} $$</p></div>
+      <div class="zh"><p>设 $f : \mathbb{R}^n \to \mathbb{R}$，$g : \mathbb{R} \to \mathbb{R}$，$h(x) = g(f(x))$。直接求偏导数可得</p>
+        <p>$$ \nabla^2 h(x) = g'(f(x))\, \nabla^2 f(x) + g''(f(x))\, \nabla f(x) \nabla f(x)^T. \tag{A.8} $$</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Composition with affine function</h3></div>
+      <div class="zh"><h3>与仿射函数的复合</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Suppose $f : \mathbb{R}^n \to \mathbb{R}$, $A \in \mathbb{R}^{n\times m}$, and $b \in \mathbb{R}^n$. Define $g : \mathbb{R}^m \to \mathbb{R}$ by $g(x) = f(Ax + b)$. Then we have</p>
+        <p>$$ \nabla^2 g(x) = A^T \nabla^2 f(Ax + b)\, A. $$</p>
+        <p>As an example, consider the restriction of a real-valued function $f$ to a line, i.e., the function $\tilde f(t) = f(x + tv)$, where $x$ and $v$ are fixed. Then we have</p>
+        <p>$$ \nabla^2 \tilde f(t) = \tilde f''(t) = v^T \nabla^2 f(x + tv)\, v. $$</p></div>
+      <div class="zh"><p>设 $f : \mathbb{R}^n \to \mathbb{R}$，$A \in \mathbb{R}^{n\times m}$，$b \in \mathbb{R}^n$。定义 $g : \mathbb{R}^m \to \mathbb{R}$ 为 $g(x) = f(Ax + b)$。则</p>
+        <p>$$ \nabla^2 g(x) = A^T \nabla^2 f(Ax + b)\, A. $$</p>
+        <p>例如，考虑实值函数 $f$ 限制在一条直线上的情形，即函数 $\tilde f(t) = f(x + tv)$，其中 $x$ 与 $v$ 固定。则</p>
+        <p>$$ \nabla^2 \tilde f(t) = \tilde f''(t) = v^T \nabla^2 f(x + tv)\, v. $$</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><em>Example A.4</em> We consider the function $f : \mathbb{R}^n \to \mathbb{R}$ from example A.2,</p>
+        <p>$$ f(x) = \log \sum_{i=1}^m \exp(a_i^T x + b_i), $$</p>
+        <p>where $a_1, \ldots, a_m \in \mathbb{R}^n$, and $b_1, \ldots, b_m \in \mathbb{R}$. By noting that $f(x) = g(Ax + b)$, where $g(y) = \log(\sum_{i=1}^m \exp y_i)$, we can obtain a simple formula for the Hessian of $f$. Taking partial derivatives, or using the formula (A.8), noting that $g$ is the composition of $\log$ with $\sum_{i=1}^m \exp y_i$, yields</p>
+        <p>$$ \nabla^2 g(y) = \mathbf{diag}(\nabla g(y)) - \nabla g(y) \nabla g(y)^T, $$</p>
+        <p>where $\nabla g(y)$ is given in (A.7). By the composition formula we have</p>
+        <p>$$ \nabla^2 f(x) = A^T \left( \frac{1}{\mathbf{1}^T z}\, \mathbf{diag}(z) - \frac{1}{(\mathbf{1}^T z)^2}\, z z^T \right) A, $$</p>
+        <p>where $z_i = \exp(a_i^T x + b_i)$, $i = 1, \ldots, m$.</p></div>
+      <div class="zh"><p><em>例 A.4</em> 考虑例 A.2 中的函数 $f : \mathbb{R}^n \to \mathbb{R}$，</p>
+        <p>$$ f(x) = \log \sum_{i=1}^m \exp(a_i^T x + b_i), $$</p>
+        <p>其中 $a_1, \ldots, a_m \in \mathbb{R}^n$，$b_1, \ldots, b_m \in \mathbb{R}$。注意到 $f(x) = g(Ax + b)$，其中 $g(y) = \log(\sum_{i=1}^m \exp y_i)$，即可得到 $f$ 的 Hessian 的简洁公式。求偏导数，或用公式 (A.8)（注意 $g$ 是 $\log$ 与 $\sum_{i=1}^m \exp y_i$ 的复合），可得</p>
+        <p>$$ \nabla^2 g(y) = \mathbf{diag}(\nabla g(y)) - \nabla g(y) \nabla g(y)^T, $$</p>
+        <p>其中 $\nabla g(y)$ 由 (A.7) 给出。由复合公式有</p>
+        <p>$$ \nabla^2 f(x) = A^T \left( \frac{1}{\mathbf{1}^T z}\, \mathbf{diag}(z) - \frac{1}{(\mathbf{1}^T z)^2}\, z z^T \right) A, $$</p>
+        <p>其中 $z_i = \exp(a_i^T x + b_i)$，$i = 1, \ldots, m$。</p></div>
+    </div>
+
+    <!-- ============== A.5 Linear algebra ============== -->
+    <div class="pair head">
+      <div class="en"><h2>A.5 Linear algebra</h2></div>
+      <div class="zh"><h2>A.5 线性代数</h2></div>
+    </div>
+
+    <!-- ============== A.5.1 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>A.5.1 Range and nullspace</h3></div>
+      <div class="zh"><h3>A.5.1 值域与零空间</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Let $A \in \mathbb{R}^{m\times n}$ (i.e., $A$ is a real matrix with $m$ rows and $n$ columns). The range of $A$, denoted $\mathcal{R}(A)$, is the set of all vectors in $\mathbb{R}^m$ that can be written as linear combinations of the columns of $A$, i.e.,</p>
+        <p>$$ \mathcal{R}(A) = \{Ax \mid x \in \mathbb{R}^n\}. $$</p>
+        <p>The range $\mathcal{R}(A)$ is a subspace of $\mathbb{R}^m$, i.e., it is itself a vector space. Its dimension is the rank of $A$, denoted $\mathbf{rank}\, A$. The rank of $A$ can never be greater than the minimum of $m$ and $n$. We say $A$ has full rank if $\mathbf{rank}\, A = \min\{m, n\}$.</p></div>
+      <div class="zh"><p>设 $A \in \mathbb{R}^{m\times n}$（即 $A$ 是 $m$ 行 $n$ 列的实矩阵）。$A$ 的<strong>值域</strong>记作 $\mathcal{R}(A)$，是 $\mathbb{R}^m$ 中所有可表为 $A$ 的列的线性组合的向量构成的集合，即</p>
+        <p>$$ \mathcal{R}(A) = \{Ax \mid x \in \mathbb{R}^n\}. $$</p>
+        <p>值域 $\mathcal{R}(A)$ 是 $\mathbb{R}^m$ 的一个子空间，即它本身是一个向量空间。其维数为 $A$ 的<strong>秩</strong>，记作 $\mathbf{rank}\, A$。$A$ 的秩不会超过 $m$ 与 $n$ 的较小者。若 $\mathbf{rank}\, A = \min\{m, n\}$，则称 $A$ 是<strong>满秩</strong>的。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The nullspace (or kernel) of $A$, denoted $\mathcal{N}(A)$, is the set of all vectors $x$ mapped into zero by $A$:</p>
+        <p>$$ \mathcal{N}(A) = \{x \mid Ax = 0\}. $$</p>
+        <p>The nullspace is a subspace of $\mathbb{R}^n$.</p></div>
+      <div class="zh"><p>$A$ 的<strong>零空间</strong>（或核）记作 $\mathcal{N}(A)$，是所有被 $A$ 映为零的向量 $x$ 构成的集合：</p>
+        <p>$$ \mathcal{N}(A) = \{x \mid Ax = 0\}. $$</p>
+        <p>零空间是 $\mathbb{R}^n$ 的一个子空间。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Orthogonal decomposition induced by $A$</h3></div>
+      <div class="zh"><h3>$A$ 诱导的正交分解</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>If $V$ is a subspace of $\mathbb{R}^n$, its orthogonal complement, denoted $V^\perp$, is defined as</p>
+        <p>$$ V^\perp = \{x \mid z^T x = 0 \text{ for all } z \in V\}. $$</p>
+        <p>(As one would expect of a complement, we have $V^{\perp\perp} = V$.)</p>
+        <p>A basic result of linear algebra is that, for any $A \in \mathbb{R}^{m\times n}$, we have</p>
+        <p>$$ \mathcal{N}(A) = \mathcal{R}(A^T)^\perp. $$</p>
+        <p>(Applying the result to $A^T$ we also have $\mathcal{R}(A) = \mathcal{N}(A^T)^\perp$.) This result is often stated as</p>
+        <p>$$ \mathcal{N}(A)^\perp \oplus \mathcal{R}(A^T) = \mathbb{R}^n. \tag{A.9} $$</p>
+        <p>Here the symbol $\oplus$ refers to orthogonal direct sum, i.e., the sum of two subspaces that are orthogonal. The decomposition (A.9) of $\mathbb{R}^n$ is called the orthogonal decomposition induced by $A$.</p></div>
+      <div class="zh"><p>若 $V$ 是 $\mathbb{R}^n$ 的子空间，其<strong>正交补</strong>记作 $V^\perp$，定义为</p>
+        <p>$$ V^\perp = \{x \mid z^T x = 0, \, \forall z \in V\}. $$</p>
+        <p>（正如对补的期望，$V^{\perp\perp} = V$。）</p>
+        <p>线性代数的一个基本结论是：对任意 $A \in \mathbb{R}^{m\times n}$，有</p>
+        <p>$$ \mathcal{N}(A) = \mathcal{R}(A^T)^\perp. $$</p>
+        <p>（将此结果应用于 $A^T$ 还可得 $\mathcal{R}(A) = \mathcal{N}(A^T)^\perp$。）此结论常写为</p>
+        <p>$$ \mathcal{N}(A)^\perp \oplus \mathcal{R}(A^T) = \mathbb{R}^n. \tag{A.9} $$</p>
+        <p>这里符号 $\oplus$ 表示正交直和，即两个相互正交的子空间之和。$\mathbb{R}^n$ 的分解 (A.9) 称为由 $A$ 诱导的<strong>正交分解</strong>。</p></div>
+    </div>
+
+    <!-- ============== A.5.2 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>A.5.2 Symmetric eigenvalue decomposition</h3></div>
+      <div class="zh"><h3>A.5.2 对称特征值分解</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Suppose $A \in \mathbf{S}^n$, i.e., $A$ is a real symmetric $n \times n$ matrix. Then $A$ can be factored as</p>
+        <p>$$ A = Q \Lambda Q^T, \tag{A.10} $$</p>
+        <p>where $Q \in \mathbb{R}^{n\times n}$ is orthogonal, i.e., satisfies $Q^T Q = I$, and $\Lambda = \mathbf{diag}(\lambda_1, \ldots, \lambda_n)$. The (real) numbers $\lambda_i$ are the eigenvalues of $A$, and are the roots of the characteristic polynomial $\det(sI - A)$. The columns of $Q$ form an orthonormal set of eigenvectors of $A$. The factorization (A.10) is called the spectral decomposition or (symmetric) eigenvalue decomposition of $A$.</p></div>
+      <div class="zh"><p>设 $A \in \mathbf{S}^n$，即 $A$ 是实对称 $n \times n$ 矩阵。则 $A$ 可分解为</p>
+        <p>$$ A = Q \Lambda Q^T, \tag{A.10} $$</p>
+        <p>其中 $Q \in \mathbb{R}^{n\times n}$ 正交，即满足 $Q^T Q = I$，$\Lambda = \mathbf{diag}(\lambda_1, \ldots, \lambda_n)$。$\lambda_i$ 是 $A$ 的（实）<strong>特征值</strong>，也是特征多项式 $\det(sI - A)$ 的根。$Q$ 的列构成 $A$ 的一组正交单位特征向量。分解 (A.10) 称为 $A$ 的谱分解或（对称）<strong>特征值分解</strong>。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We order the eigenvalues as $\lambda_1 \ge \lambda_2 \ge \cdots \ge \lambda_n$. We use the notation $\lambda_i(A)$ to refer to the $i$th largest eigenvalue of $A \in \mathbf{S}$. We usually write the largest or maximum eigenvalue as $\lambda_1(A) = \lambda_{\max}(A)$, and the least or minimum eigenvalue as $\lambda_n(A) = \lambda_{\min}(A)$.</p></div>
+      <div class="zh"><p>将特征值排序为 $\lambda_1 \ge \lambda_2 \ge \cdots \ge \lambda_n$。用记号 $\lambda_i(A)$ 表示 $A \in \mathbf{S}$ 的第 $i$ 大特征值。通常将最大特征值记为 $\lambda_1(A) = \lambda_{\max}(A)$，最小特征值记为 $\lambda_n(A) = \lambda_{\min}(A)$。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The determinant and trace can be expressed in terms of the eigenvalues,</p>
+        <p>$$ \det A = \prod_{i=1}^n \lambda_i, \qquad \mathbf{tr}\, A = \sum_{i=1}^n \lambda_i, $$</p>
+        <p>as can the spectral and Frobenius norms,</p>
+        <p>$$ \|A\|_2 = \max_{i=1,\ldots,n} |\lambda_i| = \max\{\lambda_1, -\lambda_n\}, \qquad \|A\|_F = \left( \sum_{i=1}^n \lambda_i^2 \right)^{1/2}. $$</p></div>
+      <div class="zh"><p>行列式与迹可用特征值表示：</p>
+        <p>$$ \det A = \prod_{i=1}^n \lambda_i, \qquad \mathbf{tr}\, A = \sum_{i=1}^n \lambda_i, $$</p>
+        <p>谱范数与 Frobenius 范数同样如此：</p>
+        <p>$$ \|A\|_2 = \max_{i=1,\ldots,n} |\lambda_i| = \max\{\lambda_1, -\lambda_n\}, \qquad \|A\|_F = \left( \sum_{i=1}^n \lambda_i^2 \right)^{1/2}. $$</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Definiteness and matrix inequalities</h3></div>
+      <div class="zh"><h3>定性与矩阵不等式</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The largest and smallest eigenvalues satisfy</p>
+        <p>$$ \lambda_{\max}(A) = \sup_{x \ne 0} \frac{x^T A x}{x^T x}, \qquad \lambda_{\min}(A) = \inf_{x \ne 0} \frac{x^T A x}{x^T x}. $$</p>
+        <p>In particular, for any $x$, we have</p>
+        <p>$$ \lambda_{\min}(A)\, x^T x \le x^T A x \le \lambda_{\max}(A)\, x^T x, $$</p>
+        <p>with both inequalities tight for (different) choices of $x$.</p></div>
+      <div class="zh"><p>最大与最小特征值满足</p>
+        <p>$$ \lambda_{\max}(A) = \sup_{x \ne 0} \frac{x^T A x}{x^T x}, \qquad \lambda_{\min}(A) = \inf_{x \ne 0} \frac{x^T A x}{x^T x}. $$</p>
+        <p>特别地，对任意 $x$ 有</p>
+        <p>$$ \lambda_{\min}(A)\, x^T x \le x^T A x \le \lambda_{\max}(A)\, x^T x, $$</p>
+        <p>且两个不等式分别对（不同的）$x$ 取到等号。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>A matrix $A \in \mathbf{S}^n$ is called positive definite if for all $x \ne 0$, $x^T A x > 0$. We denote this as $A \succ 0$. By the inequality above, we see that $A \succ 0$ if and only all its eigenvalues are positive, i.e., $\lambda_{\min}(A) > 0$. If $-A$ is positive definite, we say $A$ is negative definite, which we write as $A \prec 0$. We use $\mathbf{S}^n_{++}$ to denote the set of positive definite matrices in $\mathbf{S}^n$.</p></div>
+      <div class="zh"><p>若对所有 $x \ne 0$ 都有 $x^T A x > 0$，则称矩阵 $A \in \mathbf{S}^n$ 是<strong>正定</strong>的，记作 $A \succ 0$。由上述不等式可知，$A \succ 0$ 当且仅当其所有特征值为正，即 $\lambda_{\min}(A) > 0$。若 $-A$ 正定，则称 $A$ 是<strong>负定</strong>的，记作 $A \prec 0$。用 $\mathbf{S}^n_{++}$ 表示 $\mathbf{S}^n$ 中正定矩阵的集合。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>If $A$ satisfies $x^T A x \ge 0$ for all $x$, we say that $A$ is positive semidefinite or nonnegative definite. If $-A$ is nonnegative definite, i.e., if $x^T A x \le 0$ for all $x$, we say that $A$ is negative semidefinite or nonpositive definite. We use $\mathbf{S}^n_+$ to denote the set of nonnegative definite matrices in $\mathbf{S}^n$.</p></div>
+      <div class="zh"><p>若对所有 $x$ 都有 $x^T A x \ge 0$，则称 $A$ 是<strong>半正定</strong>的或非负定的。若 $-A$ 非负定，即对所有 $x$ 有 $x^T A x \le 0$，则称 $A$ 是<strong>半负定</strong>的或非正定的。用 $\mathbf{S}^n_+$ 表示 $\mathbf{S}^n$ 中非负定矩阵的集合。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>For $A, B \in \mathbf{S}^n$, we use $A \prec B$ to mean $B - A \succ 0$, and so on. These inequalities are called matrix inequalities, or generalized inequalities associated with the positive semidefinite cone.</p></div>
+      <div class="zh"><p>对 $A, B \in \mathbf{S}^n$，用 $A \prec B$ 表示 $B - A \succ 0$，以此类推。这些不等式称为<strong>矩阵不等式</strong>，或与半正定锥相关联的广义不等式。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Symmetric squareroot</h3></div>
+      <div class="zh"><h3>对称平方根</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Let $A \in \mathbf{S}^n_+$, with eigenvalue decomposition $A = Q\, \mathbf{diag}(\lambda_1, \ldots, \lambda_n)\, Q^T$. We define the (symmetric) squareroot of $A$ as</p>
+        <p>$$ A^{1/2} = Q\, \mathbf{diag}(\lambda_1^{1/2}, \ldots, \lambda_n^{1/2})\, Q^T. $$</p>
+        <p>The squareroot $A^{1/2}$ is the unique symmetric positive semidefinite solution of the equation $X^2 = A$.</p></div>
+      <div class="zh"><p>设 $A \in \mathbf{S}^n_+$，其特征值分解为 $A = Q\, \mathbf{diag}(\lambda_1, \ldots, \lambda_n)\, Q^T$。定义 $A$ 的（对称）<strong>平方根</strong>为</p>
+        <p>$$ A^{1/2} = Q\, \mathbf{diag}(\lambda_1^{1/2}, \ldots, \lambda_n^{1/2})\, Q^T. $$</p>
+        <p>平方根 $A^{1/2}$ 是方程 $X^2 = A$ 的唯一对称半正定解。</p></div>
+    </div>
+
+    <!-- ============== A.5.3 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>A.5.3 Generalized eigenvalue decomposition</h3></div>
+      <div class="zh"><h3>A.5.3 广义特征值分解</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The generalized eigenvalues of a pair of symmetric matrices $(A, B) \in \mathbf{S}^n \times \mathbf{S}^n$ are defined as the roots of the polynomial $\det(sB - A)$. We are usually interested in matrix pairs with $B \in \mathbf{S}^n_{++}$. In this case the generalized eigenvalues are also the eigenvalues of $B^{-1/2} A B^{-1/2}$ (which are real).</p></div>
+      <div class="zh"><p>对称矩阵对 $(A, B) \in \mathbf{S}^n \times \mathbf{S}^n$ 的<strong>广义特征值</strong>定义为多项式 $\det(sB - A)$ 的根。我们通常关心 $B \in \mathbf{S}^n_{++}$ 的矩阵对。此时广义特征值也是 $B^{-1/2} A B^{-1/2}$ 的特征值（它们是实数）。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>As with the standard eigenvalue decomposition, we order the generalized eigenvalues in nonincreasing order, as $\lambda_1 \ge \lambda_2 \ge \cdots \ge \lambda_n$, and denote the maximum generalized eigenvalue by $\lambda_{\max}(A, B)$.</p></div>
+      <div class="zh"><p>与标准特征值分解一样，将广义特征值按非增序排列为 $\lambda_1 \ge \lambda_2 \ge \cdots \ge \lambda_n$，并用 $\lambda_{\max}(A, B)$ 表示最大广义特征值。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>When $B \in \mathbf{S}^n_{++}$, the pair of matrices can be factored as</p>
+        <p>$$ A = V \Lambda V^T, \qquad B = V V^T, \tag{A.11} $$</p>
+        <p>where $V \in \mathbb{R}^{n\times n}$ is nonsingular, and $\Lambda = \mathbf{diag}(\lambda_1, \ldots, \lambda_n)$, where $\lambda_i$ are the generalized eigenvalues of the pair $(A, B)$. The decomposition (A.11) is called the generalized eigenvalue decomposition.</p></div>
+      <div class="zh"><p>当 $B \in \mathbf{S}^n_{++}$ 时，该矩阵对可分解为</p>
+        <p>$$ A = V \Lambda V^T, \qquad B = V V^T, \tag{A.11} $$</p>
+        <p>其中 $V \in \mathbb{R}^{n\times n}$ 非奇异，$\Lambda = \mathbf{diag}(\lambda_1, \ldots, \lambda_n)$，$\lambda_i$ 为矩阵对 $(A, B)$ 的广义特征值。分解 (A.11) 称为<strong>广义特征值分解</strong>。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The generalized eigenvalue decomposition is related to the standard eigenvalue decomposition of the matrix $B^{-1/2} A B^{-1/2}$. If $Q \Lambda Q^T$ is the eigenvalue decomposition of $B^{-1/2} A B^{-1/2}$, then (A.11) holds with $V = B^{1/2} Q$.</p></div>
+      <div class="zh"><p>广义特征值分解与矩阵 $B^{-1/2} A B^{-1/2}$ 的标准特征值分解相关。若 $Q \Lambda Q^T$ 是 $B^{-1/2} A B^{-1/2}$ 的特征值分解，则取 $V = B^{1/2} Q$ 即可使 (A.11) 成立。</p></div>
+    </div>
+
+    <!-- ============== A.5.4 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>A.5.4 Singular value decomposition</h3></div>
+      <div class="zh"><h3>A.5.4 奇异值分解</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Suppose $A \in \mathbb{R}^{m\times n}$ with $\mathbf{rank}\, A = r$. Then $A$ can be factored as</p>
+        <p>$$ A = U \Sigma V^T, \tag{A.12} $$</p>
+        <p>where $U \in \mathbb{R}^{m\times r}$ satisfies $U^T U = I$, $V \in \mathbb{R}^{n\times r}$ satisfies $V^T V = I$, and $\Sigma = \mathbf{diag}(\sigma_1, \ldots, \sigma_r)$, with</p>
+        <p>$$ \sigma_1 \ge \sigma_2 \ge \cdots \ge \sigma_r > 0. $$</p>
+        <p>The factorization (A.12) is called the singular value decomposition (SVD) of $A$. The columns of $U$ are called left singular vectors of $A$, the columns of $V$ are right singular vectors, and the numbers $\sigma_i$ are the singular values. The singular value decomposition can be written</p>
+        <p>$$ A = \sum_{i=1}^r \sigma_i u_i v_i^T, $$</p>
+        <p>where $u_i \in \mathbb{R}^m$ are the left singular vectors, and $v_i \in \mathbb{R}^n$ are the right singular vectors.</p></div>
+      <div class="zh"><p>设 $A \in \mathbb{R}^{m\times n}$，$\mathbf{rank}\, A = r$。则 $A$ 可分解为</p>
+        <p>$$ A = U \Sigma V^T, \tag{A.12} $$</p>
+        <p>其中 $U \in \mathbb{R}^{m\times r}$ 满足 $U^T U = I$，$V \in \mathbb{R}^{n\times r}$ 满足 $V^T V = I$，$\Sigma = \mathbf{diag}(\sigma_1, \ldots, \sigma_r)$，且</p>
+        <p>$$ \sigma_1 \ge \sigma_2 \ge \cdots \ge \sigma_r > 0. $$</p>
+        <p>分解 (A.12) 称为 $A$ 的<strong>奇异值分解</strong>（SVD）。$U$ 的列称为 $A$ 的<strong>左奇异向量</strong>，$V$ 的列称为<strong>右奇异向量</strong>，数 $\sigma_i$ 称为<strong>奇异值</strong>。奇异值分解可写为</p>
+        <p>$$ A = \sum_{i=1}^r \sigma_i u_i v_i^T, $$</p>
+        <p>其中 $u_i \in \mathbb{R}^m$ 为左奇异向量，$v_i \in \mathbb{R}^n$ 为右奇异向量。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The singular value decomposition of a matrix $A$ is closely related to the eigenvalue decomposition of the (symmetric, nonnegative definite) matrix $A^T A$. Using (A.12) we can write</p>
+        <p>$$ A^T A = V \Sigma^2 V^T = \begin{bmatrix} V & \tilde V \end{bmatrix} \begin{bmatrix} \Sigma^2 & 0 \\ 0 & 0 \end{bmatrix} \begin{bmatrix} V & \tilde V \end{bmatrix}^T, $$</p>
+        <p>where $\tilde V$ is any matrix for which $[V\ \tilde V]$ is orthogonal. The righthand expression is the eigenvalue decomposition of $A^T A$, so we conclude that its nonzero eigenvalues are the singular values of $A$ squared, and the associated eigenvectors of $A^T A$ are the right singular vectors of $A$. A similar analysis of $AA^T$ shows that its nonzero eigenvalues are also the squares of the singular values of $A$, and the associated eigenvectors are the left singular vectors of $A$.</p></div>
+      <div class="zh"><p>矩阵 $A$ 的奇异值分解与（对称、半正定）矩阵 $A^T A$ 的特征值分解密切相关。利用 (A.12) 可写</p>
+        <p>$$ A^T A = V \Sigma^2 V^T = \begin{bmatrix} V & \tilde V \end{bmatrix} \begin{bmatrix} \Sigma^2 & 0 \\ 0 & 0 \end{bmatrix} \begin{bmatrix} V & \tilde V \end{bmatrix}^T, $$</p>
+        <p>其中 $\tilde V$ 是使 $[V\ \tilde V]$ 正交的任一矩阵。右端恰为 $A^T A$ 的特征值分解，故其非零特征值等于 $A$ 的奇异值的平方，而 $A^T A$ 相应的特征向量即 $A$ 的右奇异向量。对 $AA^T$ 作类似分析可知，其非零特征值也是 $A$ 的奇异值的平方，相应的特征向量是 $A$ 的左奇异向量。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The first or largest singular value is also written as $\sigma_{\max}(A)$. It can be expressed as</p>
+        <p>$$ \sigma_{\max}(A) = \sup_{x, y \ne 0} \frac{x^T A y}{\|x\|_2 \|y\|_2} = \sup_{y \ne 0} \frac{\|Ay\|_2}{\|y\|_2}. $$</p>
+        <p>The righthand expression shows that the maximum singular value is the $\ell_2$ operator norm of $A$. The minimum singular value of $A \in \mathbb{R}^{m\times n}$ is given by</p>
+        <p>$$ \sigma_{\min}(A) = \begin{cases} \sigma_r(A) & r = \min\{m, n\} \\ 0 & r < \min\{m, n\}, \end{cases} $$</p>
+        <p>which is positive if and only if $A$ is full rank.</p></div>
+      <div class="zh"><p>第一个或最大的奇异值也记作 $\sigma_{\max}(A)$。它可表为</p>
+        <p>$$ \sigma_{\max}(A) = \sup_{x, y \ne 0} \frac{x^T A y}{\|x\|_2 \|y\|_2} = \sup_{y \ne 0} \frac{\|Ay\|_2}{\|y\|_2}. $$</p>
+        <p>右端表达式表明最大奇异值即 $A$ 的 $\ell_2$ 算子范数。$A \in \mathbb{R}^{m\times n}$ 的最小奇异值为</p>
+        <p>$$ \sigma_{\min}(A) = \begin{cases} \sigma_r(A) & r = \min\{m, n\} \\ 0 & r < \min\{m, n\}, \end{cases} $$</p>
+        <p>它为正当且仅当 $A$ 满秩。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The singular values of a symmetric matrix are the absolute values of its nonzero eigenvalues, sorted into descending order. The singular values of a symmetric positive semidefinite matrix are the same as its nonzero eigenvalues.</p></div>
+      <div class="zh"><p>对称矩阵的奇异值是其非零特征值的绝对值，按降序排列。对称半正定矩阵的奇异值与其非零特征值相同。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The condition number of a nonsingular $A \in \mathbb{R}^{n\times n}$, denoted $\mathbf{cond}(A)$ or $\kappa(A)$, is defined as</p>
+        <p>$$ \mathbf{cond}(A) = \|A\|_2 \|A^{-1}\|_2 = \sigma_{\max}(A)/\sigma_{\min}(A). $$</p></div>
+      <div class="zh"><p>非奇异矩阵 $A \in \mathbb{R}^{n\times n}$ 的<strong>条件数</strong>记作 $\mathbf{cond}(A)$ 或 $\kappa(A)$，定义为</p>
+        <p>$$ \mathbf{cond}(A) = \|A\|_2 \|A^{-1}\|_2 = \sigma_{\max}(A)/\sigma_{\min}(A). $$</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Pseudo-inverse</h3></div>
+      <div class="zh"><h3>伪逆</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Let $A = U \Sigma V^T$ be the singular value decomposition of $A \in \mathbb{R}^{m\times n}$, with $\mathbf{rank}\, A = r$. We define the pseudo-inverse or Moore–Penrose inverse of $A$ as</p>
+        <p>$$ A^\dagger = V \Sigma^{-1} U^T \in \mathbb{R}^{n\times m}. $$</p>
+        <p>Alternative expressions are</p>
+        <p>$$ A^\dagger = \lim_{\epsilon \to 0} (A^T A + \epsilon I)^{-1} A^T = \lim_{\epsilon \to 0} A^T (AA^T + \epsilon I)^{-1}, $$</p>
+        <p>where the limits are taken with $\epsilon > 0$, which ensures that the inverses in the expressions exist. If $\mathbf{rank}\, A = n$, then $A^\dagger = (A^T A)^{-1} A^T$. If $\mathbf{rank}\, A = m$, then $A^\dagger = A^T (AA^T)^{-1}$. If $A$ is square and nonsingular, then $A^\dagger = A^{-1}$.</p></div>
+      <div class="zh"><p>设 $A = U \Sigma V^T$ 为 $A \in \mathbb{R}^{m\times n}$ 的奇异值分解，$\mathbf{rank}\, A = r$。定义 $A$ 的<strong>伪逆</strong>或 Moore–Penrose 逆为</p>
+        <p>$$ A^\dagger = V \Sigma^{-1} U^T \in \mathbb{R}^{n\times m}. $$</p>
+        <p>它也可表为</p>
+        <p>$$ A^\dagger = \lim_{\epsilon \to 0} (A^T A + \epsilon I)^{-1} A^T = \lim_{\epsilon \to 0} A^T (AA^T + \epsilon I)^{-1}, $$</p>
+        <p>其中极限在 $\epsilon > 0$ 下取，以保证式中出现的逆都存在。若 $\mathbf{rank}\, A = n$，则 $A^\dagger = (A^T A)^{-1} A^T$。若 $\mathbf{rank}\, A = m$，则 $A^\dagger = A^T (AA^T)^{-1}$。若 $A$ 为方阵且非奇异，则 $A^\dagger = A^{-1}$。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The pseudo-inverse comes up in problems involving least-squares, minimum norm, quadratic minimization, and (Euclidean) projection. For example, $A^\dagger b$ is a solution of the least-squares problem</p>
+        <p>$$ \text{minimize} \quad \|Ax - b\|_2^2 $$</p>
+        <p>in general. When the solution is not unique, $A^\dagger b$ gives the solution with minimum (Euclidean) norm. As another example, the matrix $AA^\dagger = UU^T$ gives (Euclidean) projection on $\mathcal{R}(A)$. The matrix $A^\dagger A = VV^T$ gives (Euclidean) projection on $\mathcal{R}(A^T)$.</p></div>
+      <div class="zh"><p>伪逆出现在最小二乘、最小范数、二次极小化及（欧氏）投影等问题中。例如，$A^\dagger b$ 一般是如下最小二乘问题的一个解：</p>
+        <p>$$ \text{minimize} \quad \|Ax - b\|_2^2. $$</p>
+        <p>当解不唯一时，$A^\dagger b$ 给出具有最小（欧氏）范数的解。另一个例子：矩阵 $AA^\dagger = UU^T$ 给出到 $\mathcal{R}(A)$ 上的（欧氏）投影；矩阵 $A^\dagger A = VV^T$ 给出到 $\mathcal{R}(A^T)$ 上的（欧氏）投影。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The optimal value $p^\star$ of the (general, nonconvex) quadratic optimization problem</p>
+        <p>$$ \text{minimize} \quad (1/2)x^T P x + q^T x + r, $$</p>
+        <p>where $P \in \mathbf{S}^n$, can be expressed as</p>
+        <p>$$ p^\star = \begin{cases} -(1/2) q^T P^\dagger q + r & P \succeq 0, \; q \in \mathcal{R}(P) \\ -\infty & \text{otherwise}. \end{cases} $$</p>
+        <p>(This generalizes the expression $p^\star = -(1/2) q^T P^{-1} q + r$, valid for $P \succ 0$.)</p></div>
+      <div class="zh"><p>（一般、非凸的）二次优化问题</p>
+        <p>$$ \text{minimize} \quad (1/2)x^T P x + q^T x + r, $$</p>
+        <p>（其中 $P \in \mathbf{S}^n$）的最优值 $p^\star$ 可表为</p>
+        <p>$$ p^\star = \begin{cases} -(1/2) q^T P^\dagger q + r & P \succeq 0, \; q \in \mathcal{R}(P) \\ -\infty & \text{其他}. \end{cases} $$</p>
+        <p>（这推广了在 $P \succ 0$ 时成立的表达式 $p^\star = -(1/2) q^T P^{-1} q + r$。）</p></div>
+    </div>
+
+    <!-- ============== A.5.5 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>A.5.5 Schur complement</h3></div>
+      <div class="zh"><h3>A.5.5 Schur 补</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Consider a matrix $X \in \mathbf{S}^n$ partitioned as</p>
+        <p>$$ X = \begin{bmatrix} A & B \\ B^T & C \end{bmatrix}, $$</p>
+        <p>where $A \in \mathbf{S}^k$. If $\det A \ne 0$, the matrix</p>
+        <p>$$ S = C - B^T A^{-1} B $$</p>
+        <p>is called the Schur complement of $A$ in $X$. Schur complements arise in several contexts, and appear in many important formulas and theorems. For example, we have</p>
+        <p>$$ \det X = \det A\, \det S. $$</p></div>
+      <div class="zh"><p>考虑分块为如下形式的矩阵 $X \in \mathbf{S}^n$：</p>
+        <p>$$ X = \begin{bmatrix} A & B \\ B^T & C \end{bmatrix}, $$</p>
+        <p>其中 $A \in \mathbf{S}^k$。若 $\det A \ne 0$，则矩阵</p>
+        <p>$$ S = C - B^T A^{-1} B $$</p>
+        <p>称为 $A$ 在 $X$ 中的 <strong>Schur 补</strong>。Schur 补出现在多种场合，并出现在许多重要公式和定理中。例如</p>
+        <p>$$ \det X = \det A\, \det S. $$</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Inverse of block matrix</h3></div>
+      <div class="zh"><h3>分块矩阵的逆</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The Schur complement comes up in solving linear equations, by eliminating one block of variables. We start with</p>
+        <p>$$ \begin{bmatrix} A & B \\ B^T & C \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix} = \begin{bmatrix} u \\ v \end{bmatrix}, $$</p>
+        <p>and assume that $\det A \ne 0$. If we eliminate $x$ from the top block equation and substitute it into the bottom block equation, we obtain $v = B^T A^{-1} u + Sy$, so</p>
+        <p>$$ y = S^{-1}(v - B^T A^{-1} u). $$</p>
+        <p>Substituting this into the first equation yields</p>
+        <p>$$ x = \left(A^{-1} + A^{-1} B S^{-1} B^T A^{-1}\right) u - A^{-1} B S^{-1} v. $$</p>
+        <p>We can express these two equations as a formula for the inverse of a block matrix:</p>
+        <p>$$ \begin{bmatrix} A & B \\ B^T & C \end{bmatrix}^{-1} = \begin{bmatrix} A^{-1} + A^{-1} B S^{-1} B^T A^{-1} & -A^{-1} B S^{-1} \\ -S^{-1} B^T A^{-1} & S^{-1} \end{bmatrix}. $$</p>
+        <p>In particular, we see that the Schur complement is the inverse of the $2,2$ block entry of the inverse of $X$.</p></div>
+      <div class="zh"><p>Schur 补在求解线性方程组、消去一个变量块时出现。从</p>
+        <p>$$ \begin{bmatrix} A & B \\ B^T & C \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix} = \begin{bmatrix} u \\ v \end{bmatrix} $$</p>
+        <p>出发，假设 $\det A \ne 0$。从上面的块方程消去 $x$ 并代入下面的块方程，得 $v = B^T A^{-1} u + Sy$，故</p>
+        <p>$$ y = S^{-1}(v - B^T A^{-1} u). $$</p>
+        <p>代回第一个方程得</p>
+        <p>$$ x = \left(A^{-1} + A^{-1} B S^{-1} B^T A^{-1}\right) u - A^{-1} B S^{-1} v. $$</p>
+        <p>这两个方程可写成分块矩阵求逆的公式：</p>
+        <p>$$ \begin{bmatrix} A & B \\ B^T & C \end{bmatrix}^{-1} = \begin{bmatrix} A^{-1} + A^{-1} B S^{-1} B^T A^{-1} & -A^{-1} B S^{-1} \\ -S^{-1} B^T A^{-1} & S^{-1} \end{bmatrix}. $$</p>
+        <p>特别地，Schur 补是 $X$ 的逆的 $(2,2)$ 块的逆。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Minimization and definiteness</h3></div>
+      <div class="zh"><h3>极小化与定性</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The Schur complement arises when you minimize a quadratic form over some of the variables. Suppose $A \succ 0$, and consider the minimization problem</p>
+        <p>$$ \text{minimize} \quad u^T A u + 2 v^T B^T u + v^T C v \tag{A.13} $$</p>
+        <p>with variable $u$. The solution is $u = -A^{-1} B v$, and the optimal value is</p>
+        <p>$$ \inf_u \begin{bmatrix} u \\ v \end{bmatrix}^T \begin{bmatrix} A & B \\ B^T & C \end{bmatrix} \begin{bmatrix} u \\ v \end{bmatrix} = v^T S v. \tag{A.14} $$</p>
+        <p>From this we can derive the following characterizations of positive definiteness or semidefiniteness of the block matrix $X$:</p>
+        <ul>
+          <li>$X \succ 0$ if and only if $A \succ 0$ and $S \succ 0$.</li>
+          <li>If $A \succ 0$, then $X \succeq 0$ if and only if $S \succeq 0$.</li>
+        </ul></div>
+      <div class="zh"><p>Schur 补出现在对一部分变量极小化二次型时。设 $A \succ 0$，考虑极小化问题</p>
+        <p>$$ \text{minimize} \quad u^T A u + 2 v^T B^T u + v^T C v \tag{A.13} $$</p>
+        <p>变量为 $u$。其解为 $u = -A^{-1} B v$，最优值为</p>
+        <p>$$ \inf_u \begin{bmatrix} u \\ v \end{bmatrix}^T \begin{bmatrix} A & B \\ B^T & C \end{bmatrix} \begin{bmatrix} u \\ v \end{bmatrix} = v^T S v. \tag{A.14} $$</p>
+        <p>由此可得分块矩阵 $X$ 正定或半正定的如下刻画：</p>
+        <ul>
+          <li>$X \succ 0$ 当且仅当 $A \succ 0$ 且 $S \succ 0$；</li>
+          <li>若 $A \succ 0$，则 $X \succeq 0$ 当且仅当 $S \succeq 0$。</li>
+        </ul></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Schur complement with singular $A$</h3></div>
+      <div class="zh"><h3>$A$ 奇异时的 Schur 补</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Some Schur complement results have generalizations to the case when $A$ is singular, although the details are more complicated. As an example, if $A \succeq 0$ and $Bv \in \mathcal{R}(A)$, then the quadratic minimization problem (A.13) (with variable $u$) is solvable, and has optimal value</p>
+        <p>$$ v^T (C - B^T A^\dagger B) v, $$</p>
+        <p>where $A^\dagger$ is the pseudo-inverse of $A$. The problem is unbounded if $Bv \notin \mathcal{R}(A)$ or if $A \not\succeq 0$.</p></div>
+      <div class="zh"><p>某些 Schur 补的结果可以推广到 $A$ 奇异的情形，但细节更为复杂。例如，若 $A \succeq 0$ 且 $Bv \in \mathcal{R}(A)$，则二次极小化问题 (A.13)（变量为 $u$）可解，其最优值为</p>
+        <p>$$ v^T (C - B^T A^\dagger B) v, $$</p>
+        <p>其中 $A^\dagger$ 为 $A$ 的伪逆。若 $Bv \notin \mathcal{R}(A)$ 或 $A \not\succeq 0$，则该问题无下界。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The range condition $Bv \in \mathcal{R}(A)$ can also be expressed as $(I - AA^\dagger)Bv = 0$, so we have the following characterization of positive semidefiniteness of the block matrix $X$:</p>
+        <p>$$ X \succeq 0 \iff A \succeq 0, \quad (I - AA^\dagger)B = 0, \quad C - B^T A^\dagger B \succeq 0. $$</p>
+        <p>Here the matrix $C - B^T A^\dagger B$ serves as a generalization of the Schur complement, when $A$ is singular.</p></div>
+      <div class="zh"><p>值域条件 $Bv \in \mathcal{R}(A)$ 也可表为 $(I - AA^\dagger)Bv = 0$，于是得到分块矩阵 $X$ 半正定的如下刻画：</p>
+        <p>$$ X \succeq 0 \iff A \succeq 0, \quad (I - AA^\dagger)B = 0, \quad C - B^T A^\dagger B \succeq 0. $$</p>
+        <p>这里矩阵 $C - B^T A^\dagger B$ 在 $A$ 奇异时作为 Schur 补的推广。</p></div>
+    </div>
+
+    <!-- ============== Bibliography ============== -->
+    <div class="pair head">
+      <div class="en"><h2>Bibliography</h2></div>
+      <div class="zh"><h2>参考文献</h2></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Some basic references for the material in this appendix are Rudin [Rud76] for analysis, and Strang [Str80] and Meyer [Mey00] for linear algebra. More advanced linear algebra texts include Horn and Johnson [HJ85, HJ91], Parlett [Par98], Golub and Van Loan [GL89], Trefethen and Bau [TB97], and Demmel [Dem97].</p></div>
+      <div class="zh"><p>本附录内容的一些基本参考书：分析方面为 Rudin [Rud76]；线性代数方面为 Strang [Str80] 和 Meyer [Mey00]。更高深的线性代数教材包括 Horn 和 Johnson [HJ85, HJ91]、Parlett [Par98]、Golub 和 Van Loan [GL89]、Trefethen 和 Bau [TB97] 以及 Demmel [Dem97]。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The concept of closed function (§A.3.3) appears frequently in convex optimization, although the terminology varies. The term is used by Rockafellar [Roc70, page 51], Hiriart-Urruty and Lemaréchal [HUL93, volume 1, page 149], Borwein and Lewis [BL00, page 76], and Bertsekas, Nedić, and Ozdaglar [Ber03, page 28].</p></div>
+      <div class="zh"><p>闭函数的概念（§A.3.3）在凸优化中频繁出现，尽管术语有所不同。Rockafellar [Roc70, 第 51 页]、Hiriart-Urruty 与 Lemaréchal [HUL93, 第 1 卷, 第 149 页]、Borwein 与 Lewis [BL00, 第 76 页] 以及 Bertsekas、Nedić 与 Ozdaglar [Ber03, 第 28 页] 均使用了这一术语。</p></div>
+    </div>
+
+    <div style="margin-top:40px; padding:16px; text-align:center; color:var(--muted); font-size:14px; border-top:1px solid var(--rule)">
+      — 附录 A 完（A.1–A.5，含全部公式 A.1–A.14 及例 A.1–A.4）· 下一页：<a href="appendix-b.html" style="color:var(--accent)">附录 B 数学背景续</a> —
+    </div>
+  </main>
+
+  <script src="assets/mathjax-config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+</body>
+</html>

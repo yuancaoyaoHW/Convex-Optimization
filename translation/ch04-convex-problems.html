@@ -1,0 +1,1877 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chapter 4 Convex Optimization Problems · 凸优化问题 — Convex Optimization 中英对照</title>
+  <link rel="stylesheet" href="assets/bilingual.css">
+  <style>
+    /* figure block: full-width, spanning both columns */
+    .pair.fig-block {
+      grid-template-columns: 1fr;
+      border-bottom: 1px solid var(--rule-soft);
+    }
+    .pair.fig-block > .figure-wrap {
+      grid-column: 1 / -1;
+      padding: 16px 22px;
+      text-align: center;
+    }
+    .pair.fig-block .figure-wrap img {
+      max-width: 100%;
+      height: auto;
+      border: 1px solid var(--rule-soft);
+      border-radius: 4px;
+    }
+    .pair.fig-block .fig-caption {
+      max-width: 760px;
+      margin: 10px auto 4px;
+      font-size: 14px;
+      color: var(--muted);
+      text-align: left;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+    .pair.fig-block .fig-caption .cap-en {
+      color: var(--en-ink);
+      border-right: 1px solid var(--rule);
+      padding-right: 16px;
+    }
+    .pair.fig-block .fig-caption .cap-zh {
+      color: var(--ink);
+      padding-left: 16px;
+    }
+    .pair.fig-block .fig-caption .figref { font-weight: 700; color: var(--accent); }
+    @media (max-width: 760px) {
+      .pair.fig-block .fig-caption { grid-template-columns: 1fr; }
+      .pair.fig-block .fig-caption .cap-en { border-right: none; border-bottom: 1px dashed var(--rule); padding-right: 0; padding-bottom: 8px; }
+      .pair.fig-block .fig-caption .cap-zh { padding-left: 0; padding-top: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="crumbs">
+      <a href="index.html">目录</a><span class="sep">/</span>第 4 章 凸优化问题
+    </div>
+    <div class="nav">
+      <a href="ch03-convex-functions.html">‹ 上一页</a>
+      <a href="ch05-duality.html">下一页 ›</a>
+    </div>
+  </div>
+
+  <main class="doc">
+    <div class="doc-header">
+      <p class="kicker">Chapter 4</p>
+      <h1>凸优化问题 / Convex Optimization Problems</h1>
+      <p class="meta">原书 pp. 127–188 · 翻译对照（英 / 中）· 含 12 张原图</p>
+    </div>
+
+    <!-- ============== 4.1 ============== -->
+    <div class="pair head">
+      <div class="en"><h2>4.1 Optimization problems</h2></div>
+      <div class="zh"><h2>4.1 优化问题</h2></div>
+    </div>
+
+    <!-- ============== 4.1.1 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>4.1.1 Basic terminology</h3></div>
+      <div class="zh"><h3>4.1.1 基本术语</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We use the notation</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(x) \ \text{subject to} &amp; f_i(x) \le 0, \quad i = 1,\ldots,m \ &amp; h_i(x) = 0, \quad i = 1,\ldots,p \end{array} \tag{4.1}$$</p>
+        <p>to describe the problem of finding an $x$ that minimizes $f_0(x)$ among all $x$ that satisfy the conditions $f_i(x) \le 0$, $i = 1,\ldots,m$, and $h_i(x) = 0$, $i = 1,\ldots,p$. We call $x \in \mathbb{R}^n$ the <em>optimization variable</em> and the function $f_0 : \mathbb{R}^n \to \mathbb{R}$ the <em>objective function</em> or <em>cost function</em>. The inequalities $f_i(x) \le 0$ are called <em>inequality constraints</em>, and the corresponding functions $f_i : \mathbb{R}^n \to \mathbb{R}$ are called the <em>inequality constraint functions</em>. The equations $h_i(x) = 0$ are called the <em>equality constraints</em>, and the functions $h_i : \mathbb{R}^n \to \mathbb{R}$ are the <em>equality constraint functions</em>. If there are no constraints (i.e., $m = p = 0$) we say the problem (4.1) is <em>unconstrained</em>.</p></div>
+      <div class="zh"><p>我们用记号</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(x) \ \text{subject to} &amp; f_i(x) \le 0, \quad i = 1,\ldots,m \ &amp; h_i(x) = 0, \quad i = 1,\ldots,p \end{array} \tag{4.1}$$</p>
+        <p>来描述如下问题：在所有满足条件 $f_i(x) \le 0$（$i = 1,\ldots,m$）和 $h_i(x) = 0$（$i = 1,\ldots,p$）的 $x$ 中，寻找使 $f_0(x)$ 最小的 $x$。我们称 $x \in \mathbb{R}^n$ 为<strong>优化变量</strong>，称函数 $f_0 : \mathbb{R}^n \to \mathbb{R}$ 为<strong>目标函数</strong>或<strong>代价函数</strong>。不等式 $f_i(x) \le 0$ 称为<strong>不等式约束</strong>，对应的函数 $f_i : \mathbb{R}^n \to \mathbb{R}$ 称为<strong>不等式约束函数</strong>。方程 $h_i(x) = 0$ 称为<strong>等式约束</strong>，函数 $h_i : \mathbb{R}^n \to \mathbb{R}$ 为<strong>等式约束函数</strong>。若无约束（即 $m = p = 0$），则称问题 (4.1) 是<strong>无约束的</strong>。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The set of points for which the objective and all constraint functions are defined,</p>
+        <p>$$ \mathcal{D} = \bigcap_{i=0}^m \mathbf{dom}\, f_i \, \cap \, \bigcap_{i=1}^p \mathbf{dom}\, h_i, $$</p>
+        <p>is called the <em>domain</em> of the optimization problem (4.1). A point $x \in \mathcal{D}$ is <em>feasible</em> if it satisfies the constraints $f_i(x) \le 0$, $i = 1,\ldots,m$, and $h_i(x) = 0$, $i = 1,\ldots,p$. The problem (4.1) is said to be <em>feasible</em> if there exists at least one feasible point, and <em>infeasible</em> otherwise. The set of all feasible points is called the <em>feasible set</em> or the <em>constraint set</em>.</p></div>
+      <div class="zh"><p>目标函数与所有约束函数均有定义的点集</p>
+        <p>$$ \mathcal{D} = \bigcap_{i=0}^m \mathbf{dom}\, f_i \, \cap \, \bigcap_{i=1}^p \mathbf{dom}\, h_i, $$</p>
+        <p>称为优化问题 (4.1) 的<strong>定义域</strong>。若点 $x \in \mathcal{D}$ 满足约束 $f_i(x) \le 0$（$i = 1,\ldots,m$）和 $h_i(x) = 0$（$i = 1,\ldots,p$），则称 $x$ 是<strong>可行的</strong>。若至少存在一个可行点，则称问题 (4.1) 是<strong>可行的</strong>，否则称为<strong>不可行的</strong>。所有可行点构成的集合称为<strong>可行集</strong>或<strong>约束集</strong>。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The <em>optimal value</em> $p^\star$ of the problem (4.1) is defined as</p>
+        <p>$$ p^\star = \inf \{f_0(x) \mid f_i(x) \le 0,\, i = 1,\ldots,m,\, h_i(x) = 0,\, i = 1,\ldots,p\}. $$</p>
+        <p>We allow $p^\star$ to take on the extended values $\pm \infty$. If the problem is infeasible, we have $p^\star = \infty$ (following the standard convention that the infimum of the empty set is $\infty$). If there are feasible points $x_k$ with $f_0(x_k) \to -\infty$ as $k \to \infty$, then $p^\star = -\infty$, and we say the problem (4.1) is <em>unbounded below</em>.</p></div>
+      <div class="zh"><p>问题 (4.1) 的<strong>最优值</strong> $p^\star$ 定义为</p>
+        <p>$$ p^\star = \inf \{f_0(x) \mid f_i(x) \le 0,\, i = 1,\ldots,m,\, h_i(x) = 0,\, i = 1,\ldots,p\}. $$</p>
+        <p>我们允许 $p^\star$ 取广义值 $\pm \infty$。若问题不可行，则 $p^\star = \infty$（按空集的下确界为 $\infty$ 的标准约定）。若存在可行点 $x_k$ 使得 $f_0(x_k) \to -\infty$（$k \to \infty$），则 $p^\star = -\infty$，此时称问题 (4.1) <strong>下方无界</strong>。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Optimal and locally optimal points</h3></div>
+      <div class="zh"><h3>最优点与局部最优点</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We say $x^\star$ is an <em>optimal point</em>, or <em>solves</em> the problem (4.1), if $x^\star$ is feasible and $f_0(x^\star) = p^\star$. The set of all optimal points is the <em>optimal set</em>, denoted</p>
+        <p>$$ \mathcal{X}_{\mathrm{opt}} = \{x \mid f_i(x) \le 0,\, i = 1,\ldots,m,\, h_i(x) = 0,\, i = 1,\ldots,p,\, f_0(x) = p^\star\}. $$</p>
+        <p>If there exists an optimal point for the problem (4.1), we say the optimal value is <em>attained</em> or <em>achieved</em>, and the problem is <em>solvable</em>. If $\mathcal{X}_{\mathrm{opt}}$ is empty, we say the optimal value is <em>not attained</em> or <em>not achieved</em>. (This always occurs when the problem is unbounded below.)</p></div>
+      <div class="zh"><p>若 $x^\star$ 可行且 $f_0(x^\star) = p^\star$，则称 $x^\star$ 为<strong>最优点</strong>，或称它<strong>求解</strong>了问题 (4.1)。所有最优点构成的集合称为<strong>最优集</strong>，记为</p>
+        <p>$$ \mathcal{X}_{\mathrm{opt}} = \{x \mid f_i(x) \le 0,\, i = 1,\ldots,m,\, h_i(x) = 0,\, i = 1,\ldots,p,\, f_0(x) = p^\star\}. $$</p>
+        <p>若问题 (4.1) 存在最优点，则称最优值被<strong>达到</strong>或<strong>实现</strong>，且该问题是<strong>可解的</strong>。若 $\mathcal{X}_{\mathrm{opt}}$ 为空，则称最优值<strong>未被达到</strong>或<strong>未被实现</strong>。（当问题下方无界时，必然出现此情形。）</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>A feasible point $x$ with $f_0(x) \le p^\star + \epsilon$ (where $\epsilon &gt; 0$) is called $\epsilon$-<em>suboptimal</em>, and the set of all $\epsilon$-suboptimal points is called the $\epsilon$-<em>suboptimal set</em> for the problem (4.1).</p>
+        <p>We say a feasible point $x$ is <em>locally optimal</em> if there is an $R &gt; 0$ such that</p>
+        <p>$$ f_0(x) = \inf\{f_0(z) \mid f_i(z) \le 0,\, i = 1,\ldots,m,\, h_i(z) = 0,\, i = 1,\ldots,p,\, \|z - x\|_2 \le R\}, $$</p>
+        <p>or, in other words, $x$ solves the optimization problem</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(z) \\ \text{subject to} &amp; f_i(z) \le 0, \quad i = 1,\ldots,m \\ &amp; h_i(z) = 0, \quad i = 1,\ldots,p \\ &amp; \|z - x\|_2 \le R \end{array}$$</p>
+        <p>with variable $z$. Roughly speaking, this means $x$ minimizes $f_0$ over nearby points in the feasible set. The term &lsquo;globally optimal&rsquo; is sometimes used for &lsquo;optimal&rsquo; to distinguish between &lsquo;locally optimal&rsquo; and &lsquo;optimal&rsquo;. Throughout this book, however, optimal will mean globally optimal.</p></div>
+      <div class="zh"><p>满足 $f_0(x) \le p^\star + \epsilon$（其中 $\epsilon &gt; 0$）的可行点 $x$ 称为 $\epsilon$-<strong>次优的</strong>，所有 $\epsilon$-次优点构成的集合称为问题 (4.1) 的 $\epsilon$-<strong>次优集</strong>。</p>
+        <p>若存在 $R &gt; 0$ 使得</p>
+        <p>$$ f_0(x) = \inf\{f_0(z) \mid f_i(z) \le 0,\, i = 1,\ldots,m,\, h_i(z) = 0,\, i = 1,\ldots,p,\, \|z - x\|_2 \le R\}, $$</p>
+        <p>则称可行点 $x$ 是<strong>局部最优的</strong>。换言之，$x$ 求解了优化问题</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(z) \\ \text{subject to} &amp; f_i(z) \le 0, \quad i = 1,\ldots,m \\ &amp; h_i(z) = 0, \quad i = 1,\ldots,p \\ &amp; \|z - x\|_2 \le R \end{array}$$</p>
+        <p>（变量为 $z$）。粗略地说，这意味着 $x$ 在可行集中邻近的点处最小化 $f_0$。&ldquo;全局最优&rdquo;一词有时用于指代&ldquo;最优&rdquo;，以区分&ldquo;局部最优&rdquo;与&ldquo;最优&rdquo;。但本书中，最优一律指全局最优。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>If $x$ is feasible and $f_i(x) = 0$, we say the $i$th inequality constraint $f_i(x) \le 0$ is <em>active</em> at $x$. If $f_i(x) &lt; 0$, we say the constraint $f_i(x) \le 0$ is <em>inactive</em>. (The equality constraints are active at all feasible points.) We say that a constraint is <em>redundant</em> if deleting it does not change the feasible set.</p></div>
+      <div class="zh"><p>若 $x$ 可行且 $f_i(x) = 0$，则称第 $i$ 个不等式约束 $f_i(x) \le 0$ 在 $x$ 处<strong>起作用</strong>（active）。若 $f_i(x) &lt; 0$，则称约束 $f_i(x) \le 0$ <strong>不起作用</strong>（inactive）。（等式约束在所有可行点处都起作用。）若删去某一约束不改变可行集，则称该约束是<strong>冗余的</strong>。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><em>Example 4.1</em> We illustrate these definitions with a few simple unconstrained optimization problems with variable $x \in \mathbb{R}$, and $\mathbf{dom}\, f_0 = \mathbb{R}_{++}$.</p>
+        <ul>
+          <li>$f_0(x) = 1/x$: $p^\star = 0$, but the optimal value is not achieved.</li>
+          <li>$f_0(x) = -\log x$: $p^\star = -\infty$, so this problem is unbounded below.</li>
+          <li>$f_0(x) = x \log x$: $p^\star = -1/e$, achieved at the (unique) optimal point $x^\star = 1/e$.</li>
+        </ul></div>
+      <div class="zh"><p><em>例 4.1</em> 我们用几个简单的无约束优化问题（变量 $x \in \mathbb{R}$，$\mathbf{dom}\, f_0 = \mathbb{R}_{++}$）来说明上述定义。</p>
+        <ul>
+          <li>$f_0(x) = 1/x$：$p^\star = 0$，但最优值未被达到。</li>
+          <li>$f_0(x) = -\log x$：$p^\star = -\infty$，故该问题下方无界。</li>
+          <li>$f_0(x) = x \log x$：$p^\star = -1/e$，在（唯一的）最优点 $x^\star = 1/e$ 处达到。</li>
+        </ul></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Feasibility problems</h3></div>
+      <div class="zh"><h3>可行性问题</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>If the objective function is identically zero, the optimal value is either zero (if the feasible set is nonempty) or $\infty$ (if the feasible set is empty). We call this the <em>feasibility problem</em>, and will sometimes write it as</p>
+        <p>$$\begin{array}{ll} \text{find} &amp; x \\ \text{subject to} &amp; f_i(x) \le 0, \quad i = 1,\ldots,m \\ &amp; h_i(x) = 0, \quad i = 1,\ldots,p. \end{array}$$</p>
+        <p>The feasibility problem is thus to determine whether the constraints are consistent, and if so, find a point that satisfies them.</p></div>
+      <div class="zh"><p>若目标函数恒为零，则最优值为零（当可行集非空时）或 $\infty$（当可行集为空时）。我们称之为<strong>可行性问题</strong>，有时写成</p>
+        <p>$$\begin{array}{ll} \text{find} &amp; x \\ \text{subject to} &amp; f_i(x) \le 0, \quad i = 1,\ldots,m \\ &amp; h_i(x) = 0, \quad i = 1,\ldots,p. \end{array}$$</p>
+        <p>因此，可行性问题即判定约束是否相容；若相容，则求一个满足约束的点。</p></div>
+    </div>
+
+    <!-- ============== 4.1.2 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>4.1.2 Expressing problems in standard form</h3></div>
+      <div class="zh"><h3>4.1.2 问题的标准形式表示</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We refer to (4.1) as an optimization problem in <em>standard form</em>. In the standard form problem we adopt the convention that the righthand side of the inequality and equality constraints are zero. This can always be arranged by subtracting any nonzero righthand side: we represent the equality constraint $g_i(x) = \tilde{g}_i(x)$, for example, as $h_i(x) = 0$, where $h_i(x) = g_i(x) - \tilde{g}_i(x)$. In a similar way we express inequalities of the form $f_i(x) \ge 0$ as $-f_i(x) \le 0$.</p></div>
+      <div class="zh"><p>我们把 (4.1) 称为<strong>标准形式</strong>的优化问题。在标准形式问题中，我们约定不等式与等式约束的右端为零。这总能通过减去任意非零右端来实现：例如，把等式约束 $g_i(x) = \tilde{g}_i(x)$ 表示为 $h_i(x) = 0$，其中 $h_i(x) = g_i(x) - \tilde{g}_i(x)$。类似地，形如 $f_i(x) \ge 0$ 的不等式表示为 $-f_i(x) \le 0$。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><em>Example 4.2 Box constraints.</em> Consider the optimization problem</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(x) \\ \text{subject to} &amp; l_i \le x_i \le u_i, \quad i = 1,\ldots,n, \end{array}$$</p>
+        <p>where $x \in \mathbb{R}^n$ is the variable. The constraints are called <em>variable bounds</em> (since they give lower and upper bounds for each $x_i$) or <em>box constraints</em> (since the feasible set is a box).</p>
+        <p>We can express this problem in standard form as</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(x) \\ \text{subject to} &amp; l_i - x_i \le 0, \quad i = 1,\ldots,n \\ &amp; x_i - u_i \le 0, \quad i = 1,\ldots,n. \end{array}$$</p>
+        <p>There are $2n$ inequality constraint functions:</p>
+        <p>$$ f_i(x) = l_i - x_i, \quad i = 1,\ldots,n, $$</p>
+        <p>and</p>
+        <p>$$ f_i(x) = x_{i-n} - u_{i-n}, \quad i = n+1,\ldots,2n. $$</p></div>
+      <div class="zh"><p><em>例 4.2 盒约束。</em> 考虑优化问题</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(x) \\ \text{subject to} &amp; l_i \le x_i \le u_i, \quad i = 1,\ldots,n, \end{array}$$</p>
+        <p>其中 $x \in \mathbb{R}^n$ 为变量。这些约束称为<strong>变量界限</strong>（因它们给出每个 $x_i$ 的下界与上界）或<strong>盒约束</strong>（因可行集是一个盒子）。</p>
+        <p>该问题的标准形式为</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(x) \\ \text{subject to} &amp; l_i - x_i \le 0, \quad i = 1,\ldots,n \\ &amp; x_i - u_i \le 0, \quad i = 1,\ldots,n. \end{array}$$</p>
+        <p>共有 $2n$ 个不等式约束函数：</p>
+        <p>$$ f_i(x) = l_i - x_i, \quad i = 1,\ldots,n, $$</p>
+        <p>以及</p>
+        <p>$$ f_i(x) = x_{i-n} - u_{i-n}, \quad i = n+1,\ldots,2n. $$</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Maximization problems</h3></div>
+      <div class="zh"><h3>最大化问题</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We concentrate on the minimization problem by convention. We can solve the maximization problem</p>
+        <p>$$\begin{array}{ll} \text{maximize} &amp; f_0(x) \\ \text{subject to} &amp; f_i(x) \le 0, \quad i = 1,\ldots,m \\ &amp; h_i(x) = 0, \quad i = 1,\ldots,p \end{array} \tag{4.2}$$</p>
+        <p>by minimizing the function $-f_0$ subject to the constraints. By this correspondence we can define all the terms above for the maximization problem (4.2). For example the optimal value of (4.2) is defined as</p>
+        <p>$$ p^\star = \sup\{f_0(x) \mid f_i(x) \le 0,\, i = 1,\ldots,m,\, h_i(x) = 0,\, i = 1,\ldots,p\}, $$</p>
+        <p>and a feasible point $x$ is $\epsilon$-suboptimal if $f_0(x) \ge p^\star - \epsilon$. When the maximization problem is considered, the objective is sometimes called the <em>utility</em> or <em>satisfaction level</em> instead of the cost.</p></div>
+      <div class="zh"><p>按惯例，我们集中讨论极小化问题。极大化问题</p>
+        <p>$$\begin{array}{ll} \text{maximize} &amp; f_0(x) \\ \text{subject to} &amp; f_i(x) \le 0, \quad i = 1,\ldots,m \\ &amp; h_i(x) = 0, \quad i = 1,\ldots,p \end{array} \tag{4.2}$$</p>
+        <p>可通过在同样约束下极小化函数 $-f_0$ 来求解。据此对应关系，我们可为极大化问题 (4.2) 定义上述所有术语。例如，(4.2) 的最优值定义为</p>
+        <p>$$ p^\star = \sup\{f_0(x) \mid f_i(x) \le 0,\, i = 1,\ldots,m,\, h_i(x) = 0,\, i = 1,\ldots,p\}, $$</p>
+        <p>可行点 $x$ 若满足 $f_0(x) \ge p^\star - \epsilon$ 则为 $\epsilon$-次优的。考虑极大化问题时，目标有时称为<strong>效用</strong>或<strong>满意度</strong>，而非代价。</p></div>
+    </div>
+
+    <!-- ============== 4.1.3 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>4.1.3 Equivalent problems</h3></div>
+      <div class="zh"><h3>4.1.3 等价问题</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>In this book we will use the notion of <em>equivalence</em> of optimization problems in an informal way. We call two problems equivalent if from a solution of one, a solution of the other is readily found, and vice versa. (It is possible, but complicated, to give a formal definition of equivalence.)</p></div>
+      <div class="zh"><p>本书中，我们将以非正式的方式使用优化问题的<strong>等价</strong>概念。若由一个问题之解可容易求得另一问题之解，反之亦然，则称两问题<strong>等价</strong>。（给出等价的形式化定义是可能的，但较为繁琐。）</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>As a simple example, consider the problem</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; \tilde{f}(x) = \alpha_0 f_0(x) \\ \text{subject to} &amp; \tilde{f}_i(x) = \alpha_i f_i(x) \le 0, \quad i = 1,\ldots,m \\ &amp; \tilde{h}_i(x) = \beta_i h_i(x) = 0, \quad i = 1,\ldots,p, \end{array} \tag{4.3}$$</p>
+        <p>where $\alpha_i &gt; 0$, $i = 0,\ldots,m$, and $\beta_i \ne 0$, $i = 1,\ldots,p$. This problem is obtained from the standard form problem (4.1) by scaling the objective and inequality constraint functions by positive constants, and scaling the equality constraint functions by nonzero constants. As a result, the feasible sets of the problem (4.3) and the original problem (4.1) are identical. A point $x$ is optimal for the original problem (4.1) if and only if it is optimal for the scaled problem (4.3), so we say the two problems are equivalent. The two problems (4.1) and (4.3) are not, however, the same (unless $\alpha_i$ and $\beta_i$ are all equal to one), since the objective and constraint functions differ.</p></div>
+      <div class="zh"><p>作为一个简单例子，考虑问题</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; \tilde{f}(x) = \alpha_0 f_0(x) \\ \text{subject to} &amp; \tilde{f}_i(x) = \alpha_i f_i(x) \le 0, \quad i = 1,\ldots,m \\ &amp; \tilde{h}_i(x) = \beta_i h_i(x) = 0, \quad i = 1,\ldots,p, \end{array} \tag{4.3}$$</p>
+        <p>其中 $\alpha_i &gt; 0$（$i = 0,\ldots,m$），$\beta_i \ne 0$（$i = 1,\ldots,p$）。该问题是由标准形式问题 (4.1) 通过以正的常数缩放目标函数与不等式约束函数、以非零常数缩放等式约束函数而得到的。因此，问题 (4.3) 与原问题 (4.1) 的可行集相同。点 $x$ 对原问题 (4.1) 最优当且仅当它对缩放后的问题 (4.3) 最优，故称两问题等价。然而，问题 (4.1) 与 (4.3) 并不相同（除非 $\alpha_i$ 和 $\beta_i$ 全为 1），因为目标函数与约束函数不同。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We now describe some general transformations that yield equivalent problems.</p></div>
+      <div class="zh"><p>下面描述一些产生等价问题的一般变换。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Change of variables</h3></div>
+      <div class="zh"><h3>变量代换</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Suppose $\phi : \mathbb{R}^n \to \mathbb{R}^n$ is one-to-one, with image covering the problem domain $\mathcal{D}$, i.e., $\phi(\mathbf{dom}\, \phi) \supseteq \mathcal{D}$. We define functions $\tilde{f}_i$ and $\tilde{h}_i$ as</p>
+        <p>$$ \tilde{f}_i(z) = f_i(\phi(z)), \quad i = 0,\ldots,m, \qquad \tilde{h}_i(z) = h_i(\phi(z)), \quad i = 1,\ldots,p. $$</p>
+        <p>Now consider the problem</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; \tilde{f}_0(z) \\ \text{subject to} &amp; \tilde{f}_i(z) \le 0, \quad i = 1,\ldots,m \\ &amp; \tilde{h}_i(z) = 0, \quad i = 1,\ldots,p, \end{array} \tag{4.4}$$</p>
+        <p>with variable $z$. We say that the standard form problem (4.1) and the problem (4.4) are related by the <em>change of variable</em> or <em>substitution of variable</em> $x = \phi(z)$.</p>
+        <p>The two problems are clearly equivalent: if $x$ solves the problem (4.1), then $z = \phi^{-1}(x)$ solves the problem (4.4); if $z$ solves the problem (4.4), then $x = \phi(z)$ solves the problem (4.1).</p></div>
+      <div class="zh"><p>设 $\phi : \mathbb{R}^n \to \mathbb{R}^n$ 为单射，且其像覆盖问题定义域 $\mathcal{D}$，即 $\phi(\mathbf{dom}\, \phi) \supseteq \mathcal{D}$。定义函数 $\tilde{f}_i$ 和 $\tilde{h}_i$ 为</p>
+        <p>$$ \tilde{f}_i(z) = f_i(\phi(z)), \quad i = 0,\ldots,m, \qquad \tilde{h}_i(z) = h_i(\phi(z)), \quad i = 1,\ldots,p. $$</p>
+        <p>考虑问题</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; \tilde{f}_0(z) \\ \text{subject to} &amp; \tilde{f}_i(z) \le 0, \quad i = 1,\ldots,m \\ &amp; \tilde{h}_i(z) = 0, \quad i = 1,\ldots,p, \end{array} \tag{4.4}$$</p>
+        <p>变量为 $z$。我们称标准形式问题 (4.1) 与问题 (4.4) 通过<strong>变量代换</strong>（或变量替换）$x = \phi(z)$ 相关联。</p>
+        <p>两问题显然等价：若 $x$ 求解问题 (4.1)，则 $z = \phi^{-1}(x)$ 求解问题 (4.4)；若 $z$ 求解问题 (4.4)，则 $x = \phi(z)$ 求解问题 (4.1)。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Transformation of objective and constraint functions</h3></div>
+      <div class="zh"><h3>目标函数与约束函数的变换</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Suppose that $\psi_0 : \mathbb{R} \to \mathbb{R}$ is monotone increasing, $\psi_1,\ldots,\psi_m : \mathbb{R} \to \mathbb{R}$ satisfy $\psi_i(u) \le 0$ if and only if $u \le 0$, and $\psi_{m+1},\ldots,\psi_{m+p} : \mathbb{R} \to \mathbb{R}$ satisfy $\psi_i(u) = 0$ if and only if $u = 0$. We define functions $\tilde{f}_i$ and $\tilde{h}_i$ as the compositions</p>
+        <p>$$ \tilde{f}_i(x) = \psi_i(f_i(x)), \quad i = 0,\ldots,m, \qquad \tilde{h}_i(x) = \psi_{m+i}(h_i(x)), \quad i = 1,\ldots,p. $$</p>
+        <p>Evidently the associated problem</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; \tilde{f}_0(x) \\ \text{subject to} &amp; \tilde{f}_i(x) \le 0, \quad i = 1,\ldots,m \\ &amp; \tilde{h}_i(x) = 0, \quad i = 1,\ldots,p \end{array}$$</p>
+        <p>and the standard form problem (4.1) are equivalent; indeed, the feasible sets are identical, and the optimal points are identical. (The example (4.3) above, in which the objective and constraint functions are scaled by appropriate constants, is the special case when all $\psi_i$ are linear.)</p></div>
+      <div class="zh"><p>设 $\psi_0 : \mathbb{R} \to \mathbb{R}$ 单调递增，$\psi_1,\ldots,\psi_m : \mathbb{R} \to \mathbb{R}$ 满足 $\psi_i(u) \le 0$ 当且仅当 $u \le 0$，$\psi_{m+1},\ldots,\psi_{m+p} : \mathbb{R} \to \mathbb{R}$ 满足 $\psi_i(u) = 0$ 当且仅当 $u = 0$。定义函数 $\tilde{f}_i$ 和 $\tilde{h}_i$ 为复合</p>
+        <p>$$ \tilde{f}_i(x) = \psi_i(f_i(x)), \quad i = 0,\ldots,m, \qquad \tilde{h}_i(x) = \psi_{m+i}(h_i(x)), \quad i = 1,\ldots,p. $$</p>
+        <p>显然，相应的问题</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; \tilde{f}_0(x) \\ \text{subject to} &amp; \tilde{f}_i(x) \le 0, \quad i = 1,\ldots,m \\ &amp; \tilde{h}_i(x) = 0, \quad i = 1,\ldots,p \end{array}$$</p>
+        <p>与标准形式问题 (4.1) 等价；事实上，可行集相同，最优集也相同。（上面的例子 (4.3) 中，目标与约束函数被适当的常数缩放，即所有 $\psi_i$ 均为线性这一特殊情形。）</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><em>Example 4.3 Least-norm and least-norm-squared problems.</em> As a simple example consider the unconstrained Euclidean norm minimization problem</p>
+        <p>$$ \text{minimize} \quad \|Ax - b\|_2, \tag{4.5}$$</p>
+        <p>with variable $x \in \mathbb{R}^n$. Since the norm is always nonnegative, we can just as well solve the problem</p>
+        <p>$$ \text{minimize} \quad \|Ax - b\|_2^2 = (Ax - b)^T(Ax - b), \tag{4.6}$$</p>
+        <p>in which we minimize the square of the Euclidean norm. The problems (4.5) and (4.6) are clearly equivalent; the optimal points are the same. The two problems are not the same, however. For example, the objective in (4.5) is not differentiable at any $x$ with $Ax - b = 0$, whereas the objective in (4.6) is differentiable for all $x$ (in fact, quadratic).</p></div>
+      <div class="zh"><p><em>例 4.3 最小范数与最小范数平方问题。</em> 作为一个简单例子，考虑无约束的 Euclid 范数极小化问题</p>
+        <p>$$ \text{minimize} \quad \|Ax - b\|_2, \tag{4.5}$$</p>
+        <p>变量为 $x \in \mathbb{R}^n$。由于范数总是非负的，我们同样可以求解</p>
+        <p>$$ \text{minimize} \quad \|Ax - b\|_2^2 = (Ax - b)^T(Ax - b), \tag{4.6}$$</p>
+        <p>即极小化 Euclid 范数的平方。问题 (4.5) 与 (4.6) 显然等价；最优点相同。然而两问题并不相同。例如，(4.5) 的目标在满足 $Ax - b = 0$ 的任何 $x$ 处不可微，而 (4.6) 的目标对所有 $x$ 可微（事实上是二次的）。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Slack variables</h3></div>
+      <div class="zh"><h3>松弛变量</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>One simple transformation is based on the observation that $f_i(x) \le 0$ if and only if there is an $s_i \ge 0$ that satisfies $f_i(x) + s_i = 0$. Using this transformation we obtain the problem</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(x) \\ \text{subject to} &amp; s_i \ge 0, \quad i = 1,\ldots,m \\ &amp; f_i(x) + s_i = 0, \quad i = 1,\ldots,m \\ &amp; h_i(x) = 0, \quad i = 1,\ldots,p, \end{array} \tag{4.7}$$</p>
+        <p>where the variables are $x \in \mathbb{R}^n$ and $s \in \mathbb{R}^m$. This problem has $n + m$ variables, $m$ inequality constraints (the nonnegativity constraints on $s_i$), and $m + p$ equality constraints. The new variable $s_i$ is called the <em>slack variable</em> associated with the original inequality constraint $f_i(x) \le 0$. Introducing slack variables replaces each inequality constraint with an equality constraint, and a nonnegativity constraint.</p>
+        <p>The problem (4.7) is equivalent to the original standard form problem (4.1). Indeed, if $(x, s)$ is feasible for the problem (4.7), then $x$ is feasible for the original problem, since $s_i = -f_i(x) \ge 0$. Conversely, if $x$ is feasible for the original problem, then $(x, s)$ is feasible for the problem (4.7), where we take $s_i = -f_i(x)$. Similarly, $x$ is optimal for the original problem (4.1) if and only if $(x, s)$ is optimal for the problem (4.7), where $s_i = -f_i(x)$.</p></div>
+      <div class="zh"><p>一种简单的变换基于如下观察：$f_i(x) \le 0$ 当且仅当存在 $s_i \ge 0$ 满足 $f_i(x) + s_i = 0$。利用此变换得到问题</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(x) \\ \text{subject to} &amp; s_i \ge 0, \quad i = 1,\ldots,m \\ &amp; f_i(x) + s_i = 0, \quad i = 1,\ldots,m \\ &amp; h_i(x) = 0, \quad i = 1,\ldots,p, \end{array} \tag{4.7}$$</p>
+        <p>变量为 $x \in \mathbb{R}^n$ 和 $s \in \mathbb{R}^m$。该问题有 $n + m$ 个变量、$m$ 个不等式约束（对 $s_i$ 的非负约束）和 $m + p$ 个等式约束。新变量 $s_i$ 称为与原不等式约束 $f_i(x) \le 0$ 关联的<strong>松弛变量</strong>。引入松弛变量把每个不等式约束替换为一个等式约束和一个非负约束。</p>
+        <p>问题 (4.7) 与原标准形式问题 (4.1) 等价。事实上，若 $(x, s)$ 对问题 (4.7) 可行，则 $x$ 对原问题可行，因为 $s_i = -f_i(x) \ge 0$。反之，若 $x$ 对原问题可行，则 $(x, s)$ 对问题 (4.7) 可行，其中取 $s_i = -f_i(x)$。类似地，$x$ 对原问题 (4.1) 最优当且仅当 $(x, s)$ 对问题 (4.7) 最优，其中 $s_i = -f_i(x)$。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Eliminating equality constraints</h3></div>
+      <div class="zh"><h3>消去等式约束</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>If we can explicitly parametrize all solutions of the equality constraints</p>
+        <p>$$ h_i(x) = 0, \quad i = 1,\ldots,p, \tag{4.8}$$</p>
+        <p>using some parameter $z \in \mathbb{R}^k$, then we can eliminate the equality constraints from the problem, as follows. Suppose the function $\phi : \mathbb{R}^k \to \mathbb{R}^n$ is such that $x$ satisfies (4.8) if and only if there is some $z \in \mathbb{R}^k$ such that $x = \phi(z)$. The optimization problem</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; \tilde{f}_0(z) = f_0(\phi(z)) \\ \text{subject to} &amp; \tilde{f}_i(z) = f_i(\phi(z)) \le 0, \quad i = 1,\ldots,m \end{array}$$</p>
+        <p>is then equivalent to the original problem (4.1). This transformed problem has variable $z \in \mathbb{R}^k$, $m$ inequality constraints, and no equality constraints. If $z$ is optimal for the transformed problem, then $x = \phi(z)$ is optimal for the original problem. Conversely, if $x$ is optimal for the original problem, then (since $x$ is feasible) there is at least one $z$ such that $x = \phi(z)$. Any such $z$ is optimal for the transformed problem.</p></div>
+      <div class="zh"><p>若能显式地参数化等式约束</p>
+        <p>$$ h_i(x) = 0, \quad i = 1,\ldots,p, \tag{4.8}$$</p>
+        <p>的所有解（用某个参数 $z \in \mathbb{R}^k$），则可如下消去问题中的等式约束。设函数 $\phi : \mathbb{R}^k \to \mathbb{R}^n$ 满足：$x$ 满足 (4.8) 当且仅当存在某个 $z \in \mathbb{R}^k$ 使 $x = \phi(z)$。则优化问题</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; \tilde{f}_0(z) = f_0(\phi(z)) \\ \text{subject to} &amp; \tilde{f}_i(z) = f_i(\phi(z)) \le 0, \quad i = 1,\ldots,m \end{array}$$</p>
+        <p>与原问题 (4.1) 等价。该变换后的问题变量为 $z \in \mathbb{R}^k$，有 $m$ 个不等式约束且无等式约束。若 $z$ 对变换后的问题最优，则 $x = \phi(z)$ 对原问题最优。反之，若 $x$ 对原问题最优，则（因 $x$ 可行）至少存在一个 $z$ 使 $x = \phi(z)$，任何这样的 $z$ 对变换后的问题最优。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Eliminating linear equality constraints</h3></div>
+      <div class="zh"><h3>消去线性等式约束</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The process of eliminating variables can be described more explicitly, and easily carried out numerically, when the equality constraints are all linear, i.e., have the form $Ax = b$. If $Ax = b$ is inconsistent, i.e., $b \notin \mathcal{R}(A)$, then the original problem is infeasible. Assuming this is not the case, let $x_0$ denote any solution of the equality constraints. Let $F \in \mathbb{R}^{n \times k}$ be any matrix with $\mathcal{R}(F) = \mathcal{N}(A)$, so the general solution of the linear equations $Ax = b$ is given by $Fz + x_0$, where $z \in \mathbb{R}^k$. (We can choose $F$ to be full rank, in which case we have $k = n - \mathbf{rank}\, A$.)</p>
+        <p>Substituting $x = Fz + x_0$ into the original problem yields the problem</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(Fz + x_0) \\ \text{subject to} &amp; f_i(Fz + x_0) \le 0, \quad i = 1,\ldots,m, \end{array}$$</p>
+        <p>with variable $z$, which is equivalent to the original problem, has no equality constraints, and $\mathbf{rank}\, A$ fewer variables.</p></div>
+      <div class="zh"><p>当等式约束全为线性、即形如 $Ax = b$ 时，消去变量的过程可以更明确地描述，也容易数值实现。若 $Ax = b$ 不相容，即 $b \notin \mathcal{R}(A)$，则原问题不可行。设非如此，记 $x_0$ 为等式约束的任一解。取 $F \in \mathbb{R}^{n \times k}$ 为满足 $\mathcal{R}(F) = \mathcal{N}(A)$ 的任一矩阵，则线性方程组 $Ax = b$ 的通解为 $Fz + x_0$，其中 $z \in \mathbb{R}^k$。（可选 $F$ 列满秩，此时 $k = n - \mathbf{rank}\, A$。）</p>
+        <p>将 $x = Fz + x_0$ 代入原问题得到</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(Fz + x_0) \\ \text{subject to} &amp; f_i(Fz + x_0) \le 0, \quad i = 1,\ldots,m, \end{array}$$</p>
+        <p>变量为 $z$，它与原问题等价，无等式约束，且少了 $\mathbf{rank}\, A$ 个变量。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Introducing equality constraints</h3></div>
+      <div class="zh"><h3>引入等式约束</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We can also introduce equality constraints and new variables into a problem. Instead of describing the general case, which is complicated and not very illuminating, we give a typical example that will be useful later. Consider the problem</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(A_0 x + b_0) \\ \text{subject to} &amp; f_i(A_i x + b_i) \le 0, \quad i = 1,\ldots,m \\ &amp; h_i(x) = 0, \quad i = 1,\ldots,p, \end{array}$$</p>
+        <p>where $x \in \mathbb{R}^n$, $A_i \in \mathbb{R}^{k_i \times n}$, and $f_i : \mathbb{R}^{k_i} \to \mathbb{R}$. In this problem the objective and constraint functions are given as compositions of the functions $f_i$ with affine transformations defined by $A_i x + b_i$.</p>
+        <p>We introduce new variables $y_i \in \mathbb{R}^{k_i}$, as well as new equality constraints $y_i = A_i x + b_i$, for $i = 0,\ldots,m$, and form the equivalent problem</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(y_0) \\ \text{subject to} &amp; f_i(y_i) \le 0, \quad i = 1,\ldots,m \\ &amp; y_i = A_i x + b_i, \quad i = 0,\ldots,m \\ &amp; h_i(x) = 0, \quad i = 1,\ldots,p. \end{array}$$</p>
+        <p>This problem has $k_0 + \cdots + k_m$ new variables,</p>
+        <p>$$ y_0 \in \mathbb{R}^{k_0}, \quad \ldots, \quad y_m \in \mathbb{R}^{k_m}, $$</p>
+        <p>and $k_0 + \cdots + k_m$ new equality constraints,</p>
+        <p>$$ y_0 = A_0 x + b_0, \quad \ldots, \quad y_m = A_m x + b_m. $$</p>
+        <p>The objective and inequality constraints in this problem are independent, i.e., involve different optimization variables.</p></div>
+      <div class="zh"><p>我们也可以向问题中引入等式约束与新变量。我们不描述一般情形（复杂且不甚明了），而是给出一个将在后文有用的典型例子。考虑问题</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(A_0 x + b_0) \\ \text{subject to} &amp; f_i(A_i x + b_i) \le 0, \quad i = 1,\ldots,m \\ &amp; h_i(x) = 0, \quad i = 1,\ldots,p, \end{array}$$</p>
+        <p>其中 $x \in \mathbb{R}^n$，$A_i \in \mathbb{R}^{k_i \times n}$，$f_i : \mathbb{R}^{k_i} \to \mathbb{R}$。该问题中，目标函数与约束函数是函数 $f_i$ 与由 $A_i x + b_i$ 定义的仿射变换的复合。</p>
+        <p>引入新变量 $y_i \in \mathbb{R}^{k_i}$ 以及新等式约束 $y_i = A_i x + b_i$（$i = 0,\ldots,m$），构成等价问题</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(y_0) \\ \text{subject to} &amp; f_i(y_i) \le 0, \quad i = 1,\ldots,m \\ &amp; y_i = A_i x + b_i, \quad i = 0,\ldots,m \\ &amp; h_i(x) = 0, \quad i = 1,\ldots,p. \end{array}$$</p>
+        <p>该问题有 $k_0 + \cdots + k_m$ 个新变量</p>
+        <p>$$ y_0 \in \mathbb{R}^{k_0}, \quad \ldots, \quad y_m \in \mathbb{R}^{k_m}, $$</p>
+        <p>以及 $k_0 + \cdots + k_m$ 个新等式约束</p>
+        <p>$$ y_0 = A_0 x + b_0, \quad \ldots, \quad y_m = A_m x + b_m. $$</p>
+        <p>该问题中的目标与不等式约束是相互独立的，即涉及不同的优化变量。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Optimizing over some variables</h3></div>
+      <div class="zh"><h3>对部分变量优化</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We always have</p>
+        <p>$$ \inf_{x,y} f(x, y) = \inf_x \tilde{f}(x) $$</p>
+        <p>where $\tilde{f}(x) = \inf_y f(x, y)$. In other words, we can always minimize a function by first minimizing over some of the variables, and then minimizing over the remaining ones. This simple and general principle can be used to transform problems into equivalent forms. The general case is cumbersome to describe and not illuminating, so we describe instead an example.</p>
+        <p>Suppose the variable $x \in \mathbb{R}^n$ is partitioned as $x = (x_1, x_2)$, with $x_1 \in \mathbb{R}^{n_1}$, $x_2 \in \mathbb{R}^{n_2}$, and $n_1 + n_2 = n$. We consider the problem</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(x_1, x_2) \\ \text{subject to} &amp; f_i(x_1) \le 0, \quad i = 1,\ldots,m_1 \\ &amp; \tilde{f}_i(x_2) \le 0, \quad i = 1,\ldots,m_2, \end{array} \tag{4.9}$$</p>
+        <p>in which the constraints are independent, in the sense that each constraint function depends on $x_1$ or $x_2$. We first minimize over $x_2$. Define the function $\tilde{f}_0$ of $x_1$ by</p>
+        <p>$$ \tilde{f}_0(x_1) = \inf\{f_0(x_1, z) \mid \tilde{f}_i(z) \le 0,\, i = 1,\ldots,m_2\}. $$</p>
+        <p>The problem (4.9) is then equivalent to</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; \tilde{f}_0(x_1) \\ \text{subject to} &amp; f_i(x_1) \le 0, \quad i = 1,\ldots,m_1. \end{array} \tag{4.10}$$</p></div>
+      <div class="zh"><p>总有</p>
+        <p>$$ \inf_{x,y} f(x, y) = \inf_x \tilde{f}(x) $$</p>
+        <p>其中 $\tilde{f}(x) = \inf_y f(x, y)$。换言之，我们总可以先对部分变量取极小、再对其余变量取极小来极小化一个函数。这一简单而一般的原则可用于将问题变换为等价形式。一般情形的描述繁琐且不甚明了，故以一个例子说明。</p>
+        <p>设变量 $x \in \mathbb{R}^n$ 分块为 $x = (x_1, x_2)$，其中 $x_1 \in \mathbb{R}^{n_1}$，$x_2 \in \mathbb{R}^{n_2}$，$n_1 + n_2 = n$。考虑问题</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(x_1, x_2) \\ \text{subject to} &amp; f_i(x_1) \le 0, \quad i = 1,\ldots,m_1 \\ &amp; \tilde{f}_i(x_2) \le 0, \quad i = 1,\ldots,m_2, \end{array} \tag{4.9}$$</p>
+        <p>其中约束是独立的，即每个约束函数只依赖于 $x_1$ 或 $x_2$。先对 $x_2$ 取极小。定义 $x_1$ 的函数 $\tilde{f}_0$ 为</p>
+        <p>$$ \tilde{f}_0(x_1) = \inf\{f_0(x_1, z) \mid \tilde{f}_i(z) \le 0,\, i = 1,\ldots,m_2\}. $$</p>
+        <p>则问题 (4.9) 等价于</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; \tilde{f}_0(x_1) \\ \text{subject to} &amp; f_i(x_1) \le 0, \quad i = 1,\ldots,m_1. \end{array} \tag{4.10}$$</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><em>Example 4.4 Minimizing a quadratic function with constraints on some variables.</em> Consider a problem with strictly convex quadratic objective, with some of the variables unconstrained:</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; x_1^T P_{11} x_1 + 2 x_1^T P_{12} x_2 + x_2^T P_{22} x_2 \\ \text{subject to} &amp; f_i(x_1) \le 0, \quad i = 1,\ldots,m, \end{array}$$</p>
+        <p>where $P_{11}$ and $P_{22}$ are symmetric. Here we can analytically minimize over $x_2$:</p>
+        <p>$$ \inf_{x_2} \left( x_1^T P_{11} x_1 + 2 x_1^T P_{12} x_2 + x_2^T P_{22} x_2 \right) = x_1^T \left( P_{11} - P_{12} P_{22}^{-1} P_{12}^T \right) x_1 $$</p>
+        <p>(see §A.5.5). Therefore the original problem is equivalent to</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; x_1^T \left( P_{11} - P_{12} P_{22}^{-1} P_{12}^T \right) x_1 \\ \text{subject to} &amp; f_i(x_1) \le 0, \quad i = 1,\ldots,m. \end{array}$$</p></div>
+      <div class="zh"><p><em>例 4.4 带部分变量约束的二次函数极小化。</em> 考虑严格凸二次目标、部分变量不受约束的问题：</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; x_1^T P_{11} x_1 + 2 x_1^T P_{12} x_2 + x_2^T P_{22} x_2 \\ \text{subject to} &amp; f_i(x_1) \le 0, \quad i = 1,\ldots,m, \end{array}$$</p>
+        <p>其中 $P_{11}$ 和 $P_{22}$ 对称。这里可解析地对 $x_2$ 取极小：</p>
+        <p>$$ \inf_{x_2} \left( x_1^T P_{11} x_1 + 2 x_1^T P_{12} x_2 + x_2^T P_{22} x_2 \right) = x_1^T \left( P_{11} - P_{12} P_{22}^{-1} P_{12}^T \right) x_1 $$</p>
+        <p>（见 §A.5.5）。因此原问题等价于</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; x_1^T \left( P_{11} - P_{12} P_{22}^{-1} P_{12}^T \right) x_1 \\ \text{subject to} &amp; f_i(x_1) \le 0, \quad i = 1,\ldots,m. \end{array}$$</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Epigraph problem form</h3></div>
+      <div class="zh"><h3>上图问题形式</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The <em>epigraph form</em> of the standard problem (4.1) is the problem</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; t \\ \text{subject to} &amp; f_0(x) - t \le 0 \\ &amp; f_i(x) \le 0, \quad i = 1,\ldots,m \\ &amp; h_i(x) = 0, \quad i = 1,\ldots,p, \end{array} \tag{4.11}$$</p>
+        <p>with variables $x \in \mathbb{R}^n$ and $t \in \mathbb{R}$. We can easily see that it is equivalent to the original problem: $(x, t)$ is optimal for (4.11) if and only if $x$ is optimal for (4.1) and $t = f_0(x)$. Note that the objective function of the epigraph form problem is a linear function of the variables $x, t$.</p>
+        <p>The epigraph form problem (4.11) can be interpreted geometrically as an optimization problem in the &lsquo;graph space&rsquo; $(x, t)$: we minimize $t$ over the epigraph of $f_0$, subject to the constraints on $x$. This is illustrated in figure 4.1.</p></div>
+      <div class="zh"><p>标准问题 (4.1) 的<strong>上图形式</strong>为</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; t \\ \text{subject to} &amp; f_0(x) - t \le 0 \\ &amp; f_i(x) \le 0, \quad i = 1,\ldots,m \\ &amp; h_i(x) = 0, \quad i = 1,\ldots,p, \end{array} \tag{4.11}$$</p>
+        <p>变量为 $x \in \mathbb{R}^n$ 和 $t \in \mathbb{R}$。容易看出它与原问题等价：$(x, t)$ 对 (4.11) 最优当且仅当 $x$ 对 (4.1) 最优且 $t = f_0(x)$。注意上图形式问题的目标函数是变量 $x, t$ 的线性函数。</p>
+        <p>上图形式问题 (4.11) 可几何地解释为&ldquo;图空间&rdquo;$(x, t)$ 中的优化问题：在上图（epigraph）$\mathbf{epi}\, f_0$ 上极小化 $t$，并满足对 $x$ 的约束。如图 4.1 所示。</p></div>
+    </div>
+
+    <!-- ===== Figure 4.1 ===== -->
+    <div class="pair fig-block">
+      <div class="figure-wrap">
+        <img src="assets/figures/fig4.1.png" alt="Figure 4.1: geometric interpretation of epigraph form problem">
+        <div class="fig-caption">
+          <div class="cap-en"><span class="figref">Figure 4.1</span> Geometric interpretation of epigraph form problem, for a problem with no constraints. The problem is to find the point in the epigraph (shown shaded) that minimizes $t$, i.e., the &lsquo;lowest&rsquo; point in the epigraph. The optimal point is $(x^\star, t^\star)$.</div>
+          <div class="cap-zh"><span class="figref">图 4.1</span> 上图形式问题的几何解释（无约束情形）。问题即在上图（阴影所示）中寻找使 $t$ 最小的点，即上图&ldquo;最低&rdquo;的点。最优点为 $(x^\star, t^\star)$。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Implicit and explicit constraints</h3></div>
+      <div class="zh"><h3>隐式约束与显式约束</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>By a simple trick already mentioned in §3.1.2, we can include any of the constraints implicitly in the objective function, by redefining its domain. As an extreme example, the standard form problem can be expressed as the unconstrained problem</p>
+        <p>$$ \text{minimize} \quad F(x), \tag{4.12}$$</p>
+        <p>where we define the function $F$ as $f_0$, but with domain restricted to the feasible set:</p>
+        <p>$$ \mathbf{dom}\, F = \{x \in \mathbf{dom}\, f_0 \mid f_i(x) \le 0,\, i = 1,\ldots,m,\, h_i(x) = 0,\, i = 1,\ldots,p\}, $$</p>
+        <p>and $F(x) = f_0(x)$ for $x \in \mathbf{dom}\, F$. (Equivalently, we can define $F(x)$ to have value $\infty$ for $x$ not feasible.) The problems (4.1) and (4.12) are clearly equivalent: they have the same feasible set, optimal points, and optimal value.</p>
+        <p>Of course this transformation is nothing more than a notational trick. Making the constraints implicit has not made the problem any easier to analyze or solve, even though the problem (4.12) is, at least nominally, unconstrained. In some ways the transformation makes the problem more difficult. Suppose, for example, that the objective $f_0$ in the original problem is differentiable, so in particular its domain is open. The restricted objective function $F$ is probably not differentiable, since its domain is likely not to be open.</p></div>
+      <div class="zh"><p>通过 §3.1.2 中已提及的一个简单技巧，可把任意约束隐含于目标函数中，即重新定义其定义域。作为一个极端例子，标准形式问题可表示为无约束问题</p>
+        <p>$$ \text{minimize} \quad F(x), \tag{4.12}$$</p>
+        <p>其中函数 $F$ 定义为 $f_0$，但定义域限制为可行集：</p>
+        <p>$$ \mathbf{dom}\, F = \{x \in \mathbf{dom}\, f_0 \mid f_i(x) \le 0,\, i = 1,\ldots,m,\, h_i(x) = 0,\, i = 1,\ldots,p\}, $$</p>
+        <p>且 $x \in \mathbf{dom}\, F$ 时 $F(x) = f_0(x)$。（等价地，可定义 $F(x)$ 在 $x$ 不可行时取 $\infty$。）问题 (4.1) 与 (4.12) 显然等价：可行集、最优集、最优值均相同。</p>
+        <p>当然，此变换不过是记号技巧。使约束隐式化并未使问题更易分析或求解，尽管问题 (4.12) 至少名义上是无约束的。在某些方面，该变换使问题更困难。例如，设原问题的目标 $f_0$ 可微，则其定义域为开集。限制后的目标函数 $F$ 可能不可微，因其定义域很可能不是开集。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Conversely, we will encounter problems with implicit constraints, which we can then make explicit. As a simple example, consider the unconstrained problem</p>
+        <p>$$ \text{minimize} \quad f(x) \tag{4.13}$$</p>
+        <p>where the function $f$ is given by</p>
+        <p>$$ f(x) = \begin{cases} x^T x &amp; Ax = b \\ \infty &amp; \text{otherwise.} \end{cases} $$</p>
+        <p>Thus, the objective function is equal to the quadratic form $x^T x$ on the affine set defined by $Ax = b$, and $\infty$ off the affine set. Since we can clearly restrict our attention to points that satisfy $Ax = b$, we say that the problem (4.13) has an <em>implicit equality constraint</em> $Ax = b$ hidden in the objective. We can make the implicit equality constraint explicit, by forming the equivalent problem</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; x^T x \\ \text{subject to} &amp; Ax = b. \end{array} \tag{4.14}$$</p>
+        <p>While the problems (4.13) and (4.14) are clearly equivalent, they are not the same. The problem (4.13) is unconstrained, but its objective function is not differentiable. The problem (4.14), however, has an equality constraint, but its objective and constraint functions are differentiable.</p></div>
+      <div class="zh"><p>反之，我们会遇到带隐式约束的问题，可将其显式化。作为一个简单例子，考虑无约束问题</p>
+        <p>$$ \text{minimize} \quad f(x) \tag{4.13}$$</p>
+        <p>其中函数 $f$ 为</p>
+        <p>$$ f(x) = \begin{cases} x^T x &amp; Ax = b \\ \infty &amp; \text{其他.} \end{cases} $$</p>
+        <p>因此，目标函数在 $Ax = b$ 定义的仿射集上等于二次型 $x^T x$，在该仿射集之外为 $\infty$。由于显然可只考虑满足 $Ax = b$ 的点，我们说问题 (4.13) 在目标中隐含一个等式约束 $Ax = b$。将该隐式等式约束显式化，得到等价问题</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; x^T x \\ \text{subject to} &amp; Ax = b. \end{array} \tag{4.14}$$</p>
+        <p>问题 (4.13) 与 (4.14) 显然等价，但并不相同。问题 (4.13) 无约束，但其目标函数不可微。问题 (4.14) 有等式约束，但其目标函数与约束函数可微。</p></div>
+    </div>
+
+    <!-- ============== 4.1.4 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>4.1.4 Parameter and oracle problem descriptions</h3></div>
+      <div class="zh"><h3>4.1.4 参数描述与预言机描述</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>For a problem in the standard form (4.1), there is still the question of how the objective and constraint functions are specified. In many cases these functions have some analytical or closed form, i.e., are given by a formula or expression that involves the variable $x$ as well as some parameters. Suppose, for example, the objective is quadratic, so it has the form $f_0(x) = (1/2)x^T P x + q^T x + r$. To specify the objective function we give the coefficients (also called <em>problem parameters</em> or <em>problem data</em>) $P \in \mathbf{S}^n$, $q \in \mathbb{R}^n$, and $r \in \mathbb{R}$. We call this a <em>parameter problem description</em>, since the specific problem to be solved (i.e., the <em>problem instance</em>) is specified by giving the values of the parameters that appear in the expressions for the objective and constraint functions.</p></div>
+      <div class="zh"><p>对于标准形式 (4.1) 的问题，目标函数与约束函数如何给定仍是一个问题。许多情形下，这些函数有某种解析或闭式表达，即由一个涉及变量 $x$ 与某些参数的公式或表达式给出。例如，设目标为二次的，即形如 $f_0(x) = (1/2)x^T P x + q^T x + r$。为给定目标函数，我们给出系数（也称<strong>问题参数</strong>或<strong>问题数据</strong>）$P \in \mathbf{S}^n$、$q \in \mathbb{R}^n$、$r \in \mathbb{R}$。这称为<strong>参数描述</strong>，因为具体待解的问题（即<strong>问题实例</strong>）由出现在目标与约束函数表达式中的参数的取值给定。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>In other cases the objective and constraint functions are described by <em>oracle models</em> (which are also called black box or subroutine models). In an oracle model, we do not know $f$ explicitly, but can evaluate $f(x)$ (and usually also some derivatives) at any $x \in \mathbf{dom}\, f$. This is referred to as <em>querying the oracle</em>, and is usually associated with some cost, such as time. We are also given some prior information about the function, such as convexity and a bound on its values. As a concrete example of an oracle model, consider an unconstrained problem, in which we are to minimize the function $f$. The function value $f(x)$ and its gradient $\nabla f(x)$ are evaluated in a subroutine. We can call the subroutine at any $x \in \mathbf{dom}\, f$, but do not have access to its source code. Calling the subroutine with argument $x$ yields (when the subroutine returns) $f(x)$ and $\nabla f(x)$. Note that in the oracle model, we never really know the function; we only know the function value (and some derivatives) at the points where we have queried the oracle. (We also know some given prior information about the function, such as differentiability and convexity.)</p></div>
+      <div class="zh"><p>其他情形下，目标与约束函数由<strong>预言机模型</strong>（也称黑箱模型或子程序模型）描述。在预言机模型中，我们并不显式地知道 $f$，但可在任意 $x \in \mathbf{dom}\, f$ 处计算 $f(x)$（通常也可计算某些导数）。这称为<strong>查询预言机</strong>，通常伴随某种代价（如时间）。我们还获得关于函数的一些先验信息，如凸性及其值的界。作为预言机模型的具体例子，考虑无约束问题——我们要极小化函数 $f$。函数值 $f(x)$ 及其梯度 $\nabla f(x)$ 在一个子程序中计算。我们可在任意 $x \in \mathbf{dom}\, f$ 调用该子程序，但无法访问其源代码。以参数 $x$ 调用子程序，返回时得到 $f(x)$ 和 $\nabla f(x)$。注意，在预言机模型中，我们并未真正知道函数本身，只知道在查询过预言机的点处的函数值（及某些导数）。（我们还知道所给定的关于函数的先验信息，如可微性与凸性。）</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>In practice the distinction between a parameter and oracle problem description is not so sharp. If we are given a parameter problem description, we can construct an oracle for it, which simply evaluates the required functions and derivatives when queried. Most of the algorithms we study in part III work with an oracle model, but can be made more efficient when they are restricted to solve a specific parametrized family of problems.</p></div>
+      <div class="zh"><p>实践中，参数描述与预言机描述的区别并非如此鲜明。若给定参数描述，我们可以为之构造预言机，它在被查询时简单地计算所需的函数与导数。我们在第三部分研究的大多数算法都采用预言机模型，但当限定于求解某一特定的参数化问题族时，可使其更高效。</p></div>
+    </div>
+
+    <!-- ============== 4.2 ============== -->
+    <div class="pair head">
+      <div class="en"><h2>4.2 Convex optimization</h2></div>
+      <div class="zh"><h2>4.2 凸优化</h2></div>
+    </div>
+
+    <!-- ============== 4.2.1 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>4.2.1 Convex optimization problems in standard form</h3></div>
+      <div class="zh"><h3>4.2.1 标准形式的凸优化问题</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>A convex optimization problem is one of the form</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(x) \\ \text{subject to} &amp; f_i(x) \le 0, \quad i = 1,\ldots,m \\ &amp; a_i^T x = b_i, \quad i = 1,\ldots,p, \end{array} \tag{4.15}$$</p>
+        <p>where $f_0, \ldots, f_m$ are convex functions. Comparing (4.15) with the general standard form problem (4.1), the convex problem has three additional requirements:</p>
+        <ul>
+          <li>the objective function must be convex,</li>
+          <li>the inequality constraint functions must be convex,</li>
+          <li>the equality constraint functions $h_i(x) = a_i^T x - b_i$ must be affine.</li>
+        </ul></div>
+      <div class="zh"><p>凸优化问题是形如</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(x) \\ \text{subject to} &amp; f_i(x) \le 0, \quad i = 1,\ldots,m \\ &amp; a_i^T x = b_i, \quad i = 1,\ldots,p, \end{array} \tag{4.15}$$</p>
+        <p>其中 $f_0, \ldots, f_m$ 为凸函数。将 (4.15) 与一般标准形式问题 (4.1) 比较，凸问题有三个附加要求：</p>
+        <ul>
+          <li>目标函数必须是凸的；</li>
+          <li>不等式约束函数必须是凸的；</li>
+          <li>等式约束函数 $h_i(x) = a_i^T x - b_i$ 必须是仿射的。</li>
+        </ul></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We immediately note an important property: The feasible set of a convex optimization problem is convex, since it is the intersection of the domain of the problem</p>
+        <p>$$ \mathcal{D} = \bigcap_{i=0}^m \mathbf{dom}\, f_i, $$</p>
+        <p>which is a convex set, with $m$ (convex) sublevel sets $\{x \mid f_i(x) \le 0\}$ and $p$ hyperplanes $\{x \mid a_i^T x = b_i\}$. (We can assume without loss of generality that $a_i \ne 0$: if $a_i = 0$ and $b_i = 0$ for some $i$, then the $i$th equality constraint can be deleted; if $a_i = 0$ and $b_i \ne 0$, the $i$th equality constraint is inconsistent, and the problem is infeasible.) Thus, in a convex optimization problem, we minimize a convex objective function over a convex set.</p></div>
+      <div class="zh"><p>我们立即注意到一个重要性质：凸优化问题的可行集是凸的，因为它是问题定义域</p>
+        <p>$$ \mathcal{D} = \bigcap_{i=0}^m \mathbf{dom}\, f_i, $$</p>
+        <p>（凸集）与 $m$ 个（凸的）下水平集 $\{x \mid f_i(x) \le 0\}$ 和 $p$ 个超平面 $\{x \mid a_i^T x = b_i\}$ 的交集。（不失一般性可设 $a_i \ne 0$：若某 $i$ 满足 $a_i = 0$ 且 $b_i = 0$，则第 $i$ 个等式约束可删去；若 $a_i = 0$ 且 $b_i \ne 0$，则第 $i$ 个等式约束不相容，问题不可行。）因此，在凸优化问题中，我们在凸集上极小化凸目标函数。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>If $f_0$ is quasiconvex instead of convex, we say the problem (4.15) is a (standard form) <em>quasiconvex optimization problem</em>. Since the sublevel sets of a convex or quasiconvex function are convex, we conclude that for a convex or quasiconvex optimization problem the $\epsilon$-suboptimal sets are convex. In particular, the optimal set is convex. If the objective is strictly convex, then the optimal set contains at most one point.</p></div>
+      <div class="zh"><p>若 $f_0$ 是拟凸的（而非凸的），则称问题 (4.15) 为（标准形式）<strong>拟凸优化问题</strong>。由于凸函数或拟凸函数的下水平集是凸的，故对凸或拟凸优化问题，$\epsilon$-次优集是凸的。特别地，最优集是凸的。若目标严格凸，则最优集至多含一个点。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Concave maximization problems</h3></div>
+      <div class="zh"><h3>凹最大化问题</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>With a slight abuse of notation, we will also refer to</p>
+        <p>$$\begin{array}{ll} \text{maximize} &amp; f_0(x) \\ \text{subject to} &amp; f_i(x) \le 0, \quad i = 1,\ldots,m \\ &amp; a_i^T x = b_i, \quad i = 1,\ldots,p, \end{array} \tag{4.16}$$</p>
+        <p>as a convex optimization problem if the objective function $f_0$ is concave, and the inequality constraint functions $f_1, \ldots, f_m$ are convex. This <em>concave maximization problem</em> is readily solved by minimizing the convex objective function $-f_0$. All of the results, conclusions, and algorithms that we describe for the minimization problem are easily transposed to the maximization case. In a similar way the maximization problem (4.16) is called quasiconvex if $f_0$ is quasiconcave.</p></div>
+      <div class="zh"><p>略加滥用记号，我们也将</p>
+        <p>$$\begin{array}{ll} \text{maximize} &amp; f_0(x) \\ \text{subject to} &amp; f_i(x) \le 0, \quad i = 1,\ldots,m \\ &amp; a_i^T x = b_i, \quad i = 1,\ldots,p, \end{array} \tag{4.16}$$</p>
+        <p>称为凸优化问题，只要目标函数 $f_0$ 是凹的，且不等式约束函数 $f_1, \ldots, f_m$ 是凸的。该<strong>凹最大化问题</strong>可通过极小化凸目标函数 $-f_0$ 容易求解。我们对极小化问题所述的所有结果、结论与算法，都容易转用于极大化情形。类似地，若 $f_0$ 是拟凹的，则称极大化问题 (4.16) 为拟凸的。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Abstract form convex optimization problem</h3></div>
+      <div class="zh"><h3>抽象形式凸优化问题</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>It is important to note a subtlety in our definition of convex optimization problem. Consider the example with $x \in \mathbb{R}^2$,</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(x) = x_1^2 + x_2^2 \\ \text{subject to} &amp; f_1(x) = x_1/(1 + x_2^2) \le 0 \\ &amp; h_1(x) = (x_1 + x_2)^2 = 0, \end{array} \tag{4.17}$$</p>
+        <p>which is in the standard form (4.1). This problem is <em>not</em> a convex optimization problem in standard form since the equality constraint function $h_1$ is not affine, and the inequality constraint function $f_1$ is not convex. Nevertheless the feasible set, which is $\{x \mid x_1 \le 0,\, x_1 + x_2 = 0\}$, is convex. So although in this problem we are minimizing a convex function $f_0$ over a convex set, it is not a convex optimization problem by our definition.</p>
+        <p>Of course, the problem is readily reformulated as</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(x) = x_1^2 + x_2^2 \\ \text{subject to} &amp; \tilde{f}_1(x) = x_1 \le 0 \\ &amp; \tilde{h}_1(x) = x_1 + x_2 = 0, \end{array} \tag{4.18}$$</p>
+        <p>which is in standard convex optimization form, since $f_0$ and $\tilde{f}_1$ are convex, and $\tilde{h}_1$ is affine.</p></div>
+      <div class="zh"><p>注意凸优化问题定义中的一个微妙之处。考虑例子（$x \in \mathbb{R}^2$）</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(x) = x_1^2 + x_2^2 \\ \text{subject to} &amp; f_1(x) = x_1/(1 + x_2^2) \le 0 \\ &amp; h_1(x) = (x_1 + x_2)^2 = 0, \end{array} \tag{4.17}$$</p>
+        <p>它处于标准形式 (4.1)。但该问题<em>不是</em>标准形式的凸优化问题，因为等式约束函数 $h_1$ 不是仿射的，不等式约束函数 $f_1$ 不是凸的。然而可行集 $\{x \mid x_1 \le 0,\, x_1 + x_2 = 0\}$ 是凸的。所以尽管此问题是在凸集上极小化凸函数 $f_0$，按我们的定义它不是凸优化问题。</p>
+        <p>当然，该问题容易改写为</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(x) = x_1^2 + x_2^2 \\ \text{subject to} &amp; \tilde{f}_1(x) = x_1 \le 0 \\ &amp; \tilde{h}_1(x) = x_1 + x_2 = 0, \end{array} \tag{4.18}$$</p>
+        <p>它处于标准凸优化形式，因为 $f_0$ 和 $\tilde{f}_1$ 是凸的，$\tilde{h}_1$ 是仿射的。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Some authors use the term <em>abstract convex optimization problem</em> to describe the (abstract) problem of minimizing a convex function over a convex set. Using this terminology, the problem (4.17) is an abstract convex optimization problem. We will not use this terminology in this book. For us, a convex optimization problem is not just one of minimizing a convex function over a convex set; it is also required that the feasible set be described specifically by a set of inequalities involving convex functions, and a set of linear equality constraints. The problem (4.17) is not a convex optimization problem, but the problem (4.18) is a convex optimization problem. (The two problems are, however, equivalent.)</p></div>
+      <div class="zh"><p>有些作者用<strong>抽象凸优化问题</strong>来描述在凸集上极小化凸函数这一（抽象）问题。用此术语，问题 (4.17) 是抽象凸优化问题。本书不采用此术语。对我们而言，凸优化问题不仅仅是在凸集上极小化凸函数，还要求可行集由涉及凸函数的一组不等式和一组线性等式约束具体地描述。问题 (4.17) 不是凸优化问题，但问题 (4.18) 是。（然而两问题是等价的。）</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Our adoption of the stricter definition of convex optimization problem does not matter much in practice. To solve the abstract problem of minimizing a convex function over a convex set, we need to find a description of the set in terms of convex inequalities and linear equality constraints. As the example above suggests, this is usually straightforward.</p></div>
+      <div class="zh"><p>我们采用更严格的凸优化问题定义在实践中影响不大。为求解在凸集上极小化凸函数这一抽象问题，需要找到该集合用凸不等式与线性等式约束表示的描述。如上例所示，这通常是直接的。</p></div>
+    </div>
+
+    <!-- ============== 4.2.2 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>4.2.2 Local and global optima</h3></div>
+      <div class="zh"><h3>4.2.2 局部最优与全局最优</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>A fundamental property of convex optimization problems is that any locally optimal point is also (globally) optimal. To see this, suppose that $x$ is locally optimal for a convex optimization problem, i.e., $x$ is feasible and</p>
+        <p>$$ f_0(x) = \inf\{f_0(z) \mid z \text{ feasible},\, \|z - x\|_2 \le R\}, \tag{4.19}$$</p>
+        <p>for some $R &gt; 0$. Now suppose that $x$ is not globally optimal, i.e., there is a feasible $y$ such that $f_0(y) &lt; f_0(x)$. Evidently $\|y - x\|_2 &gt; R$, since otherwise $f_0(x) \le f_0(y)$. Consider the point $z$ given by</p>
+        <p>$$ z = (1 - \theta)x + \theta y, \qquad \theta = \frac{R}{2\|y - x\|_2}. $$</p>
+        <p>Then we have $\|z - x\|_2 = R/2 &lt; R$, and by convexity of the feasible set, $z$ is feasible. By convexity of $f_0$ we have</p>
+        <p>$$ f_0(z) \le (1 - \theta)f_0(x) + \theta f_0(y) &lt; f_0(x), $$</p>
+        <p>which contradicts (4.19). Hence there exists no feasible $y$ with $f_0(y) &lt; f_0(x)$, i.e., $x$ is globally optimal.</p></div>
+      <div class="zh"><p>凸优化问题的一个基本性质是：任何局部最优点也是（全局）最优的。为证之，设 $x$ 是凸优化问题的局部最优，即 $x$ 可行且</p>
+        <p>$$ f_0(x) = \inf\{f_0(z) \mid z \text{ 可行},\, \|z - x\|_2 \le R\}, \tag{4.19}$$</p>
+        <p>对某个 $R &gt; 0$ 成立。设 $x$ 不是全局最优，即存在可行 $y$ 使 $f_0(y) &lt; f_0(x)$。显然 $\|y - x\|_2 &gt; R$，否则 $f_0(x) \le f_0(y)$。考虑点</p>
+        <p>$$ z = (1 - \theta)x + \theta y, \qquad \theta = \frac{R}{2\|y - x\|_2}. $$</p>
+        <p>则 $\|z - x\|_2 = R/2 &lt; R$，且由可行集的凸性，$z$ 可行。由 $f_0$ 的凸性</p>
+        <p>$$ f_0(z) \le (1 - \theta)f_0(x) + \theta f_0(y) &lt; f_0(x), $$</p>
+        <p>与 (4.19) 矛盾。故不存在可行 $y$ 使 $f_0(y) &lt; f_0(x)$，即 $x$ 全局最优。</p></div>
+    </div>
+
+    <!-- ===== Figure 4.2 ===== -->
+    <div class="pair fig-block">
+      <div class="figure-wrap">
+        <img src="assets/figures/fig4.2.png" alt="Figure 4.2: geometric interpretation of optimality condition">
+        <div class="fig-caption">
+          <div class="cap-en"><span class="figref">Figure 4.2</span> Geometric interpretation of the optimality condition (4.21). The feasible set $\mathcal{X}$ is shown shaded. Some level curves of $f_0$ are shown as dashed lines. The point $x$ is optimal: $-\nabla f_0(x)$ defines a supporting hyperplane (shown as a solid line) to $\mathcal{X}$ at $x$.</div>
+          <div class="cap-zh"><span class="figref">图 4.2</span> 最优性条件 (4.21) 的几何解释。可行集 $\mathcal{X}$ 以阴影显示。$f_0$ 的若干等值线以虚线表示。点 $x$ 最优：$-\nabla f_0(x)$ 在 $x$ 处定义了 $\mathcal{X}$ 的一个支撑超平面（实线所示）。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>It is not true that locally optimal points of quasiconvex optimization problems are globally optimal; see §4.2.5.</p></div>
+      <div class="zh"><p>拟凸优化问题的局部最优点未必全局最优；见 §4.2.5。</p></div>
+    </div>
+
+    <!-- ============== 4.2.3 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>4.2.3 An optimality criterion for differentiable $f_0$</h3></div>
+      <div class="zh"><h3>4.2.3 可微 $f_0$ 的最优性准则</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Suppose that the objective $f_0$ in a convex optimization problem is differentiable, so that for all $x, y \in \mathbf{dom}\, f_0$,</p>
+        <p>$$ f_0(y) \ge f_0(x) + \nabla f_0(x)^T (y - x) \tag{4.20}$$</p>
+        <p>(see §3.1.3). Let $\mathcal{X}$ denote the feasible set, i.e.,</p>
+        <p>$$ \mathcal{X} = \{x \mid f_i(x) \le 0,\, i = 1,\ldots,m,\, h_i(x) = 0,\, i = 1,\ldots,p\}. $$</p>
+        <p>Then $x$ is optimal if and only if $x \in \mathcal{X}$ and</p>
+        <p>$$ \nabla f_0(x)^T (y - x) \ge 0 \quad \text{for all } y \in \mathcal{X}. \tag{4.21}$$</p>
+        <p>This optimality criterion can be understood geometrically: If $\nabla f_0(x) \ne 0$, it means that $-\nabla f_0(x)$ defines a supporting hyperplane to the feasible set at $x$ (see figure 4.2).</p></div>
+      <div class="zh"><p>设凸优化问题的目标 $f_0$ 可微，则对所有 $x, y \in \mathbf{dom}\, f_0$，</p>
+        <p>$$ f_0(y) \ge f_0(x) + \nabla f_0(x)^T (y - x) \tag{4.20}$$</p>
+        <p>（见 §3.1.3）。记可行集为 $\mathcal{X}$，即</p>
+        <p>$$ \mathcal{X} = \{x \mid f_i(x) \le 0,\, i = 1,\ldots,m,\, h_i(x) = 0,\, i = 1,\ldots,p\}. $$</p>
+        <p>则 $x$ 最优当且仅当 $x \in \mathcal{X}$ 且</p>
+        <p>$$ \nabla f_0(x)^T (y - x) \ge 0 \quad \text{对所有 } y \in \mathcal{X}. \tag{4.21}$$</p>
+        <p>此最优性准则可几何地理解：若 $\nabla f_0(x) \ne 0$，它意味着 $-\nabla f_0(x)$ 在 $x$ 处定义了可行集的一个支撑超平面（见图 4.2）。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Proof of optimality condition</h3></div>
+      <div class="zh"><h3>最优性条件的证明</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>First suppose $x \in \mathcal{X}$ and satisfies (4.21). Then if $y \in \mathcal{X}$ we have, by (4.20), $f_0(y) \ge f_0(x)$. This shows $x$ is an optimal point for (4.1).</p>
+        <p>Conversely, suppose $x$ is optimal, but the condition (4.21) does not hold, i.e., for some $y \in \mathcal{X}$ we have</p>
+        <p>$$ \nabla f_0(x)^T (y - x) &lt; 0. $$</p>
+        <p>Consider the point $z(t) = ty + (1-t)x$, where $t \in [0, 1]$ is a parameter. Since $z(t)$ is on the line segment between $x$ and $y$, and the feasible set is convex, $z(t)$ is feasible. We claim that for small positive $t$ we have $f_0(z(t)) &lt; f_0(x)$, which will prove that $x$ is not optimal. To show this, note that</p>
+        <p>$$ \left. \frac{d}{dt} f_0(z(t)) \right|_{t=0} = \nabla f_0(x)^T (y - x) &lt; 0, $$</p>
+        <p>so for small positive $t$, we have $f_0(z(t)) &lt; f_0(x)$.</p></div>
+      <div class="zh"><p>先设 $x \in \mathcal{X}$ 且满足 (4.21)。则对 $y \in \mathcal{X}$，由 (4.20) 有 $f_0(y) \ge f_0(x)$。这表明 $x$ 是 (4.1) 的最优点。</p>
+        <p>反之，设 $x$ 最优但条件 (4.21) 不成立，即对某 $y \in \mathcal{X}$ 有</p>
+        <p>$$ \nabla f_0(x)^T (y - x) &lt; 0. $$</p>
+        <p>考虑点 $z(t) = ty + (1-t)x$，其中 $t \in [0, 1]$ 为参数。因 $z(t)$ 在 $x$ 与 $y$ 的线段上，且可行集凸，故 $z(t)$ 可行。我们断言：对充分小的正 $t$ 有 $f_0(z(t)) &lt; f_0(x)$，由此可证 $x$ 非最优。为此注意</p>
+        <p>$$ \left. \frac{d}{dt} f_0(z(t)) \right|_{t=0} = \nabla f_0(x)^T (y - x) &lt; 0, $$</p>
+        <p>故对充分小的正 $t$，有 $f_0(z(t)) &lt; f_0(x)$。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We will pursue the topic of optimality conditions in much more depth in chapter 5, but here we examine a few simple examples.</p></div>
+      <div class="zh"><p>我们将在第 5 章更深入地讨论最优性条件，这里先考察几个简单例子。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Unconstrained problems</h3></div>
+      <div class="zh"><h3>无约束问题</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>For an unconstrained problem (i.e., $m = p = 0$), the condition (4.21) reduces to the well known necessary and sufficient condition</p>
+        <p>$$ \nabla f_0(x) = 0 \tag{4.22}$$</p>
+        <p>for $x$ to be optimal. While we have already seen this optimality condition, it is useful to see how it follows from (4.21). Suppose $x$ is optimal, which means here that $x \in \mathbf{dom}\, f_0$, and for all feasible $y$ we have $\nabla f_0(x)^T (y - x) \ge 0$. Since $f_0$ is differentiable, its domain is (by definition) open, so all $y$ sufficiently close to $x$ are feasible. Let us take $y = x - t\nabla f_0(x)$, where $t \in \mathbb{R}$ is a parameter. For $t$ small and positive, $y$ is feasible, and so</p>
+        <p>$$ \nabla f_0(x)^T (y - x) = -t\|\nabla f_0(x)\|_2^2 \ge 0, $$</p>
+        <p>from which we conclude $\nabla f_0(x) = 0$.</p></div>
+      <div class="zh"><p>对无约束问题（即 $m = p = 0$），条件 (4.21) 退化为熟知的 $x$ 最优的充要条件</p>
+        <p>$$ \nabla f_0(x) = 0 \tag{4.22}$$</p>
+        <p>虽然此前已见过此最优性条件，但了解它如何由 (4.21) 推出是有益的。设 $x$ 最优，即 $x \in \mathbf{dom}\, f_0$，且对所有可行 $y$ 有 $\nabla f_0(x)^T (y - x) \ge 0$。因 $f_0$ 可微，其定义域（由定义）为开集，故所有充分接近 $x$ 的 $y$ 都可行。取 $y = x - t\nabla f_0(x)$，其中 $t \in \mathbb{R}$ 为参数。对充分小的正 $t$，$y$ 可行，故</p>
+        <p>$$ \nabla f_0(x)^T (y - x) = -t\|\nabla f_0(x)\|_2^2 \ge 0, $$</p>
+        <p>由此得 $\nabla f_0(x) = 0$。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>There are several possible situations, depending on the number of solutions of (4.22). If there are no solutions of (4.22), then there are no optimal points; the optimal value of the problem is not attained. Here we can distinguish between two cases: the problem is unbounded below, or the optimal value is finite, but not attained. On the other hand we can have multiple solutions of the equation (4.22), in which case each such solution is a minimizer of $f_0$.</p></div>
+      <div class="zh"><p>视 (4.22) 的解的个数，有几种可能情形。若 (4.22) 无解，则无最优点，问题的最优值未被达到。此处又可分两种情形：问题下方无界，或最优值有限但未被达到。另一方面，(4.22) 可能有多个解，此时每个解都是 $f_0$ 的极小点。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><em>Example 4.5 Unconstrained quadratic optimization.</em> Consider the problem of minimizing the quadratic function</p>
+        <p>$$ f_0(x) = (1/2)x^T P x + q^T x + r, $$</p>
+        <p>where $P \in \mathbf{S}^n_+$ (which makes $f_0$ convex). The necessary and sufficient condition for $x$ to be a minimizer of $f_0$ is</p>
+        <p>$$ \nabla f_0(x) = Px + q = 0. $$</p>
+        <p>Several cases can occur, depending on whether this (linear) equation has no solutions, one solution, or many solutions.</p>
+        <ul>
+          <li>If $q \notin \mathcal{R}(P)$, then there is no solution. In this case $f_0$ is unbounded below.</li>
+          <li>If $P \succ 0$ (which is the condition for $f_0$ to be strictly convex), then there is a unique minimizer, $x^\star = -P^{-1}q$.</li>
+          <li>If $P$ is singular, but $q \in \mathcal{R}(P)$, then the set of optimal points is the (affine) set</li>
+        </ul>
+        <p>$$ \mathcal{X}_{\mathrm{opt}} = -P^\dagger q + \mathcal{N}(P), $$</p>
+        <p>where $P^\dagger$ denotes the pseudo-inverse of $P$ (see §A.5.4).</p></div>
+      <div class="zh"><p><em>例 4.5 无约束二次优化。</em> 考虑极小化二次函数</p>
+        <p>$$ f_0(x) = (1/2)x^T P x + q^T x + r, $$</p>
+        <p>其中 $P \in \mathbf{S}^n_+$（使 $f_0$ 凸）。$x$ 为 $f_0$ 的极小点的充要条件为</p>
+        <p>$$ \nabla f_0(x) = Px + q = 0. $$</p>
+        <p>视此（线性）方程无解、唯一解或多解，有几种情形：</p>
+        <ul>
+          <li>若 $q \notin \mathcal{R}(P)$，则无解。此时 $f_0$ 下方无界。</li>
+          <li>若 $P \succ 0$（即 $f_0$ 严格凸的条件），则有唯一极小点 $x^\star = -P^{-1}q$。</li>
+          <li>若 $P$ 奇异但 $q \in \mathcal{R}(P)$，则最优集为（仿射）集</li>
+        </ul>
+        <p>$$ \mathcal{X}_{\mathrm{opt}} = -P^\dagger q + \mathcal{N}(P), $$</p>
+        <p>其中 $P^\dagger$ 为 $P$ 的伪逆（见 §A.5.4）。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><em>Example 4.6 Analytic centering.</em> Consider the (unconstrained) problem of minimizing the (convex) function $f_0 : \mathbb{R}^n \to \mathbb{R}$, defined as</p>
+        <p>$$ f_0(x) = -\sum_{i=1}^m \log(b_i - a_i^T x), \qquad \mathbf{dom}\, f_0 = \{x \mid Ax \prec b\}, $$</p>
+        <p>where $a_1^T, \ldots, a_m^T$ are the rows of $A$. The function $f_0$ is differentiable, so the necessary and sufficient conditions for $x$ to be optimal are</p>
+        <p>$$ Ax \prec b, \qquad \nabla f_0(x) = \sum_{i=1}^m \frac{1}{b_i - a_i^T x} a_i = 0. \tag{4.23}$$</p>
+        <p>(The condition $Ax \prec b$ is just $x \in \mathbf{dom}\, f_0$.) If $Ax \prec b$ is infeasible, then the domain of $f_0$ is empty. Assuming $Ax \prec b$ is feasible, there are still several possible cases (see exercise 4.2):</p>
+        <ul>
+          <li>There are no solutions of (4.23), and hence no optimal points for the problem. This occurs if and only if $f_0$ is unbounded below.</li>
+          <li>There are many solutions of (4.23). In this case it can be shown that the solutions form an affine set.</li>
+          <li>There is a unique solution of (4.23), i.e., a unique minimizer of $f_0$. This occurs if and only if the open polyhedron $\{x \mid Ax \prec b\}$ is nonempty and bounded.</li>
+        </ul></div>
+      <div class="zh"><p><em>例 4.6 解析中心化。</em> 考虑极小化（凸）函数 $f_0 : \mathbb{R}^n \to \mathbb{R}$ 的（无约束）问题，</p>
+        <p>$$ f_0(x) = -\sum_{i=1}^m \log(b_i - a_i^T x), \qquad \mathbf{dom}\, f_0 = \{x \mid Ax \prec b\}, $$</p>
+        <p>其中 $a_1^T, \ldots, a_m^T$ 为 $A$ 的行。$f_0$ 可微，故 $x$ 最优的充要条件为</p>
+        <p>$$ Ax \prec b, \qquad \nabla f_0(x) = \sum_{i=1}^m \frac{1}{b_i - a_i^T x} a_i = 0. \tag{4.23}$$</p>
+        <p>（条件 $Ax \prec b$ 即 $x \in \mathbf{dom}\, f_0$。）若 $Ax \prec b$ 不可行，则 $f_0$ 的定义域为空。设 $Ax \prec b$ 可行，仍有几种可能情形（见习题 4.2）：</p>
+        <ul>
+          <li>(4.23) 无解，故问题无最优点。当且仅当 $f_0$ 下方无界时发生。</li>
+          <li>(4.23) 有多解。此时可证解集为仿射集。</li>
+          <li>(4.23) 有唯一解，即 $f_0$ 的唯一极小点。当且仅当开多面体 $\{x \mid Ax \prec b\}$ 非空且有界时发生。</li>
+        </ul></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Problems with equality constraints only</h3></div>
+      <div class="zh"><h3>仅含等式约束的问题</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Consider the case where there are equality constraints but no inequality constraints, i.e.,</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(x) \\ \text{subject to} &amp; Ax = b. \end{array}$$</p>
+        <p>Here the feasible set is affine. We assume that it is nonempty; otherwise the problem is infeasible. The optimality condition for a feasible $x$ is that</p>
+        <p>$$ \nabla f_0(x)^T (y - x) \ge 0 $$</p>
+        <p>must hold for all $y$ satisfying $Ay = b$. Since $x$ is feasible, every feasible $y$ has the form $y = x + v$ for some $v \in \mathcal{N}(A)$. The optimality condition can therefore be expressed as:</p>
+        <p>$$ \nabla f_0(x)^T v \ge 0 \quad \text{for all } v \in \mathcal{N}(A). $$</p>
+        <p>If a linear function is nonnegative on a subspace, then it must be zero on the subspace, so it follows that $\nabla f_0(x)^T v = 0$ for all $v \in \mathcal{N}(A)$. In other words, $\nabla f_0(x) \perp \mathcal{N}(A)$.</p></div>
+      <div class="zh"><p>考虑有等式约束但无不等式约束的情形，即</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(x) \\ \text{subject to} &amp; Ax = b. \end{array}$$</p>
+        <p>此处可行集是仿射的。设其非空；否则问题不可行。可行 $x$ 的最优性条件为</p>
+        <p>$$ \nabla f_0(x)^T (y - x) \ge 0 $$</p>
+        <p>对所有满足 $Ay = b$ 的 $y$ 成立。因 $x$ 可行，每个可行 $y$ 形如 $y = x + v$，其中 $v \in \mathcal{N}(A)$。故最优性条件可表为：</p>
+        <p>$$ \nabla f_0(x)^T v \ge 0 \quad \text{对所有 } v \in \mathcal{N}(A). $$</p>
+        <p>若一线性函数在子空间上非负，则它在该子空间上必为零，故 $\nabla f_0(x)^T v = 0$ 对所有 $v \in \mathcal{N}(A)$ 成立。换言之，$\nabla f_0(x) \perp \mathcal{N}(A)$。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Using the fact that $\mathcal{N}(A)^\perp = \mathcal{R}(A^T)$, this optimality condition can be expressed as $\nabla f_0(x) \in \mathcal{R}(A^T)$, i.e., there exists a $\nu \in \mathbb{R}^p$ such that</p>
+        <p>$$ \nabla f_0(x) + A^T \nu = 0. $$</p>
+        <p>Together with the requirement $Ax = b$ (i.e., that $x$ is feasible), this is the classical Lagrange multiplier optimality condition, which we will study in greater detail in chapter 5.</p></div>
+      <div class="zh"><p>利用 $\mathcal{N}(A)^\perp = \mathcal{R}(A^T)$，此最优性条件可表为 $\nabla f_0(x) \in \mathcal{R}(A^T)$，即存在 $\nu \in \mathbb{R}^p$ 使</p>
+        <p>$$ \nabla f_0(x) + A^T \nu = 0. $$</p>
+        <p>连同 $Ax = b$（即 $x$ 可行）的要求，这便是经典的 Lagrange 乘子最优性条件，我们将在第 5 章更详细地研究。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Minimization over the nonnegative orthant</h3></div>
+      <div class="zh"><h3>在非负卦限上的极小化</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>As another example we consider the problem</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(x) \\ \text{subject to} &amp; x \succeq 0, \end{array}$$</p>
+        <p>where the only inequality constraints are nonnegativity constraints on the variables. The optimality condition (4.21) is then</p>
+        <p>$$ x \succeq 0, \qquad \nabla f_0(x)^T (y - x) \ge 0 \quad \text{for all } y \succeq 0. $$</p>
+        <p>The term $\nabla f_0(x)^T y$, which is a linear function of $y$, is unbounded below on $y \succeq 0$, unless we have $\nabla f_0(x) \succeq 0$. The condition then reduces to $-\nabla f_0(x)^T x \ge 0$. But $x \succeq 0$ and $\nabla f_0(x) \succeq 0$, so we must have $\nabla f_0(x)^T x = 0$, i.e.,</p>
+        <p>$$ \sum_{i=1}^n (\nabla f_0(x))_i x_i = 0. $$</p>
+        <p>Now each of the terms in this sum is the product of two nonnegative numbers, so we conclude that each term must be zero, i.e., $(\nabla f_0(x))_i x_i = 0$ for $i = 1, \ldots, n$. The optimality condition can therefore be expressed as</p>
+        <p>$$ x \succeq 0, \qquad \nabla f_0(x) \succeq 0, \qquad x_i (\nabla f_0(x))_i = 0, \quad i = 1, \ldots, n. $$</p>
+        <p>The last condition is called <em>complementarity</em>, since it means that the sparsity patterns (i.e., the set of indices corresponding to nonzero components) of the vectors $x$ and $\nabla f_0(x)$ are complementary (i.e., have empty intersection). We will encounter complementarity conditions again in chapter 5.</p></div>
+      <div class="zh"><p>作为另一个例子，考虑问题</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(x) \\ \text{subject to} &amp; x \succeq 0, \end{array}$$</p>
+        <p>其中仅有的不等式约束为变量的非负约束。最优性条件 (4.21) 为</p>
+        <p>$$ x \succeq 0, \qquad \nabla f_0(x)^T (y - x) \ge 0 \quad \text{对所有 } y \succeq 0. $$</p>
+        <p>$\nabla f_0(x)^T y$ 作为 $y$ 的线性函数，在 $y \succeq 0$ 上下方无界，除非 $\nabla f_0(x) \succeq 0$。条件于是化为 $-\nabla f_0(x)^T x \ge 0$。但 $x \succeq 0$ 且 $\nabla f_0(x) \succeq 0$，故必有 $\nabla f_0(x)^T x = 0$，即</p>
+        <p>$$ \sum_{i=1}^n (\nabla f_0(x))_i x_i = 0. $$</p>
+        <p>该和式中每一项是两个非负数之积，故每一项必为零，即 $(\nabla f_0(x))_i x_i = 0$（$i = 1, \ldots, n$）。最优性条件因而可表为</p>
+        <p>$$ x \succeq 0, \qquad \nabla f_0(x) \succeq 0, \qquad x_i (\nabla f_0(x))_i = 0, \quad i = 1, \ldots, n. $$</p>
+        <p>最后一个条件称为<strong>互补性</strong>，因为它意味着向量 $x$ 与 $\nabla f_0(x)$ 的稀疏模式（即非零分量对应的下标集）互补（即交集为空）。我们将在第 5 章再次遇到互补性条件。</p></div>
+    </div>
+
+    <!-- ============== 4.2.4 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>4.2.4 Equivalent convex problems</h3></div>
+      <div class="zh"><h3>4.2.4 等价的凸问题</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>It is useful to see which of the transformations described in §4.1.3 preserve convexity.</p></div>
+      <div class="zh"><p>了解 §4.1.3 中所述哪些变换保持凸性是有益的。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Eliminating equality constraints</h3></div>
+      <div class="zh"><h3>消去等式约束</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>For a convex problem the equality constraints must be linear, i.e., of the form $Ax = b$. In this case they can be eliminated by finding a particular solution $x_0$ of $Ax = b$, and a matrix $F$ whose range is the nullspace of $A$, which results in the problem</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(Fz + x_0) \\ \text{subject to} &amp; f_i(Fz + x_0) \le 0, \quad i = 1,\ldots,m, \end{array}$$</p>
+        <p>with variable $z$. Since the composition of a convex function with an affine function is convex, eliminating equality constraints preserves convexity of a problem. Moreover, the process of eliminating equality constraints (and reconstructing the solution of the original problem from the solution of the transformed problem) involves standard linear algebra operations.</p></div>
+      <div class="zh"><p>对凸问题，等式约束必须为线性，即形如 $Ax = b$。此时可由 $Ax = b$ 的一个特解 $x_0$ 和一个像为 $A$ 的零空间的矩阵 $F$ 消去等式约束，得到问题</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(Fz + x_0) \\ \text{subject to} &amp; f_i(Fz + x_0) \le 0, \quad i = 1,\ldots,m, \end{array}$$</p>
+        <p>变量为 $z$。由于凸函数与仿射函数的复合仍为凸，消去等式约束保持问题的凸性。此外，消去等式约束（并由变换后问题的解重构原问题的解）涉及标准的线性代数运算。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>At least in principle, this means we can restrict our attention to convex optimization problems which have no equality constraints. In many cases, however, it is better to retain the equality constraints, since eliminating them can make the problem harder to understand and analyze, or ruin the efficiency of an algorithm that solves it. This is true, for example, when the variable $x$ has very large dimension, and eliminating the equality constraints would destroy sparsity or some other useful structure of the problem.</p></div>
+      <div class="zh"><p>至少原则上，这意味着我们可限于关注无等式约束的凸优化问题。然而在许多情形下，保留等式约束更好，因为消去它们可能使问题更难理解与分析，或损害求解算法的效率。例如，当变量 $x$ 维数很大时，消去等式约束会破坏稀疏性或问题的其他有用结构。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Introducing equality constraints</h3></div>
+      <div class="zh"><h3>引入等式约束</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We can introduce new variables and equality constraints into a convex optimization problem, provided the equality constraints are linear, and the resulting problem will also be convex. For example, if an objective or constraint function has the form $f_i(A_i x + b_i)$, where $A_i \in \mathbb{R}^{k_i \times n}$, we can introduce a new variable $y_i \in \mathbb{R}^{k_i}$, replace $f_i(A_i x + b_i)$ with $f_i(y_i)$, and add the linear equality constraint $y_i = A_i x + b_i$.</p></div>
+      <div class="zh"><p>只要等式约束是线性的，我们可向凸优化问题引入新变量与等式约束，所得问题仍为凸。例如，若目标或约束函数形如 $f_i(A_i x + b_i)$（$A_i \in \mathbb{R}^{k_i \times n}$），可引入新变量 $y_i \in \mathbb{R}^{k_i}$，将 $f_i(A_i x + b_i)$ 替换为 $f_i(y_i)$，并添加线性等式约束 $y_i = A_i x + b_i$。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Slack variables</h3></div>
+      <div class="zh"><h3>松弛变量</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>By introducing slack variables we have the new constraints $f_i(x) + s_i = 0$. Since equality constraint functions must be affine in a convex problem, we must have $f_i$ affine. In other words: introducing slack variables for linear inequalities preserves convexity of a problem.</p></div>
+      <div class="zh"><p>引入松弛变量后得到新约束 $f_i(x) + s_i = 0$。由于凸问题中等式约束函数必须仿射，故 $f_i$ 必须仿射。换言之：为线性不等式引入松弛变量保持问题的凸性。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Epigraph problem form</h3></div>
+      <div class="zh"><h3>上图问题形式</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The epigraph form of the convex optimization problem (4.15) is</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; t \\ \text{subject to} &amp; f_0(x) - t \le 0 \\ &amp; f_i(x) \le 0, \quad i = 1,\ldots,m \\ &amp; a_i^T x = b_i, \quad i = 1,\ldots,p. \end{array}$$</p>
+        <p>The objective is linear (hence convex) and the new constraint function $f_0(x) - t$ is also convex in $(x, t)$, so the epigraph form problem is convex as well.</p>
+        <p>It is sometimes said that a linear objective is universal for convex optimization, since any convex optimization problem is readily transformed to one with linear objective. The epigraph form of a convex problem has several practical uses. By assuming the objective of a convex optimization problem is linear, we can simplify theoretical analysis. It can also simplify algorithm development, since an algorithm that solves convex optimization problems with linear objective can, using the transformation above, solve any convex optimization problem (provided it can handle the constraint $f_0(x) - t \le 0$).</p></div>
+      <div class="zh"><p>凸优化问题 (4.15) 的上图形式为</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; t \\ \text{subject to} &amp; f_0(x) - t \le 0 \\ &amp; f_i(x) \le 0, \quad i = 1,\ldots,m \\ &amp; a_i^T x = b_i, \quad i = 1,\ldots,p. \end{array}$$</p>
+        <p>目标是线性的（从而凸），新约束函数 $f_0(x) - t$ 在 $(x, t)$ 上也凸，故上图形式问题也是凸的。</p>
+        <p>有时说线性目标对凸优化是通用的，因为任何凸优化问题都容易变换为线性目标的问题。凸问题的上图形式有多种实际用途。通过假设凸优化问题的目标为线性，可简化理论分析。它也可简化算法开发，因为求解线性目标凸优化问题的算法，利用上述变换可求解任何凸优化问题（只要它能处理约束 $f_0(x) - t \le 0$）。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Minimizing over some variables</h3></div>
+      <div class="zh"><h3>对部分变量极小化</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Minimizing a convex function over some variables preserves convexity. Therefore, if $f_0$ in (4.9) is jointly convex in $x_1$ and $x_2$, and $f_i$, $i = 1, \ldots, m_1$, and $\tilde{f}_i$, $i = 1, \ldots, m_2$, are convex, then the equivalent problem (4.10) is convex.</p></div>
+      <div class="zh"><p>对部分变量极小化凸函数保持凸性。因此，若 (4.9) 中的 $f_0$ 在 $x_1$ 与 $x_2$ 上联合凸，且 $f_i$（$i = 1, \ldots, m_1$）和 $\tilde{f}_i$（$i = 1, \ldots, m_2$）凸，则等价问题 (4.10) 凸。</p></div>
+    </div>
+
+    <!-- ============== 4.2.5 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>4.2.5 Quasiconvex optimization</h3></div>
+      <div class="zh"><h3>4.2.5 拟凸优化</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Recall that a quasiconvex optimization problem has the standard form</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(x) \\ \text{subject to} &amp; f_i(x) \le 0, \quad i = 1,\ldots,m \\ &amp; Ax = b, \end{array} \tag{4.24}$$</p>
+        <p>where the inequality constraint functions $f_1, \ldots, f_m$ are convex, and the objective $f_0$ is quasiconvex (instead of convex, as in a convex optimization problem). (Quasiconvex constraint functions can be replaced with equivalent convex constraint functions, i.e., constraint functions that are convex and have the same 0-sublevel set, as in §3.4.5.)</p></div>
+      <div class="zh"><p>回忆拟凸优化问题有标准形式</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(x) \\ \text{subject to} &amp; f_i(x) \le 0, \quad i = 1,\ldots,m \\ &amp; Ax = b, \end{array} \tag{4.24}$$</p>
+        <p>其中不等式约束函数 $f_1, \ldots, f_m$ 凸，目标 $f_0$ 拟凸（而非凸，如在凸优化问题中）。（拟凸约束函数可用等价的凸约束函数替换，即凸的且有相同 0-下水平集的约束函数，见 §3.4.5。）</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>In this section we point out some basic differences between convex and quasiconvex optimization problems, and also show how solving a quasiconvex optimization problem can be reduced to solving a sequence of convex optimization problems.</p></div>
+      <div class="zh"><p>本节指出凸与拟凸优化问题之间的一些基本差异，并说明求解拟凸优化问题如何可归约为求解一列凸优化问题。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Locally optimal solutions and optimality conditions</h3></div>
+      <div class="zh"><h3>局部最优解与最优性条件</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The most important difference between convex and quasiconvex optimization is that a quasiconvex optimization problem can have locally optimal solutions that are not (globally) optimal. This phenomenon can be seen even in the simple case of unconstrained minimization of a quasiconvex function on $\mathbb{R}$, such as the one shown in figure 4.3.</p>
+        <p>Nevertheless, a variation of the optimality condition (4.21) given in §4.2.3 does hold for quasiconvex optimization problems with differentiable objective function. Let $\mathcal{X}$ denote the feasible set for the quasiconvex optimization problem (4.24). It follows from the first-order condition for quasiconvexity (3.20) that $x$ is optimal if</p>
+        <p>$$ x \in \mathcal{X}, \qquad \nabla f_0(x)^T (y - x) &gt; 0 \quad \text{for all } y \in \mathcal{X} \setminus \{x\}. \tag{4.25}$$</p></div>
+      <div class="zh"><p>凸与拟凸优化最重要的差异在于：拟凸优化问题可能有非（全局）最优的局部最优解。即使在 $\mathbb{R}$ 上无约束地极小化一个拟凸函数这种简单情形中也能看到此现象，如图 4.3 所示。</p>
+        <p>尽管如此，§4.2.3 中给出的最优性条件 (4.21) 的一种变体对可微目标的拟凸优化问题仍成立。记拟凸优化问题 (4.24) 的可行集为 $\mathcal{X}$。由拟凸性的一阶条件 (3.20) 可得 $x$ 最优若</p>
+        <p>$$ x \in \mathcal{X}, \qquad \nabla f_0(x)^T (y - x) &gt; 0 \quad \text{对所有 } y \in \mathcal{X} \setminus \{x\}. \tag{4.25}$$</p></div>
+    </div>
+
+    <!-- ===== Figure 4.3 ===== -->
+    <div class="pair fig-block">
+      <div class="figure-wrap">
+        <img src="assets/figures/fig4.3.png" alt="Figure 4.3: quasiconvex function with non-global local optimum">
+        <div class="fig-caption">
+          <div class="cap-en"><span class="figref">Figure 4.3</span> A quasiconvex function $f$ on $\mathbb{R}$, with a locally optimal point $x$ that is not globally optimal. This example shows that the simple optimality condition $f'(x) = 0$, valid for convex functions, does not hold for quasiconvex functions.</div>
+          <div class="cap-zh"><span class="figref">图 4.3</span> $\mathbb{R}$ 上的拟凸函数 $f$，有一个非全局最优的局部最优点 $x$。此例表明，对凸函数有效的简单最优性条件 $f'(x) = 0$ 对拟凸函数不成立。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>There are two important differences between this criterion and the analogous one (4.21) for convex optimization:</p>
+        <ul>
+          <li>The condition (4.25) is only sufficient for optimality; simple examples show that it need not hold for an optimal point. In contrast, the condition (4.21) is necessary and sufficient for $x$ to solve the convex problem.</li>
+          <li>The condition (4.25) requires the gradient of $f_0$ to be nonzero, whereas the condition (4.21) does not. Indeed, when $\nabla f_0(x) = 0$ in the convex case, the condition (4.21) is satisfied, and $x$ is optimal.</li>
+        </ul></div>
+      <div class="zh"><p>此准则与凸优化的相应准则 (4.21) 有两点重要差异：</p>
+        <ul>
+          <li>条件 (4.25) 仅为最优性的充分条件；简单例子表明它对最优点不一定成立。相反，条件 (4.21) 是 $x$ 求解凸问题的充要条件。</li>
+          <li>条件 (4.25) 要求 $f_0$ 的梯度非零，而条件 (4.21) 不要求。事实上，凸情形中当 $\nabla f_0(x) = 0$ 时，条件 (4.21) 成立，$x$ 最优。</li>
+        </ul></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Quasiconvex optimization via convex feasibility problems</h3></div>
+      <div class="zh"><h3>通过凸可行性问题求解拟凸优化</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>One general approach to quasiconvex optimization relies on the representation of the sublevel sets of a quasiconvex function via a family of convex inequalities, as described in §3.4.5. Let $\phi_t : \mathbb{R}^n \to \mathbb{R}$, $t \in \mathbb{R}$, be a family of convex functions that satisfy</p>
+        <p>$$ f_0(x) \le t \quad \Longleftrightarrow \quad \phi_t(x) \le 0, $$</p>
+        <p>and also, for each $x$, $\phi_t(x)$ is a nonincreasing function of $t$, i.e., $\phi_s(x) \le \phi_t(x)$ whenever $s \ge t$.</p>
+        <p>Let $p^\star$ denote the optimal value of the quasiconvex optimization problem (4.24). If the feasibility problem</p>
+        <p>$$\begin{array}{ll} \text{find} &amp; x \\ \text{subject to} &amp; \phi_t(x) \le 0 \\ &amp; f_i(x) \le 0, \quad i = 1,\ldots,m \\ &amp; Ax = b, \end{array} \tag{4.26}$$</p>
+        <p>is feasible, then we have $p^\star \le t$. Conversely, if the problem (4.26) is infeasible, then we can conclude $p^\star \ge t$. The problem (4.26) is a convex feasibility problem, since the inequality constraint functions are all convex, and the equality constraints are linear. Thus, we can check whether the optimal value $p^\star$ of a quasiconvex optimization problem is less than or more than a given value $t$ by solving the convex feasibility problem (4.26). If the convex feasibility problem is feasible then we have $p^\star \le t$, and any feasible point $x$ is feasible for the quasiconvex problem and satisfies $f_0(x) \le t$. If the convex feasibility problem is infeasible, then we know that $p^\star \ge t$.</p></div>
+      <div class="zh"><p>求解拟凸优化的一种一般方法依赖于 §3.4.5 中所述的、用一族凸不等式表示拟凸函数下水平集的方法。设 $\phi_t : \mathbb{R}^n \to \mathbb{R}$（$t \in \mathbb{R}$）为一族凸函数，满足</p>
+        <p>$$ f_0(x) \le t \quad \Longleftrightarrow \quad \phi_t(x) \le 0, $$</p>
+        <p>且对每个 $x$，$\phi_t(x)$ 是 $t$ 的非增函数，即 $s \ge t$ 时 $\phi_s(x) \le \phi_t(x)$。</p>
+        <p>记拟凸优化问题 (4.24) 的最优值为 $p^\star$。若可行性问题</p>
+        <p>$$\begin{array}{ll} \text{find} &amp; x \\ \text{subject to} &amp; \phi_t(x) \le 0 \\ &amp; f_i(x) \le 0, \quad i = 1,\ldots,m \\ &amp; Ax = b, \end{array} \tag{4.26}$$</p>
+        <p>可行，则 $p^\star \le t$。反之，若问题 (4.26) 不可行，则可断言 $p^\star \ge t$。问题 (4.26) 是凸可行性问题，因为不等式约束函数全凸，等式约束线性。于是，通过求解凸可行性问题 (4.26)，可判定拟凸优化问题的最优值 $p^\star$ 小于还是大于给定值 $t$。若凸可行性问题可行，则 $p^\star \le t$，且任一可行点 $x$ 对拟凸问题可行并满足 $f_0(x) \le t$。若凸可行性问题不可行，则 $p^\star \ge t$。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>This observation can be used as the basis of a simple algorithm for solving the quasiconvex optimization problem (4.24) using bisection, solving a convex feasibility problem at each step. We assume that the problem is feasible, and start with an interval $[l, u]$ known to contain the optimal value $p^\star$. We then solve the convex feasibility problem at its midpoint $t = (l + u)/2$, to determine whether the optimal value is in the lower or upper half of the interval, and update the interval accordingly. This produces a new interval, which also contains the optimal value, but has half the width of the initial interval. This is repeated until the width of the interval is small enough:</p></div>
+      <div class="zh"><p>此观察可作为用二分法求解拟凸优化问题 (4.24) 的简单算法的基础，每步求解一个凸可行性问题。设问题可行，并从一个已知包含最优值 $p^\star$ 的区间 $[l, u]$ 开始。然后在中点 $t = (l + u)/2$ 处求解凸可行性问题，以判定最优值在区间的下半部分还是上半部分，并相应更新区间。这产生一个同样包含最优值、但宽度为初始区间一半的新区间。重复直至区间宽度足够小：</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><em>Algorithm 4.1 Bisection method for quasiconvex optimization.</em></p>
+        <p><em>given</em> $l \le p^\star$, $u \ge p^\star$, tolerance $\epsilon &gt; 0$.</p>
+        <p><em>repeat</em></p>
+        <p>1. $t := (l + u)/2$.</p>
+        <p>2. Solve the convex feasibility problem (4.26).</p>
+        <p>3. <em>if</em> (4.26) is feasible, $u := t$; <em>else</em> $l := t$.</p>
+        <p><em>until</em> $u - l \le \epsilon$.</p></div>
+      <div class="zh"><p><em>算法 4.1 拟凸优化的二分法。</em></p>
+        <p><em>给定</em> $l \le p^\star$，$u \ge p^\star$，容差 $\epsilon &gt; 0$。</p>
+        <p><em>重复</em></p>
+        <p>1. $t := (l + u)/2$。</p>
+        <p>2. 求解凸可行性问题 (4.26)。</p>
+        <p>3. <em>若</em> (4.26) 可行，$u := t$；<em>否则</em> $l := t$。</p>
+        <p><em>直到</em> $u - l \le \epsilon$。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The interval $[l, u]$ is guaranteed to contain $p^\star$, i.e., we have $l \le p^\star \le u$ at each step. In each iteration the interval is divided in two, i.e., bisected, so the length of the interval after $k$ iterations is $2^{-k}(u - l)$, where $u - l$ is the length of the initial interval. It follows that exactly $\lceil \log_2((u - l)/\epsilon) \rceil$ iterations are required before the algorithm terminates. Each step involves solving the convex feasibility problem (4.26).</p></div>
+      <div class="zh"><p>区间 $[l, u]$ 保证包含 $p^\star$，即每步有 $l \le p^\star \le u$。每次迭代区间一分为二（即二分），故 $k$ 次迭代后区间长度为 $2^{-k}(u - l)$，其中 $u - l$ 为初始区间长度。因此算法终止前恰好需要 $\lceil \log_2((u - l)/\epsilon) \rceil$ 次迭代。每步涉及求解凸可行性问题 (4.26)。</p></div>
+    </div>
+
+    <!-- ============== 4.3 ============== -->
+    <div class="pair head">
+      <div class="en"><h2>4.3 Linear optimization problems</h2></div>
+      <div class="zh"><h2>4.3 线性优化问题</h2></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>When the objective and constraint functions are all affine, the problem is called a <em>linear program</em> (LP). A general linear program has the form</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; c^T x + d \\ \text{subject to} &amp; Gx \preceq h \\ &amp; Ax = b, \end{array} \tag{4.27}$$</p>
+        <p>where $G \in \mathbb{R}^{m \times n}$ and $A \in \mathbb{R}^{p \times n}$. Linear programs are, of course, convex optimization problems.</p>
+        <p>It is common to omit the constant $d$ in the objective function, since it does not affect the optimal (or feasible) set. Since we can maximize an affine objective $c^T x + d$, by minimizing $-c^T x - d$ (which is still convex), we also refer to a maximization problem with affine objective and constraint functions as an LP.</p>
+        <p>The geometric interpretation of an LP is illustrated in figure 4.4. The feasible set of the LP (4.27) is a polyhedron $P$; the problem is to minimize the affine function $c^T x + d$ (or, equivalently, the linear function $c^T x$) over $P$.</p></div>
+      <div class="zh"><p>当目标函数与约束函数全为仿射时，该问题称为<strong>线性规划</strong>（LP）。一般线性规划形如</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; c^T x + d \\ \text{subject to} &amp; Gx \preceq h \\ &amp; Ax = b, \end{array} \tag{4.27}$$</p>
+        <p>其中 $G \in \mathbb{R}^{m \times n}$，$A \in \mathbb{R}^{p \times n}$。线性规划当然是凸优化问题。</p>
+        <p>目标函数中的常数 $d$ 常被省略，因为它不影响最优集（或可行集）。由于可通过极小化 $-c^T x - d$（仍凸）来极大化仿射目标 $c^T x + d$，我们也把仿射目标与约束函数的极大化问题称为 LP。</p>
+        <p>LP 的几何解释如图 4.4 所示。LP (4.27) 的可行集是多面体 $P$；问题即在 $P$ 上极小化仿射函数 $c^T x + d$（或等价地，线性函数 $c^T x$）。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Standard and inequality form linear programs</h3></div>
+      <div class="zh"><h3>标准形式与不等式形式的线性规划</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Two special cases of the LP (4.27) are so widely encountered that they have been given separate names. In a <em>standard form LP</em> the only inequalities are componentwise nonnegativity constraints $x \succeq 0$:</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; c^T x \\ \text{subject to} &amp; Ax = b \\ &amp; x \succeq 0. \end{array} \tag{4.28}$$</p>
+        <p>If the LP has no equality constraints, it is called an <em>inequality form LP</em>, usually written as</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; c^T x \\ \text{subject to} &amp; Ax \preceq b. \end{array} \tag{4.29}$$</p></div>
+      <div class="zh"><p>LP (4.27) 的两个特殊情形如此常见，以至于有专门的名称。在<strong>标准形式 LP</strong> 中，仅有的不等式是逐分量非负约束 $x \succeq 0$：</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; c^T x \\ \text{subject to} &amp; Ax = b \\ &amp; x \succeq 0. \end{array} \tag{4.28}$$</p>
+        <p>若 LP 无等式约束，则称为<strong>不等式形式 LP</strong>，通常写为</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; c^T x \\ \text{subject to} &amp; Ax \preceq b. \end{array} \tag{4.29}$$</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Converting LPs to standard form</h3></div>
+      <div class="zh"><h3>将 LP 转换为标准形式</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>It is sometimes useful to transform a general LP (4.27) to one in standard form (4.28) (for example in order to use an algorithm for standard form LPs). The first step is to introduce slack variables $s_i$ for the inequalities, which results in</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; c^T x + d \\ \text{subject to} &amp; Gx + s = h \\ &amp; Ax = b \\ &amp; s \succeq 0. \end{array}$$</p>
+        <p>The second step is to express the variable $x$ as the difference of two nonnegative variables $x^+$ and $x^-$, i.e., $x = x^+ - x^-$, $x^+, x^- \succeq 0$. This yields the problem</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; c^T x^+ - c^T x^- + d \\ \text{subject to} &amp; Gx^+ - Gx^- + s = h \\ &amp; Ax^+ - Ax^- = b \\ &amp; x^+ \succeq 0, \quad x^- \succeq 0, \quad s \succeq 0, \end{array}$$</p>
+        <p>which is an LP in standard form, with variables $x^+$, $x^-$, and $s$. (For equivalence of this problem and the original one (4.27), see exercise 4.10.)</p>
+        <p>These techniques for manipulating problems (along with many others we will see in the examples and exercises) can be used to formulate many problems as linear programs. With some abuse of terminology, it is common to refer to a problem that can be formulated as an LP as an LP, even if it does not have the form (4.27).</p></div>
+      <div class="zh"><p>有时需将一般 LP (4.27) 变换为标准形式 (4.28)（例如为使用针对标准形式 LP 的算法）。第一步为不等式引入松弛变量 $s_i$，得</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; c^T x + d \\ \text{subject to} &amp; Gx + s = h \\ &amp; Ax = b \\ &amp; s \succeq 0. \end{array}$$</p>
+        <p>第二步将变量 $x$ 表示为两个非负变量 $x^+$ 与 $x^-$ 之差，即 $x = x^+ - x^-$，$x^+, x^- \succeq 0$。由此得问题</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; c^T x^+ - c^T x^- + d \\ \text{subject to} &amp; Gx^+ - Gx^- + s = h \\ &amp; Ax^+ - Ax^- = b \\ &amp; x^+ \succeq 0, \quad x^- \succeq 0, \quad s \succeq 0, \end{array}$$</p>
+        <p>这是标准形式的 LP，变量为 $x^+$、$x^-$、$s$。（此问题与原问题 (4.27) 的等价性见习题 4.10。）</p>
+        <p>这些处理问题的技巧（连同我们将在例子和习题中看到的许多其他技巧）可用于将许多问题表述为线性规划。略加滥用术语，可表述为 LP 的问题通常也称为 LP，即使它不具有 (4.27) 的形式。</p></div>
+    </div>
+
+    <!-- ===== Figure 4.4 ===== -->
+    <div class="pair fig-block">
+      <div class="figure-wrap">
+        <img src="assets/figures/fig4.4.png" alt="Figure 4.4: geometric interpretation of an LP">
+        <div class="fig-caption">
+          <div class="cap-en"><span class="figref">Figure 4.4</span> Geometric interpretation of an LP. The feasible set $P$, which is a polyhedron, is shaded. The objective $c^T x$ is linear, so its level curves are hyperplanes orthogonal to $c$ (shown as dashed lines). The point $x^\star$ is optimal; it is the point in $P$ as far as possible in the direction $-c$.</div>
+          <div class="cap-zh"><span class="figref">图 4.4</span> LP 的几何解释。可行集 $P$（多面体）以阴影显示。目标 $c^T x$ 是线性的，故其等值面为正交于 $c$ 的超平面（虚线所示）。点 $x^\star$ 最优；它是 $P$ 中沿 $-c$ 方向最远的点。</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============== 4.3.1 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>4.3.1 Examples</h3></div>
+      <div class="zh"><h3>4.3.1 例子</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>LPs arise in a vast number of fields and applications; here we give a few typical examples.</p></div>
+      <div class="zh"><p>LP 出现在众多领域与应用中；这里给出几个典型例子。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Diet problem</h3></div>
+      <div class="zh"><h3>饮食问题</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>A healthy diet contains $m$ different nutrients in quantities at least equal to $b_1, \ldots, b_m$. We can compose such a diet by choosing nonnegative quantities $x_1, \ldots, x_n$ of $n$ different foods. One unit quantity of food $j$ contains an amount $a_{ij}$ of nutrient $i$, and has a cost of $c_j$. We want to determine the cheapest diet that satisfies the nutritional requirements. This problem can be formulated as the LP</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; c^T x \\ \text{subject to} &amp; Ax \succeq b \\ &amp; x \succeq 0. \end{array}$$</p>
+        <p>Several variations on this problem can also be formulated as LPs. For example, we can insist on an exact amount of a nutrient in the diet (which gives a linear equality constraint), or we can impose an upper bound on the amount of a nutrient, in addition to the lower bound as above.</p></div>
+      <div class="zh"><p>健康饮食含 $m$ 种营养素，数量至少为 $b_1, \ldots, b_m$。我们可通过选择 $n$ 种食物的非负数量 $x_1, \ldots, x_n$ 来组成这样的饮食。一个单位食物 $j$ 含营养素 $i$ 的量为 $a_{ij}$，成本为 $c_j$。我们要确定满足营养需求的最廉饮食。此问题可表述为 LP</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; c^T x \\ \text{subject to} &amp; Ax \succeq b \\ &amp; x \succeq 0. \end{array}$$</p>
+        <p>此问题的若干变体也可表述为 LP。例如，可要求某营养素的精确数量（给出线性等式约束），或在上述下界之外对某营养素的量加上界。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Chebyshev center of a polyhedron</h3></div>
+      <div class="zh"><h3>多面体的 Chebyshev 中心</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We consider the problem of finding the largest Euclidean ball that lies in a polyhedron described by linear inequalities,</p>
+        <p>$$ P = \{x \in \mathbb{R}^n \mid a_i^T x \le b_i,\, i = 1,\ldots,m\}. $$</p>
+        <p>(The center of the optimal ball is called the <em>Chebyshev center</em> of the polyhedron; it is the point deepest inside the polyhedron, i.e., farthest from the boundary; see §8.5.1.) We represent the ball as</p>
+        <p>$$ B = \{x_c + u \mid \|u\|_2 \le r\}. $$</p>
+        <p>The variables in the problem are the center $x_c \in \mathbb{R}^n$ and the radius $r$; we wish to maximize $r$ subject to the constraint $B \subseteq P$.</p>
+        <p>We start by considering the simpler constraint that $B$ lies in one halfspace $a_i^T x \le b_i$, i.e.,</p>
+        <p>$$ \|u\|_2 \le r \;\Longrightarrow\; a_i^T(x_c + u) \le b_i. \tag{4.30}$$</p>
+        <p>Since</p>
+        <p>$$ \sup\{a_i^T u \mid \|u\|_2 \le r\} = r\|a_i\|_2 $$</p>
+        <p>we can write (4.30) as</p>
+        <p>$$ a_i^T x_c + r\|a_i\|_2 \le b_i, \tag{4.31}$$</p>
+        <p>which is a linear inequality in $x_c$ and $r$. In other words, the constraint that the ball lies in the halfspace determined by the inequality $a_i^T x \le b_i$ can be written as a linear inequality.</p>
+        <p>Therefore $B \subseteq P$ if and only if (4.31) holds for all $i = 1, \ldots, m$. Hence the Chebyshev center can be determined by solving the LP</p>
+        <p>$$\begin{array}{ll} \text{maximize} &amp; r \\ \text{subject to} &amp; a_i^T x_c + r\|a_i\|_2 \le b_i, \quad i = 1,\ldots,m, \end{array}$$</p>
+        <p>with variables $r$ and $x_c$. (For more on the Chebyshev center, see §8.5.1.)</p></div>
+      <div class="zh"><p>考虑求含于由线性不等式描述的多面体中的最大 Euclid 球的问题，</p>
+        <p>$$ P = \{x \in \mathbb{R}^n \mid a_i^T x \le b_i,\, i = 1,\ldots,m\}. $$</p>
+        <p>（最优球的中心称为多面体的<strong>Chebyshev 中心</strong>；它是多面体内部最深的点，即离边界最远的点；见 §8.5.1。）将球表示为</p>
+        <p>$$ B = \{x_c + u \mid \|u\|_2 \le r\}. $$</p>
+        <p>问题变量为中心 $x_c \in \mathbb{R}^n$ 和半径 $r$；我们要在约束 $B \subseteq P$ 下极大化 $r$。</p>
+        <p>先考虑较简单的约束：$B$ 含于一个半空间 $a_i^T x \le b_i$，即</p>
+        <p>$$ \|u\|_2 \le r \;\Longrightarrow\; a_i^T(x_c + u) \le b_i. \tag{4.30}$$</p>
+        <p>由于</p>
+        <p>$$ \sup\{a_i^T u \mid \|u\|_2 \le r\} = r\|a_i\|_2 $$</p>
+        <p>可把 (4.30) 写为</p>
+        <p>$$ a_i^T x_c + r\|a_i\|_2 \le b_i, \tag{4.31}$$</p>
+        <p>这是关于 $x_c$ 与 $r$ 的线性不等式。换言之，球含于由不等式 $a_i^T x \le b_i$ 确定的半空间这一约束可写为线性不等式。</p>
+        <p>因此 $B \subseteq P$ 当且仅当 (4.31) 对所有 $i = 1, \ldots, m$ 成立。故 Chebyshev 中心可通过求解 LP 确定：</p>
+        <p>$$\begin{array}{ll} \text{maximize} &amp; r \\ \text{subject to} &amp; a_i^T x_c + r\|a_i\|_2 \le b_i, \quad i = 1,\ldots,m, \end{array}$$</p>
+        <p>变量为 $r$ 与 $x_c$。（关于 Chebyshev 中心的更多内容见 §8.5.1。）</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Dynamic activity planning</h3></div>
+      <div class="zh"><h3>动态活动规划</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We consider the problem of choosing, or planning, the activity levels of $n$ activities, or sectors of an economy, over $N$ time periods. We let $x_j(t) \ge 0$, $t = 1, \ldots, N$, denote the activity level of sector $j$, in period $t$. The activities both consume and produce products or goods in proportion to their activity levels. The amount of good $i$ produced per unit of activity $j$ is given by $a_{ij}$. Similarly, the amount of good $i$ consumed per unit of activity $j$ is $b_{ij}$. The total amount of goods produced in period $t$ is given by $Ax(t) \in \mathbb{R}^m$, and the amount of goods consumed is $Bx(t) \in \mathbb{R}^m$. (Although we refer to these products as &lsquo;goods&rsquo;, they can also include unwanted products such as pollutants.)</p></div>
+      <div class="zh"><p>考虑在 $N$ 个时间段内选择或规划 $n$ 项活动（或经济部门）的活动水平的问题。设 $x_j(t) \ge 0$（$t = 1, \ldots, N$）为第 $t$ 段部门 $j$ 的活动水平。活动按其活动水平比例地消耗和产出产品或商品。每单位活动 $j$ 产出商品 $i$ 的量为 $a_{ij}$；类似地，每单位活动 $j$ 消耗商品 $i$ 的量为 $b_{ij}$。第 $t$ 段产出商品总量为 $Ax(t) \in \mathbb{R}^m$，消耗商品量为 $Bx(t) \in \mathbb{R}^m$。（虽然称这些产品为&ldquo;商品&rdquo;，它们也可包括污染物等不受欢迎的产品。）</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The goods consumed in a period cannot exceed those produced in the previous period: we must have $Bx(t+1) \preceq Ax(t)$ for $t = 1, \ldots, N$. A vector $g_0 \in \mathbb{R}^m$ of initial goods is given, which constrains the first period activity levels: $Bx(1) \preceq g_0$. The (vectors of) excess goods not consumed by the activities are given by</p>
+        <p>$$ s(0) = g_0 - Bx(1) $$</p>
+        <p>$$ s(t) = Ax(t) - Bx(t+1), \quad t = 1, \ldots, N-1 $$</p>
+        <p>$$ s(N) = Ax(N). $$</p>
+        <p>The objective is to maximize a discounted total value of excess goods:</p>
+        <p>$$ c^T s(0) + \gamma c^T s(1) + \cdots + \gamma^N c^T s(N), $$</p>
+        <p>where $c \in \mathbb{R}^m$ gives the values of the goods, and $\gamma &gt; 0$ is a discount factor. (The value $c_i$ is negative if the $i$th product is unwanted, e.g., a pollutant; $|c_i|$ is then the cost of disposal per unit.)</p>
+        <p>Putting it all together we arrive at the LP</p>
+        <p>$$\begin{array}{ll} \text{maximize} &amp; c^T s(0) + \gamma c^T s(1) + \cdots + \gamma^N c^T s(N) \\ \text{subject to} &amp; x(t) \succeq 0, \quad t = 1,\ldots,N \\ &amp; s(t) \succeq 0, \quad t = 0,\ldots,N \\ &amp; s(0) = g_0 - Bx(1) \\ &amp; s(t) = Ax(t) - Bx(t+1), \quad t = 1,\ldots,N-1 \\ &amp; s(N) = Ax(N), \end{array}$$</p>
+        <p>with variables $x(1), \ldots, x(N), s(0), \ldots, s(N)$. This problem is a standard form LP; the variables $s(t)$ are the slack variables associated with the constraints $Bx(t+1) \preceq Ax(t)$.</p></div>
+      <div class="zh"><p>某段消耗的商品不能超过前一段产出的商品：须有 $Bx(t+1) \preceq Ax(t)$（$t = 1, \ldots, N$）。给定初始商品向量 $g_0 \in \mathbb{R}^m$，它约束第一段活动水平：$Bx(1) \preceq g_0$。未被活动消耗的剩余商品（向量）为</p>
+        <p>$$ s(0) = g_0 - Bx(1) $$</p>
+        <p>$$ s(t) = Ax(t) - Bx(t+1), \quad t = 1, \ldots, N-1 $$</p>
+        <p>$$ s(N) = Ax(N). $$</p>
+        <p>目标是极大化剩余商品的折扣总价值：</p>
+        <p>$$ c^T s(0) + \gamma c^T s(1) + \cdots + \gamma^N c^T s(N), $$</p>
+        <p>其中 $c \in \mathbb{R}^m$ 给出商品价值，$\gamma &gt; 0$ 为折扣因子。（若第 $i$ 种产品不受欢迎，如污染物，则 $c_i$ 为负；$|c_i|$ 即每单位的处置成本。）</p>
+        <p>综合起来得到 LP</p>
+        <p>$$\begin{array}{ll} \text{maximize} &amp; c^T s(0) + \gamma c^T s(1) + \cdots + \gamma^N c^T s(N) \\ \text{subject to} &amp; x(t) \succeq 0, \quad t = 1,\ldots,N \\ &amp; s(t) \succeq 0, \quad t = 0,\ldots,N \\ &amp; s(0) = g_0 - Bx(1) \\ &amp; s(t) = Ax(t) - Bx(t+1), \quad t = 1,\ldots,N-1 \\ &amp; s(N) = Ax(N), \end{array}$$</p>
+        <p>变量为 $x(1), \ldots, x(N), s(0), \ldots, s(N)$。这是标准形式 LP；变量 $s(t)$ 是与约束 $Bx(t+1) \preceq Ax(t)$ 关联的松弛变量。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Chebyshev inequalities</h3></div>
+      <div class="zh"><h3>Chebyshev 不等式</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We consider a probability distribution for a discrete random variable $x$ on a set $\{u_1, \ldots, u_n\} \subseteq \mathbb{R}$ with $n$ elements. We describe the distribution of $x$ by a vector $p \in \mathbb{R}^n$, where</p>
+        <p>$$ p_i = \mathbf{prob}(x = u_i), $$</p>
+        <p>so $p$ satisfies $p \succeq 0$ and $\mathbf{1}^T p = 1$. Conversely, if $p$ satisfies $p \succeq 0$ and $\mathbf{1}^T p = 1$, then it defines a probability distribution for $x$. We assume that $u_i$ are known and fixed, but the distribution $p$ is not known.</p>
+        <p>If $f$ is any function of $x$, then</p>
+        <p>$$ \mathbf{E}\, f = \sum_{i=1}^n p_i f(u_i) $$</p>
+        <p>is a linear function of $p$. If $S$ is any subset of $\mathbb{R}$, then</p>
+        <p>$$ \mathbf{prob}(x \in S) = \sum_{u_i \in S} p_i $$</p>
+        <p>is a linear function of $p$.</p>
+        <p>Although we do not know $p$, we are given prior knowledge of the following form: We know upper and lower bounds on expected values of some functions of $x$, and probabilities of some subsets of $\mathbb{R}$. This prior knowledge can be expressed as linear inequality constraints on $p$,</p>
+        <p>$$ \alpha_i \le a_i^T p \le \beta_i, \quad i = 1,\ldots,m. $$</p>
+        <p>The problem is to give lower and upper bounds on $\mathbf{E}\, f_0(x) = a_0^T p$, where $f_0$ is some function of $x$.</p>
+        <p>To find a lower bound we solve the LP</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; a_0^T p \\ \text{subject to} &amp; p \succeq 0, \quad \mathbf{1}^T p = 1 \\ &amp; \alpha_i \le a_i^T p \le \beta_i, \quad i = 1,\ldots,m, \end{array}$$</p>
+        <p>with variable $p$. The optimal value of this LP gives the lowest possible value of $\mathbf{E}\, f_0(X)$ for any distribution that is consistent with the prior information. Moreover, the bound is sharp: the optimal solution gives a distribution that is consistent with the prior information and achieves the lower bound. In a similar way, we can find the best upper bound by maximizing $a_0^T p$ subject to the same constraints. (We will consider Chebyshev inequalities in more detail in §7.4.1.)</p></div>
+      <div class="zh"><p>考虑离散随机变量 $x$ 在含 $n$ 个元素的集合 $\{u_1, \ldots, u_n\} \subseteq \mathbb{R}$ 上的概率分布。我们用向量 $p \in \mathbb{R}^n$ 描述 $x$ 的分布，其中</p>
+        <p>$$ p_i = \mathbf{prob}(x = u_i), $$</p>
+        <p>故 $p$ 满足 $p \succeq 0$ 且 $\mathbf{1}^T p = 1$。反之，若 $p$ 满足 $p \succeq 0$ 且 $\mathbf{1}^T p = 1$，则它定义了 $x$ 的一个概率分布。设 $u_i$ 已知且固定，但分布 $p$ 未知。</p>
+        <p>若 $f$ 是 $x$ 的任一函数，则</p>
+        <p>$$ \mathbf{E}\, f = \sum_{i=1}^n p_i f(u_i) $$</p>
+        <p>是 $p$ 的线性函数。若 $S$ 是 $\mathbb{R}$ 的任一子集，则</p>
+        <p>$$ \mathbf{prob}(x \in S) = \sum_{u_i \in S} p_i $$</p>
+        <p>是 $p$ 的线性函数。</p>
+        <p>虽然不知 $p$，但我们有如下形式的先验知识：$x$ 的某些函数的期望值、$\mathbb{R}$ 的某些子集的概率的上下界。此先验知识可表为对 $p$ 的线性不等式约束：</p>
+        <p>$$ \alpha_i \le a_i^T p \le \beta_i, \quad i = 1,\ldots,m. $$</p>
+        <p>问题是对 $\mathbf{E}\, f_0(x) = a_0^T p$（$f_0$ 为 $x$ 的某函数）给出下界与上界。</p>
+        <p>求下界即解 LP</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; a_0^T p \\ \text{subject to} &amp; p \succeq 0, \quad \mathbf{1}^T p = 1 \\ &amp; \alpha_i \le a_i^T p \le \beta_i, \quad i = 1,\ldots,m, \end{array}$$</p>
+        <p>变量为 $p$。该 LP 的最优值给出在与先验信息相容的所有分布中 $\mathbf{E}\, f_0(X)$ 的最小可能值。且该界是紧的：最优解给出一个与先验信息相容并达到下界的分布。类似地，在同样约束下极大化 $a_0^T p$ 可得最佳上界。（我们将在 §7.4.1 更详细地讨论 Chebyshev 不等式。）</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Piecewise-linear minimization</h3></div>
+      <div class="zh"><h3>分段线性极小化</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Consider the (unconstrained) problem of minimizing the piecewise-linear, convex function</p>
+        <p>$$ f(x) = \max_{i=1,\ldots,m}(a_i^T x + b_i). $$</p>
+        <p>This problem can be transformed to an equivalent LP by first forming the epigraph problem,</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; t \\ \text{subject to} &amp; \max_{i=1,\ldots,m}(a_i^T x + b_i) \le t, \end{array}$$</p>
+        <p>and then expressing the inequality as a set of $m$ separate inequalities:</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; t \\ \text{subject to} &amp; a_i^T x + b_i \le t, \quad i = 1,\ldots,m. \end{array}$$</p>
+        <p>This is an LP (in inequality form), with variables $x$ and $t$.</p></div>
+      <div class="zh"><p>考虑极小化分段线性凸函数的（无约束）问题</p>
+        <p>$$ f(x) = \max_{i=1,\ldots,m}(a_i^T x + b_i). $$</p>
+        <p>此问题可先取上图问题变换为等价 LP：</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; t \\ \text{subject to} &amp; \max_{i=1,\ldots,m}(a_i^T x + b_i) \le t, \end{array}$$</p>
+        <p>然后将不等式表为 $m$ 个独立不等式：</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; t \\ \text{subject to} &amp; a_i^T x + b_i \le t, \quad i = 1,\ldots,m. \end{array}$$</p>
+        <p>这是（不等式形式的）LP，变量为 $x$ 与 $t$。</p></div>
+    </div>
+
+    <!-- ============== 4.3.2 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>4.3.2 Linear-fractional programming</h3></div>
+      <div class="zh"><h3>4.3.2 线性分式规划</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The problem of minimizing a ratio of affine functions over a polyhedron is called a <em>linear-fractional program</em>:</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(x) \\ \text{subject to} &amp; Gx \preceq h \\ &amp; Ax = b \end{array} \tag{4.32}$$</p>
+        <p>where the objective function is given by</p>
+        <p>$$ f_0(x) = \frac{c^T x + d}{e^T x + f}, \qquad \mathbf{dom}\, f_0 = \{x \mid e^T x + f &gt; 0\}. $$</p>
+        <p>The objective function is quasiconvex (in fact, quasilinear) so linear-fractional programs are quasiconvex optimization problems.</p></div>
+      <div class="zh"><p>在多面体上极小化两个仿射函数之比的问题称为<strong>线性分式规划</strong>：</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(x) \\ \text{subject to} &amp; Gx \preceq h \\ &amp; Ax = b \end{array} \tag{4.32}$$</p>
+        <p>其中目标函数为</p>
+        <p>$$ f_0(x) = \frac{c^T x + d}{e^T x + f}, \qquad \mathbf{dom}\, f_0 = \{x \mid e^T x + f &gt; 0\}. $$</p>
+        <p>目标函数是拟凸的（实际上是拟线性的），故线性分式规划是拟凸优化问题。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Transforming to a linear program</h3></div>
+      <div class="zh"><h3>变换为线性规划</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>If the feasible set</p>
+        <p>$$ \{x \mid Gx \preceq h,\, Ax = b,\, e^T x + f &gt; 0\} $$</p>
+        <p>is nonempty, the linear-fractional program (4.32) can be transformed to an equivalent linear program</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; c^T y + dz \\ \text{subject to} &amp; Gy - hz \preceq 0 \\ &amp; Ay - bz = 0 \\ &amp; e^T y + fz = 1 \\ &amp; z \ge 0 \end{array} \tag{4.33}$$</p>
+        <p>with variables $y, z$.</p>
+        <p>To show the equivalence, we first note that if $x$ is feasible in (4.32) then the pair</p>
+        <p>$$ y = \frac{x}{e^T x + f}, \qquad z = \frac{1}{e^T x + f} $$</p>
+        <p>is feasible in (4.33), with the same objective value $c^T y + dz = f_0(x)$. It follows that the optimal value of (4.32) is greater than or equal to the optimal value of (4.33).</p>
+        <p>Conversely, if $(y, z)$ is feasible in (4.33), with $z \ne 0$, then $x = y/z$ is feasible in (4.32), with the same objective value $f_0(x) = c^T y + dz$. If $(y, z)$ is feasible in (4.33) with $z = 0$, and $x_0$ is feasible for (4.32), then $x = x_0 + ty$ is feasible in (4.32) for all $t \ge 0$. Moreover, $\lim_{t \to \infty} f_0(x_0 + ty) = c^T y + dz$, so we can find feasible points in (4.32) with objective values arbitrarily close to the objective value of $(y, z)$. We conclude that the optimal value of (4.32) is less than or equal to the optimal value of (4.33).</p></div>
+      <div class="zh"><p>若可行集</p>
+        <p>$$ \{x \mid Gx \preceq h,\, Ax = b,\, e^T x + f &gt; 0\} $$</p>
+        <p>非空，则线性分式规划 (4.32) 可变换为等价线性规划</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; c^T y + dz \\ \text{subject to} &amp; Gy - hz \preceq 0 \\ &amp; Ay - bz = 0 \\ &amp; e^T y + fz = 1 \\ &amp; z \ge 0 \end{array} \tag{4.33}$$</p>
+        <p>变量为 $y, z$。</p>
+        <p>为证等价性，先注意若 $x$ 在 (4.32) 中可行，则对</p>
+        <p>$$ y = \frac{x}{e^T x + f}, \qquad z = \frac{1}{e^T x + f} $$</p>
+        <p>在 (4.33) 中可行，且目标值相同 $c^T y + dz = f_0(x)$。故 (4.32) 的最优值大于等于 (4.33) 的最优值。</p>
+        <p>反之，若 $(y, z)$ 在 (4.33) 中可行且 $z \ne 0$，则 $x = y/z$ 在 (4.32) 中可行，且目标值相同 $f_0(x) = c^T y + dz$。若 $(y, z)$ 在 (4.33) 中可行且 $z = 0$，而 $x_0$ 对 (4.32) 可行，则 $x = x_0 + ty$ 对所有 $t \ge 0$ 在 (4.32) 中可行。且 $\lim_{t \to \infty} f_0(x_0 + ty) = c^T y + dz$，故可在 (4.32) 中找到目标值任意接近 $(y, z)$ 目标值的可行点。因此 (4.32) 的最优值小于等于 (4.33) 的最优值。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Generalized linear-fractional programming</h3></div>
+      <div class="zh"><h3>广义线性分式规划</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>A generalization of the linear-fractional program (4.32) is the <em>generalized linear-fractional program</em> in which</p>
+        <p>$$ f_0(x) = \max_{i=1,\ldots,r} \frac{c_i^T x + d_i}{e_i^T x + f_i}, \qquad \mathbf{dom}\, f_0 = \{x \mid e_i^T x + f_i &gt; 0,\, i = 1,\ldots,r\}. $$</p>
+        <p>The objective function is the pointwise maximum of $r$ quasiconvex functions, and therefore quasiconvex, so this problem is quasiconvex. When $r = 1$ it reduces to the standard linear-fractional program.</p></div>
+      <div class="zh"><p>线性分式规划 (4.32) 的一种推广是<strong>广义线性分式规划</strong>，其中</p>
+        <p>$$ f_0(x) = \max_{i=1,\ldots,r} \frac{c_i^T x + d_i}{e_i^T x + f_i}, \qquad \mathbf{dom}\, f_0 = \{x \mid e_i^T x + f_i &gt; 0,\, i = 1,\ldots,r\}. $$</p>
+        <p>目标是 $r$ 个拟凸函数的逐点极大，故拟凸，此问题为拟凸的。$r = 1$ 时退化为标准线性分式规划。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><em>Example 4.7 Von Neumann growth problem.</em> We consider an economy with $n$ sectors, and activity levels $x_i &gt; 0$ in the current period, and activity levels $x_i^+ &gt; 0$ in the next period. (In this problem we only consider one period.) There are $m$ goods which are consumed, and also produced, by the activity: An activity level $x$ consumes goods $Bx \in \mathbb{R}^m$, and produces goods $Ax$. The goods consumed in the next period cannot exceed the goods produced in the current period, i.e., $Bx^+ \preceq Ax$. The growth rate in sector $i$, over the period, is given by $x_i^+/x_i$.</p>
+        <p>Von Neumann&rsquo;s growth problem is to find an activity level vector $x$ that maximizes the minimum growth rate across all sectors of the economy. This problem can be expressed as a generalized linear-fractional problem</p>
+        <p>$$\begin{array}{ll} \text{maximize} &amp; \min_{i=1,\ldots,n} x_i^+/x_i \\ \text{subject to} &amp; x^+ \succeq 0 \\ &amp; Bx^+ \preceq Ax \end{array}$$</p>
+        <p>with domain $\{(x, x^+) \mid x \succ 0\}$. Note that this problem is homogeneous in $x$ and $x^+$, so we can replace the implicit constraint $x \succ 0$ by the explicit constraint $x \succeq \mathbf{1}$.</p></div>
+      <div class="zh"><p><em>例 4.7 Von Neumann 增长问题。</em> 考虑一个有 $n$ 个部门的经济体，当期活动水平 $x_i &gt; 0$，下期活动水平 $x_i^+ &gt; 0$。（此问题只考虑一个时期。）有 $m$ 种商品被活动消耗并产出：活动水平 $x$ 消耗商品 $Bx \in \mathbb{R}^m$，产出商品 $Ax$。下期消耗的商品不能超过当期产出的商品，即 $Bx^+ \preceq Ax$。部门 $i$ 在该时期的增长率为 $x_i^+/x_i$。</p>
+        <p>Von Neumann 增长问题是求使经济所有部门最小增长率最大的活动水平向量 $x$。此问题可表为广义线性分式问题</p>
+        <p>$$\begin{array}{ll} \text{maximize} &amp; \min_{i=1,\ldots,n} x_i^+/x_i \\ \text{subject to} &amp; x^+ \succeq 0 \\ &amp; Bx^+ \preceq Ax \end{array}$$</p>
+        <p>定义域为 $\{(x, x^+) \mid x \succ 0\}$。注意此问题对 $x$ 和 $x^+$ 齐次，故可用显式约束 $x \succeq \mathbf{1}$ 替代隐式约束 $x \succ 0$。</p></div>
+    </div>
+
+    <!-- ============== 4.4 ============== -->
+    <div class="pair head">
+      <div class="en"><h2>4.4 Quadratic optimization problems</h2></div>
+      <div class="zh"><h2>4.4 二次优化问题</h2></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The convex optimization problem (4.15) is called a <em>quadratic program</em> (QP) if the objective function is (convex) quadratic, and the constraint functions are affine. A quadratic program can be expressed in the form</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; (1/2)x^T P x + q^T x + r \\ \text{subject to} &amp; Gx \preceq h \\ &amp; Ax = b, \end{array} \tag{4.34}$$</p>
+        <p>where $P \in \mathbf{S}^n_+$, $G \in \mathbb{R}^{m \times n}$, and $A \in \mathbb{R}^{p \times n}$. In a quadratic program, we minimize a convex quadratic function over a polyhedron, as illustrated in figure 4.5.</p>
+        <p>If the objective in (4.15) as well as the inequality constraint functions are (convex) quadratic, as in</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; (1/2)x^T P_0 x + q_0^T x + r_0 \\ \text{subject to} &amp; (1/2)x^T P_i x + q_i^T x + r_i \le 0, \quad i = 1,\ldots,m \\ &amp; Ax = b, \end{array} \tag{4.35}$$</p>
+        <p>where $P_i \in \mathbf{S}^n_+$, $i = 0, 1 \ldots, m$, the problem is called a <em>quadratically constrained quadratic program</em> (QCQP). In a QCQP, we minimize a convex quadratic function over a feasible region that is the intersection of ellipsoids (when $P_i \succ 0$).</p>
+        <p>Quadratic programs include linear programs as a special case, by taking $P = 0$ in (4.34). Quadratically constrained quadratic programs include quadratic programs (and therefore also linear programs) as a special case, by taking $P_i = 0$ in (4.35), for $i = 1, \ldots, m$.</p></div>
+      <div class="zh"><p>若目标函数为（凸）二次、约束函数为仿射，则凸优化问题 (4.15) 称为<strong>二次规划</strong>（QP）。二次规划可表为</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; (1/2)x^T P x + q^T x + r \\ \text{subject to} &amp; Gx \preceq h \\ &amp; Ax = b, \end{array} \tag{4.34}$$</p>
+        <p>其中 $P \in \mathbf{S}^n_+$，$G \in \mathbb{R}^{m \times n}$，$A \in \mathbb{R}^{p \times n}$。在二次规划中，我们在多面体上极小化凸二次函数，如图 4.5 所示。</p>
+        <p>若 (4.15) 中的目标与不等式约束函数均为（凸）二次，如</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; (1/2)x^T P_0 x + q_0^T x + r_0 \\ \text{subject to} &amp; (1/2)x^T P_i x + q_i^T x + r_i \le 0, \quad i = 1,\ldots,m \\ &amp; Ax = b, \end{array} \tag{4.35}$$</p>
+        <p>其中 $P_i \in \mathbf{S}^n_+$（$i = 0, 1 \ldots, m$），则称为<strong>二次约束二次规划</strong>（QCQP）。在 QCQP 中，我们在由椭球（$P_i \succ 0$ 时）交集构成的可行区域上极小化凸二次函数。</p>
+        <p>在 (4.34) 中取 $P = 0$，二次规划以线性规划为特殊情形。在 (4.35) 中取 $P_i = 0$（$i = 1, \ldots, m$），二次约束二次规划以二次规划（进而线性规划）为特殊情形。</p></div>
+    </div>
+
+    <!-- ===== Figure 4.5 ===== -->
+    <div class="pair fig-block">
+      <div class="figure-wrap">
+        <img src="assets/figures/fig4.5.png" alt="Figure 4.5: geometric illustration of QP">
+        <div class="fig-caption">
+          <div class="cap-en"><span class="figref">Figure 4.5</span> Geometric illustration of QP. The feasible set $P$, which is a polyhedron, is shown shaded. The contour lines of the objective function, which is convex quadratic, are shown as dashed curves. The point $x^\star$ is optimal.</div>
+          <div class="cap-zh"><span class="figref">图 4.5</span> QP 的几何说明。可行集 $P$（多面体）以阴影显示。凸二次目标函数的等值线以虚曲线表示。点 $x^\star$ 最优。</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============== 4.4.1 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>4.4.1 Examples</h3></div>
+      <div class="zh"><h3>4.4.1 例子</h3></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Least-squares and regression</h3></div>
+      <div class="zh"><h3>最小二乘与回归</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The problem of minimizing the convex quadratic function</p>
+        <p>$$ \|Ax - b\|_2^2 = x^T A^T A x - 2b^T A x + b^T b $$</p>
+        <p>is an (unconstrained) QP. It arises in many fields and has many names, e.g., <em>regression analysis</em> or <em>least-squares approximation</em>. This problem is simple enough to have the well known analytical solution $x = A^\dagger b$, where $A^\dagger$ is the pseudo-inverse of $A$ (see §A.5.4).</p>
+        <p>When linear inequality constraints are added, the problem is called <em>constrained regression</em> or <em>constrained least-squares</em>, and there is no longer a simple analytical solution. As an example we can consider regression with lower and upper bounds on the variables, i.e.,</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; \|Ax - b\|_2^2 \\ \text{subject to} &amp; l_i \le x_i \le u_i, \quad i = 1,\ldots,n, \end{array}$$</p>
+        <p>which is a QP. (We will study least-squares and regression problems in far more depth in chapters 6 and 7.)</p></div>
+      <div class="zh"><p>极小化凸二次函数</p>
+        <p>$$ \|Ax - b\|_2^2 = x^T A^T A x - 2b^T A x + b^T b $$</p>
+        <p>是（无约束）QP。它出现在众多领域并有多种名称，如<strong>回归分析</strong>或<strong>最小二乘逼近</strong>。此问题足够简单，有熟知的解析解 $x = A^\dagger b$，其中 $A^\dagger$ 为 $A$ 的伪逆（见 §A.5.4）。</p>
+        <p>加入线性不等式约束后，问题称为<strong>约束回归</strong>或<strong>约束最小二乘</strong>，不再有简单解析解。例如考虑带变量上下界的回归，即</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; \|Ax - b\|_2^2 \\ \text{subject to} &amp; l_i \le x_i \le u_i, \quad i = 1,\ldots,n, \end{array}$$</p>
+        <p>这是 QP。（我们将在第 6、7 章更深入地研究最小二乘与回归问题。）</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Distance between polyhedra</h3></div>
+      <div class="zh"><h3>多面体之间的距离</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The (Euclidean) distance between the polyhedra $\mathcal{P}_1 = \{x \mid A_1 x \preceq b_1\}$ and $\mathcal{P}_2 = \{x \mid A_2 x \preceq b_2\}$ in $\mathbb{R}^n$ is defined as</p>
+        <p>$$ \mathbf{dist}(\mathcal{P}_1, \mathcal{P}_2) = \inf\{\|x_1 - x_2\|_2 \mid x_1 \in \mathcal{P}_1,\, x_2 \in \mathcal{P}_2\}. $$</p>
+        <p>If the polyhedra intersect, the distance is zero.</p>
+        <p>To find the distance between $\mathcal{P}_1$ and $\mathcal{P}_2$, we can solve the QP</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; \|x_1 - x_2\|_2^2 \\ \text{subject to} &amp; A_1 x_1 \preceq b_1, \quad A_2 x_2 \preceq b_2, \end{array}$$</p>
+        <p>with variables $x_1, x_2 \in \mathbb{R}^n$. This problem is infeasible if and only if one of the polyhedra is empty. The optimal value is zero if and only if the polyhedra intersect, in which case the optimal $x_1$ and $x_2$ are equal (and is a point in the intersection $\mathcal{P}_1 \cap \mathcal{P}_2$). Otherwise the optimal $x_1$ and $x_2$ are the points in $\mathcal{P}_1$ and $\mathcal{P}_2$, respectively, that are closest to each other. (We will study geometric problems involving distance in more detail in chapter 8.)</p></div>
+      <div class="zh"><p>$\mathbb{R}^n$ 中多面体 $\mathcal{P}_1 = \{x \mid A_1 x \preceq b_1\}$ 与 $\mathcal{P}_2 = \{x \mid A_2 x \preceq b_2\}$ 之间的（Euclid）距离定义为</p>
+        <p>$$ \mathbf{dist}(\mathcal{P}_1, \mathcal{P}_2) = \inf\{\|x_1 - x_2\|_2 \mid x_1 \in \mathcal{P}_1,\, x_2 \in \mathcal{P}_2\}. $$</p>
+        <p>若多面体相交，距离为零。</p>
+        <p>求 $\mathcal{P}_1$ 与 $\mathcal{P}_2$ 的距离可解 QP</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; \|x_1 - x_2\|_2^2 \\ \text{subject to} &amp; A_1 x_1 \preceq b_1, \quad A_2 x_2 \preceq b_2, \end{array}$$</p>
+        <p>变量为 $x_1, x_2 \in \mathbb{R}^n$。当且仅当某多面体为空时该问题不可行。当且仅当多面体相交时最优值为零，此时最优 $x_1$ 与 $x_2$ 相等（为交集 $\mathcal{P}_1 \cap \mathcal{P}_2$ 中一点）。否则最优 $x_1$ 与 $x_2$ 分别为 $\mathcal{P}_1$ 与 $\mathcal{P}_2$ 中彼此最接近的点。（我们将在第 8 章更详细地研究涉及距离的几何问题。）</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Bounding variance</h3></div>
+      <div class="zh"><h3>方差的界</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We consider again the Chebyshev inequalities example (page 150), where the variable is an unknown probability distribution given by $p \in \mathbb{R}^n$, about which we have some prior information. The variance of a random variable $f(x)$ is given by</p>
+        <p>$$ \mathbf{E}\, f^2 - (\mathbf{E}\, f)^2 = \sum_{i=1}^n f_i^2 p_i - \left(\sum_{i=1}^n f_i p_i\right)^2, $$</p>
+        <p>(where $f_i = f(u_i)$), which is a concave quadratic function of $p$.</p>
+        <p>It follows that we can maximize the variance of $f(x)$, subject to the given prior information, by solving the QP</p>
+        <p>$$\begin{array}{ll} \text{maximize} &amp; \sum_{i=1}^n f_i^2 p_i - \left(\sum_{i=1}^n f_i p_i\right)^2 \\ \text{subject to} &amp; p \succeq 0, \quad \mathbf{1}^T p = 1 \\ &amp; \alpha_i \le a_i^T p \le \beta_i, \quad i = 1,\ldots,m. \end{array}$$</p>
+        <p>The optimal value gives the maximum possible variance of $f(x)$, over all distributions that are consistent with the prior information; the optimal $p$ gives a distribution that achieves this maximum variance.</p></div>
+      <div class="zh"><p>再考虑 Chebyshev 不等式的例子（第 150 页），其中变量为未知的概率分布 $p \in \mathbb{R}^n$，对其有某些先验信息。随机变量 $f(x)$ 的方差为</p>
+        <p>$$ \mathbf{E}\, f^2 - (\mathbf{E}\, f)^2 = \sum_{i=1}^n f_i^2 p_i - \left(\sum_{i=1}^n f_i p_i\right)^2, $$</p>
+        <p>（其中 $f_i = f(u_i)$），这是 $p$ 的凹二次函数。</p>
+        <p>因此可在给定先验信息下通过求解 QP 极大化 $f(x)$ 的方差：</p>
+        <p>$$\begin{array}{ll} \text{maximize} &amp; \sum_{i=1}^n f_i^2 p_i - \left(\sum_{i=1}^n f_i p_i\right)^2 \\ \text{subject to} &amp; p \succeq 0, \quad \mathbf{1}^T p = 1 \\ &amp; \alpha_i \le a_i^T p \le \beta_i, \quad i = 1,\ldots,m. \end{array}$$</p>
+        <p>最优值给出在与先验信息相容的所有分布中 $f(x)$ 的最大可能方差；最优 $p$ 给出达到此最大方差的分布。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Linear program with random cost</h3></div>
+      <div class="zh"><h3>随机成本的线性规划</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We consider an LP,</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; c^T x \\ \text{subject to} &amp; Gx \preceq h \\ &amp; Ax = b, \end{array}$$</p>
+        <p>with variable $x \in \mathbb{R}^n$. We suppose that the cost function (vector) $c \in \mathbb{R}^n$ is random, with mean value $\bar c$ and covariance $\mathbf{E}(c - \bar c)(c - \bar c)^T = \Sigma$. (We assume for simplicity that the other problem parameters are deterministic.) For a given $x \in \mathbb{R}^n$, the cost $c^T x$ is a (scalar) random variable with mean $\mathbf{E}\, c^T x = \bar c^T x$ and variance</p>
+        <p>$$ \mathbf{var}(c^T x) = \mathbf{E}(c^T x - \mathbf{E}\, c^T x)^2 = x^T \Sigma x. $$</p>
+        <p>In general there is a trade-off between small expected cost and small cost variance. One way to take variance into account is to minimize a linear combination of the expected value and the variance of the cost, i.e.,</p>
+        <p>$$ \mathbf{E}\, c^T x + \gamma\, \mathbf{var}(c^T x), $$</p>
+        <p>which is called the <em>risk-sensitive cost</em>. The parameter $\gamma \ge 0$ is called the <em>risk-aversion parameter</em>, since it sets the relative values of cost variance and expected value. (For $\gamma &gt; 0$, we are willing to trade off an increase in expected cost for a sufficiently large decrease in cost variance).</p>
+        <p>To minimize the risk-sensitive cost we solve the QP</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; \bar c^T x + \gamma x^T \Sigma x \\ \text{subject to} &amp; Gx \preceq h \\ &amp; Ax = b. \end{array}$$</p></div>
+      <div class="zh"><p>考虑 LP</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; c^T x \\ \text{subject to} &amp; Gx \preceq h \\ &amp; Ax = b, \end{array}$$</p>
+        <p>变量为 $x \in \mathbb{R}^n$。设成本函数（向量）$c \in \mathbb{R}^n$ 随机，均值 $\bar c$，协方差 $\mathbf{E}(c - \bar c)(c - \bar c)^T = \Sigma$。（为简单设其他问题参数确定。）对给定 $x \in \mathbb{R}^n$，成本 $c^T x$ 是（标量）随机变量，均值 $\mathbf{E}\, c^T x = \bar c^T x$，方差</p>
+        <p>$$ \mathbf{var}(c^T x) = \mathbf{E}(c^T x - \mathbf{E}\, c^T x)^2 = x^T \Sigma x. $$</p>
+        <p>一般地，小期望成本与小成本方差之间存在权衡。纳入方差的一种方式是极小化期望值与方差的线性组合，即</p>
+        <p>$$ \mathbf{E}\, c^T x + \gamma\, \mathbf{var}(c^T x), $$</p>
+        <p>称为<strong>风险敏感成本</strong>。参数 $\gamma \ge 0$ 称为<strong>风险厌恶参数</strong>，它设定成本方差与期望值的相对权重。（$\gamma &gt; 0$ 时，我们愿意以期望成本的增加换取足够大的方差降低。）</p>
+        <p>极小化风险敏感成本即解 QP</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; \bar c^T x + \gamma x^T \Sigma x \\ \text{subject to} &amp; Gx \preceq h \\ &amp; Ax = b. \end{array}$$</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Markowitz portfolio optimization</h3></div>
+      <div class="zh"><h3>Markowitz 投资组合优化</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We consider a classical portfolio problem with $n$ assets or stocks held over a period of time. We let $x_i$ denote the amount of asset $i$ held throughout the period, with $x_i$ in dollars, at the price at the beginning of the period. A normal long position in asset $i$ corresponds to $x_i &gt; 0$; a short position in asset $i$ (i.e., the obligation to buy the asset at the end of the period) corresponds to $x_i &lt; 0$. We let $p_i$ denote the relative price change of asset $i$ over the period, i.e., its change in price over the period divided by its price at the beginning of the period. The overall return on the portfolio is $r = p^T x$ (given in dollars). The optimization variable is the portfolio vector $x \in \mathbb{R}^n$.</p>
+        <p>A wide variety of constraints on the portfolio can be considered. The simplest set of constraints is that $x_i \ge 0$ (i.e., no short positions) and $\mathbf{1}^T x = B$ (i.e., the total budget to be invested is $B$, which is often taken to be one).</p>
+        <p>We take a stochastic model for price changes: $p \in \mathbb{R}^n$ is a random vector, with known mean $\bar p$ and covariance $\Sigma$. Therefore with portfolio $x \in \mathbb{R}^n$, the return $r$ is a (scalar) random variable with mean $\bar p^T x$ and variance $x^T \Sigma x$. The choice of portfolio $x$ involves a trade-off between the mean of the return, and its variance.</p>
+        <p>The classical portfolio optimization problem, introduced by Markowitz, is the QP</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; x^T \Sigma x \\ \text{subject to} &amp; \bar p^T x \ge r_{\min} \\ &amp; \mathbf{1}^T x = 1, \quad x \succeq 0, \end{array}$$</p>
+        <p>where $x$, the portfolio, is the variable. Here we find the portfolio that minimizes the return variance (which is associated with the risk of the portfolio) subject to achieving a minimum acceptable mean return $r_{\min}$, and satisfying the portfolio budget and no-shorting constraints.</p></div>
+      <div class="zh"><p>考虑经典的投资组合问题：在一段时期内持有 $n$ 种资产或股票。设 $x_i$ 为该时期内持有资产 $i$ 的金额（以期初价格计）。资产 $i$ 的正常多头对应 $x_i &gt; 0$；空头（即期末买入资产的义务）对应 $x_i &lt; 0$。设 $p_i$ 为资产 $i$ 在该时期的相对价格变化，即价格变化除以期初价格。组合的总收益为 $r = p^T x$（以美元计）。优化变量为组合向量 $x \in \mathbb{R}^n$。</p>
+        <p>可考虑对组合的多种约束。最简单的一组约束为 $x_i \ge 0$（即不允许做空）和 $\mathbf{1}^T x = B$（即总投资预算为 $B$，常取为 1）。</p>
+        <p>对价格变化取随机模型：$p \in \mathbb{R}^n$ 为随机向量，已知均值 $\bar p$ 和协方差 $\Sigma$。因此对组合 $x \in \mathbb{R}^n$，收益 $r$ 是（标量）随机变量，均值 $\bar p^T x$，方差 $x^T \Sigma x$。组合 $x$ 的选择涉及收益均值与方差之间的权衡。</p>
+        <p>由 Markowitz 提出的经典投资组合优化问题是 QP</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; x^T \Sigma x \\ \text{subject to} &amp; \bar p^T x \ge r_{\min} \\ &amp; \mathbf{1}^T x = 1, \quad x \succeq 0, \end{array}$$</p>
+        <p>变量为 $x$（组合）。此处我们在满足最低可接受均值收益 $r_{\min}$、组合预算与不做空约束下，求使收益方差（与组合风险相关）最小的组合。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Many extensions are possible. One standard extension, for example, is to allow short positions, i.e., $x_i &lt; 0$. To do this we introduce variables $x_{\mathrm{long}}$ and $x_{\mathrm{short}}$, with</p>
+        <p>$$ x_{\mathrm{long}} \succeq 0, \quad x_{\mathrm{short}} \succeq 0, \quad x = x_{\mathrm{long}} - x_{\mathrm{short}}, \quad \mathbf{1}^T x_{\mathrm{short}} \le \eta\, \mathbf{1}^T x_{\mathrm{long}}. $$</p>
+        <p>The last constraint limits the total short position at the beginning of the period to some fraction $\eta$ of the total long position at the beginning of the period.</p>
+        <p>As another extension we can include linear transaction costs in the portfolio optimization problem. Starting from a given initial portfolio $x_{\mathrm{init}}$ we buy and sell assets to achieve the portfolio $x$, which we then hold over the period as described above. We are charged a transaction fee for buying and selling assets, which is proportional to the amount bought or sold. To handle this, we introduce variables $u_{\mathrm{buy}}$ and $u_{\mathrm{sell}}$, which determine the amount of each asset we buy and sell before the holding period. We have the constraints</p>
+        <p>$$ x = x_{\mathrm{init}} + u_{\mathrm{buy}} - u_{\mathrm{sell}}, \quad u_{\mathrm{buy}} \succeq 0, \quad u_{\mathrm{sell}} \succeq 0. $$</p>
+        <p>We replace the simple budget constraint $\mathbf{1}^T x = 1$ with the condition that the initial buying and selling, including transaction fees, involves zero net cash:</p>
+        <p>$$ (1 - f_{\mathrm{sell}})\mathbf{1}^T u_{\mathrm{sell}} = (1 + f_{\mathrm{buy}})\mathbf{1}^T u_{\mathrm{buy}} $$</p>
+        <p>Here the lefthand side is the total proceeds from selling assets, less the selling transaction fee, and the righthand side is the total cost, including transaction fee, of buying assets. The constants $f_{\mathrm{buy}} \ge 0$ and $f_{\mathrm{sell}} \ge 0$ are the transaction fee rates for buying and selling (assumed the same across assets, for simplicity).</p>
+        <p>The problem of minimizing return variance, subject to a minimum mean return, and the budget and trading constraints, is a QP with variables $x$, $u_{\mathrm{buy}}$, $u_{\mathrm{sell}}$.</p></div>
+      <div class="zh"><p>可作多种推广。例如，一种标准推广是允许做空，即 $x_i &lt; 0$。为此引入变量 $x_{\mathrm{long}}$ 与 $x_{\mathrm{short}}$，</p>
+        <p>$$ x_{\mathrm{long}} \succeq 0, \quad x_{\mathrm{short}} \succeq 0, \quad x = x_{\mathrm{long}} - x_{\mathrm{short}}, \quad \mathbf{1}^T x_{\mathrm{short}} \le \eta\, \mathbf{1}^T x_{\mathrm{long}}. $$</p>
+        <p>最后一个约束将期初总空头头寸限制为期初总多头头寸的某个比例 $\eta$。</p>
+        <p>作为另一种推广，可在投资组合优化问题中加入线性交易成本。从给定初始组合 $x_{\mathrm{init}}$ 出发，买卖资产以达到组合 $x$，然后如上持有。买卖资产收取与买卖量成比例的交易费。为此引入变量 $u_{\mathrm{buy}}$ 与 $u_{\mathrm{sell}}$，决定持有期前各资产的买卖量。约束为</p>
+        <p>$$ x = x_{\mathrm{init}} + u_{\mathrm{buy}} - u_{\mathrm{sell}}, \quad u_{\mathrm{buy}} \succeq 0, \quad u_{\mathrm{sell}} \succeq 0. $$</p>
+        <p>用&ldquo;期初买卖（含交易费）净现金为零&rdquo;的条件替换简单预算约束 $\mathbf{1}^T x = 1$：</p>
+        <p>$$ (1 - f_{\mathrm{sell}})\mathbf{1}^T u_{\mathrm{sell}} = (1 + f_{\mathrm{buy}})\mathbf{1}^T u_{\mathrm{buy}} $$</p>
+        <p>左端为卖出资产的总收入减卖出交易费，右端为买入资产的总成本含交易费。常数 $f_{\mathrm{buy}} \ge 0$ 与 $f_{\mathrm{sell}} \ge 0$ 为买入与卖出的交易费率（为简单设各资产相同）。</p>
+        <p>在最低均值收益与预算及交易约束下极小化收益方差的问题，是变量为 $x$、$u_{\mathrm{buy}}$、$u_{\mathrm{sell}}$ 的 QP。</p></div>
+    </div>
+
+    <!-- ============== 4.4.2 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>4.4.2 Second-order cone programming</h3></div>
+      <div class="zh"><h3>4.4.2 二阶锥规划</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>A problem that is closely related to quadratic programming is the <em>second-order cone program</em> (SOCP):</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f^T x \\ \text{subject to} &amp; \|A_i x + b_i\|_2 \le c_i^T x + d_i, \quad i = 1,\ldots,m \\ &amp; Fx = g, \end{array} \tag{4.36}$$</p>
+        <p>where $x \in \mathbb{R}^n$ is the optimization variable, $A_i \in \mathbb{R}^{n_i \times n}$, and $F \in \mathbb{R}^{p \times n}$. We call a constraint of the form</p>
+        <p>$$ \|Ax + b\|_2 \le c^T x + d, $$</p>
+        <p>where $A \in \mathbb{R}^{k \times n}$, a <em>second-order cone constraint</em>, since it is the same as requiring the affine function $(Ax + b, c^T x + d)$ to lie in the second-order cone in $\mathbb{R}^{k+1}$.</p>
+        <p>When $c_i = 0$, $i = 1, \ldots, m$, the SOCP (4.36) is equivalent to a QCQP (which is obtained by squaring each of the constraints). Similarly, if $A_i = 0$, $i = 1, \ldots, m$, then the SOCP (4.36) reduces to a (general) LP. Second-order cone programs are, however, more general than QCQPs (and of course, LPs).</p></div>
+      <div class="zh"><p>与二次规划密切相关的问题是<strong>二阶锥规划</strong>（SOCP）：</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f^T x \\ \text{subject to} &amp; \|A_i x + b_i\|_2 \le c_i^T x + d_i, \quad i = 1,\ldots,m \\ &amp; Fx = g, \end{array} \tag{4.36}$$</p>
+        <p>其中 $x \in \mathbb{R}^n$ 为优化变量，$A_i \in \mathbb{R}^{n_i \times n}$，$F \in \mathbb{R}^{p \times n}$。我们称形如</p>
+        <p>$$ \|Ax + b\|_2 \le c^T x + d, $$</p>
+        <p>（$A \in \mathbb{R}^{k \times n}$）的约束为<strong>二阶锥约束</strong>，因为它等价于要求仿射函数 $(Ax + b, c^T x + d)$ 位于 $\mathbb{R}^{k+1}$ 的二阶锥中。</p>
+        <p>当 $c_i = 0$（$i = 1, \ldots, m$）时，SOCP (4.36) 等价于 QCQP（将各约束平方即得）。类似地，若 $A_i = 0$（$i = 1, \ldots, m$），则 SOCP (4.36) 退化为（一般）LP。然而二阶锥规划比 QCQP（当然也比 LP）更一般。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Robust linear programming</h3></div>
+      <div class="zh"><h3>鲁棒线性规划</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We consider a linear program in inequality form,</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; c^T x \\ \text{subject to} &amp; a_i^T x \le b_i, \quad i = 1,\ldots,m, \end{array}$$</p>
+        <p>in which there is some uncertainty or variation in the parameters $c, a_i, b_i$. To simplify the exposition we assume that $c$ and $b_i$ are fixed, and that $a_i$ are known to lie in given ellipsoids:</p>
+        <p>$$ a_i \in \mathcal{E}_i = \{\bar a_i + P_i u \mid \|u\|_2 \le 1\}, $$</p>
+        <p>where $P_i \in \mathbb{R}^{n \times n}$. (If $P_i$ is singular we obtain &lsquo;flat&rsquo; ellipsoids, of dimension $\mathbf{rank}\, P_i$; $P_i = 0$ means that $a_i$ is known perfectly.)</p>
+        <p>We will require that the constraints be satisfied for all possible values of the parameters $a_i$, which leads us to the <em>robust linear program</em></p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; c^T x \\ \text{subject to} &amp; a_i^T x \le b_i \text{ for all } a_i \in \mathcal{E}_i, \quad i = 1,\ldots,m. \end{array} \tag{4.37}$$</p>
+        <p>The robust linear constraint, $a_i^T x \le b_i$ for all $a_i \in \mathcal{E}_i$, can be expressed as</p>
+        <p>$$ \sup\{a_i^T x \mid a_i \in \mathcal{E}_i\} \le b_i, $$</p>
+        <p>the lefthand side of which can be expressed as</p>
+        <p>$$ \sup\{a_i^T x \mid a_i \in \mathcal{E}_i\} = \bar a_i^T x + \sup\{u^T P_i^T x \mid \|u\|_2 \le 1\} = \bar a_i^T x + \|P_i^T x\|_2. $$</p>
+        <p>Thus, the robust linear constraint can be expressed as</p>
+        <p>$$ \bar a_i^T x + \|P_i^T x\|_2 \le b_i, $$</p>
+        <p>which is evidently a second-order cone constraint. Hence the robust LP (4.37) can be expressed as the SOCP</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; c^T x \\ \text{subject to} &amp; \bar a_i^T x + \|P_i^T x\|_2 \le b_i, \quad i = 1,\ldots,m. \end{array}$$</p>
+        <p>Note that the additional norm terms act as regularization terms; they prevent $x$ from being large in directions with considerable uncertainty in the parameters $a_i$.</p></div>
+      <div class="zh"><p>考虑不等式形式的线性规划</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; c^T x \\ \text{subject to} &amp; a_i^T x \le b_i, \quad i = 1,\ldots,m, \end{array}$$</p>
+        <p>其中参数 $c, a_i, b_i$ 存在不确定性或变化。为简化叙述，设 $c$ 和 $b_i$ 固定，$a_i$ 已知位于给定椭球中：</p>
+        <p>$$ a_i \in \mathcal{E}_i = \{\bar a_i + P_i u \mid \|u\|_2 \le 1\}, $$</p>
+        <p>其中 $P_i \in \mathbb{R}^{n \times n}$。（若 $P_i$ 奇异，则得维数为 $\mathbf{rank}\, P_i$ 的&ldquo;扁平&rdquo;椭球；$P_i = 0$ 表示 $a_i$ 完全已知。）</p>
+        <p>我们要求约束对所有可能的 $a_i$ 值成立，由此得到<strong>鲁棒线性规划</strong></p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; c^T x \\ \text{subject to} &amp; a_i^T x \le b_i \text{ 对所有 } a_i \in \mathcal{E}_i, \quad i = 1,\ldots,m. \end{array} \tag{4.37}$$</p>
+        <p>鲁棒线性约束&ldquo;$a_i^T x \le b_i$ 对所有 $a_i \in \mathcal{E}_i$&rdquo;可表为</p>
+        <p>$$ \sup\{a_i^T x \mid a_i \in \mathcal{E}_i\} \le b_i, $$</p>
+        <p>其左端可表为</p>
+        <p>$$ \sup\{a_i^T x \mid a_i \in \mathcal{E}_i\} = \bar a_i^T x + \sup\{u^T P_i^T x \mid \|u\|_2 \le 1\} = \bar a_i^T x + \|P_i^T x\|_2. $$</p>
+        <p>故鲁棒线性约束可表为</p>
+        <p>$$ \bar a_i^T x + \|P_i^T x\|_2 \le b_i, $$</p>
+        <p>这显然是二阶锥约束。因此鲁棒 LP (4.37) 可表为 SOCP</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; c^T x \\ \text{subject to} &amp; \bar a_i^T x + \|P_i^T x\|_2 \le b_i, \quad i = 1,\ldots,m. \end{array}$$</p>
+        <p>注意附加的范数项起正则化作用；它们阻止 $x$ 在 $a_i$ 不确定性较大的方向上取大值。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Linear programming with random constraints</h3></div>
+      <div class="zh"><h3>带随机约束的线性规划</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The robust LP described above can also be considered in a statistical framework. Here we suppose that the parameters $a_i$ are independent Gaussian random vectors, with mean $\bar a_i$ and covariance $\Sigma_i$. We require that each constraint $a_i^T x \le b_i$ should hold with a probability (or confidence) exceeding $\eta$, where $\eta \ge 0.5$, i.e.,</p>
+        <p>$$ \mathbf{prob}(a_i^T x \le b_i) \ge \eta. \tag{4.38}$$</p>
+        <p>We will show that this probability constraint can be expressed as a second-order cone constraint.</p>
+        <p>Letting $u = a_i^T x$, with $\sigma^2$ denoting its variance, this constraint can be written as</p>
+        <p>$$ \mathbf{prob}\left(\frac{u - \bar u}{\sigma} \le \frac{b_i - \bar u}{\sigma}\right) \ge \eta. $$</p>
+        <p>Since $(u - \bar u)/\sigma$ is a zero mean unit variance Gaussian variable, the probability above is simply $\Phi((b_i - \bar u)/\sigma)$, where</p>
+        <p>$$ \Phi(z) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{z} e^{-t^2/2}\, dt $$</p>
+        <p>is the cumulative distribution function of a zero mean unit variance Gaussian random variable. Thus the probability constraint (4.38) can be expressed as</p>
+        <p>$$ \frac{b_i - \bar u}{\sigma} \ge \Phi^{-1}(\eta), $$</p>
+        <p>or, equivalently,</p>
+        <p>$$ \bar u + \Phi^{-1}(\eta)\sigma \le b_i. $$</p>
+        <p>From $\bar u = \bar a_i^T x$ and $\sigma = (x^T \Sigma_i x)^{1/2}$ we obtain</p>
+        <p>$$ \bar a_i^T x + \Phi^{-1}(\eta)\|\Sigma_i^{1/2} x\|_2 \le b_i. $$</p>
+        <p>By our assumption that $\eta \ge 1/2$, we have $\Phi^{-1}(\eta) \ge 0$, so this constraint is a second-order cone constraint.</p>
+        <p>In summary, the problem</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; c^T x \\ \text{subject to} &amp; \mathbf{prob}(a_i^T x \le b_i) \ge \eta, \quad i = 1,\ldots,m \end{array}$$</p>
+        <p>can be expressed as the SOCP</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; c^T x \\ \text{subject to} &amp; \bar a_i^T x + \Phi^{-1}(\eta)\|\Sigma_i^{1/2} x\|_2 \le b_i, \quad i = 1,\ldots,m. \end{array}$$</p>
+        <p>(We will consider robust convex optimization problems in more depth in chapter 6. See also exercises 4.13, 4.28, and 4.59.)</p></div>
+      <div class="zh"><p>上述鲁棒 LP 也可在统计框架下考虑。设参数 $a_i$ 为独立 Gauss 随机向量，均值 $\bar a_i$，协方差 $\Sigma_i$。要求每个约束 $a_i^T x \le b_i$ 以超过 $\eta$（$\eta \ge 0.5$）的概率（置信度）成立，即</p>
+        <p>$$ \mathbf{prob}(a_i^T x \le b_i) \ge \eta. \tag{4.38}$$</p>
+        <p>我们将证明此概率约束可表为二阶锥约束。</p>
+        <p>令 $u = a_i^T x$，$\sigma^2$ 为其方差，此约束可写为</p>
+        <p>$$ \mathbf{prob}\left(\frac{u - \bar u}{\sigma} \le \frac{b_i - \bar u}{\sigma}\right) \ge \eta. $$</p>
+        <p>因 $(u - \bar u)/\sigma$ 为零均值单位方差 Gauss 变量，上述概率即 $\Phi((b_i - \bar u)/\sigma)$，其中</p>
+        <p>$$ \Phi(z) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{z} e^{-t^2/2}\, dt $$</p>
+        <p>为零均值单位方差 Gauss 随机变量的累积分布函数。故概率约束 (4.38) 可表为</p>
+        <p>$$ \frac{b_i - \bar u}{\sigma} \ge \Phi^{-1}(\eta), $$</p>
+        <p>或等价地</p>
+        <p>$$ \bar u + \Phi^{-1}(\eta)\sigma \le b_i. $$</p>
+        <p>由 $\bar u = \bar a_i^T x$ 和 $\sigma = (x^T \Sigma_i x)^{1/2}$ 得</p>
+        <p>$$ \bar a_i^T x + \Phi^{-1}(\eta)\|\Sigma_i^{1/2} x\|_2 \le b_i. $$</p>
+        <p>由假设 $\eta \ge 1/2$，有 $\Phi^{-1}(\eta) \ge 0$，故此约束为二阶锥约束。</p>
+        <p>综上，问题</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; c^T x \\ \text{subject to} &amp; \mathbf{prob}(a_i^T x \le b_i) \ge \eta, \quad i = 1,\ldots,m \end{array}$$</p>
+        <p>可表为 SOCP</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; c^T x \\ \text{subject to} &amp; \bar a_i^T x + \Phi^{-1}(\eta)\|\Sigma_i^{1/2} x\|_2 \le b_i, \quad i = 1,\ldots,m. \end{array}$$</p>
+        <p>（我们将在第 6 章更深入地考虑鲁棒凸优化问题。另见习题 4.13、4.28、4.59。）</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p><em>Example 4.8 Portfolio optimization with loss risk constraints.</em> We consider again the classical Markowitz portfolio problem described above (page 155). We assume here that the price change vector $p \in \mathbb{R}^n$ is a Gaussian random variable, with mean $\bar p$ and covariance $\Sigma$. Therefore the return $r$ is a Gaussian random variable with mean $\bar r = \bar p^T x$ and variance $\sigma_r^2 = x^T \Sigma x$.</p>
+        <p>Consider a loss risk constraint of the form</p>
+        <p>$$ \mathbf{prob}(r \le \alpha) \le \beta, \tag{4.39}$$</p>
+        <p>where $\alpha$ is a given unwanted return level (e.g., a large loss) and $\beta$ is a given maximum probability.</p>
+        <p>As in the stochastic interpretation of the robust LP given above, we can express this constraint using the cumulative distribution function $\Phi$ of a unit Gaussian random variable. The inequality (4.39) is equivalent to</p>
+        <p>$$ \bar p^T x + \Phi^{-1}(\beta) \|\Sigma^{1/2} x\|_2 \ge \alpha. $$</p>
+        <p>Provided $\beta \le 1/2$ (i.e., $\Phi^{-1}(\beta) \le 0$), this loss risk constraint is a second-order cone constraint. (If $\beta &gt; 1/2$, the loss risk constraint becomes nonconvex in $x$.)</p>
+        <p>The problem of maximizing the expected return subject to a bound on the loss risk (with $\beta \le 1/2$), can therefore be cast as an SOCP with one second-order cone constraint:</p>
+        <p>$$\begin{array}{ll} \text{maximize} &amp; \bar p^T x \\ \text{subject to} &amp; \bar p^T x + \Phi^{-1}(\beta) \|\Sigma^{1/2} x\|_2 \ge \alpha \\ &amp; x \succeq 0, \quad \mathbf{1}^T x = 1. \end{array}$$</p>
+        <p>There are many extensions of this problem. For example, we can impose several loss risk constraints, i.e.,</p>
+        <p>$$ \mathbf{prob}(r \le \alpha_i) \le \beta_i, \quad i = 1,\ldots,k, $$</p>
+        <p>(where $\beta_i \le 1/2$), which expresses the risks ($\beta_i$) we are willing to accept for various levels of loss ($\alpha_i$).</p></div>
+      <div class="zh"><p><em>例 4.8 带损失风险约束的投资组合优化。</em> 再考虑上述经典 Markowitz 投资组合问题（第 155 页）。此处设价格变化向量 $p \in \mathbb{R}^n$ 为 Gauss 随机变量，均值 $\bar p$，协方差 $\Sigma$。故收益 $r$ 为 Gauss 随机变量，均值 $\bar r = \bar p^T x$，方差 $\sigma_r^2 = x^T \Sigma x$。</p>
+        <p>考虑形如</p>
+        <p>$$ \mathbf{prob}(r \le \alpha) \le \beta, \tag{4.39}$$</p>
+        <p>的损失风险约束，其中 $\alpha$ 为给定的不希望收益水平（如大损失），$\beta$ 为给定最大概率。</p>
+        <p>如上述鲁棒 LP 的随机解释，可用单位 Gauss 随机变量的累积分布函数 $\Phi$ 表此约束。不等式 (4.39) 等价于</p>
+        <p>$$ \bar p^T x + \Phi^{-1}(\beta) \|\Sigma^{1/2} x\|_2 \ge \alpha. $$</p>
+        <p>当 $\beta \le 1/2$（即 $\Phi^{-1}(\beta) \le 0$）时，此损失风险约束为二阶锥约束。（若 $\beta &gt; 1/2$，损失风险约束在 $x$ 上非凸。）</p>
+        <p>因此在损失风险有界（$\beta \le 1/2$）下极大化期望收益的问题，可表为含一个二阶锥约束的 SOCP：</p>
+        <p>$$\begin{array}{ll} \text{maximize} &amp; \bar p^T x \\ \text{subject to} &amp; \bar p^T x + \Phi^{-1}(\beta) \|\Sigma^{1/2} x\|_2 \ge \alpha \\ &amp; x \succeq 0, \quad \mathbf{1}^T x = 1. \end{array}$$</p>
+        <p>此问题有多种推广。例如可施加多个损失风险约束，即</p>
+        <p>$$ \mathbf{prob}(r \le \alpha_i) \le \beta_i, \quad i = 1,\ldots,k, $$</p>
+        <p>（其中 $\beta_i \le 1/2$），表示我们愿意为各种损失水平（$\alpha_i$）接受的风险（$\beta_i$）。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Minimal surface</h3></div>
+      <div class="zh"><h3>极小曲面</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Consider a differentiable function $f : \mathbb{R}^2 \to \mathbb{R}$ with $\mathbf{dom}\, f = C$. The surface area of its graph is given by</p>
+        <p>$$ A = \int_C \sqrt{1 + \|\nabla f(x)\|_2^2}\, dx = \int_C \left\|(\nabla f(x), 1)\right\|_2\, dx, $$</p>
+        <p>which is a convex functional of $f$. The <em>minimal surface problem</em> is to find the function $f$ that minimizes $A$ subject to some constraints, for example, some given values of $f$ on the boundary of $C$.</p>
+        <p>We will approximate this problem by discretizing the function $f$. Let $C = [0, 1] \times [0, 1]$, and let $f_{ij}$ denote the value of $f$ at the point $(i/K, j/K)$, for $i, j = 0, \ldots, K$. An approximate expression for the gradient of $f$ at the point $x = (i/K, j/K)$ can be found using forward differences:</p>
+        <p>$$ \nabla f(x) \approx K \left[\begin{array}{c} f_{i+1,j} - f_{i,j} \\ f_{i,j+1} - f_{i,j} \end{array}\right]. $$</p>
+        <p>Substituting this into the expression for the area of the graph, and approximating the integral as a sum, we obtain an approximation for the area of the graph:</p>
+        <p>$$ A \approx A_{\mathrm{disc}} = \frac{1}{K^2} \sum_{i,j=0}^{K-1} \left\|\left[\begin{array}{c} K(f_{i+1,j} - f_{i,j}) \\ K(f_{i,j+1} - f_{i,j}) \\ 1 \end{array}\right]\right\|_2. $$</p>
+        <p>The discretized area approximation $A_{\mathrm{disc}}$ is a convex function of $f_{ij}$.</p>
+        <p>We can consider a wide variety of constraints on $f_{ij}$, such as equality or inequality constraints on any of its entries (for example, on the boundary values), or on its moments. As an example, we consider the problem of finding the minimal area surface with fixed boundary values on the left and right edges of the square:</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; A_{\mathrm{disc}} \\ \text{subject to} &amp; f_{0j} = l_j, \quad j = 0,\ldots,K \\ &amp; f_{Kj} = r_j, \quad j = 0,\ldots,K \end{array} \tag{4.40}$$</p>
+        <p>where $f_{ij}$, $i, j = 0, \ldots, K$, are the variables, and $l_j, r_j$ are the given boundary values on the left and right sides of the square.</p>
+        <p>We can transform the problem (4.40) into an SOCP by introducing new variables $t_{ij}$, $i, j = 0, \ldots, K-1$:</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; (1/K^2) \sum_{i,j=0}^{K-1} t_{ij} \\ \text{subject to} &amp; \left\|\left[\begin{array}{c} K(f_{i+1,j} - f_{i,j}) \\ K(f_{i,j+1} - f_{i,j}) \\ 1 \end{array}\right]\right\|_2 \le t_{ij}, \quad i, j = 0,\ldots,K-1 \\ &amp; f_{0j} = l_j, \quad j = 0,\ldots,K \\ &amp; f_{Kj} = r_j, \quad j = 0,\ldots,K. \end{array}$$</p></div>
+      <div class="zh"><p>考虑可微函数 $f : \mathbb{R}^2 \to \mathbb{R}$，$\mathbf{dom}\, f = C$。其图的表面积为</p>
+        <p>$$ A = \int_C \sqrt{1 + \|\nabla f(x)\|_2^2}\, dx = \int_C \left\|(\nabla f(x), 1)\right\|_2\, dx, $$</p>
+        <p>这是 $f$ 的凸泛函。<strong>极小曲面问题</strong>即在某些约束下（如 $f$ 在 $C$ 边界上的给定值）求使 $A$ 最小的函数 $f$。</p>
+        <p>我们将通过离散化函数 $f$ 来逼近此问题。设 $C = [0, 1] \times [0, 1]$，$f_{ij}$ 为 $f$ 在点 $(i/K, j/K)$（$i, j = 0, \ldots, K$）的值。用前向差分可得 $f$ 在 $x = (i/K, j/K)$ 处梯度的近似：</p>
+        <p>$$ \nabla f(x) \approx K \left[\begin{array}{c} f_{i+1,j} - f_{i,j} \\ f_{i,j+1} - f_{i,j} \end{array}\right]. $$</p>
+        <p>将其代入图面积表达式，并将积分近似为求和，得图面积的近似：</p>
+        <p>$$ A \approx A_{\mathrm{disc}} = \frac{1}{K^2} \sum_{i,j=0}^{K-1} \left\|\left[\begin{array}{c} K(f_{i+1,j} - f_{i,j}) \\ K(f_{i,j+1} - f_{i,j}) \\ 1 \end{array}\right]\right\|_2. $$</p>
+        <p>离散面积近似 $A_{\mathrm{disc}}$ 是 $f_{ij}$ 的凸函数。</p>
+        <p>可考虑对 $f_{ij}$ 的多种约束，如对任一项的等式或不等式约束（例如边界值），或对其矩的约束。作为例子，考虑在方形左右边界固定边界值下求极小面积曲面的问题：</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; A_{\mathrm{disc}} \\ \text{subject to} &amp; f_{0j} = l_j, \quad j = 0,\ldots,K \\ &amp; f_{Kj} = r_j, \quad j = 0,\ldots,K \end{array} \tag{4.40}$$</p>
+        <p>其中 $f_{ij}$（$i, j = 0, \ldots, K$）为变量，$l_j, r_j$ 为方形左右边界上的给定边界值。</p>
+        <p>引入新变量 $t_{ij}$（$i, j = 0, \ldots, K-1$），可将问题 (4.40) 变换为 SOCP：</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; (1/K^2) \sum_{i,j=0}^{K-1} t_{ij} \\ \text{subject to} &amp; \left\|\left[\begin{array}{c} K(f_{i+1,j} - f_{i,j}) \\ K(f_{i,j+1} - f_{i,j}) \\ 1 \end{array}\right]\right\|_2 \le t_{ij}, \quad i, j = 0,\ldots,K-1 \\ &amp; f_{0j} = l_j, \quad j = 0,\ldots,K \\ &amp; f_{Kj} = r_j, \quad j = 0,\ldots,K. \end{array}$$</p></div>
+    </div>
+
+    <!-- ============== 4.5 ============== -->
+    <div class="pair head">
+      <div class="en"><h2>4.5 Geometric programming</h2></div>
+      <div class="zh"><h2>4.5 几何规划</h2></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>In this section we describe a family of optimization problems that are <em>not</em> convex in their natural form. These problems can, however, be transformed to convex optimization problems, by a change of variables and a transformation of the objective and constraint functions.</p></div>
+      <div class="zh"><p>本节描述一族在其自然形式下<em>非</em>凸的优化问题。然而，通过变量代换和目标与约束函数的变换，这些问题可变换为凸优化问题。</p></div>
+    </div>
+
+    <!-- ============== 4.5.1 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>4.5.1 Monomials and posynomials</h3></div>
+      <div class="zh"><h3>4.5.1 单项式与正项式</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>A function $f : \mathbb{R}^n \to \mathbb{R}$ with $\mathbf{dom}\, f = \mathbb{R}^n_{++}$, defined as</p>
+        <p>$$ f(x) = c x_1^{a_1} x_2^{a_2} \cdots x_n^{a_n}, \tag{4.41}$$</p>
+        <p>where $c &gt; 0$ and $a_i \in \mathbb{R}$, is called a <em>monomial function</em>, or simply, a <em>monomial</em>. The exponents $a_i$ of a monomial can be any real numbers, including fractional or negative, but the coefficient $c$ can only be positive. (The term &lsquo;monomial&rsquo; conflicts with the standard definition from algebra, in which the exponents must be non-negative integers, but this should not cause any confusion.) A sum of monomials, i.e., a function of the form</p>
+        <p>$$ f(x) = \sum_{k=1}^K c_k x_1^{a_{1k}} x_2^{a_{2k}} \cdots x_n^{a_{nk}}, \tag{4.42}$$</p>
+        <p>where $c_k &gt; 0$, is called a <em>posynomial function</em> (with $K$ terms), or simply, a <em>posynomial</em>.</p></div>
+      <div class="zh"><p>函数 $f : \mathbb{R}^n \to \mathbb{R}$，$\mathbf{dom}\, f = \mathbb{R}^n_{++}$，定义为</p>
+        <p>$$ f(x) = c x_1^{a_1} x_2^{a_2} \cdots x_n^{a_n}, \tag{4.41}$$</p>
+        <p>其中 $c &gt; 0$，$a_i \in \mathbb{R}$，称为<strong>单项式函数</strong>，简称<strong>单项式</strong>。单项式的指数 $a_i$ 可为任意实数，包括分数或负数，但系数 $c$ 只能为正。（&ldquo;单项式&rdquo;一词与代数中指数须为非负整数的标准定义冲突，但不应引起混淆。）单项式之和，即形如</p>
+        <p>$$ f(x) = \sum_{k=1}^K c_k x_1^{a_{1k}} x_2^{a_{2k}} \cdots x_n^{a_{nk}}, \tag{4.42}$$</p>
+        <p>（$c_k &gt; 0$）的函数，称为<strong>正项式函数</strong>（含 $K$ 项），简称<strong>正项式</strong>。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Posynomials are closed under addition, multiplication, and nonnegative scaling. Monomials are closed under multiplication and division. If a posynomial is multiplied by a monomial, the result is a posynomial; similarly, a posynomial can be divided by a monomial, with the result a posynomial.</p></div>
+      <div class="zh"><p>正项式在加法、乘法和非负数乘下封闭。单项式在乘法和除法下封闭。正项式乘以单项式仍为正项式；类似地，正项式除以单项式仍为正项式。</p></div>
+    </div>
+
+    <!-- ============== 4.5.2 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>4.5.2 Geometric programming</h3></div>
+      <div class="zh"><h3>4.5.2 几何规划</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>An optimization problem of the form</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(x) \\ \text{subject to} &amp; f_i(x) \le 1, \quad i = 1,\ldots,m \\ &amp; h_i(x) = 1, \quad i = 1,\ldots,p \end{array} \tag{4.43}$$</p>
+        <p>where $f_0, \ldots, f_m$ are posynomials and $h_1, \ldots, h_p$ are monomials, is called a <em>geometric program</em> (GP). The domain of this problem is $\mathcal{D} = \mathbb{R}^n_{++}$; the constraint $x \succ 0$ is implicit.</p></div>
+      <div class="zh"><p>形如</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; f_0(x) \\ \text{subject to} &amp; f_i(x) \le 1, \quad i = 1,\ldots,m \\ &amp; h_i(x) = 1, \quad i = 1,\ldots,p \end{array} \tag{4.43}$$</p>
+        <p>其中 $f_0, \ldots, f_m$ 为正项式，$h_1, \ldots, h_p$ 为单项式，称为<strong>几何规划</strong>（GP）。该问题的定义域为 $\mathcal{D} = \mathbb{R}^n_{++}$；约束 $x \succ 0$ 是隐式的。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Extensions of geometric programming</h3></div>
+      <div class="zh"><h3>几何规划的推广</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Several extensions are readily handled. If $f$ is a posynomial and $h$ is a monomial, then the constraint $f(x) \le h(x)$ can be handled by expressing it as $f(x)/h(x) \le 1$ (since $f/h$ is posynomial). This includes as a special case a constraint of the form $f(x) \le a$, where $f$ is posynomial and $a &gt; 0$. In a similar way if $h_1$ and $h_2$ are both nonzero monomial functions, then we can handle the equality constraint $h_1(x) = h_2(x)$ by expressing it as $h_1(x)/h_2(x) = 1$ (since $h_1/h_2$ is monomial). We can maximize a nonzero monomial objective function, by minimizing its inverse (which is also a monomial).</p>
+        <p>For example, consider the problem</p>
+        <p>$$\begin{array}{ll} \text{maximize} &amp; x/y \\ \text{subject to} &amp; 2 \le x \le 3 \\ &amp; x^2 + 3y/z \le \sqrt{y} \\ &amp; x/y = z^2, \end{array}$$</p>
+        <p>with variables $x, y, z \in \mathbb{R}$ (and the implicit constraint $x, y, z &gt; 0$). Using the simple transformations described above, we obtain the equivalent standard form GP</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; x^{-1}y \\ \text{subject to} &amp; 2x^{-1} \le 1, \quad (1/3)x \le 1 \\ &amp; x^2 y^{-1/2} + 3y^{1/2} z^{-1} \le 1 \\ &amp; xy^{-1} z^{-2} = 1. \end{array}$$</p>
+        <p>We will refer to a problem like this one, that is easily transformed to an equivalent GP in the standard form (4.43), also as a GP. (In the same way that we refer to a problem easily transformed to an LP as an LP.)</p></div>
+      <div class="zh"><p>若干推广容易处理。若 $f$ 为正项式、$h$ 为单项式，则约束 $f(x) \le h(x)$ 可表为 $f(x)/h(x) \le 1$（因 $f/h$ 为正项式）。这包括 $f(x) \le a$（$f$ 正项式，$a &gt; 0$）作为特殊情形。类似地，若 $h_1$ 与 $h_2$ 均为非零单项式函数，则等式约束 $h_1(x) = h_2(x)$ 可表为 $h_1(x)/h_2(x) = 1$（因 $h_1/h_2$ 为单项式）。可极大化非零单项式目标函数，即极小化其倒数（仍为单项式）。</p>
+        <p>例如，考虑问题</p>
+        <p>$$\begin{array}{ll} \text{maximize} &amp; x/y \\ \text{subject to} &amp; 2 \le x \le 3 \\ &amp; x^2 + 3y/z \le \sqrt{y} \\ &amp; x/y = z^2, \end{array}$$</p>
+        <p>变量 $x, y, z \in \mathbb{R}$（含隐式约束 $x, y, z &gt; 0$）。用上述简单变换得等价的标准形式 GP</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; x^{-1}y \\ \text{subject to} &amp; 2x^{-1} \le 1, \quad (1/3)x \le 1 \\ &amp; x^2 y^{-1/2} + 3y^{1/2} z^{-1} \le 1 \\ &amp; xy^{-1} z^{-2} = 1. \end{array}$$</p>
+        <p>我们将此类容易变换为标准形式 (4.43) 的等价 GP 的问题也称为 GP。（正如我们把容易变换为 LP 的问题称为 LP。）</p></div>
+    </div>
+
+    <!-- ============== 4.5.3 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>4.5.3 Geometric program in convex form</h3></div>
+      <div class="zh"><h3>4.5.3 凸形式的几何规划</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Geometric programs are not (in general) convex optimization problems, but they can be transformed to convex problems by a change of variables and a transformation of the objective and constraint functions.</p>
+        <p>We will use the variables defined as $y_i = \log x_i$, so $x_i = e^{y_i}$. If $f$ is the monomial function of $x$ given in (4.41), i.e.,</p>
+        <p>$$ f(x) = c x_1^{a_1} x_2^{a_2} \cdots x_n^{a_n}, $$</p>
+        <p>then</p>
+        <p>$$ f(x) = f(e^{y_1}, \ldots, e^{y_n}) = c(e^{y_1})^{a_1} \cdots (e^{y_n})^{a_n} = e^{a^T y + b}, $$</p>
+        <p>where $b = \log c$. The change of variables $y_i = \log x_i$ turns a monomial function into the exponential of an affine function.</p>
+        <p>Similarly, if $f$ is the posynomial given by (4.42), i.e.,</p>
+        <p>$$ f(x) = \sum_{k=1}^K c_k x_1^{a_{1k}} x_2^{a_{2k}} \cdots x_n^{a_{nk}}, $$</p>
+        <p>then</p>
+        <p>$$ f(x) = \sum_{k=1}^K e^{a_k^T y + b_k}, $$</p>
+        <p>where $a_k = (a_{1k}, \ldots, a_{nk})$ and $b_k = \log c_k$. After the change of variables, a posynomial becomes a sum of exponentials of affine functions.</p>
+        <p>The geometric program (4.43) can be expressed in terms of the new variable $y$ as</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; \sum_{k=1}^{K_0} e^{a_{0k}^T y + b_{0k}} \\ \text{subject to} &amp; \sum_{k=1}^{K_i} e^{a_{ik}^T y + b_{ik}} \le 1, \quad i = 1,\ldots,m \\ &amp; e^{g_i^T y + h_i} = 1, \quad i = 1,\ldots,p, \end{array}$$</p>
+        <p>where $a_{ik} \in \mathbb{R}^n$, $i = 0, \ldots, m$, contain the exponents of the posynomial inequality constraints, and $g_i \in \mathbb{R}^n$, $i = 1, \ldots, p$, contain the exponents of the monomial equality constraints of the original geometric program.</p>
+        <p>Now we transform the objective and constraint functions, by taking the logarithm. This results in the problem</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; \tilde{f}_0(y) = \log\left(\sum_{k=1}^{K_0} e^{a_{0k}^T y + b_{0k}}\right) \\ \text{subject to} &amp; \tilde{f}_i(y) = \log\left(\sum_{k=1}^{K_i} e^{a_{ik}^T y + b_{ik}}\right) \le 0, \quad i = 1,\ldots,m \\ &amp; \tilde{h}_i(y) = g_i^T y + h_i = 0, \quad i = 1,\ldots,p. \end{array} \tag{4.44}$$</p>
+        <p>Since the functions $\tilde{f}_i$ are convex, and $\tilde{h}_i$ are affine, this problem is a convex optimization problem. We refer to it as a <em>geometric program in convex form</em>. To distinguish it from the original geometric program, we refer to (4.43) as a <em>geometric program in posynomial form</em>.</p></div>
+      <div class="zh"><p>几何规划一般不是凸优化问题，但可通过变量代换和目标与约束函数的变换变为凸问题。</p>
+        <p>用变量 $y_i = \log x_i$，故 $x_i = e^{y_i}$。若 $f$ 为 (4.41) 给出的 $x$ 的单项式函数，即</p>
+        <p>$$ f(x) = c x_1^{a_1} x_2^{a_2} \cdots x_n^{a_n}, $$</p>
+        <p>则</p>
+        <p>$$ f(x) = f(e^{y_1}, \ldots, e^{y_n}) = c(e^{y_1})^{a_1} \cdots (e^{y_n})^{a_n} = e^{a^T y + b}, $$</p>
+        <p>其中 $b = \log c$。变量代换 $y_i = \log x_i$ 把单项式函数变为仿射函数的指数。</p>
+        <p>类似地，若 $f$ 为 (4.42) 给出的正项式，即</p>
+        <p>$$ f(x) = \sum_{k=1}^K c_k x_1^{a_{1k}} x_2^{a_{2k}} \cdots x_n^{a_{nk}}, $$</p>
+        <p>则</p>
+        <p>$$ f(x) = \sum_{k=1}^K e^{a_k^T y + b_k}, $$</p>
+        <p>其中 $a_k = (a_{1k}, \ldots, a_{nk})$，$b_k = \log c_k$。变量代换后，正项式变为仿射函数指数之和。</p>
+        <p>几何规划 (4.43) 可用新变量 $y$ 表为</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; \sum_{k=1}^{K_0} e^{a_{0k}^T y + b_{0k}} \\ \text{subject to} &amp; \sum_{k=1}^{K_i} e^{a_{ik}^T y + b_{ik}} \le 1, \quad i = 1,\ldots,m \\ &amp; e^{g_i^T y + h_i} = 1, \quad i = 1,\ldots,p, \end{array}$$</p>
+        <p>其中 $a_{ik} \in \mathbb{R}^n$（$i = 0, \ldots, m$）含正项式不等式约束的指数，$g_i \in \mathbb{R}^n$（$i = 1, \ldots, p$）含原几何规划单项式等式约束的指数。</p>
+        <p>现在对目标与约束函数取对数变换，得问题</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; \tilde{f}_0(y) = \log\left(\sum_{k=1}^{K_0} e^{a_{0k}^T y + b_{0k}}\right) \\ \text{subject to} &amp; \tilde{f}_i(y) = \log\left(\sum_{k=1}^{K_i} e^{a_{ik}^T y + b_{ik}}\right) \le 0, \quad i = 1,\ldots,m \\ &amp; \tilde{h}_i(y) = g_i^T y + h_i = 0, \quad i = 1,\ldots,p. \end{array} \tag{4.44}$$</p>
+        <p>由于函数 $\tilde{f}_i$ 凸，$\tilde{h}_i$ 仿射，此问题为凸优化问题。我们称之为<strong>凸形式的几何规划</strong>。为与原几何规划区分，称 (4.43) 为<strong>正项式形式的几何规划</strong>。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Note that the transformation between the posynomial form geometric program (4.43) and the convex form geometric program (4.44) does not involve any computation; the problem data for the two problems are the same. It simply changes the form of the objective and constraint functions.</p>
+        <p>If the posynomial objective and constraint functions all have only one term, i.e., are monomials, then the convex form geometric program (4.44) reduces to a (general) linear program. We can therefore consider geometric programming to be a generalization, or extension, of linear programming.</p></div>
+      <div class="zh"><p>注意，正项式形式几何规划 (4.43) 与凸形式几何规划 (4.44) 之间的变换不涉及任何计算；两问题的问题数据相同。它只是改变了目标与约束函数的形式。</p>
+        <p>若正项式目标与约束函数都只有一项，即为单项式，则凸形式几何规划 (4.44) 退化为（一般）线性规划。因此可把几何规划视为线性规划的推广或扩展。</p></div>
+    </div>
+
+    <!-- ============== 4.5.4 ============== -->
+    <div class="pair head">
+      <div class="en"><h3>4.5.4 Examples</h3></div>
+      <div class="zh"><h3>4.5.4 例子</h3></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Frobenius norm diagonal scaling</h3></div>
+      <div class="zh"><h3>Frobenius 范数对角缩放</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Consider a matrix $M \in \mathbb{R}^{n \times n}$, and the associated linear function that maps $u$ into $y = Mu$. Suppose we scale the coordinates, i.e., change variables to $\tilde{u} = Du$, $\tilde{y} = Dy$, where $D$ is diagonal, with $D_{ii} &gt; 0$. In the new coordinates the linear function is given by $\tilde{y} = D M D^{-1} \tilde{u}$.</p>
+        <p>Now suppose we want to choose the scaling in such a way that the resulting matrix, $D M D^{-1}$, is small. We will use the Frobenius norm (squared) to measure the size of the matrix:</p>
+        <p>$$ \|D M D^{-1}\|_F^2 = \mathbf{tr}\left((D M D^{-1})^T (D M D^{-1})\right) = \sum_{i,j=1}^n (D M D^{-1})_{ij}^2 = \sum_{i,j=1}^n M_{ij}^2 d_i^2/d_j^2, $$</p>
+        <p>where $D = \mathbf{diag}(d)$. Since this is a posynomial in $d$, the problem of choosing the scaling $d$ to minimize the Frobenius norm is an unconstrained geometric program,</p>
+        <p>$$ \text{minimize} \quad \sum_{i,j=1}^n M_{ij}^2 d_i^2/d_j^2, $$</p>
+        <p>with variable $d$. The only exponents in this geometric program are $0$, $2$, and $-2$.</p></div>
+      <div class="zh"><p>考虑矩阵 $M \in \mathbb{R}^{n \times n}$ 及将 $u$ 映为 $y = Mu$ 的关联线性函数。设我们对坐标作缩放，即令 $\tilde{u} = Du$、$\tilde{y} = Dy$，其中 $D$ 对角且 $D_{ii} &gt; 0$。新坐标下线性函数为 $\tilde{y} = D M D^{-1} \tilde{u}$。</p>
+        <p>设要选择缩放使所得矩阵 $D M D^{-1}$ 尺度小。用 Frobenius 范数（平方）度量矩阵大小：</p>
+        <p>$$ \|D M D^{-1}\|_F^2 = \mathbf{tr}\left((D M D^{-1})^T (D M D^{-1})\right) = \sum_{i,j=1}^n (D M D^{-1})_{ij}^2 = \sum_{i,j=1}^n M_{ij}^2 d_i^2/d_j^2, $$</p>
+        <p>其中 $D = \mathbf{diag}(d)$。由于这是 $d$ 的正项式，选择缩放 $d$ 极小化 Frobenius 范数的问题是无约束几何规划：</p>
+        <p>$$ \text{minimize} \quad \sum_{i,j=1}^n M_{ij}^2 d_i^2/d_j^2, $$</p>
+        <p>变量为 $d$。该几何规划中仅有的指数为 $0$、$2$、$-2$。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Design of a cantilever beam</h3></div>
+      <div class="zh"><h3>悬臂梁设计</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>We consider the design of a cantilever beam, which consists of $N$ segments, numbered from right to left as $1, \ldots, N$, as shown in figure 4.6. Each segment has unit length and a uniform rectangular cross-section with width $w_i$ and height $h_i$. A vertical load (force) $F$ is applied at the right end of the beam. This load causes the beam to deflect (downward), and induces stress in each segment of the beam. We assume that the deflections are small, and that the material is linearly elastic, with Young&rsquo;s modulus $E$.</p></div>
+      <div class="zh"><p>考虑悬臂梁的设计，它由 $N$ 段组成，从右到左编号为 $1, \ldots, N$，如图 4.6 所示。每段单位长度，均匀矩形截面，宽 $w_i$，高 $h_i$。右端施加竖向载荷（力）$F$。该载荷使梁（向下）挠曲，并在各段引起应力。设挠度很小，材料为线弹性，Young 模量为 $E$。</p></div>
+    </div>
+
+    <!-- ===== Figure 4.6 ===== -->
+    <div class="pair fig-block">
+      <div class="figure-wrap">
+        <img src="assets/figures/fig4.6.png" alt="Figure 4.6: segmented cantilever beam">
+        <div class="fig-caption">
+          <div class="cap-en"><span class="figref">Figure 4.6</span> Segmented cantilever beam with 4 segments. Each segment has unit length and a rectangular profile. A vertical force $F$ is applied at the right end of the beam.</div>
+          <div class="cap-zh"><span class="figref">图 4.6</span> 含 4 段的分段悬臂梁。每段单位长度、矩形截面。梁右端施加竖向力 $F$。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>The design variables in the problem are the widths $w_i$ and heights $h_i$ of the $N$ segments. We seek to minimize the total volume of the beam (which is proportional to its weight),</p>
+        <p>$$ w_1 h_1 + \cdots + w_N h_N, $$</p>
+        <p>subject to some design constraints. We impose upper and lower bounds on width and height of the segments,</p>
+        <p>$$ w_{\min} \le w_i \le w_{\max}, \quad h_{\min} \le h_i \le h_{\max}, \quad i = 1, \ldots, N, $$</p>
+        <p>as well as the aspect ratios,</p>
+        <p>$$ S_{\min} \le h_i/w_i \le S_{\max}. $$</p>
+        <p>In addition, we have a limit on the maximum allowable stress in the material, and on the vertical deflection at the end of the beam.</p>
+        <p>We first consider the maximum stress constraint. The maximum stress in segment $i$, which we denote $\sigma_i$, is given by $\sigma_i = 6iF/(w_i h_i^2)$. We impose the constraints</p>
+        <p>$$ \frac{6iF}{w_i h_i^2} \le \sigma_{\max}, \quad i = 1, \ldots, N, $$</p>
+        <p>to ensure that the stress does not exceed the maximum allowable value $\sigma_{\max}$ anywhere in the beam.</p>
+        <p>The last constraint is a limit on the vertical deflection at the end of the beam, which we will denote $y_1$:</p>
+        <p>$$ y_1 \le y_{\max}. $$</p>
+        <p>The deflection $y_1$ can be found by a recursion that involves the deflection and slope of the beam segments:</p>
+        <p>$$ v_i = \frac{12(i - 1/2)F}{E w_i h_i^3} + v_{i+1}, \qquad y_i = \frac{6(i - 1/3)F}{E w_i h_i^3} + v_{i+1} + y_{i+1}, \tag{4.45}$$</p>
+        <p>for $i = N, N-1, \ldots, 1$, with starting values $v_{N+1} = y_{N+1} = 0$. In this recursion, $y_i$ is the deflection at the right end of segment $i$, and $v_i$ is the slope at that point.</p>
+        <p>We can use the recursion (4.45) to show that these deflection and slope quantities are in fact posynomial functions of the variables $w$ and $h$. We first note that $v_{N+1}$ and $y_{N+1}$ are zero, and therefore posynomials. Now assume that $v_{i+1}$ and $y_{i+1}$ are posynomial functions of $w$ and $h$. The lefthand equation in (4.45) shows that $v_i$ is the sum of a monomial and a posynomial (i.e., $v_{i+1}$), and therefore is a posynomial. From the righthand equation in (4.45), we see that the deflection $y_i$ is the sum of a monomial and two posynomials ($v_{i+1}$ and $y_{i+1}$), and so is a posynomial. In particular, the deflection at the end of the beam, $y_1$, is a posynomial.</p>
+        <p>The problem is then</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; \sum_{i=1}^N w_i h_i \\ \text{subject to} &amp; w_{\min} \le w_i \le w_{\max}, \quad i = 1,\ldots,N \\ &amp; h_{\min} \le h_i \le h_{\max}, \quad i = 1,\ldots,N \\ &amp; S_{\min} \le h_i/w_i \le S_{\max}, \quad i = 1,\ldots,N \\ &amp; 6iF/(w_i h_i^2) \le \sigma_{\max}, \quad i = 1,\ldots,N \\ &amp; y_1 \le y_{\max}, \end{array} \tag{4.46}$$</p>
+        <p>with variables $w$ and $h$. This is a GP, since the objective is a posynomial, and the constraints can all be expressed as posynomial inequalities. (In fact, the constraints can all be expressed as monomial inequalities, with the exception of the deflection limit, which is a complicated posynomial inequality.)</p>
+        <p>When the number of segments $N$ is large, the number of monomial terms appearing in the posynomial $y_1$ grows approximately as $N^2$. Another formulation of this problem, explored in exercise 4.31, is obtained by introducing $v_1, \ldots, v_N$ and $y_1, \ldots, y_N$ as variables, and including a modified version of the recursion as a set of constraints. This formulation avoids this growth in the number of monomial terms.</p></div>
+      <div class="zh"><p>问题的设计变量为 $N$ 段的宽度 $w_i$ 与高度 $h_i$。我们要极小化梁的总体积（与其重量成正比），</p>
+        <p>$$ w_1 h_1 + \cdots + w_N h_N, $$</p>
+        <p>并满足某些设计约束。对各段宽高施加上下界：</p>
+        <p>$$ w_{\min} \le w_i \le w_{\max}, \quad h_{\min} \le h_i \le h_{\max}, \quad i = 1, \ldots, N, $$</p>
+        <p>以及长宽比：</p>
+        <p>$$ S_{\min} \le h_i/w_i \le S_{\max}. $$</p>
+        <p>此外，对材料最大容许应力和梁末端竖向挠度有限制。</p>
+        <p>先考虑最大应力约束。第 $i$ 段的最大应力记为 $\sigma_i$，由 $\sigma_i = 6iF/(w_i h_i^2)$ 给出。施加约束</p>
+        <p>$$ \frac{6iF}{w_i h_i^2} \le \sigma_{\max}, \quad i = 1, \ldots, N, $$</p>
+        <p>以确保梁中任何位置的应力不超过最大容许值 $\sigma_{\max}$。</p>
+        <p>最后一个约束是梁末端竖向挠度（记为 $y_1$）的限值：</p>
+        <p>$$ y_1 \le y_{\max}. $$</p>
+        <p>挠度 $y_1$ 可通过涉及各段挠度与斜率的递推求得：</p>
+        <p>$$ v_i = \frac{12(i - 1/2)F}{E w_i h_i^3} + v_{i+1}, \qquad y_i = \frac{6(i - 1/3)F}{E w_i h_i^3} + v_{i+1} + y_{i+1}, \tag{4.45}$$</p>
+        <p>对 $i = N, N-1, \ldots, 1$，初始值 $v_{N+1} = y_{N+1} = 0$。此递推中，$y_i$ 为第 $i$ 段右端挠度，$v_i$ 为该点斜率。</p>
+        <p>用递推 (4.45) 可证这些挠度与斜率量实为变量 $w$ 和 $h$ 的正项式函数。先注意 $v_{N+1}$ 与 $y_{N+1}$ 为零，从而是正项式。设 $v_{i+1}$ 与 $y_{i+1}$ 为 $w$ 和 $h$ 的正项式函数。(4.45) 左式表明 $v_i$ 是一个单项式与一个正项式（即 $v_{i+1}$）之和，故为正项式。由 (4.45) 右式，挠度 $y_i$ 是一个单项式与两个正项式（$v_{i+1}$ 与 $y_{i+1}$）之和，故为正项式。特别地，梁末端挠度 $y_1$ 是正项式。</p>
+        <p>问题即</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; \sum_{i=1}^N w_i h_i \\ \text{subject to} &amp; w_{\min} \le w_i \le w_{\max}, \quad i = 1,\ldots,N \\ &amp; h_{\min} \le h_i \le h_{\max}, \quad i = 1,\ldots,N \\ &amp; S_{\min} \le h_i/w_i \le S_{\max}, \quad i = 1,\ldots,N \\ &amp; 6iF/(w_i h_i^2) \le \sigma_{\max}, \quad i = 1,\ldots,N \\ &amp; y_1 \le y_{\max}, \end{array} \tag{4.46}$$</p>
+        <p>变量为 $w$ 与 $h$。这是 GP，因为目标是正项式，约束都可表为正项式不等式。（事实上，除挠度限值这一复杂正项式不等式外，约束都可表为单项式不等式。）</p>
+        <p>当段数 $N$ 较大时，正项式 $y_1$ 中的单项式项数约以 $N^2$ 增长。习题 4.31 探讨了此问题的另一种表述：引入 $v_1, \ldots, v_N$ 与 $y_1, \ldots, y_N$ 作为变量，并将递推的修改版本作为一组约束。此表述避免了单项式项数的这种增长。</p></div>
+    </div>
+
+    <div class="pair head">
+      <div class="en"><h3>Minimizing spectral radius via Perron-Frobenius theory</h3></div>
+      <div class="zh"><h3>通过 Perron-Frobenius 理论极小化谱半径</h3></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>Suppose the matrix $A \in \mathbb{R}^{n \times n}$ is elementwise nonnegative, i.e., $A_{ij} \ge 0$ for $i, j = 1, \ldots, n$, and <em>irreducible</em>, which means that the matrix $(I + A)^{n-1}$ is elementwise positive. The Perron-Frobenius theorem states that $A$ has a positive real eigenvalue $\lambda_{\mathrm{pf}}$ equal to its spectral radius, i.e., the largest magnitude of its eigenvalues. The Perron-Frobenius eigenvalue $\lambda_{\mathrm{pf}}$ determines the asymptotic rate of growth or decay of $A^k$, as $k \to \infty$; in fact, the matrix $((1/\lambda_{\mathrm{pf}})A)^k$ converges. Roughly speaking, this means that as $k \to \infty$, $A^k$ grows like $\lambda_{\mathrm{pf}}^k$, if $\lambda_{\mathrm{pf}} &gt; 1$, or decays like $\lambda_{\mathrm{pf}}^k$, if $\lambda_{\mathrm{pf}} &lt; 1$.</p>
+        <p>A basic result in the theory of nonnegative matrices states that the Perron-Frobenius eigenvalue is given by</p>
+        <p>$$ \lambda_{\mathrm{pf}} = \inf\{\lambda \mid Av \preceq \lambda v \text{ for some } v \succ 0\} $$</p>
+        <p>(and moreover, that the infimum is achieved). The inequality $Av \preceq \lambda v$ can be expressed as</p>
+        <p>$$ \sum_{j=1}^n A_{ij} v_j / (\lambda v_i) \le 1, \quad i = 1, \ldots, n, \tag{4.47}$$</p>
+        <p>which is a set of posynomial inequalities in the variables $A_{ij}$, $v_i$, and $\lambda$. Thus, the condition that $\lambda_{\mathrm{pf}} \le \lambda$ can be expressed as a set of posynomial inequalities in $A$, $v$, and $\lambda$. This allows us to solve some optimization problems involving the Perron-Frobenius eigenvalue using geometric programming.</p>
+        <p>Suppose that the entries of the matrix $A$ are posynomial functions of some underlying variable $x \in \mathbb{R}^k$. In this case the inequalities (4.47) are posynomial inequalities in the variables $x \in \mathbb{R}^k$, $v \in \mathbb{R}^n$, and $\lambda \in \mathbb{R}$. We consider the problem of choosing $x$ to minimize the Perron-Frobenius eigenvalue (or spectral radius) of $A$, possibly subject to posynomial inequalities on $x$,</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; \lambda_{\mathrm{pf}}(A(x)) \\ \text{subject to} &amp; f_i(x) \le 1, \quad i = 1,\ldots,p, \end{array}$$</p>
+        <p>where $f_i$ are posynomials. Using the characterization above, we can express this problem as the GP</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; \lambda \\ \text{subject to} &amp; \sum_{j=1}^n A_{ij} v_j/(\lambda v_i) \le 1, \quad i = 1,\ldots,n \\ &amp; f_i(x) \le 1, \quad i = 1,\ldots,p, \end{array}$$</p>
+        <p>where the variables are $x$, $v$, and $\lambda$.</p></div>
+      <div class="zh"><p>设矩阵 $A \in \mathbb{R}^{n \times n}$ 逐元素非负，即 $A_{ij} \ge 0$（$i, j = 1, \ldots, n$），且<em>不可约</em>，即矩阵 $(I + A)^{n-1}$ 逐元素为正。Perron-Frobenius 定理指出：$A$ 有一个正实特征值 $\lambda_{\mathrm{pf}}$ 等于其谱半径（即特征值模的最大值）。Perron-Frobenius 特征值 $\lambda_{\mathrm{pf}}$ 决定 $A^k$ 当 $k \to \infty$ 时的渐近增长或衰减率；事实上，矩阵 $((1/\lambda_{\mathrm{pf}})A)^k$ 收敛。粗略地说，$k \to \infty$ 时，若 $\lambda_{\mathrm{pf}} &gt; 1$，$A^k$ 如 $\lambda_{\mathrm{pf}}^k$ 增长；若 $\lambda_{\mathrm{pf}} &lt; 1$，如 $\lambda_{\mathrm{pf}}^k$ 衰减。</p>
+        <p>非负矩阵理论的一个基本结果是 Perron-Frobenius 特征值由</p>
+        <p>$$ \lambda_{\mathrm{pf}} = \inf\{\lambda \mid Av \preceq \lambda v \text{ 对某 } v \succ 0\} $$</p>
+        <p>给出（且下确界可达）。不等式 $Av \preceq \lambda v$ 可表为</p>
+        <p>$$ \sum_{j=1}^n A_{ij} v_j / (\lambda v_i) \le 1, \quad i = 1, \ldots, n, \tag{4.47}$$</p>
+        <p>这是关于变量 $A_{ij}$、$v_i$、$\lambda$ 的一组正项式不等式。因此，条件 $\lambda_{\mathrm{pf}} \le \lambda$ 可表为关于 $A$、$v$、$\lambda$ 的一组正项式不等式。这使我们能用几何规划求解涉及 Perron-Frobenius 特征值的某些优化问题。</p>
+        <p>设矩阵 $A$ 的项为某基础变量 $x \in \mathbb{R}^k$ 的正项式函数。此时不等式 (4.47) 为关于变量 $x \in \mathbb{R}^k$、$v \in \mathbb{R}^n$、$\lambda \in \mathbb{R}$ 的正项式不等式。考虑选择 $x$ 极小化 $A$ 的 Perron-Frobenius 特征值（谱半径）、可能受对 $x$ 的正项式不等式约束的问题：</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; \lambda_{\mathrm{pf}}(A(x)) \\ \text{subject to} &amp; f_i(x) \le 1, \quad i = 1,\ldots,p, \end{array}$$</p>
+        <p>其中 $f_i$ 为正项式。用上述刻画，此问题可表为 GP</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; \lambda \\ \text{subject to} &amp; \sum_{j=1}^n A_{ij} v_j/(\lambda v_i) \le 1, \quad i = 1,\ldots,n \\ &amp; f_i(x) \le 1, \quad i = 1,\ldots,p, \end{array}$$</p>
+        <p>变量为 $x$、$v$、$\lambda$。</p></div>
+    </div>
+
+    <div class="pair">
+      <div class="en"><p>As a specific example, we consider a simple model for the population dynamics for a bacterium, with time or period denoted by $t = 0, 1, 2, \ldots$, in hours. The vector $p(t) \in \mathbb{R}^4_+$ characterizes the population age distribution at period $t$: $p_1(t)$ is the total population between 0 and 1 hours old; $p_2(t)$ is the total population between 1 and 2 hours old; and so on. We (arbitrarily) assume that no bacteria live more than 4 hours. The population propagates in time as $p(t+1) = Ap(t)$, where</p>
+        <p>$$ A = \begin{bmatrix} b_1 &amp; b_2 &amp; b_3 &amp; b_4 \\ s_1 &amp; 0 &amp; 0 &amp; 0 \\ 0 &amp; s_2 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; s_3 &amp; 0 \end{bmatrix}. $$</p>
+        <p>Here $b_i$ is the birth rate among bacteria in age group $i$, and $s_i$ is the survival rate from age group $i$ into age group $i+1$. We assume that $b_i &gt; 0$ and $0 &lt; s_i &lt; 1$, which implies that the matrix $A$ is irreducible.</p>
+        <p>The Perron-Frobenius eigenvalue of $A$ determines the asymptotic growth or decay rate of the population. If $\lambda_{\mathrm{pf}} &lt; 1$, the population converges to zero like $\lambda_{\mathrm{pf}}^t$, and so has a half-life of $-1/\log_2 \lambda_{\mathrm{pf}}$ hours. If $\lambda_{\mathrm{pf}} &gt; 1$ the population grows geometrically like $\lambda_{\mathrm{pf}}^t$, with a doubling time of $1/\log_2 \lambda_{\mathrm{pf}}$ hours. Minimizing the spectral radius of $A$ corresponds to finding the fastest decay rate, or slowest growth rate, for the population.</p>
+        <p>As our underlying variables, on which the matrix $A$ depends, we take $c_1$ and $c_2$, the concentrations of two chemicals in the environment that affect the birth and survival rates of the bacteria. We model the birth and survival rates as monomial functions of the two concentrations:</p>
+        <p>$$ b_i = b_i^{\mathrm{nom}}(c_1/c_1^{\mathrm{nom}})^{\alpha_i}(c_2/c_2^{\mathrm{nom}})^{\beta_i}, \quad i = 1, \ldots, 4 $$</p>
+        <p>$$ s_i = s_i^{\mathrm{nom}}(c_1/c_1^{\mathrm{nom}})^{\gamma_i}(c_2/c_2^{\mathrm{nom}})^{\delta_i}, \quad i = 1, \ldots, 3. $$</p>
+        <p>Here, $b_i^{\mathrm{nom}}$ is nominal birth rate, $s_i^{\mathrm{nom}}$ is nominal survival rate, and $c_i^{\mathrm{nom}}$ is nominal concentration of chemical $i$. The constants $\alpha_i, \beta_i, \gamma_i$, and $\delta_i$ give the effect on the birth and survival rates due to changes in the concentrations of the chemicals away from the nominal values. For example $\alpha_2 = -0.3$ and $\gamma_1 = 0.5$ means that an increase in concentration of chemical 1, over the nominal concentration, causes a decrease in the birth rate of bacteria that are between 1 and 2 hours old, and an increase in the survival rate of bacteria from 0 to 1 hours old.</p>
+        <p>We assume that the concentrations $c_1$ and $c_2$ can be independently increased or decreased (say, within a factor of 2), by administering drugs, and pose the problem of finding the drug mix that maximizes the population decay rate (i.e., minimizes $\lambda_{\mathrm{pf}}(A)$). Using the approach described above, this problem can be posed as the GP</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; \lambda \\ \text{subject to} &amp; b_1 v_1 + b_2 v_2 + b_3 v_3 + b_4 v_4 \le \lambda v_1 \\ &amp; s_1 v_1 \le \lambda v_2 \\ &amp; s_2 v_2 \le \lambda v_3 \\ &amp; s_3 v_3 \le \lambda v_4 \\ &amp; 1/2 \le c_i/c_i^{\mathrm{nom}} \le 2, \quad i = 1, 2 \\ &amp; b_i = b_i^{\mathrm{nom}}(c_1/c_1^{\mathrm{nom}})^{\alpha_i}(c_2/c_2^{\mathrm{nom}})^{\beta_i}, \quad i = 1,\ldots,4 \\ &amp; s_i = s_i^{\mathrm{nom}}(c_1/c_1^{\mathrm{nom}})^{\gamma_i}(c_2/c_2^{\mathrm{nom}})^{\delta_i}, \quad i = 1,\ldots,3, \end{array}$$</p>
+        <p>with variables $b_i$, $s_i$, $c_i$, $v_i$, and $\lambda$.</p></div>
+      <div class="zh"><p>作为具体例子，考虑细菌种群动力学的简单模型，时间或周期记为 $t = 0, 1, 2, \ldots$（以小时计）。向量 $p(t) \in \mathbb{R}^4_+$ 刻画第 $t$ 周期的种群年龄分布：$p_1(t)$ 为 0 至 1 小时的种群总数；$p_2(t)$ 为 1 至 2 小时的总数；依此类推。我们（任意地）假设细菌寿命不超过 4 小时。种群按 $p(t+1) = Ap(t)$ 随时间演化，其中</p>
+        <p>$$ A = \begin{bmatrix} b_1 &amp; b_2 &amp; b_3 &amp; b_4 \\ s_1 &amp; 0 &amp; 0 &amp; 0 \\ 0 &amp; s_2 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; s_3 &amp; 0 \end{bmatrix}. $$</p>
+        <p>此处 $b_i$ 为年龄组 $i$ 的出生率，$s_i$ 为从年龄组 $i$ 到 $i+1$ 的存活率。设 $b_i &gt; 0$ 且 $0 &lt; s_i &lt; 1$，这蕴涵矩阵 $A$ 不可约。</p>
+        <p>$A$ 的 Perron-Frobenius 特征值决定种群的渐近增长或衰减率。若 $\lambda_{\mathrm{pf}} &lt; 1$，种群如 $\lambda_{\mathrm{pf}}^t$ 收敛到零，半衰期为 $-1/\log_2 \lambda_{\mathrm{pf}}$ 小时。若 $\lambda_{\mathrm{pf}} &gt; 1$，种群如 $\lambda_{\mathrm{pf}}^t$ 几何增长，倍增时间为 $1/\log_2 \lambda_{\mathrm{pf}}$ 小时。极小化 $A$ 的谱半径对应于求最快衰减率或最慢增长率。</p>
+        <p>作为矩阵 $A$ 所依赖的基础变量，取 $c_1$ 与 $c_2$——环境中影响细菌出生率与存活率的两种化学物质的浓度。将出生率与存活率建模为两浓度的单项式函数：</p>
+        <p>$$ b_i = b_i^{\mathrm{nom}}(c_1/c_1^{\mathrm{nom}})^{\alpha_i}(c_2/c_2^{\mathrm{nom}})^{\beta_i}, \quad i = 1, \ldots, 4 $$</p>
+        <p>$$ s_i = s_i^{\mathrm{nom}}(c_1/c_1^{\mathrm{nom}})^{\gamma_i}(c_2/c_2^{\mathrm{nom}})^{\delta_i}, \quad i = 1, \ldots, 3. $$</p>
+        <p>此处 $b_i^{\mathrm{nom}}$ 为名义出生率，$s_i^{\mathrm{nom}}$ 为名义存活率，$c_i^{\mathrm{nom}}$ 为化学物质 $i$ 的名义浓度。常数 $\alpha_i, \beta_i, \gamma_i, \delta_i$ 给出化学物质浓度偏离名义值时对出生率与存活率的影响。例如 $\alpha_2 = -0.3$、$\gamma_1 = 0.5$ 表示化学物质 1 浓度高于名义值时，1 至 2 小时细菌的出生率降低，0 至 1 小时细菌的存活率升高。</p>
+        <p>设浓度 $c_1$ 与 $c_2$ 可独立增减（例如在 2 倍以内），通过施药实现，问题为求使种群衰减率最大（即 $\lambda_{\mathrm{pf}}(A)$ 最小）的药物配比。用上述方法，此问题可表为 GP</p>
+        <p>$$\begin{array}{ll} \text{minimize} &amp; \lambda \\ \text{subject to} &amp; b_1 v_1 + b_2 v_2 + b_3 v_3 + b_4 v_4 \le \lambda v_1 \\ &amp; s_1 v_1 \le \lambda v_2 \\ &amp; s_2 v_2 \le \lambda v_3 \\ &amp; s_3 v_3 \le \lambda v_4 \\ &amp; 1/2 \le c_i/c_i^{\mathrm{nom}} \le 2, \quad i = 1, 2 \\ &amp; b_i = b_i^{\mathrm{nom}}(c_1/c_1^{\mathrm{nom}})^{\alpha_i}(c_2/c_2^{\mathrm{nom}})^{\beta_i}, \quad i = 1,\ldots,4 \\ &amp; s_i = s_i^{\mathrm{nom}}(c_1/c_1^{\mathrm{nom}})^{\gamma_i}(c_2/c_2^{\mathrm{nom}})^{\delta_i}, \quad i = 1,\ldots,3, \end{array}$$</p>
+        <p>变量为 $b_i$、$s_i$、$c_i$、$v_i$、$\lambda$。</p></div>
+    </div>
