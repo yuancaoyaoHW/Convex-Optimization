@@ -36,6 +36,7 @@ jobs:
           cp translation/giscus-config.json _site/giscus-config.json
           cp translation/annotations.json _site/annotations.json
           cp translation/annotations-index.json _site/annotations-index.json
+          cp translation/annotated-pairs.json _site/annotated-pairs.json
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4

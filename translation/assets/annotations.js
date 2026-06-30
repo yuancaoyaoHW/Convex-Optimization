@@ -1,6 +1,7 @@
 (function () {
   const annotationsUrl = "annotations.json";
   const giscusConfigUrl = "giscus-config.json";
+  const annotatedPairsUrl = "annotated-pairs.json";
   const pageName = window.location.pathname.split("/").pop() || "index.html";
 
   function ensureModal() {
@@ -150,7 +151,7 @@
     }
   }
 
-  function attachAnnotations(items, config) {
+  function attachAnnotations(items, config, annotatedSet) {
     const grouped = groupByPair(items.filter(function (item) {
       return item.page === pageName;
     }));
@@ -158,10 +159,19 @@
     document.querySelectorAll(".pair").forEach(function (pair, index) {
       const pairIndex = index + 1;
       const annotations = grouped.get(pairIndex) || [];
+      const giscusCount = annotatedSet ? annotatedSet.get(pairIndex) : 0;
       const button = document.createElement("button");
       button.className = "annotation-button";
       button.type = "button";
-      button.textContent = annotations.length > 0 ? "\u6279\u6ce8 " + annotations.length : "\u6279\u6ce8";
+      if (giscusCount > 0) {
+        button.classList.add("has-comments");
+        button.textContent = "💬 " + giscusCount;
+        pair.classList.add("has-annotations");
+      } else if (annotations.length > 0) {
+        button.textContent = "\u6279\u6ce8 " + annotations.length;
+      } else {
+        button.textContent = "\u6279\u6ce8";
+      }
       button.addEventListener("click", function () {
         openPairModal(pairIndex, annotations, config);
       });
@@ -186,15 +196,34 @@
     if (btn) btn.click();
   }
 
+  function buildAnnotatedSet(data) {
+    const set = new Map();
+    if (!data || !data.pairs) return set;
+    data.pairs.forEach(function (p) {
+      if (p.page === pageName && p.pair > 0) {
+        set.set(p.pair, p.comments || 0);
+      }
+    });
+    return set;
+  }
+
+  function fetchJsonSafe(url) {
+    return fetch(url).then(function (r) {
+      if (!r.ok) return null;
+      return r.json();
+    }).catch(function () { return null; });
+  }
+
   document.addEventListener("keydown", function (event) {
     if (event.key === "Escape") closeModal();
   });
 
   Promise.all([
     fetchJson(annotationsUrl),
-    fetchJson(giscusConfigUrl)
+    fetchJson(giscusConfigUrl),
+    fetchJsonSafe(annotatedPairsUrl)
   ]).then(function (results) {
-    attachAnnotations(results[0], results[1]);
+    attachAnnotations(results[0], results[1], buildAnnotatedSet(results[2]));
     openPairFromHash();
   });
 })();

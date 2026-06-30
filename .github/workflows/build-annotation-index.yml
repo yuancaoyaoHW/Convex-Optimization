@@ -1,0 +1,43 @@
+name: Build annotation index
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "translation/_build_annotated_pairs.py"
+      - ".github/workflows/build-annotation-index.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: annotation-index
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run GraphQL query and build index
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python translation/_build_annotated_pairs.py
+
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet translation/annotated-pairs.json; then
+            echo "no changes — skipping commit"
+          else
+            git add translation/annotated-pairs.json
+            git commit -m "Update annotated-pairs index [skip ci]"
+            git push
+          fi

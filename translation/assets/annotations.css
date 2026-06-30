@@ -26,6 +26,21 @@
   outline: none;
 }
 
+.annotation-button.has-comments {
+  background: var(--accent);
+  color: #fff;
+}
+
+.annotation-button.has-comments:hover,
+.annotation-button.has-comments:focus-visible {
+  filter: brightness(1.08);
+}
+
+.pair.has-annotations {
+  border-left: 3px solid var(--accent);
+  padding-left: 10px;
+}
+
 .annotation-modal {
   position: fixed;
   inset: 0;
