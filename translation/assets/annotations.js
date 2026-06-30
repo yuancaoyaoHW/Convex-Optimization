@@ -1,7 +1,7 @@
 (function () {
-  const dataUrl = "annotations.json";
+  const annotationsUrl = "annotations.json";
+  const giscusConfigUrl = "giscus-config.json";
   const pageName = window.location.pathname.split("/").pop() || "index.html";
-  const authoringMode = new URLSearchParams(window.location.search).get("annotate") === "1";
 
   function ensureModal() {
     let modal = document.querySelector(".annotation-modal");
@@ -37,25 +37,6 @@
     document.body.classList.remove("annotation-lock");
   }
 
-  function openModal(items) {
-    const modal = ensureModal();
-    modal.querySelector(".annotation-heading").textContent = "\u6279\u6ce8";
-    const list = modal.querySelector(".annotation-list");
-    list.innerHTML = items.map(function (item) {
-      return [
-        '<article class="annotation-card">',
-        '  <h3 class="annotation-title">' + escapeHtml(item.title) + "</h3>",
-        '  <div class="annotation-body">' + item.body + "</div>",
-        "</article>"
-      ].join("");
-    }).join("");
-    showModal(modal);
-
-    if (window.MathJax && window.MathJax.typesetPromise) {
-      window.MathJax.typesetPromise([list]);
-    }
-  }
-
   function showModal(modal) {
     modal.classList.add("is-open");
     document.body.classList.add("annotation-lock");
@@ -80,117 +61,118 @@
     }, new Map());
   }
 
-  function annotationObject(pairIndex, title, body) {
-    return {
-      page: pageName,
-      pair: pairIndex,
-      title: title,
-      body: body
-    };
+  function staticAnnotationHtml(items) {
+    if (!items || items.length === 0) return "";
+
+    return [
+      '<section class="annotation-section">',
+      '  <h3 class="annotation-section-title">\u7ad9\u5185\u6279\u6ce8</h3>',
+      items.map(function (item) {
+        return [
+          '<article class="annotation-card">',
+          '  <h4 class="annotation-title">' + escapeHtml(item.title) + "</h4>",
+          '  <div class="annotation-body">' + item.body + "</div>",
+          "</article>"
+        ].join("");
+      }).join(""),
+      "</section>"
+    ].join("");
   }
 
-  function renderGeneratedJson(pairIndex, form) {
-    const title = form.querySelector("[data-annotation-title]").value.trim();
-    const body = form.querySelector("[data-annotation-body]").value.trim();
-    const output = form.querySelector("[data-annotation-output]");
-    output.value = JSON.stringify(annotationObject(pairIndex, title, body), null, 2);
-    return output.value;
+  function requiredConfigMissing(config) {
+    return ["repo", "repoId", "category", "categoryId"].filter(function (key) {
+      return !config[key] || !String(config[key]).trim();
+    });
   }
 
-  function downloadJson(value) {
-    const blob = new Blob([value + "\n"], { type: "application/json" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "annotation-snippet.json";
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    URL.revokeObjectURL(link.href);
+  function setupHtml(term, missing) {
+    return [
+      '<section class="annotation-setup">',
+      '  <h3 class="annotation-section-title">Giscus \u672a\u914d\u7f6e</h3>',
+      "  <p>\u8981\u5728 GitHub Pages \u4e0a\u76f4\u63a5\u65b0\u589e\u6279\u6ce8\uff0c\u9700\u8981\u5148\u5728 <a href=\"https://giscus.app\" target=\"_blank\" rel=\"noopener\">giscus.app</a> \u751f\u6210\u771f\u5b9e\u914d\u7f6e\u3002</p>",
+      "  <p>\u5f53\u524d\u7f3a\u5c11\uff1a<code>" + missing.map(escapeHtml).join("</code>, <code>") + "</code></p>",
+      '  <p class="annotation-term">\u672c\u6bb5 term: <code>' + escapeHtml(term) + "</code></p>",
+      "</section>"
+    ].join("");
   }
 
-  function openEditor(pairIndex) {
+  function giscusContainerHtml(term) {
+    return [
+      '<section class="annotation-section">',
+      '  <h3 class="annotation-section-title">GitHub \u8ba8\u8bba</h3>',
+      '  <p class="annotation-term">term: <code>' + escapeHtml(term) + "</code></p>",
+      '  <div class="annotation-giscus"></div>',
+      "</section>"
+    ].join("");
+  }
+
+  function loadGiscus(container, config, term) {
+    const script = document.createElement("script");
+    script.src = "https://giscus.app/client.js";
+    script.async = true;
+    script.crossOrigin = "anonymous";
+    script.setAttribute("data-repo", config.repo);
+    script.setAttribute("data-repo-id", config.repoId);
+    script.setAttribute("data-category", config.category);
+    script.setAttribute("data-category-id", config.categoryId);
+    script.setAttribute("data-mapping", "specific");
+    script.setAttribute("data-term", term);
+    script.setAttribute("data-strict", "1");
+    script.setAttribute("data-reactions-enabled", config.reactionsEnabled || "1");
+    script.setAttribute("data-emit-metadata", config.emitMetadata || "0");
+    script.setAttribute("data-input-position", config.inputPosition || "bottom");
+    script.setAttribute("data-theme", config.theme || "light");
+    script.setAttribute("data-lang", config.lang || "zh-CN");
+    container.appendChild(script);
+  }
+
+  function openPairModal(pairIndex, items, config) {
     const modal = ensureModal();
-    modal.querySelector(".annotation-heading").textContent = "\u65b0\u589e\u6279\u6ce8";
+    const term = pageName + "#pair-" + pairIndex;
+    const missing = requiredConfigMissing(config);
+    modal.querySelector(".annotation-heading").textContent = "\u6279\u6ce8";
+
     const list = modal.querySelector(".annotation-list");
     list.innerHTML = [
-      '<form class="annotation-editor">',
-      '  <div class="annotation-meta">page: <code>' + escapeHtml(pageName) + "</code> / pair: <code>" + pairIndex + "</code></div>",
-      '  <label class="annotation-field">',
-      '    <span>\u6807\u9898</span>',
-      '    <input class="annotation-input" data-annotation-title type="text" value="">',
-      "  </label>",
-      '  <label class="annotation-field">',
-      '    <span>\u6b63\u6587 HTML</span>',
-      '    <textarea class="annotation-textarea" data-annotation-body rows="8" placeholder="<p>\u8fd9\u91cc\u5199\u6279\u6ce8\uff0c\u652f\u6301 MathJax\uff1a$x \\\\in C$\u3002</p>"></textarea>',
-      "  </label>",
-      '  <label class="annotation-field">',
-      '    <span>\u751f\u6210\u7684 JSON</span>',
-      '    <textarea class="annotation-output" data-annotation-output rows="9" readonly></textarea>',
-      "  </label>",
-      '  <div class="annotation-actions">',
-      '    <button class="annotation-copy" type="button">\u590d\u5236 JSON</button>',
-      '    <button class="annotation-download" type="button">\u4e0b\u8f7d JSON</button>',
-      '    <span class="annotation-copy-status" aria-live="polite"></span>',
-      "  </div>",
-      "</form>"
+      '<div class="annotation-meta">page: <code>' + escapeHtml(pageName) + "</code> / pair: <code>" + pairIndex + "</code></div>",
+      staticAnnotationHtml(items),
+      missing.length ? setupHtml(term, missing) : giscusContainerHtml(term)
     ].join("");
 
-    const form = list.querySelector(".annotation-editor");
-    const status = form.querySelector(".annotation-copy-status");
-    form.addEventListener("input", function () {
-      renderGeneratedJson(pairIndex, form);
-      status.textContent = "";
-    });
-    form.querySelector(".annotation-copy").addEventListener("click", function () {
-      const value = renderGeneratedJson(pairIndex, form);
-      navigator.clipboard.writeText(value).then(function () {
-        status.textContent = "\u5df2\u590d\u5236";
-      });
-    });
-    form.querySelector(".annotation-download").addEventListener("click", function () {
-      downloadJson(renderGeneratedJson(pairIndex, form));
-    });
-    renderGeneratedJson(pairIndex, form);
     showModal(modal);
-    form.querySelector("[data-annotation-title]").focus();
+
+    if (window.MathJax && window.MathJax.typesetPromise) {
+      window.MathJax.typesetPromise([list]);
+    }
+
+    if (missing.length === 0) {
+      loadGiscus(list.querySelector(".annotation-giscus"), config, term);
+    }
   }
 
-  function attachAuthoringButton(pair, pairIndex, hasExistingAnnotations) {
-    const button = document.createElement("button");
-    button.className = hasExistingAnnotations
-      ? "annotation-button annotation-add-button"
-      : "annotation-button annotation-add-button annotation-add-button-single";
-    button.type = "button";
-    button.textContent = "+\u6279\u6ce8";
-    button.addEventListener("click", function () {
-      openEditor(pairIndex);
-    });
-    pair.appendChild(button);
-  }
-
-  function attachAnnotations(items) {
+  function attachAnnotations(items, config) {
     const grouped = groupByPair(items.filter(function (item) {
       return item.page === pageName;
     }));
 
     document.querySelectorAll(".pair").forEach(function (pair, index) {
       const pairIndex = index + 1;
-      const annotations = grouped.get(pairIndex);
+      const annotations = grouped.get(pairIndex) || [];
+      const button = document.createElement("button");
+      button.className = "annotation-button";
+      button.type = "button";
+      button.textContent = annotations.length > 0 ? "\u6279\u6ce8 " + annotations.length : "\u6279\u6ce8";
+      button.addEventListener("click", function () {
+        openPairModal(pairIndex, annotations, config);
+      });
+      pair.appendChild(button);
+    });
+  }
 
-      if (annotations && annotations.length > 0) {
-        const button = document.createElement("button");
-        button.className = "annotation-button";
-        button.type = "button";
-        button.textContent = annotations.length > 1 ? "\u6279\u6ce8 " + annotations.length : "\u6279\u6ce8";
-        button.addEventListener("click", function () {
-          openModal(annotations);
-        });
-        pair.appendChild(button);
-      }
-
-      if (authoringMode) {
-        attachAuthoringButton(pair, pairIndex, !!(annotations && annotations.length > 0));
-      }
+  function fetchJson(url) {
+    return fetch(url).then(function (response) {
+      if (!response.ok) throw new Error("Failed to load " + url);
+      return response.json();
     });
   }
 
@@ -198,10 +180,10 @@
     if (event.key === "Escape") closeModal();
   });
 
-  fetch(dataUrl)
-    .then(function (response) {
-      if (!response.ok) throw new Error("Failed to load " + dataUrl);
-      return response.json();
-    })
-    .then(attachAnnotations);
+  Promise.all([
+    fetchJson(annotationsUrl),
+    fetchJson(giscusConfigUrl)
+  ]).then(function (results) {
+    attachAnnotations(results[0], results[1]);
+  });
 })();
