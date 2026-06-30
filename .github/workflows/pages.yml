@@ -34,9 +34,6 @@ jobs:
           cp translation/.nojekyll _site/.nojekyll
           cp bv_cvxbook.pdf _site/bv_cvxbook.pdf
 
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
         with:
