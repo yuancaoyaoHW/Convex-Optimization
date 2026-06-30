@@ -1,0 +1,145 @@
+.pair {
+  position: relative;
+}
+
+.annotation-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 5;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 6px 10px;
+}
+
+.annotation-button:hover,
+.annotation-button:focus-visible {
+  background: var(--accent);
+  color: #fff;
+  outline: none;
+}
+
+.annotation-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(31, 41, 51, .38);
+}
+
+.annotation-modal.is-open {
+  display: flex;
+}
+
+.annotation-panel {
+  width: min(760px, 100%);
+  max-height: min(82vh, 880px);
+  overflow: auto;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: 0 24px 60px rgba(15, 23, 42, .22);
+}
+
+.annotation-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid var(--rule-soft);
+  background: var(--panel);
+  padding: 14px 18px;
+}
+
+.annotation-heading {
+  margin: 0;
+  color: var(--accent);
+  font-size: 17px;
+}
+
+.annotation-close {
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--muted);
+  cursor: pointer;
+  font: inherit;
+  line-height: 1;
+  padding: 6px 10px;
+}
+
+.annotation-close:hover,
+.annotation-close:focus-visible {
+  border-color: var(--accent);
+  color: var(--accent);
+  outline: none;
+}
+
+.annotation-list {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+}
+
+.annotation-card {
+  border: 1px solid var(--rule-soft);
+  border-radius: 8px;
+  background: #fff;
+  padding: 16px 18px;
+}
+
+.annotation-title {
+  margin: 0 0 10px;
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.annotation-body {
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+.annotation-body p {
+  margin: 0 0 12px;
+}
+
+.annotation-body p:last-child {
+  margin-bottom: 0;
+}
+
+body.annotation-lock {
+  overflow: hidden;
+}
+
+@media (max-width: 760px) {
+  .annotation-button {
+    top: 8px;
+    right: 8px;
+    font-size: 12px;
+    padding: 5px 8px;
+  }
+
+  .annotation-modal {
+    align-items: flex-end;
+    padding: 12px;
+  }
+
+  .annotation-panel {
+    max-height: 86vh;
+  }
+}
