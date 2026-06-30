@@ -13,6 +13,7 @@ on:
 
 permissions:
   contents: write
+  discussions: read
 
 concurrency:
   group: annotation-index
@@ -38,6 +39,6 @@ jobs:
             echo "no changes — skipping commit"
           else
             git add translation/annotated-pairs.json
-            git commit -m "Update annotated-pairs index [skip ci]"
+            git commit -m "Update annotated-pairs index"
             git push
           fi
