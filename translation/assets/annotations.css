@@ -193,3 +193,51 @@ body.annotation-lock {
     max-height: 86vh;
   }
 }
+
+/* ===== 批注总览页（annotations.html）===== */
+.ann-nav {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 22px;
+  border-bottom: 1px solid var(--rule-soft);
+  background: var(--panel);
+}
+.ann-nav a { color: var(--accent); text-decoration: none; font-size: 14px; }
+.ann-nav-title { font-weight: 700; color: var(--ink); }
+.ann-overview { max-width: 920px; margin: 0 auto; padding: 20px 22px 60px; }
+.ann-hint { color: var(--muted); font-size: 14px; margin: 0 0 16px; }
+.ann-list { display: grid; gap: 10px; }
+.ann-chapter { border: 1px solid var(--rule-soft); border-radius: 8px; background: #fff; overflow: hidden; }
+.ann-chapter-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--ink);
+  user-select: none;
+}
+.ann-chapter-head:hover { background: var(--accent-soft); }
+.ann-chapter-count { color: var(--muted); font-size: 13px; font-weight: 400; }
+.ann-chapter-body { display: none; border-top: 1px solid var(--rule-soft); }
+.ann-chapter.open .ann-chapter-body { display: block; }
+.ann-pair-row {
+  display: grid;
+  grid-template-columns: 48px 1fr auto;
+  gap: 12px;
+  align-items: baseline;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--rule-soft);
+}
+.ann-pair-row:last-child { border-bottom: none; }
+.ann-pair-n { color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+.ann-pair-preview { color: var(--ink); font-size: 14px; line-height: 1.5; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ann-pair-link { color: var(--accent); text-decoration: none; font-size: 13px; white-space: nowrap; }
+.ann-pair-link:hover { text-decoration: underline; }
+@media (max-width: 760px) {
+  .ann-overview { padding: 14px; }
+  .ann-pair-row { grid-template-columns: 36px 1fr; }
+  .ann-pair-link { grid-column: 2; padding-top: 2px; }
+}
