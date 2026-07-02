@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>闭凸函数：仿射下界的逐点上确界</title>
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <style>
+    :root {
+      --ink: #172033;
+      --muted: #5f6b7a;
+      --line: #d7dde7;
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --curve: #0f766e;
+      --support: #d97706;
+      --support-soft: #fef3c7;
+      --epi: #dbeafe;
+      --axis: #475569;
+      --point: #b91c1c;
+      --ghost: #94a3b8;
+      --ok: #15803d;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.6;
+    }
+
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+      line-height: 1.25;
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: 18px;
+    }
+
+    p { margin: 0 0 10px; }
+
+    .lead {
+      max-width: 900px;
+      color: var(--muted);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(520px, 1.2fr) minmax(320px, 0.8fr);
+      gap: 18px;
+      align-items: start;
+      margin-top: 18px;
+    }
+
+    section {
+      background: var(--panel);
+      border: 1px solid #e4e7ec;
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+    }
+
+    .stage {
+      width: 100%;
+      height: auto;
+      display: block;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fbfcff;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 96px minmax(0, 1fr) 88px;
+      gap: 12px;
+      align-items: center;
+      margin-top: 14px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--curve);
+    }
+
+    .value {
+      padding: 6px 8px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+      background: #fff;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 14px;
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .swatch {
+      width: 18px;
+      height: 3px;
+      border-radius: 999px;
+      background: currentColor;
+    }
+
+    .epi-swatch {
+      width: 18px;
+      height: 12px;
+      border-radius: 3px;
+      background: var(--epi);
+      border: 1px solid #93c5fd;
+    }
+
+    .formula {
+      margin: 12px 0;
+      padding: 12px;
+      border: 1px solid #fde68a;
+      border-radius: 8px;
+      background: #fffbeb;
+    }
+
+    .steps {
+      display: grid;
+      gap: 10px;
+    }
+
+    .step {
+      border-left: 4px solid var(--line);
+      padding: 8px 0 8px 12px;
+    }
+
+    .step.active {
+      border-left-color: var(--curve);
+      background: linear-gradient(90deg, rgba(15, 118, 110, 0.08), rgba(15, 118, 110, 0));
+    }
+
+    .step strong {
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .compact {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .fact {
+      border: 1px solid #e4e7ec;
+      border-radius: 8px;
+      padding: 10px;
+      min-height: 88px;
+    }
+
+    .fact b {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #ecfdf5;
+      color: var(--ok);
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    @media (max-width: 900px) {
+      main { padding: 16px; }
+      .layout { grid-template-columns: 1fr; }
+      .controls { grid-template-columns: 72px minmax(0, 1fr) 76px; }
+      .compact { grid-template-columns: 1fr; }
+      h1 { font-size: 23px; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>闭凸函数：所有仿射下界的最高包络</h1>
+    <p class="lead">
+      把凸函数想成一条碗形曲线。每个边界点都有一条从下方托住它的直线；
+      所有这些直线一起向上取最高值，就重新拼出原来的凸函数。
+    </p>
+  </header>
+
+  <div class="layout">
+    <section aria-labelledby="diagram-title">
+      <h2 id="diagram-title">图像：支撑直线托住上图</h2>
+      <svg id="scene" class="stage" viewBox="0 0 760 500" role="img" aria-label="凸函数、上图区域和支撑直线示意图">
+        <defs>
+          <clipPath id="plot-clip">
+            <rect x="58" y="28" width="648" height="398"></rect>
+          </clipPath>
+          <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3.5" orient="auto">
+            <path d="M0,0 L7,3.5 L0,7 Z" fill="#475569"></path>
+          </marker>
+        </defs>
+
+        <rect x="58" y="28" width="648" height="398" fill="#ffffff" stroke="#d7dde7"></rect>
+        <g id="grid"></g>
+        <g id="axes"></g>
+        <g clip-path="url(#plot-clip)">
+          <path id="epi" fill="var(--epi)" opacity="0.68"></path>
+          <g id="ghost-lines"></g>
+          <path id="support-band" fill="var(--support-soft)" opacity="0.75"></path>
+          <path id="support-line" fill="none" stroke="var(--support)" stroke-width="3"></path>
+          <path id="curve" fill="none" stroke="var(--curve)" stroke-width="4"></path>
+          <line id="vertical" stroke="var(--point)" stroke-width="2" stroke-dasharray="5 6"></line>
+          <circle id="touch" r="6" fill="var(--point)" stroke="#ffffff" stroke-width="2"></circle>
+        </g>
+        <text id="touch-label" font-size="15" fill="var(--point)" font-weight="700"></text>
+        <text x="622" y="54" font-size="15" fill="#2563eb">epi f：图像上方</text>
+        <text id="support-label" font-size="15" fill="var(--support)" font-weight="700"></text>
+        <text x="654" y="406" font-size="14" fill="var(--axis)">z</text>
+        <text x="69" y="47" font-size="14" fill="var(--axis)">t</text>
+      </svg>
+
+      <div class="controls">
+        <label for="u">接触点 \(u\)</label>
+        <input id="u" type="range" min="-2.5" max="2.5" step="0.1" value="1.2">
+        <div id="u-value" class="value">1.2</div>
+      </div>
+
+      <div class="legend" aria-label="图例">
+        <span style="color: var(--curve)"><i class="swatch"></i>\(f(z)\)</span>
+        <span style="color: var(--support)"><i class="swatch"></i>当前仿射下界 \(g_u(z)\)</span>
+        <span style="color: var(--ghost)"><i class="swatch"></i>其他仿射下界</span>
+        <span><i class="epi-swatch"></i>\(\operatorname{epi} f\)</span>
+      </div>
+    </section>
+
+    <section aria-labelledby="proof-title">
+      <h2 id="proof-title">把证明翻译成图</h2>
+
+      <div class="formula">
+        示例函数取
+        \[
+          f(z)=0.28z^2+0.8
+        \]
+        当前支撑直线是
+        \[
+          g_u(z)=f(u)+f'(u)(z-u)
+        \]
+        并且
+        \[
+          f(z)-g_u(z)=0.28(z-u)^2\ge 0.
+        \]
+      </div>
+
+      <div class="steps">
+        <div class="step active">
+          <strong>1. 上图是凸集</strong>
+          \(\operatorname{epi} f=\{(z,t)\mid t\ge f(z)\}\) 是曲线上方整片蓝色区域。
+        </div>
+        <div class="step">
+          <strong>2. 边界点有支撑线</strong>
+          在 \((u,f(u))\) 处，橙色直线碰到曲线，但不穿过蓝色上图。
+        </div>
+        <div class="step">
+          <strong>3. 支撑线就是仿射下界</strong>
+          因为整条橙线都在曲线下方，所以 \(g_u(z)\le f(z)\) 对所有 \(z\) 成立。
+        </div>
+        <div class="step">
+          <strong>4. 每个点都能贴住</strong>
+          滑动 \(u\)：任一点都有一条下界在该点满足 \(g_u(u)=f(u)\)。
+        </div>
+      </div>
+
+      <div class="compact">
+        <div class="fact">
+          <b>为什么先有 \(\le f\)</b>
+          所有候选 \(g\) 都是全局下界，因此任意点上都有 \(g(x)\le f(x)\)。
+        </div>
+        <div class="fact">
+          <b>为什么又能达到 \(f\)</b>
+          对固定 \(x\)，支撑线经过 \((x,f(x))\)，所以某个下界满足 \(g(x)=f(x)\)。
+        </div>
+      </div>
+
+      <p class="note">
+        于是逐点看：
+        \[
+          f(x)=\sup\{g(x)\mid g\text{ 仿射},\ g(z)\le f(z),\ \forall z\}.
+        \]
+        这里的“\(\sup\)”就是把所有灰色、橙色支撑线在同一个 \(x\) 位置的高度取最高。
+      </p>
+      <p><span class="pill">一句话</span> 凸函数不是由一条切线决定，而是由所有全局仿射下界共同托出来。</p>
+    </section>
+  </div>
+</main>
+
+<script>
+  const svg = document.getElementById('scene');
+  const grid = document.getElementById('grid');
+  const axes = document.getElementById('axes');
+  const epi = document.getElementById('epi');
+  const curve = document.getElementById('curve');
+  const ghostLines = document.getElementById('ghost-lines');
+  const supportLine = document.getElementById('support-line');
+  const supportBand = document.getElementById('support-band');
+  const vertical = document.getElementById('vertical');
+  const touch = document.getElementById('touch');
+  const touchLabel = document.getElementById('touch-label');
+  const supportLabel = document.getElementById('support-label');
+  const slider = document.getElementById('u');
+  const uValue = document.getElementById('u-value');
+
+  const plot = { left: 58, top: 28, width: 648, height: 398 };
+  const domain = { xMin: -3.2, xMax: 3.2, yMin: -0.4, yMax: 4.8 };
+  const ghostUs = [-2.4, -1.4, -0.4, 0.7, 1.8, 2.5];
+
+  function f(x) {
+    return 0.28 * x * x + 0.8;
+  }
+
+  function slope(u) {
+    return 0.56 * u;
+  }
+
+  function g(u, z) {
+    return f(u) + slope(u) * (z - u);
+  }
+
+  function sx(x) {
+    return plot.left + ((x - domain.xMin) / (domain.xMax - domain.xMin)) * plot.width;
+  }
+
+  function sy(y) {
+    return plot.top + plot.height - ((y - domain.yMin) / (domain.yMax - domain.yMin)) * plot.height;
+  }
+
+  function make(tag, attrs) {
+    const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+    Object.entries(attrs).forEach(([key, value]) => el.setAttribute(key, value));
+    return el;
+  }
+
+  function sampledPath(fn, xMin = domain.xMin, xMax = domain.xMax, steps = 160) {
+    const points = [];
+    for (let i = 0; i <= steps; i += 1) {
+      const x = xMin + (i / steps) * (xMax - xMin);
+      points.push(`${i === 0 ? 'M' : 'L'}${sx(x).toFixed(2)},${sy(fn(x)).toFixed(2)}`);
+    }
+    return points.join(' ');
+  }
+
+  function drawStatic() {
+    for (let x = -3; x <= 3; x += 1) {
+      grid.appendChild(make('line', {
+        x1: sx(x), y1: plot.top, x2: sx(x), y2: plot.top + plot.height,
+        stroke: '#edf1f7', 'stroke-width': 1
+      }));
+      grid.appendChild(make('text', {
+        x: sx(x), y: sy(0) + 20, 'text-anchor': 'middle',
+        'font-size': 12, fill: '#64748b'
+      })).textContent = x;
+    }
+
+    for (let y = 0; y <= 4; y += 1) {
+      grid.appendChild(make('line', {
+        x1: plot.left, y1: sy(y), x2: plot.left + plot.width, y2: sy(y),
+        stroke: '#edf1f7', 'stroke-width': 1
+      }));
+      grid.appendChild(make('text', {
+        x: plot.left - 10, y: sy(y) + 4, 'text-anchor': 'end',
+        'font-size': 12, fill: '#64748b'
+      })).textContent = y;
+    }
+
+    axes.appendChild(make('line', {
+      x1: plot.left, y1: sy(0), x2: plot.left + plot.width - 8, y2: sy(0),
+      stroke: 'var(--axis)', 'stroke-width': 1.5, 'marker-end': 'url(#arrow)'
+    }));
+    axes.appendChild(make('line', {
+      x1: sx(0), y1: plot.top + plot.height, x2: sx(0), y2: plot.top + 8,
+      stroke: 'var(--axis)', 'stroke-width': 1.5, 'marker-end': 'url(#arrow)'
+    }));
+
+    const topLeft = `${sx(domain.xMin)},${plot.top}`;
+    const topRight = `${sx(domain.xMax)},${plot.top}`;
+    const curvePath = sampledPath(f);
+    epi.setAttribute('d', `M${topLeft} L${topRight} ${curvePath.replace('M', 'L')} Z`);
+    curve.setAttribute('d', curvePath);
+
+    ghostUs.forEach((u) => {
+      const path = make('path', {
+        d: sampledPath((z) => g(u, z), domain.xMin, domain.xMax, 2),
+        fill: 'none',
+        stroke: 'var(--ghost)',
+        'stroke-width': 1.8,
+        'stroke-dasharray': '8 8',
+        opacity: 0.72
+      });
+      ghostLines.appendChild(path);
+    });
+  }
+
+  function update() {
+    const u = Number(slider.value);
+    const y = f(u);
+    const x1 = domain.xMin;
+    const x2 = domain.xMax;
+
+    uValue.textContent = u.toFixed(1);
+    supportLine.setAttribute('d', sampledPath((z) => g(u, z), x1, x2, 2));
+
+    const bandTop = sampledPath(f, x1, x2, 140);
+    const bandBottom = sampledPath((z) => g(u, z), x2, x1, 140).replace('M', 'L');
+    supportBand.setAttribute('d', `${bandTop} ${bandBottom} Z`);
+
+    vertical.setAttribute('x1', sx(u));
+    vertical.setAttribute('y1', sy(0));
+    vertical.setAttribute('x2', sx(u));
+    vertical.setAttribute('y2', sy(y));
+
+    touch.setAttribute('cx', sx(u));
+    touch.setAttribute('cy', sy(y));
+
+    touchLabel.setAttribute('x', sx(u) + 10);
+    touchLabel.setAttribute('y', sy(y) - 12);
+    touchLabel.textContent = `(u, f(u))`;
+
+    supportLabel.setAttribute('x', sx(-2.95));
+    supportLabel.setAttribute('y', sy(g(u, -2.95)) - 8);
+    supportLabel.textContent = `g_u(z)`;
+  }
+
+  drawStatic();
+  update();
+  slider.addEventListener('input', update);
+</script>
+</body>
+</html>
