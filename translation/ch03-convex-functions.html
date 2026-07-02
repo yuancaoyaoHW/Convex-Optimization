@@ -810,14 +810,14 @@
       <div class="en"><p>If $f_1$ and $f_2$ are convex functions then their pointwise maximum $f$, defined by</p>
         <p>$$ f(x) = \max\{f_1(x), f_2(x)\}, $$</p>
         <p>with $\mathbf{dom}\, f = \mathbf{dom}\, f_1 \cap \mathbf{dom}\, f_2$, is also convex. This property is easily verified: if $0 \le \theta \le 1$ and $x, y \in \mathbf{dom}\, f$, then</p>
-        <p>$$ f(\theta x + (1-\theta)y) = \max\{f_1(\theta x + (1-\theta)y), f_2(\theta x + (1-\theta)y)\} \le \max\{\theta f_1(x) + (1-\theta)f_1(y), \theta f_2(x) + (1-\theta)f_2(y)\} \le \theta \max\{f_1(x), f_2(x)\} + (1-\theta) \max\{f_1(y), f_2(y)\} = \theta f(x) + (1-\theta)f(y), $$</p>
+        <p>$$ \begin{aligned} f(\theta x + (1-\theta)y) &amp;= \max\{f_1(\theta x + (1-\theta)y), f_2(\theta x + (1-\theta)y)\} \\ &amp;\le \max\{\theta f_1(x) + (1-\theta)f_1(y), \theta f_2(x) + (1-\theta)f_2(y)\} \\ &amp;\le \theta \max\{f_1(x), f_2(x)\} + (1-\theta) \max\{f_1(y), f_2(y)\} \\ &amp;= \theta f(x) + (1-\theta)f(y), \end{aligned} $$</p>
         <p>which establishes convexity of $f$. It is easily shown that if $f_1, \ldots, f_m$ are convex, then their pointwise maximum</p>
         <p>$$ f(x) = \max\{f_1(x), \ldots, f_m(x)\} $$</p>
         <p>is also convex.</p></div>
       <div class="zh"><p>若 $f_1$、$f_2$ 是凸函数，则其逐点最大值 $f$，定义为</p>
         <p>$$ f(x) = \max\{f_1(x), f_2(x)\}, $$</p>
         <p>其中 $\mathbf{dom}\, f = \mathbf{dom}\, f_1 \cap \mathbf{dom}\, f_2$，也是凸的。该性质易验证：若 $0 \le \theta \le 1$ 且 $x, y \in \mathbf{dom}\, f$，则</p>
-        <p>$$ f(\theta x + (1-\theta)y) = \max\{f_1(\theta x + (1-\theta)y), f_2(\theta x + (1-\theta)y)\} \le \max\{\theta f_1(x) + (1-\theta)f_1(y), \theta f_2(x) + (1-\theta)f_2(y)\} \le \theta \max\{f_1(x), f_2(x)\} + (1-\theta) \max\{f_1(y), f_2(y)\} = \theta f(x) + (1-\theta)f(y), $$</p>
+        <p>$$ \begin{aligned} f(\theta x + (1-\theta)y) &amp;= \max\{f_1(\theta x + (1-\theta)y), f_2(\theta x + (1-\theta)y)\} \\ &amp;\le \max\{\theta f_1(x) + (1-\theta)f_1(y), \theta f_2(x) + (1-\theta)f_2(y)\} \\ &amp;\le \theta \max\{f_1(x), f_2(x)\} + (1-\theta) \max\{f_1(y), f_2(y)\} \\ &amp;= \theta f(x) + (1-\theta)f(y), \end{aligned} $$</p>
         <p>即证 $f$ 凸。容易证明：若 $f_1, \ldots, f_m$ 凸，则其逐点最大值</p>
         <p>$$ f(x) = \max\{f_1(x), \ldots, f_m(x)\} $$</p>
         <p>也是凸的。</p></div>
@@ -1056,7 +1056,7 @@
       <div class="en"><p>The second derivative of the composition function $f = h \circ g$ is given by</p>
         <p>$$ f''(x) = h''(g(x)) g'(x)^2 + h'(g(x)) g''(x). \tag{3.9}$$</p>
         <p>Now suppose, for example, that $g$ is convex (so $g'' \ge 0$) and $h$ is convex and nondecreasing (so $h'' \ge 0$ and $h' \ge 0$). It follows from (3.9) that $f'' \ge 0$, i.e., $f$ is convex. In a similar way, the expression (3.9) gives the results:</p>
-        <p>$$ \begin{aligned} f \text{ is convex} &amp;\text{ if } h \text{ is convex and nondecreasing, and } g \text{ is convex}, \\ f \text{ is convex} &amp;\text{ if } h \text{ is convex and nonincreasing, and } g \text{ is concave}, \\ f \text{ is concave} &amp;\text{ if } h \text{ is concave and nondecreasing, and } g \text{ is concave}, \\ f \text{ is concave} &amp;\text{ if } h \text{ is concave and nonincreasing, and } g \text{ is convex}. \end{aligned} \tag{3.10}$$</p></div>
+        <p>$$ \begin{aligned} f \text{ is convex} &amp;\text{ if } h \text{ is convex and nondecreasing,} \\ &amp;\text{ and } g \text{ is convex}, \\ f \text{ is convex} &amp;\text{ if } h \text{ is convex and nonincreasing,} \\ &amp;\text{ and } g \text{ is concave}, \\ f \text{ is concave} &amp;\text{ if } h \text{ is concave and nondecreasing,} \\ &amp;\text{ and } g \text{ is concave}, \\ f \text{ is concave} &amp;\text{ if } h \text{ is concave and nonincreasing,} \\ &amp;\text{ and } g \text{ is convex}. \end{aligned} \tag{3.10}$$</p></div>
       <div class="zh"><p>复合函数 $f = h \circ g$ 的二阶导数为</p>
         <p>$$ f''(x) = h''(g(x)) g'(x)^2 + h'(g(x)) g''(x). \tag{3.9}$$</p>
         <p>例如设 $g$ 凸（故 $g'' \ge 0$）且 $h$ 凸且非减（故 $h'' \ge 0$ 且 $h' \ge 0$）。由 (3.9) 得 $f'' \ge 0$，即 $f$ 凸。类似地，表达式 (3.9) 给出如下结果：</p>
@@ -1065,7 +1065,7 @@
 
     <div class="pair">
       <div class="en"><p>These statements are valid when the functions $g$ and $h$ are twice differentiable and have domains that are all of $\mathbb{R}$. It turns out that very similar composition rules hold in the general case $n > 1$, without assuming differentiability of $h$ and $g$, or that $\mathbf{dom}\, g = \mathbb{R}^n$ and $\mathbf{dom}\, h = \mathbb{R}$:</p>
-        <p>$$ \begin{aligned} f \text{ is convex} &amp;\text{ if } h \text{ is convex}, \tilde h \text{ nondecreasing, and } g \text{ is convex}, \\ f \text{ is convex} &amp;\text{ if } h \text{ is convex}, \tilde h \text{ nonincreasing, and } g \text{ is concave}, \\ f \text{ is concave} &amp;\text{ if } h \text{ is concave}, \tilde h \text{ nondecreasing, and } g \text{ is concave}, \\ f \text{ is concave} &amp;\text{ if } h \text{ is concave}, \tilde h \text{ nonincreasing, and } g \text{ is convex}. \end{aligned} \tag{3.11}$$</p>
+        <p>$$ \begin{aligned} f \text{ is convex} &amp;\text{ if } h \text{ is convex}, \tilde h \text{ nondecreasing,} \\ &amp;\text{ and } g \text{ is convex}, \\ f \text{ is convex} &amp;\text{ if } h \text{ is convex}, \tilde h \text{ nonincreasing,} \\ &amp;\text{ and } g \text{ is concave}, \\ f \text{ is concave} &amp;\text{ if } h \text{ is concave}, \tilde h \text{ nondecreasing,} \\ &amp;\text{ and } g \text{ is concave}, \\ f \text{ is concave} &amp;\text{ if } h \text{ is concave}, \tilde h \text{ nonincreasing,} \\ &amp;\text{ and } g \text{ is convex}. \end{aligned} \tag{3.11}$$</p>
         <p>Here $\tilde h$ denotes the extended-value extension of the function $h$, which assigns the value $\infty$ ($-\infty$) to points not in $\mathbf{dom}\, h$ for $h$ convex (concave). The only difference between these results, and the results in (3.10), is that we require that the extended-value extension function $\tilde h$ be nonincreasing or nondecreasing, on all of $\mathbb{R}$.</p></div>
       <div class="zh"><p>这些结论当 $g$、$h$ 二阶可微且定义域均为 $\mathbb{R}$ 时成立。结果表明，在一般情形 $n > 1$ 下，非常类似的复合规则也成立，无需假设 $h$、$g$ 可微，也无需 $\mathbf{dom}\, g = \mathbb{R}^n$ 和 $\mathbf{dom}\, h = \mathbb{R}$：</p>
         <p>$$ \begin{aligned} f \text{ 凸} &amp;\text{ 当 } h \text{ 凸}, \tilde h \text{ 非减，且 } g \text{ 凸}, \\ f \text{ 凸} &amp;\text{ 当 } h \text{ 凸}, \tilde h \text{ 非增，且 } g \text{ 凹}, \\ f \text{ 凹} &amp;\text{ 当 } h \text{ 凹}, \tilde h \text{ 非减，且 } g \text{ 凹}, \\ f \text{ 凹} &amp;\text{ 当 } h \text{ 凹}, \tilde h \text{ 非增，且 } g \text{ 凸}. \end{aligned} \tag{3.11}$$</p>
@@ -1184,7 +1184,7 @@
         <p>with $h : \mathbb{R}^k \to \mathbb{R}$, $g_i : \mathbb{R}^n \to \mathbb{R}$. Again without loss of generality we can assume $n = 1$. As in the case $k = 1$, we start by assuming the functions are twice differentiable, with $\mathbf{dom}\, g = \mathbb{R}$ and $\mathbf{dom}\, h = \mathbb{R}^k$, in order to discover the composition rules. We have</p>
         <p>$$ f''(x) = g'(x)^T \nabla^2 h(g(x)) g'(x) + \nabla h(g(x))^T g''(x), \tag{3.15}$$</p>
         <p>which is the vector analog of (3.9). Again the issue is to determine conditions under which $f''(x) \ge 0$ for all $x$ (or $f''(x) \le 0$ for all $x$ for concavity). From (3.15) we can derive many rules, for example:</p>
-        <p>$$ \begin{aligned} f \text{ is convex} &amp;\text{ if } h \text{ is convex, } h \text{ nondecreasing in each argument, and } g_i \text{ convex}, \\ f \text{ is convex} &amp;\text{ if } h \text{ is convex, } h \text{ nonincreasing in each argument, and } g_i \text{ concave}, \\ f \text{ is concave} &amp;\text{ if } h \text{ is concave, } h \text{ nondecreasing in each argument, and } g_i \text{ concave}. \end{aligned} $$</p></div>
+        <p>$$ \begin{aligned} f \text{ is convex} &amp;\text{ if } h \text{ is convex, } h \text{ nondecreasing in each argument,} \\ &amp;\text{ and } g_i \text{ convex}, \\ f \text{ is convex} &amp;\text{ if } h \text{ is convex, } h \text{ nonincreasing in each argument,} \\ &amp;\text{ and } g_i \text{ concave}, \\ f \text{ is concave} &amp;\text{ if } h \text{ is concave, } h \text{ nondecreasing in each argument,} \\ &amp;\text{ and } g_i \text{ concave}. \end{aligned} $$</p></div>
       <div class="zh"><p>现在转向 $k \ge 1$ 这一更复杂情形。设</p>
         <p>$$ f(x) = h(g(x)) = h(g_1(x), \ldots, g_k(x)), $$</p>
         <p>其中 $h : \mathbb{R}^k \to \mathbb{R}$，$g_i : \mathbb{R}^n \to \mathbb{R}$。同样不妨设 $n = 1$。与 $k = 1$ 时一样，先设函数二阶可微，$\mathbf{dom}\, g = \mathbb{R}$，$\mathbf{dom}\, h = \mathbb{R}^k$，以发现复合规则。有</p>
@@ -1262,13 +1262,13 @@
       <div class="en"><p>is convex in $x$, provided $g(x) > -\infty$ for all $x$. The domain of $g$ is the projection of $\mathbf{dom}\, f$ on its $x$-coordinates, i.e.,</p>
         <p>$$ \mathbf{dom}\, g = \{x \mid (x, y) \in \mathbf{dom}\, f \text{ for some } y \in C\}. $$</p>
         <p>We prove this by verifying Jensen’s inequality for $x_1, x_2 \in \mathbf{dom}\, g$. Let $\epsilon > 0$. Then there are $y_1, y_2 \in C$ such that $f(x_i, y_i) \le g(x_i) + \epsilon$ for $i = 1, 2$. Now let $\theta \in [0, 1]$. We have</p>
-        <p>$$ g(\theta x_1 + (1-\theta)x_2) = \inf_{y \in C} f(\theta x_1 + (1-\theta)x_2, y) \le f(\theta x_1 + (1-\theta)x_2, \theta y_1 + (1-\theta)y_2) \le \theta f(x_1, y_1) + (1-\theta) f(x_2, y_2) \le \theta g(x_1) + (1-\theta) g(x_2) + \epsilon. $$</p>
+        <p>$$ \begin{aligned} g(\theta x_1 + (1-\theta)x_2) &amp;= \inf_{y \in C} f(\theta x_1 + (1-\theta)x_2, y) \\ &amp;\le f(\theta x_1 + (1-\theta)x_2, \theta y_1 + (1-\theta)y_2) \\ &amp;\le \theta f(x_1, y_1) + (1-\theta) f(x_2, y_2) \\ &amp;\le \theta g(x_1) + (1-\theta) g(x_2) + \epsilon. \end{aligned} $$</p>
         <p>Since this holds for any $\epsilon > 0$, we have</p>
         <p>$$ g(\theta x_1 + (1-\theta)x_2) \le \theta g(x_1) + (1-\theta)g(x_2). $$</p></div>
       <div class="zh"><p>关于 $x$ 凸，只要对所有 $x$ 有 $g(x) > -\infty$。$g$ 的定义域是 $\mathbf{dom}\, f$ 在其 $x$ 坐标上的投影，即</p>
         <p>$$ \mathbf{dom}\, g = \{x \mid (x, y) \in \mathbf{dom}\, f \text{ 对某 } y \in C\}. $$</p>
         <p>我们通过验证 Jensen 不等式来证明，取 $x_1, x_2 \in \mathbf{dom}\, g$。设 $\epsilon > 0$。则存在 $y_1, y_2 \in C$ 使 $f(x_i, y_i) \le g(x_i) + \epsilon$（$i = 1, 2$）。令 $\theta \in [0, 1]$。有</p>
-        <p>$$ g(\theta x_1 + (1-\theta)x_2) = \inf_{y \in C} f(\theta x_1 + (1-\theta)x_2, y) \le f(\theta x_1 + (1-\theta)x_2, \theta y_1 + (1-\theta)y_2) \le \theta f(x_1, y_1) + (1-\theta) f(x_2, y_2) \le \theta g(x_1) + (1-\theta) g(x_2) + \epsilon. $$</p>
+        <p>$$ \begin{aligned} g(\theta x_1 + (1-\theta)x_2) &amp;= \inf_{y \in C} f(\theta x_1 + (1-\theta)x_2, y) \\ &amp;\le f(\theta x_1 + (1-\theta)x_2, \theta y_1 + (1-\theta)y_2) \\ &amp;\le \theta f(x_1, y_1) + (1-\theta) f(x_2, y_2) \\ &amp;\le \theta g(x_1) + (1-\theta) g(x_2) + \epsilon. \end{aligned} $$</p>
         <p>由于此式对任意 $\epsilon > 0$ 成立，故</p>
         <p>$$ g(\theta x_1 + (1-\theta)x_2) \le \theta g(x_1) + (1-\theta)g(x_2). $$</p></div>
     </div>
