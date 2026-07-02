@@ -1,0 +1,515 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>例 3.8：到集合最远点距离的凸性</title>
+  <style>
+    :root {
+      --ink: #1f2937;
+      --muted: #667085;
+      --line: #d0d5dd;
+      --panel: #ffffff;
+      --bg: #f6f7f9;
+      --set: #b7d7c8;
+      --set-line: #28745a;
+      --far: #d44848;
+      --near: #2563eb;
+      --x: #111827;
+      --gold: #a16207;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.55;
+    }
+
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: 18px;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 15px;
+    }
+
+    p { margin: 0 0 10px; }
+
+    .lead {
+      max-width: 940px;
+      color: var(--muted);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(460px, 1.25fr) minmax(340px, 0.9fr);
+      gap: 18px;
+      margin-top: 18px;
+      align-items: start;
+    }
+
+    section {
+      background: var(--panel);
+      border: 1px solid #e4e7ec;
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+    }
+
+    .stage {
+      width: 100%;
+      height: auto;
+      display: block;
+      border: 1px solid var(--line);
+      background: #fbfcfd;
+      touch-action: none;
+      cursor: grab;
+    }
+
+    .stage.dragging { cursor: grabbing; }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .stat {
+      border: 1px solid #e4e7ec;
+      border-radius: 8px;
+      padding: 10px;
+      min-height: 78px;
+    }
+
+    .label {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .value {
+      margin-top: 4px;
+      font-size: 20px;
+      font-variant-numeric: tabular-nums;
+      font-weight: 700;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .legend span {
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+      white-space: nowrap;
+    }
+
+    .swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2px solid currentColor;
+    }
+
+    .notes {
+      display: grid;
+      gap: 12px;
+    }
+
+    .formula {
+      padding: 10px 12px;
+      border-left: 4px solid var(--set-line);
+      background: #f1f8f5;
+      font-family: Consolas, "Liberation Mono", monospace;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
+    .comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .mini {
+      border: 1px solid #e4e7ec;
+      border-radius: 8px;
+      padding: 10px;
+      min-width: 0;
+    }
+
+    .mini svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      border: 1px solid var(--line);
+      background: #fcfcfd;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    li { margin: 6px 0; }
+
+    .hint {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 900px) {
+      main { padding: 16px; }
+      .layout, .comparison, .stats { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>例 3.8：到集合最远点距离的凸性</h1>
+    <p class="lead">
+      对固定的 <strong>y ∈ C</strong>，函数 <strong>x ↦ ||x - y||</strong> 是凸的。
+      因此 <strong>f(x) = sup<sub>y∈C</sub> ||x - y||</strong> 是一族凸函数的逐点上确界，凸性直接保留。
+    </p>
+
+    <div class="layout">
+      <section>
+        <h2>拖动 x：同时观察最远点与最近点</h2>
+        <svg id="scene" class="stage" viewBox="0 0 720 520" role="img" aria-label="二维平面上的凸集、点 x、最远点和最近点">
+          <defs>
+            <marker id="arrowFar" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+              <path d="M0,0 L8,4 L0,8 Z" fill="var(--far)"></path>
+            </marker>
+            <marker id="arrowNear" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+              <path d="M0,0 L8,4 L0,8 Z" fill="var(--near)"></path>
+            </marker>
+          </defs>
+          <g id="grid"></g>
+          <line id="farLine" stroke="var(--far)" stroke-width="3" stroke-dasharray="9 6" marker-end="url(#arrowFar)"></line>
+          <line id="nearLine" stroke="var(--near)" stroke-width="3" marker-end="url(#arrowNear)"></line>
+          <g id="rays"></g>
+          <polygon id="setC" fill="var(--set)" fill-opacity="0.72" stroke="var(--set-line)" stroke-width="3"></polygon>
+          <g id="samples"></g>
+          <circle id="farPoint" r="8" fill="var(--far)" stroke="#fff" stroke-width="3"></circle>
+          <circle id="nearPoint" r="8" fill="var(--near)" stroke="#fff" stroke-width="3"></circle>
+          <circle id="xPoint" r="10" fill="var(--x)" stroke="#fff" stroke-width="3"></circle>
+          <text id="xLabel" font-size="16" font-weight="700" fill="var(--x)">x</text>
+          <text id="cLabel" x="320" y="230" text-anchor="middle" font-size="18" font-weight="700" fill="var(--set-line)">凸集 C</text>
+        </svg>
+
+        <div class="stats" aria-live="polite">
+          <div class="stat">
+            <div class="label">最远点距离 f(x)</div>
+            <div id="farValue" class="value"></div>
+          </div>
+          <div class="stat">
+            <div class="label">最近点距离 d(x,C)</div>
+            <div id="nearValue" class="value"></div>
+          </div>
+          <div class="stat">
+            <div class="label">x 坐标</div>
+            <div id="coordValue" class="value"></div>
+          </div>
+        </div>
+
+        <div class="legend">
+          <span style="color: var(--x)"><i class="swatch"></i>可拖动点 x</span>
+          <span style="color: var(--far)"><i class="swatch"></i>最远点与 f(x)</span>
+          <span style="color: var(--near)"><i class="swatch"></i>最近点与 d(x,C)</span>
+          <span style="color: var(--set-line)"><i class="swatch"></i>凸集 C</span>
+        </div>
+        <p class="hint">灰色细线表示 x 到 C 中若干采样点的距离；红线取最大值，蓝线取最小值。</p>
+      </section>
+
+      <section class="notes">
+        <div>
+          <h2>数学原理</h2>
+          <div class="formula">f(x) = sup<sub>y∈C</sub> ||x - y||</div>
+          <ul>
+            <li>固定 y 后，g<sub>y</sub>(x) = ||x - y|| 是范数与仿射映射的复合，所以是凸函数。</li>
+            <li>f 是所有 g<sub>y</sub> 的逐点上确界：每个 y 给出一张“距离曲面”，f 取它们的最高外壳。</li>
+            <li>逐点上确界保凸不需要额外条件，因为它对应上图的交集。</li>
+          </ul>
+        </div>
+
+        <div class="comparison">
+          <div class="mini">
+            <h3>sup：上图取交集</h3>
+            <svg viewBox="0 0 280 190" aria-label="sup 的 epigraph 是多个 epigraph 的交集">
+              <path d="M24 160 H260 M40 170 V18" stroke="#98a2b3" stroke-width="1.5"></path>
+              <path d="M45 145 C85 70, 130 58, 242 34" fill="none" stroke="#d44848" stroke-width="3"></path>
+              <path d="M45 122 C92 42, 150 98, 242 62" fill="none" stroke="#2563eb" stroke-width="3"></path>
+              <path d="M45 122 C69 82, 93 58, 122 58 C165 59, 190 49, 242 34 L242 18 L45 18 Z" fill="#b7d7c8" fill-opacity="0.55" stroke="#28745a" stroke-width="2"></path>
+              <text x="62" y="30" fill="#28745a" font-size="13">共同在所有曲线上方</text>
+              <text x="72" y="176" fill="#667085" font-size="12">epi(sup g_y) = ∩ epi(g_y)</text>
+            </svg>
+            <p class="hint">凸集的交集仍是凸集，所以 sup 保凸是“免费的”。</p>
+          </div>
+
+          <div class="mini">
+            <h3>inf：下包络不免费</h3>
+            <svg viewBox="0 0 280 190" aria-label="inf 的下包络可能不是凸函数">
+              <path d="M24 160 H260 M40 170 V18" stroke="#98a2b3" stroke-width="1.5"></path>
+              <path d="M45 78 C83 38, 110 42, 143 118 C172 166, 210 151, 242 88" fill="none" stroke="#d44848" stroke-width="3"></path>
+              <path d="M45 124 C82 163, 114 148, 143 72 C174 27, 213 38, 242 122" fill="none" stroke="#2563eb" stroke-width="3"></path>
+              <path d="M45 78 C83 38, 110 42, 143 72 C174 27, 213 38, 242 88" fill="none" stroke="#a16207" stroke-width="4" stroke-dasharray="7 5"></path>
+              <line x1="60" y1="78" x2="224" y2="88" stroke="#344054" stroke-width="1.5" stroke-dasharray="4 4"></line>
+              <text x="62" y="30" fill="#a16207" font-size="13">取较低的一支会形成凹陷</text>
+              <text x="76" y="176" fill="#667085" font-size="12">inf 一般不由凸集交集表达</text>
+            </svg>
+            <p class="hint">inf 是下包络；凸函数的下包络可能向下弯，不能仅靠“inf 保凸”证明。</p>
+          </div>
+        </div>
+
+        <div>
+          <h2>和最近点距离的对比</h2>
+          <p>
+            <strong>d(x,C) = inf<sub>y∈C</sub> ||x-y||</strong> 确实也是凸函数，但原因不是
+            “inf 自动保凸”。常见证明要用 C 的凸性：x 的凸组合到 C 的最近距离，可由各自近似最近点的凸组合控制。
+          </p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const svg = document.getElementById("scene");
+    const grid = document.getElementById("grid");
+    const rays = document.getElementById("rays");
+    const samplesGroup = document.getElementById("samples");
+    const setC = document.getElementById("setC");
+    const xPoint = document.getElementById("xPoint");
+    const xLabel = document.getElementById("xLabel");
+    const farPoint = document.getElementById("farPoint");
+    const nearPoint = document.getElementById("nearPoint");
+    const farLine = document.getElementById("farLine");
+    const nearLine = document.getElementById("nearLine");
+    const farValue = document.getElementById("farValue");
+    const nearValue = document.getElementById("nearValue");
+    const coordValue = document.getElementById("coordValue");
+
+    const C = [
+      { x: 230, y: 130 },
+      { x: 405, y: 105 },
+      { x: 510, y: 235 },
+      { x: 430, y: 365 },
+      { x: 245, y: 390 },
+      { x: 150, y: 260 }
+    ];
+
+    const state = {
+      x: { x: 560, y: 105 },
+      dragging: false
+    };
+
+    function drawGrid() {
+      for (let x = 40; x <= 680; x += 40) {
+        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        line.setAttribute("x1", x);
+        line.setAttribute("x2", x);
+        line.setAttribute("y1", 30);
+        line.setAttribute("y2", 490);
+        line.setAttribute("stroke", x === 360 ? "#98a2b3" : "#eaecf0");
+        line.setAttribute("stroke-width", x === 360 ? "1.5" : "1");
+        grid.appendChild(line);
+      }
+
+      for (let y = 40; y <= 480; y += 40) {
+        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        line.setAttribute("x1", 30);
+        line.setAttribute("x2", 690);
+        line.setAttribute("y1", y);
+        line.setAttribute("y2", y);
+        line.setAttribute("stroke", y === 260 ? "#98a2b3" : "#eaecf0");
+        line.setAttribute("stroke-width", y === 260 ? "1.5" : "1");
+        grid.appendChild(line);
+      }
+    }
+
+    function interpolate(a, b, t) {
+      return {
+        x: a.x + (b.x - a.x) * t,
+        y: a.y + (b.y - a.y) * t
+      };
+    }
+
+    function buildSamples() {
+      const samples = [];
+      for (let i = 0; i < C.length; i += 1) {
+        const a = C[i];
+        const b = C[(i + 1) % C.length];
+        for (let step = 0; step < 11; step += 1) {
+          samples.push(interpolate(a, b, step / 11));
+        }
+      }
+
+      const center = C.reduce((acc, point) => ({
+        x: acc.x + point.x / C.length,
+        y: acc.y + point.y / C.length
+      }), { x: 0, y: 0 });
+
+      for (const vertex of C) {
+        for (let step = 1; step <= 3; step += 1) {
+          samples.push(interpolate(center, vertex, step / 4));
+        }
+      }
+      samples.push(center);
+      return samples;
+    }
+
+    const samples = buildSamples();
+
+    function distance(a, b) {
+      return Math.hypot(a.x - b.x, a.y - b.y);
+    }
+
+    function formatDistance(px) {
+      return (px / 40).toFixed(2);
+    }
+
+    function setLine(line, a, b) {
+      line.setAttribute("x1", a.x);
+      line.setAttribute("y1", a.y);
+      line.setAttribute("x2", b.x);
+      line.setAttribute("y2", b.y);
+    }
+
+    function svgPointFromEvent(event) {
+      const point = svg.createSVGPoint();
+      point.x = event.clientX;
+      point.y = event.clientY;
+      return point.matrixTransform(svg.getScreenCTM().inverse());
+    }
+
+    function clampPoint(point) {
+      return {
+        x: Math.min(690, Math.max(30, point.x)),
+        y: Math.min(490, Math.max(30, point.y))
+      };
+    }
+
+    function renderSampleDots() {
+      for (const sample of samples) {
+        const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        dot.setAttribute("cx", sample.x);
+        dot.setAttribute("cy", sample.y);
+        dot.setAttribute("r", 2.4);
+        dot.setAttribute("fill", "#667085");
+        dot.setAttribute("opacity", "0.45");
+        samplesGroup.appendChild(dot);
+      }
+    }
+
+    function renderRays(nearest, farthest) {
+      rays.replaceChildren();
+      for (let i = 0; i < samples.length; i += 4) {
+        const sample = samples[i];
+        if (sample === nearest || sample === farthest) continue;
+        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        line.setAttribute("x1", state.x.x);
+        line.setAttribute("y1", state.x.y);
+        line.setAttribute("x2", sample.x);
+        line.setAttribute("y2", sample.y);
+        line.setAttribute("stroke", "#98a2b3");
+        line.setAttribute("stroke-width", "1");
+        line.setAttribute("opacity", "0.26");
+        rays.appendChild(line);
+      }
+    }
+
+    function update() {
+      let nearest = samples[0];
+      let farthest = samples[0];
+      let minDistance = distance(state.x, nearest);
+      let maxDistance = minDistance;
+
+      for (const sample of samples) {
+        const d = distance(state.x, sample);
+        if (d < minDistance) {
+          minDistance = d;
+          nearest = sample;
+        }
+        if (d > maxDistance) {
+          maxDistance = d;
+          farthest = sample;
+        }
+      }
+
+      renderRays(nearest, farthest);
+      setLine(farLine, state.x, farthest);
+      setLine(nearLine, state.x, nearest);
+
+      xPoint.setAttribute("cx", state.x.x);
+      xPoint.setAttribute("cy", state.x.y);
+      xLabel.setAttribute("x", state.x.x + 13);
+      xLabel.setAttribute("y", state.x.y - 13);
+
+      farPoint.setAttribute("cx", farthest.x);
+      farPoint.setAttribute("cy", farthest.y);
+      nearPoint.setAttribute("cx", nearest.x);
+      nearPoint.setAttribute("cy", nearest.y);
+
+      farValue.textContent = formatDistance(maxDistance);
+      nearValue.textContent = formatDistance(minDistance);
+      coordValue.textContent = `(${Math.round((state.x.x - 360) / 40)}, ${Math.round((260 - state.x.y) / 40)})`;
+    }
+
+    function startDrag(event) {
+      state.dragging = true;
+      svg.classList.add("dragging");
+      svg.setPointerCapture(event.pointerId);
+      state.x = clampPoint(svgPointFromEvent(event));
+      update();
+    }
+
+    function drag(event) {
+      if (!state.dragging) return;
+      state.x = clampPoint(svgPointFromEvent(event));
+      update();
+    }
+
+    function stopDrag(event) {
+      state.dragging = false;
+      svg.classList.remove("dragging");
+      if (svg.hasPointerCapture(event.pointerId)) {
+        svg.releasePointerCapture(event.pointerId);
+      }
+    }
+
+    setC.setAttribute("points", C.map(point => `${point.x},${point.y}`).join(" "));
+    drawGrid();
+    renderSampleDots();
+    update();
+
+    svg.addEventListener("pointerdown", startDrag);
+    svg.addEventListener("pointermove", drag);
+    svg.addEventListener("pointerup", stopDrag);
+    svg.addEventListener("pointercancel", stopDrag);
+  </script>
+</body>
+</html>
