@@ -12,6 +12,7 @@ on:
       - ".github/workflows/build-annotation-index.yml"
 
 permissions:
+  actions: write
   contents: write
   discussions: read
 
@@ -32,13 +33,34 @@ jobs:
         run: python translation/_build_annotated_pairs.py
 
       - name: Commit if changed
+        id: commit-index
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           if git diff --quiet translation/annotated-pairs.json; then
             echo "no changes — skipping commit"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             git add translation/annotated-pairs.json
             git commit -m "Update annotated-pairs index"
             git push
+            echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
+
+      - name: Trigger Pages deploy
+        if: steps.commit-index.outputs.changed == 'true'
+        env:
+          PAGES_DISPATCH_TOKEN: ${{ secrets.PAGES_DISPATCH_TOKEN }}
+        run: |
+          if [ -z "$PAGES_DISPATCH_TOKEN" ]; then
+            echo "PAGES_DISPATCH_TOKEN secret is required to trigger pages.yml" >&2
+            exit 1
+          fi
+
+          curl --fail-with-body -L \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $PAGES_DISPATCH_TOKEN" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/${{ github.repository }}/actions/workflows/pages.yml/dispatches \
+            -d '{"ref":"main"}'
