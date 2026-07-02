@@ -124,6 +124,15 @@ main.doc {
 /* equation label */
 .eqn { float: right; color: var(--muted); font-size: 14px; }
 
+mjx-container[jax="SVG"][display="true"] {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] > svg {
+  max-width: 100%;
+  height: auto;
+}
+
 /* bibliography style */
 .bib p { font-size: 14px; line-height: 1.6; color: var(--en-ink); }
 .bib .zh p { color: var(--ink); }
@@ -225,4 +234,3 @@ main.index {
   padding-left: 16px;
 }
 .pair.fig-block .fig-caption .figref { font-weight: 700; color: var(--accent); }
-
