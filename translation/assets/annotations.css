@@ -27,18 +27,40 @@
 }
 
 .annotation-button.has-comments {
-  background: var(--accent);
-  color: #fff;
+  top: 10px;
+  right: -18px;
+  width: 22px;
+  min-width: 22px;
+  min-height: 42px;
+  padding: 0;
+  border: 1px solid #cbd8f7;
+  border-left: 3px solid var(--accent);
+  border-radius: 0 11px 11px 0;
+  background: #fff;
+  color: var(--accent);
+  font-size: 11px;
+  box-shadow: 0 1px 5px rgba(37, 99, 235, .10);
 }
 
 .annotation-button.has-comments:hover,
 .annotation-button.has-comments:focus-visible {
-  filter: brightness(1.08);
+  background: var(--accent);
+  color: #fff;
 }
 
 .pair.has-annotations {
-  border-left: 3px solid var(--accent);
-  padding-left: 10px;
+  position: relative;
+}
+
+.pair.has-annotations::after {
+  content: "";
+  position: absolute;
+  top: 10px;
+  right: 0;
+  width: 3px;
+  height: 42px;
+  border-radius: 3px 0 0 3px;
+  background: var(--accent);
 }
 
 .annotation-modal {
@@ -162,6 +184,62 @@
   font-size: 14px;
 }
 
+.annotation-context {
+  display: grid;
+  gap: 10px;
+  border: 1px solid #d9e4fb;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #f8fbff, #fff);
+  padding: 14px 16px;
+}
+
+.annotation-context-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.annotation-context p {
+  margin: 0;
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.annotation-context p span {
+  color: var(--muted);
+}
+
+.annotation-discussion {
+  border: 1px solid var(--rule-soft);
+  border-radius: 8px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.annotation-discussion-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid var(--rule-soft);
+  background: #fcfcfb;
+  padding: 12px 14px;
+}
+
+.annotation-discussion-head a {
+  color: var(--accent);
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.annotation-discussion-head a:hover,
+.annotation-discussion-head a:focus-visible {
+  text-decoration: underline;
+}
+
 .annotation-setup {
   border: 1px solid var(--rule);
   border-radius: 8px;
@@ -187,6 +265,32 @@
   min-height: 180px;
 }
 
+.annotation-giscus:has(iframe) .annotation-loading {
+  display: none;
+}
+
+.annotation-loading {
+  padding: 12px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.annotation-loading span {
+  display: block;
+  height: 12px;
+  margin: 10px 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #eef2f7 25%, #f7f9fb 37%, #eef2f7 63%);
+}
+
+.annotation-loading p {
+  margin: 10px 0 0;
+}
+
+.annotation-loading span:nth-child(1) { width: 72%; }
+.annotation-loading span:nth-child(2) { width: 48%; }
+.annotation-loading span:nth-child(3) { width: 84%; }
+
 body.annotation-lock {
   overflow: hidden;
 }
@@ -199,9 +303,29 @@ body.annotation-lock {
     padding: 5px 8px;
   }
 
+  .annotation-button.has-comments {
+    top: 8px;
+    right: 8px;
+    width: 22px;
+    min-width: 22px;
+    min-height: 22px;
+    border-left-width: 1px;
+    border-radius: 50%;
+  }
+
+  .pair.has-annotations::after {
+    display: none;
+  }
+
   .annotation-modal {
     align-items: flex-start;
     padding: 12px;
+  }
+
+  .annotation-context-top,
+  .annotation-discussion-head {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }
 

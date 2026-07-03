@@ -97,12 +97,34 @@
     ].join("");
   }
 
-  function giscusContainerHtml(term) {
+  function pairSummary(pair) {
+    function firstText(selector) {
+      const node = pair.querySelector(selector);
+      if (!node) return "";
+      const text = node.textContent.replace(/\s+/g, " ").trim();
+      return text.length > 180 ? text.slice(0, 177) + "..." : text;
+    }
+
+    return {
+      en: firstText(".en"),
+      zh: firstText(".zh")
+    };
+  }
+
+  function giscusContainerHtml(term, summary, config) {
+    const pairId = term.split("#").pop();
     return [
-      '<section class="annotation-section">',
-      '  <h3 class="annotation-section-title">GitHub \u8ba8\u8bba</h3>',
-      '  <p class="annotation-term">term: <code>' + escapeHtml(term) + "</code></p>",
-      '  <div class="annotation-giscus"></div>',
+      '<section class="annotation-context">',
+      '  <div class="annotation-context-top"><span>\u6b63\u5728\u8ba8\u8bba\u7684\u6bb5\u843d</span><span>' + escapeHtml(pageName) + " / " + escapeHtml(pairId) + "</span></div>",
+      summary.en ? '  <p><span>\u539f\u6587\uff1a</span>' + escapeHtml(summary.en) + "</p>" : "",
+      summary.zh ? '  <p><span>\u8bd1\u6587\uff1a</span>' + escapeHtml(summary.zh) + "</p>" : "",
+      "</section>",
+      '<section class="annotation-discussion">',
+      '  <div class="annotation-discussion-head">',
+      '    <h3 class="annotation-section-title">\u8ba8\u8bba</h3>',
+      '    <a href="https://github.com/' + escapeHtml(config.repo) + '/discussions" target="_blank" rel="noopener">\u5728 GitHub Discussions \u6253\u5f00</a>',
+      "  </div>",
+      '  <div class="annotation-giscus"><div class="annotation-loading"><span></span><span></span><span></span><p>\u6b63\u5728\u8fde\u63a5 GitHub Discussions...</p></div></div>',
       "</section>"
     ].join("");
   }
@@ -122,22 +144,22 @@
     script.setAttribute("data-reactions-enabled", config.reactionsEnabled || "1");
     script.setAttribute("data-emit-metadata", config.emitMetadata || "0");
     script.setAttribute("data-input-position", config.inputPosition || "bottom");
-    script.setAttribute("data-theme", config.theme || "light");
+    script.setAttribute("data-theme", config.theme || "noborder_light");
     script.setAttribute("data-lang", config.lang || "zh-CN");
     container.appendChild(script);
   }
 
-  function openPairModal(pairIndex, items, config) {
+  function openPairModal(pairIndex, pair, items, config) {
     const modal = ensureModal();
     const term = pageName + "#pair-" + pairIndex;
     const missing = requiredConfigMissing(config);
-    modal.querySelector(".annotation-heading").textContent = "\u6279\u6ce8";
+    const summary = pairSummary(pair);
+    modal.querySelector(".annotation-heading").textContent = "\u6bb5\u843d\u6279\u6ce8";
 
     const list = modal.querySelector(".annotation-list");
     list.innerHTML = [
-      '<div class="annotation-meta">page: <code>' + escapeHtml(pageName) + "</code> / pair: <code>" + pairIndex + "</code></div>",
       staticAnnotationHtml(items),
-      missing.length ? setupHtml(term, missing) : giscusContainerHtml(term)
+      missing.length ? setupHtml(term, missing) : giscusContainerHtml(term, summary, config)
     ].join("");
 
     showModal(modal);
@@ -165,15 +187,18 @@
       button.type = "button";
       if (giscusCount > 0) {
         button.classList.add("has-comments");
-        button.textContent = "💬 " + giscusCount;
+        button.textContent = String(giscusCount);
+        button.setAttribute("aria-label", "\u6253\u5f00 " + giscusCount + " \u6761\u6279\u6ce8");
         pair.classList.add("has-annotations");
       } else if (annotations.length > 0) {
         button.textContent = "\u6279\u6ce8 " + annotations.length;
+        button.setAttribute("aria-label", "\u6253\u5f00 " + annotations.length + " \u6761\u7ad9\u5185\u6279\u6ce8");
       } else {
         button.textContent = "\u6279\u6ce8";
+        button.setAttribute("aria-label", "\u6253\u5f00\u6279\u6ce8");
       }
       button.addEventListener("click", function () {
-        openPairModal(pairIndex, annotations, config);
+        openPairModal(pairIndex, pair, annotations, config);
       });
       pair.appendChild(button);
     });
