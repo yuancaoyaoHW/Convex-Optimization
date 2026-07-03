@@ -48,7 +48,7 @@ jobs:
           fi
 
       - name: Trigger Pages deploy
-        if: steps.commit-index.outputs.changed == 'true'
+        if: steps.commit-index.outputs.changed == 'true' || github.event_name == 'push'
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
