@@ -194,6 +194,7 @@
         button.textContent = "\u6279\u6ce8 " + annotations.length;
         button.setAttribute("aria-label", "\u6253\u5f00 " + annotations.length + " \u6761\u7ad9\u5185\u6279\u6ce8");
       } else {
+        button.classList.add("is-empty");
         button.textContent = "\u6279\u6ce8";
         button.setAttribute("aria-label", "\u6253\u5f00\u6279\u6ce8");
       }

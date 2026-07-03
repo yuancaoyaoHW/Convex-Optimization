@@ -26,6 +26,24 @@
   outline: none;
 }
 
+.annotation-button.is-empty {
+  opacity: 0;
+  transform: translateY(-2px);
+  transition: opacity .16s ease, transform .16s ease;
+}
+
+.pair:hover > .annotation-button.is-empty,
+.pair:focus-within > .annotation-button.is-empty,
+.annotation-button.is-empty:focus-visible {
+  opacity: .72;
+  transform: translateY(0);
+}
+
+.annotation-button.is-empty:hover,
+.annotation-button.is-empty:focus-visible {
+  opacity: 1;
+}
+
 .annotation-button.has-comments {
   top: 10px;
   right: -18px;
