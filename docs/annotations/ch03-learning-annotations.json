@@ -329,7 +329,7 @@
     "term": "ch03-convex-functions.html#pair-278",
     "kind": "log-concave",
     "title": "Integration of log-concave functions",
-    "body": "Learning note\n\n对数函函数在积分下的保持性很强：联合对数凹函数边缘化后仍对数凹。概率论里这意味着很多边缘分布、命中概率和体积函数仍保留可优化结构。",
+    "body": "Learning note\n\n对数凹函数在积分下的保持性很强：联合对数凹函数边缘化后仍对数凹。概率论里这意味着很多边缘分布、命中概率和体积函数仍保留可优化结构。",
     "source_summary": "Integration of log-concave functions"
   },
   {
