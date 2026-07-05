@@ -101,6 +101,23 @@ query($owner: String!, $name: String!, $cursor: String) {
 }
 """
 
+DISCUSSION_COMMENTS_QUERY = """
+query($discussionId: ID!, $cursor: String) {
+  node(id: $discussionId) {
+    ... on Discussion {
+      comments(first: 50, after: $cursor) {
+        nodes {
+          id
+          body
+          author { login }
+        }
+        pageInfo { hasNextPage endCursor }
+      }
+    }
+  }
+}
+"""
+
 CREATE_DISCUSSION = """
 mutation($repositoryId: ID!, $categoryId: ID!, $title: String!, $body: String!) {
   createDiscussion(input: {repositoryId: $repositoryId, categoryId: $categoryId, title: $title, body: $body}) {
@@ -135,24 +152,47 @@ def fetch_repo_id(token: str) -> str:
     return data["data"]["repository"]["id"]
 
 
-def fetch_existing_discussions(token: str, terms: set[str]) -> dict[str, dict]:
+def discussion_term_from_title(title: str) -> str:
+    if " - " in title:
+        return title.split(" - ", 1)[0]
+    return title
+
+
+def find_marked_comment(comments: dict) -> dict | None:
+    for comment in comments["nodes"]:
+        if MARKER in comment.get("body", ""):
+            return comment
+    return None
+
+
+def fetch_marked_comment(token: str, discussion_id: str, initial_comments: dict, graphql_fn=graphql) -> dict | None:
+    marked = find_marked_comment(initial_comments)
+    if marked or not initial_comments["pageInfo"]["hasNextPage"]:
+        return marked
+
+    cursor = initial_comments["pageInfo"]["endCursor"]
+    while True:
+        data = graphql_fn(token, DISCUSSION_COMMENTS_QUERY, {"discussionId": discussion_id, "cursor": cursor})
+        comments = data["data"]["node"]["comments"]
+        marked = find_marked_comment(comments)
+        if marked:
+            return marked
+        if not comments["pageInfo"]["hasNextPage"]:
+            return None
+        cursor = comments["pageInfo"]["endCursor"]
+
+
+def fetch_existing_discussions(token: str, terms: set[str], graphql_fn=graphql) -> dict[str, dict]:
     existing: dict[str, dict] = {}
     cursor = None
     while True:
-        data = graphql(token, DISCUSSIONS_QUERY, {"owner": OWNER, "name": REPO, "cursor": cursor})
+        data = graphql_fn(token, DISCUSSIONS_QUERY, {"owner": OWNER, "name": REPO, "cursor": cursor})
         discussions = data["data"]["repository"]["discussions"]
         for node in discussions["nodes"]:
-            matching_terms = [term for term in terms if term in node["title"]]
-            if not matching_terms:
+            term = discussion_term_from_title(node["title"])
+            if term not in terms:
                 continue
-            if len(matching_terms) > 1:
-                raise RuntimeError(f"ambiguous discussion title: {node['title']}")
-            term = matching_terms[0]
-            marked = None
-            for comment in node["comments"]["nodes"]:
-                if MARKER in comment.get("body", ""):
-                    marked = comment
-                    break
+            marked = fetch_marked_comment(token, node["id"], node["comments"], graphql_fn=graphql_fn)
             existing[term] = {
                 "discussion_id": node["id"],
                 "comment_id": marked["id"] if marked else None,
@@ -217,7 +257,7 @@ def main() -> int:
     config = load_giscus_config(args.config)
     existing = fetch_existing_discussions(token, {entry["term"] for entry in entries})
     plan = plan_publication(entries, existing)
-    repo_id = fetch_repo_id(token)
+    repo_id = None if args.dry_run else fetch_repo_id(token)
     apply_plan(token, config, repo_id, plan, args.dry_run)
     return 0
 
