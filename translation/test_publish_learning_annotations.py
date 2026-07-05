@@ -1,6 +1,7 @@
 import unittest
 
 from translation._publish_learning_annotations import (
+    DISCUSSIONS_QUERY,
     DISCUSSION_COMMENTS_QUERY,
     MARKER,
     build_discussion_title,
@@ -11,6 +12,14 @@ from translation._publish_learning_annotations import (
 
 
 class PublisherPlanningTests(unittest.TestCase):
+    def test_discussions_query_requests_comment_page_info_for_initial_page(self):
+        normalized_query = " ".join(DISCUSSIONS_QUERY.split())
+        self.assertIn("comments(first: 50)", normalized_query)
+        self.assertIn(
+            "comments(first: 50) { nodes { id body author { login } } pageInfo { hasNextPage endCursor } }",
+            normalized_query,
+        )
+
     def test_build_discussion_title_uses_exact_term(self):
         entry = {"term": "ch03-convex-functions.html#pair-13", "title": "Example 3.1 indicator function"}
         self.assertEqual(

@@ -94,6 +94,7 @@ query($owner: String!, $name: String!, $cursor: String) {
             body
             author { login }
           }
+          pageInfo { hasNextPage endCursor }
         }
       }
     }
