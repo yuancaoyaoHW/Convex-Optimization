@@ -45,6 +45,13 @@ def run_query(token, variables):
     with urllib.request.urlopen(req, timeout=30) as resp:
         return json.loads(resp.read().decode("utf-8"))
 
+def parse_discussion_title(title):
+    term = title.split(" - ", 1)[0]
+    m = TERM_RE.match(term)
+    if not m:
+        return None
+    return m.group(1), int(m.group(2))
+
 def main():
     token = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
     if not token:
@@ -64,14 +71,14 @@ def main():
             return 1
         for node in disc.get("nodes", []):
             title = node.get("title", "")
-            m = TERM_RE.match(title)
-            if not m:
+            parsed = parse_discussion_title(title)
+            if not parsed:
                 continue
             n_comments = node.get("comments", {}).get("totalCount", 0)
             if n_comments > 0:
                 pairs.append({
-                    "page": m.group(1),
-                    "pair": int(m.group(2)),
+                    "page": parsed[0],
+                    "pair": parsed[1],
                     "comments": n_comments,
                 })
         info = disc.get("pageInfo", {})
