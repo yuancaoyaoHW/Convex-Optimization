@@ -1,0 +1,362 @@
+[
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 3,
+    "term": "ch03-convex-functions.html#pair-3",
+    "kind": "definition",
+    "title": "Convex function definition",
+    "body": "Learning note\\n\\n鎶撲綇杩欎竴瀹氫箟鏃讹紝鍏堢湅涓ゅ眰锛氬畾涔夊煙鏈韩瑕佹槸鍑搁泦锛屽嚱鏁板€艰繕瑕佹弧瓒斥€滀腑鐐逛笉楂樹簬绔偣绾挎€ф彃鍊尖€濄€傚嚑浣曚笂灏辨槸寮﹀湪鍥惧儚涓婃柟銆傚悗闈竴闃舵潯浠躲€丣ensen 涓嶇瓑寮忋€佷笂鍥惧埢鐢婚兘鍦ㄩ噸鍐欏悓涓€涓牳蹇冩兂娉曘€?",
+    "source_summary": "Convex function definition and chord interpretation"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 5,
+    "term": "ch03-convex-functions.html#pair-5",
+    "kind": "definition",
+    "title": "Affine equality case",
+    "body": "Learning note\\n\\n浠垮皠鍑芥暟鏃㈠嚫鍙堝嚬锛屽洜涓烘彃鍊兼椂鍑芥暟鍊煎畬鍏ㄧ瓑浜庣鐐瑰€肩殑鎻掑€笺€傝繖涓緥瀛愭槸鍒ゆ柇寰堝瑙勫垯鐨勫熀鍑嗭細濡傛灉涓€涓瘉鏄庡湪浠垮皠鍑芥暟涓婁笉鑳介€€鍖栨垚绛夊彿锛岄€氬父璇存槑鏂瑰悜鎴栫鍙峰啓鍙嶄簡銆?",
+    "source_summary": "Affine equality case"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 8,
+    "term": "ch03-convex-functions.html#pair-8",
+    "kind": "definition",
+    "title": "Restriction to lines",
+    "body": "Learning note\\n\\n鎶婂缁村嚫鎬ч檺鍒跺埌浠绘剰鐩寸嚎锛屾槸鎶婂鏉傞棶棰橀檷鍒颁竴缁寸殑甯哥敤鍏ュ彛銆傚疄璺典腑妫€鏌?Hessian銆佽瘉鏄庡鍚堣鍒欍€佺爺绌舵嫙鍑告€ф椂锛屽緢澶氳璇侀兘鏄厛娌跨洿绾跨湅 $g(t)=f(x+tv)$銆?",
+    "source_summary": "Restriction to lines"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 13,
+    "term": "ch03-convex-functions.html#pair-13",
+    "kind": "example",
+    "title": "Example 3.1 indicator function",
+    "body": "Learning note\\n\\n鎸囩ず鍑芥暟鎶娾€滅害鏉熼泦鍚堚€濆彉鎴愨€滅洰鏍囧嚱鏁扮殑涓€閮ㄥ垎鈥濓細鍦ㄩ泦鍚堝唴浠ｄ环涓?0锛岄泦鍚堝浠ｄ环涓?$\\\\infty$銆傝繖璁╁甫绾︽潫鏈€灏忓寲鍙互鍐欐垚鏃犵害鏉熷舰寮?$f+I_C$锛屾槸鍚庨潰瀵瑰伓鍜岃繎绔柟娉曢噷鐨勫熀纭€璇█銆?",
+    "source_summary": "Example 3.1 indicator function"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 17,
+    "term": "ch03-convex-functions.html#pair-17",
+    "kind": "condition",
+    "title": "First-order condition",
+    "body": "Learning note\\n\\n涓€闃舵潯浠惰鍒囧钩闈㈡槸鍏ㄥ眬涓嬬晫锛岃€屼笉鍙槸灞€閮ㄨ繎浼笺€傚嚫浼樺寲涓€滃眬閮ㄤ俊鎭帹鍑哄叏灞€缁撹鈥濈殑榄旀硶鍩烘湰浠庤繖閲屾潵锛氳嫢 $\\\\nabla f(x)=0$锛岀珛鍒诲緱鍒?$x$ 鏄叏灞€鏈€灏忕偣銆?",
+    "source_summary": "First-order condition"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 30,
+    "term": "ch03-convex-functions.html#pair-30",
+    "kind": "condition",
+    "title": "Second-order condition",
+    "body": "Learning note\\n\\n浜岄樁鏉′欢鎶婂嚫鎬х炕璇戞垚鏇茬巼闈炶礋锛?\\\\nabla^2 f(x)\\\\succeq0$銆傛敞鎰忎弗鏍煎嚫涓嶇瓑浜庡澶?Hessian 姝ｅ畾锛涙瀹氭槸寮鸿€屾柟渚跨殑鍏呭垎鏉′欢锛屽緢澶氫弗鏍煎嚫鍑芥暟浼氬湪鏌愪簺鐐规洸鐜囬€€鍖栥€?",
+    "source_summary": "Second-order condition"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 35,
+    "term": "ch03-convex-functions.html#pair-35",
+    "kind": "example",
+    "title": "Example 3.2 quadratic functions",
+    "body": "Learning note\\n\\n浜屾鍑芥暟鏄?Hessian 鍒ゆ嵁鐨勬爣鍑嗘牱鏈細$f(x)=\\\\frac12x^TPx+q^Tx+r$ 鐨勫嚫鎬у彧鐪?$P\\\\succeq0$銆傜嚎鎬ч」鍜屽父鏁伴」浼氬钩绉绘垨鍊炬枩鍥惧儚锛屼絾涓嶆敼鍙樻洸鐜囥€?",
+    "source_summary": "Example 3.2 quadratic functions"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 57,
+    "term": "ch03-convex-functions.html#pair-57",
+    "kind": "geometry",
+    "title": "Sublevel sets",
+    "body": "Learning note\\n\\n鍑稿嚱鏁扮殑涓嬫按骞抽泦涓€瀹氬嚫锛屾墍浠モ€滃嚱鏁板嚫鈥濊兘鎺ㄥ嚭鈥滈槇鍊间互涓嬬殑鍙鍖哄煙鍑糕€濄€傚弽杩囨潵涓嶆垚绔嬶紱鎵€鏈変笅姘村钩闆嗗嚫鍙鏄庢嫙鍑搞€傝繖涓尯鍒湪 3.4 鑺備細姝ｅ紡鍑虹幇銆?",
+    "source_summary": "Sublevel sets"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 62,
+    "term": "ch03-convex-functions.html#pair-62",
+    "kind": "geometry",
+    "title": "Epigraph definition",
+    "body": "Learning note\\n\\n涓婂浘鎶婂嚱鏁伴棶棰樺彉鎴愰泦鍚堥棶棰橈細$\\\\mathrm{epi}\\\\,f$ 鏄浘鍍忎互涓婄殑鎵€鏈夌偣銆傚緢澶氬嚱鏁板嚫鎬х殑璇佹槑骞朵笉鐩存帴绠椾笉绛夊紡锛岃€屾槸璇佹槑涓婂浘鏄嚫闆嗐€?",
+    "source_summary": "Epigraph definition"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 65,
+    "term": "ch03-convex-functions.html#pair-65",
+    "kind": "example",
+    "title": "Example 3.4 matrix fractional function",
+    "body": "Learning note\\n\\n鐭╅樀鍒嗗紡鍑芥暟 $x^TY^{-1}x$ 鐪嬭捣鏉ラ潪绾挎€у緢寮猴紝浣嗗畠鐨勪笂鍥捐兘閫氳繃 Schur 琛ュ啓鎴愮嚎鎬х煩闃典笉绛夊紡銆傝繖閲屽睍绀轰簡涓€涓噸瑕佸璺細鎶婇毦鍑芥暟杞垚鍗婃瀹氬潡鐭╅樀鏉′欢銆?",
+    "source_summary": "Example 3.4 matrix fractional function"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 71,
+    "term": "ch03-convex-functions.html#pair-71",
+    "kind": "condition",
+    "title": "Jensen inequality",
+    "body": "Learning note\\n\\nJensen 涓嶇瓑寮忔槸鍑告€у畾涔夌殑澶氱偣鐗堟湰锛氬嚱鏁颁綔鐢ㄥ湪骞冲潎鍊间笂锛屼笉瓒呰繃鍑芥暟鍊肩殑骞冲潎銆傚畠鏃㈡槸璇佹槑涓嶇瓑寮忕殑宸ュ叿锛屼篃鏄鐜囨湡鏈涘舰寮?$f(E X)\\\\le E f(X)$ 鐨勬潵婧愩€?",
+    "source_summary": "Jensen inequality"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 78,
+    "term": "ch03-convex-functions.html#pair-78",
+    "kind": "condition",
+    "title": "AM-GM from Jensen",
+    "body": "Learning note\\n\\n杩欓噷鐨勯噸鐐逛笉鏄?AM-GM 鏈韩锛岃€屾槸閫夊嚱鏁扮殑鐪煎厜锛氱敤鍑稿嚱鏁?$-\\\\log x$ 鎶婁箻绉叧绯诲彉鎴愬拰鐨勫叧绯汇€傚緢澶氱粡鍏镐笉绛夊紡閮藉彲浠ョ湅鎴愨€滄寫瀵瑰嚫鍑芥暟鍚庡 Jensen鈥濄€?",
+    "source_summary": "AM-GM from Jensen"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 90,
+    "term": "ch03-convex-functions.html#pair-90",
+    "kind": "operation",
+    "title": "Example 3.5 pointwise maximum",
+    "body": "Learning note\\n\\n鑻ュ共浠垮皠鍑芥暟鐨勯€愮偣鏈€澶у€兼槸鍑哥殑锛屾墍浠ュ垎娈电嚎鎬у嚫鍑芥暟鍙互鐪嬫垚璁稿骞抽潰鐨勪笂鍖呯粶銆傛敮鎸佸悜閲忔満銆佹渶澶ф崯澶便€侀瞾妫掔害鏉熼噷閮戒細鍙嶅鍑虹幇杩欑缁撴瀯銆?",
+    "source_summary": "Example 3.5 pointwise maximum"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 92,
+    "term": "ch03-convex-functions.html#pair-92",
+    "kind": "operation",
+    "title": "Example 3.6 sum of largest components",
+    "body": "Learning note\\n\\n鈥滄渶澶х殑 $r$ 涓垎閲忎箣鍜屸€濆嚫锛屾槸鍥犱负瀹冨彲浠ュ啓鎴愬緢澶氱嚎鎬у嚱鏁扮殑鏈€澶у€笺€傝繖涓緥瀛愯缁冧竴绉嶈瑙掞細鎺掑簭鍑芥暟铏界劧涓嶅厜婊戯紝浣嗗父甯歌兘閫氳繃涓婄‘鐣屾垨鏈€澶у€艰瘉鏄庡嚫鎬с€?",
+    "source_summary": "Example 3.6 sum of largest components"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 96,
+    "term": "ch03-convex-functions.html#pair-96",
+    "kind": "operation",
+    "title": "Example 3.7 support function",
+    "body": "Learning note\\n\\n鏀拺鍑芥暟 $S_C(x)=\\\\sup_{y\\\\in C}x^Ty$ 鎶婇泦鍚?$C$ 鐨勬柟鍚戝搴︾紪鐮佹垚鍑芥暟銆傚畠鎬绘槸鍑哥殑锛屽嵆浣?$C$ 鏈韩涓嶅嚫锛涘洜涓哄鍥哄畾 $y$锛?x^Ty$ 鏄豢灏勫嚱鏁般€?",
+    "source_summary": "Example 3.7 support function"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 102,
+    "term": "ch03-convex-functions.html#pair-102",
+    "kind": "example",
+    "title": "Example 3.10 maximum eigenvalue",
+    "body": "Learning note\\n\\n鏈€澶х壒寰佸€煎彲鍐欐垚 Rayleigh 鍟嗙殑涓婄‘鐣岋細$\\\\lambda_{\\\\max}(X)=\\\\sup_{\\\\|u\\\\|=1}u^TXu$銆傚鍥哄畾 $u$ 杩欐槸 $X$ 鐨勭嚎鎬у嚱鏁帮紝鎵€浠ヤ笂纭晫缁欏嚭鍑告€с€?",
+    "source_summary": "Example 3.10 maximum eigenvalue"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 103,
+    "term": "ch03-convex-functions.html#pair-103",
+    "kind": "example",
+    "title": "Example 3.11 spectral norm",
+    "body": "Learning note\\n\\n璋辫寖鏁版槸鏈€澶у寮傚€硷紝涔熻兘鍐欐垚鍙岀嚎鎬ц〃杈剧殑涓婄‘鐣屻€傝繖涓緥瀛愬拰鏈€澶х壒寰佸€煎钩琛岋細鐭╅樀鍑芥暟鐨勫嚫鎬у父甯镐笉鏄潬灞曞紑鍏冪礌锛岃€屾槸闈犲彉鍒嗚〃绀恒€?",
+    "source_summary": "Example 3.11 spectral norm"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 112,
+    "term": "ch03-convex-functions.html#pair-112",
+    "kind": "operation",
+    "title": "Composition rules motivation",
+    "body": "Learning note\\n\\n澶嶅悎瑙勫垯鍥炵瓟鐨勬槸锛氬凡鐭?$h$ 鍜?$g$ 鐨勬洸鐜囷紝浠€涔堟椂鍊?$h(g(x))$ 浠嶇劧鍑革紵杩欓噷鏈€瀹规槗閿欑殑鏄崟璋冩€ф潯浠讹紱澶栧眰鍑芥暟鏄惁閫掑锛屽喅瀹氬唴灞傚嚫鎬х殑涓嶇瓑寮忔柟鍚戣兘鍚︿紶閫掋€?",
+    "source_summary": "Composition rules motivation"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 117,
+    "term": "ch03-convex-functions.html#pair-117",
+    "kind": "operation",
+    "title": "Scalar composition theorem",
+    "body": "Learning note\\n\\n鏍囬噺澶嶅悎鐨勫彛璇€锛氬嚫涓旈潪鍑忕殑澶栧嚱鏁板彲浠ュ悆鍑稿嚱鏁帮紱鍑镐笖闈炲鐨勫鍑芥暟鍙互鍚冨嚬鍑芥暟銆備笉瑕佸彧璁扳€滃嚫濂楀嚫浠嶅嚫鈥濓紝瀹冨皯浜嗗叧閿殑鍗曡皟鎬ч檺鍒躲€?",
+    "source_summary": "Scalar composition theorem"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 126,
+    "term": "ch03-convex-functions.html#pair-126",
+    "kind": "example",
+    "title": "Example 3.13 simple composition",
+    "body": "Learning note\\n\\n杩欎簺渚嬪瓙鏄鍚堣鍒欑殑閫熸煡琛ㄣ€傝鏃舵妸姣忎釜鍑芥暟鎷嗘垚澶栧眰 $h$ 鍜屽唴灞?$g$锛岄€愰」妫€鏌モ€滃灞傛洸鐜囥€佸灞傚崟璋冩€с€佸唴灞傛洸鐜団€濓紝姣旂洿鎺ユ眰 Hessian 鏇寸ǔ銆?",
+    "source_summary": "Example 3.13 simple composition"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 130,
+    "term": "ch03-convex-functions.html#pair-130",
+    "kind": "operation",
+    "title": "Vector composition",
+    "body": "Learning note\\n\\n鍚戦噺澶嶅悎鎶婃爣閲忚鍒欐帹骞垮埌澶氫釜鍐呭眰鍑芥暟 $g_i$銆傛牳蹇冧粛鏄灞?$h$ 瀵规瘡涓潗鏍囩殑鍗曡皟鎬э細鍝釜鍧愭爣闈炲噺锛屽氨鍏佽瀵瑰簲鐨?$g_i$ 鏄嚫锛涘摢涓潗鏍囬潪澧烇紝灏卞厑璁稿搴旂殑 $g_i$ 鏄嚬銆?",
+    "source_summary": "Vector composition"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 141,
+    "term": "ch03-convex-functions.html#pair-141",
+    "kind": "example",
+    "title": "Example 3.15 Schur complement",
+    "body": "Learning note\\n\\n杩欎釜渚嬪瓙鎶娾€滃鏌愪釜鍙橀噺鍙栦笅纭晫淇濇寔鍑告€р€濆拰 Schur 琛ヨ繛鎺ヨ捣鏉ャ€傛秷鍘诲彉閲?$y$ 鍚庡緱鍒扮殑鍑芥暟浠嶅嚫锛岃儗鍚庢槸鍑镐笂鍥惧湪鎶曞奖涓嬩粛涓哄嚫闆嗐€?",
+    "source_summary": "Example 3.15 Schur complement"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 146,
+    "term": "ch03-convex-functions.html#pair-146",
+    "kind": "operation",
+    "title": "Perspective function",
+    "body": "Learning note\\n\\n閫忚鍑芥暟 $g(x,t)=t f(x/t)$ 鏄妸鍑芥暟鏀惧埌榻愭鍧愭爣閲岀湅銆傝澶氬垎寮忓舰鎬佺殑鍑告€ч兘鏉ヨ嚜瀹冿紝渚嬪 $x^Tx/t$ 鍜岀浉瀵圭喌銆傝浣忔潯浠?$t>0$锛屽惁鍒欒〃杈惧紡娌℃湁鎰忎箟銆?",
+    "source_summary": "Perspective function"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 148,
+    "term": "ch03-convex-functions.html#pair-148",
+    "kind": "example",
+    "title": "Example 3.18 norm squared perspective",
+    "body": "Learning note\\n\\n$\\\\|x\\\\|_2^2/t$ 鐨勫嚫鎬т笉鏄伓鐒剁殑锛屽畠鏄钩鏂硅寖鏁扮殑閫忚鍑芥暟銆備紭鍖栭噷杩欑被椤瑰父鍑虹幇鍦ㄤ簩闃堕敟銆佹柟宸綊涓€鍖栧拰鍒嗗紡鐩爣涓€?",
+    "source_summary": "Example 3.18 norm squared perspective"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 150,
+    "term": "ch03-convex-functions.html#pair-150",
+    "kind": "example",
+    "title": "Example 3.19 negative log perspective",
+    "body": "Learning note\\n\\n鐩稿鐔垫潵鑷?$-\\\\log x$ 鐨勯€忚鍑芥暟銆傝繖涓緥瀛愬€煎緱璁帮細淇℃伅璁洪噷鐨?KL divergence 鍙互琚嚫鍒嗘瀽缁熶竴澶勭悊锛屽悗闈㈤亣鍒扮喌姝ｅ垯鍖栧拰姒傜巼妯″瀷鏃朵細寰堟湁鐢ㄣ€?",
+    "source_summary": "Example 3.19 negative log perspective"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 162,
+    "term": "ch03-convex-functions.html#pair-162",
+    "kind": "conjugate",
+    "title": "Example 3.21 one-dimensional conjugates",
+    "body": "Learning note\\n\\n鍏辫江鍑芥暟 $f^*(y)=\\\\sup_x(yx-f(x))$ 琛￠噺绾挎€у嚱鏁?$yx$ 鑳借秴杩?$f$ 澶氬皯銆傝绠楁椂鏈€閲嶈鐨勬槸瀹氫箟鍩燂細鑻ヤ笂纭晫鏃犵晫锛岀粨鏋滃氨鏄?$\\\\infty$锛屼笉鏄€滄病鏈夌瓟妗堚€濄€?",
+    "source_summary": "Example 3.21 one-dimensional conjugates"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 169,
+    "term": "ch03-convex-functions.html#pair-169",
+    "kind": "conjugate",
+    "title": "Example 3.24 indicator conjugate",
+    "body": "Learning note\\n\\n闆嗗悎鎸囩ず鍑芥暟鐨勫叡杞氨鏄敮鎾戝嚱鏁般€傝繖鏉″叧绯绘妸鈥滅害鏉熼泦鍚堚€濆拰鈥滄敮鎸佽秴骞抽潰鈥濇帴璧锋潵锛屾槸瀵瑰伓闂閲岀害鏉熷彉鎴愭敮鎾戝嚱鏁版垨鍏辫江椤圭殑鏍稿績鏈哄埗銆?",
+    "source_summary": "Example 3.24 indicator conjugate"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 170,
+    "term": "ch03-convex-functions.html#pair-170",
+    "kind": "conjugate",
+    "title": "Example 3.25 log-sum-exp conjugate",
+    "body": "Learning note\\n\\nlog-sum-exp 鐨勫叡杞妸鍙橀噺闄愬埗鍒版鐜囧崟绾舰锛屽苟浜х敓璐熺喌褰㈠紡銆傝繖瑙ｉ噴浜嗕负浠€涔?softmax銆佺喌鍜屾鐜囨潈閲嶇粡甯镐竴璧峰嚭鐜帮細瀹冧滑鏄悓涓€瀵瑰叡杞粨鏋勭殑涓ら潰銆?",
+    "source_summary": "Example 3.25 log-sum-exp conjugate"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 174,
+    "term": "ch03-convex-functions.html#pair-174",
+    "kind": "conjugate",
+    "title": "Example 3.26 norm conjugate",
+    "body": "Learning note\\n\\n鑼冩暟鐨勫叡杞槸瀵瑰伓鑼冩暟鍗曚綅鐞冪殑鎸囩ず鍑芥暟銆傜洿瑙夋槸锛氱嚎鎬у嚱鏁?$y^Tx$ 鑻ヨ $\\\\|x\\\\|$ 鎺т綇锛岄渶瑕?$\\\\|y\\\\|_*\\\\le1$锛涘惁鍒欐部鏌愪釜鏂瑰悜鏀惧ぇ灏变細鏃犵晫銆?",
+    "source_summary": "Example 3.26 norm conjugate"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 176,
+    "term": "ch03-convex-functions.html#pair-176",
+    "kind": "conjugate",
+    "title": "Example 3.27 norm squared conjugate",
+    "body": "Learning note\\n\\n骞虫柟鑼冩暟鐨勫叡杞粛鏄钩鏂硅寖鏁帮紝鍙槸鎹㈡垚瀵瑰伓鑼冩暟锛?\\\\frac12\\\\|x\\\\|^2$ 瀵瑰簲 $\\\\frac12\\\\|y\\\\|_*^2$銆傝繖姣旇寖鏁版湰韬洿骞虫粦锛屾墍浠ュ湪姝ｅ垯鍖栧拰瀵瑰伓鎺ㄥ閲屾洿濂界敤銆?",
+    "source_summary": "Example 3.27 norm squared conjugate"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 197,
+    "term": "ch03-convex-functions.html#pair-197",
+    "kind": "quasiconvex",
+    "title": "Quasiconvex definition",
+    "body": "Learning note\\n\\n鎷熷嚫鍑芥暟涓嶈姹傚鸡鍦ㄥ浘鍍忎笂鏂癸紝鍙姹傛墍鏈変笅姘村钩闆嗘槸鍑哥殑銆傚畠淇濈暀浜嗏€滀綆浜庢煇涓槇鍊肩殑鍙鍖哄煙濂藉鐞嗏€濊繖涓€鐐癸紝鍥犳甯哥敤浜庡彲琛屾€т簩鍒嗗拰鍑嗗嚫浼樺寲銆?",
+    "source_summary": "Quasiconvex definition"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 208,
+    "term": "ch03-convex-functions.html#pair-208",
+    "kind": "quasiconvex",
+    "title": "Example 3.32 linear-fractional function",
+    "body": "Learning note\\n\\n绾挎€у垎寮忓嚱鏁板悓鏃舵嫙鍑稿拰鎷熷嚬锛屽洜涓哄畠鐨勪笅姘村钩闆嗗拰涓婃按骞抽泦閮借兘鍖栨垚绾挎€т笉绛夊紡銆傚垎寮忚鍒掗噷甯歌鐨勫彲澶勭悊鎬э紝寰堝灏辨潵鑷繖绉嶆按骞抽泦瑙嗚銆?",
+    "source_summary": "Example 3.32 linear-fractional function"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 226,
+    "term": "ch03-convex-functions.html#pair-226",
+    "kind": "quasiconvex",
+    "title": "First-order quasiconvex condition",
+    "body": "Learning note\\n\\n鎷熷嚫鐨勪竴闃舵潯浠朵笉鏄垏骞抽潰鍏ㄥ眬涓嬬晫锛岃€屾槸锛氳嫢 $y$ 鐨勫嚱鏁板€间笉楂樹簬 $x$锛屾搴︽柟鍚戜笉鑳芥寚鍚?$y$銆傚畠鎻忚堪鐨勬槸涓嬫按骞抽泦杈圭晫鐨勬敮鎾戣秴骞抽潰銆?",
+    "source_summary": "First-order quasiconvex condition"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 253,
+    "term": "ch03-convex-functions.html#pair-253",
+    "kind": "quasiconvex",
+    "title": "Example 3.38 convex over concave",
+    "body": "Learning note\\n\\n鍑稿嚱鏁伴櫎浠ユ鐨勫嚬鍑芥暟閫氬父涓嶆槸鍑稿嚱鏁帮紝浣嗗畠鏄嫙鍑稿嚱鏁般€傝瘉鏄庣湅涓嬫按骞抽泦锛?p(x)/q(x)\\\\le t$ 绛変环浜?$p(x)-tq(x)\\\\le0$锛岃繖鏄嚫鍑芥暟鐨勪笅姘村钩闆嗐€?",
+    "source_summary": "Example 3.38 convex over concave"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 256,
+    "term": "ch03-convex-functions.html#pair-256",
+    "kind": "log-concave",
+    "title": "Log-concavity definition",
+    "body": "Learning note\\n\\n瀵规暟鍑规妸涔樻硶缁撴瀯杞垚鍔犳硶缁撴瀯锛?\\\\log f$ 鍑规剰鍛崇潃 $f$ 鍦ㄥ嚑浣曞钩鍧囨剰涔変笅琛ㄧ幇鑹ソ銆傛鐜囧瘑搴︺€佷綋绉拰鑹巼闂甯哥敤瀹冿紝鍥犱负绉垎鍜岃竟缂樺寲鏈夊緢濂界殑淇濇寔鎬с€?",
+    "source_summary": "Log-concavity definition"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 263,
+    "term": "ch03-convex-functions.html#pair-263",
+    "kind": "log-concave",
+    "title": "Example 3.40 log-concave densities",
+    "body": "Learning note\\n\\n楂樻柉瀵嗗害瀵规暟鍑癸紝鎵€浠ュ緢澶氶珮鏂鐜囧尯鍩熶細缁ф壙鍑告€ф垨鎷熷嚫鎬ф€ц川銆傝繖閲岀殑閲嶇偣鏄細姒傜巼妯″瀷鐨勫舰鐘跺彲浠ラ€氳繃 $\\\\log f$ 鐨勫嚬鎬ц繘鍏ュ嚫浼樺寲宸ュ叿绠便€?",
+    "source_summary": "Example 3.40 log-concave densities"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 278,
+    "term": "ch03-convex-functions.html#pair-278",
+    "kind": "log-concave",
+    "title": "Integration of log-concave functions",
+    "body": "Learning note\\n\\n瀵规暟鍑藉嚱鏁板湪绉垎涓嬬殑淇濇寔鎬у緢寮猴細鑱斿悎瀵规暟鍑瑰嚱鏁拌竟缂樺寲鍚庝粛瀵规暟鍑广€傛鐜囪閲岃繖鎰忓懗鐫€寰堝杈圭紭鍒嗗竷銆佸懡涓鐜囧拰浣撶Н鍑芥暟浠嶄繚鐣欏彲浼樺寲缁撴瀯銆?",
+    "source_summary": "Integration of log-concave functions"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 289,
+    "term": "ch03-convex-functions.html#pair-289",
+    "kind": "generalized",
+    "title": "Monotonicity under generalized inequalities",
+    "body": "Learning note\\n\\n$K$-鍗曡皟鎬ф妸鏅€氱殑鈥滈€愮偣鍙樺ぇ鈥濇崲鎴愰敟璇卞鐨勫亸搴忋€傝杩欎竴鑺傛椂鍏堥棶锛氬摢涓敟瀹氫箟浜嗏€滄洿澶р€濓紵鍦ㄧ煩闃靛満鏅噷锛岃繖涓敟閫氬父鏄崐姝ｅ畾閿ャ€?",
+    "source_summary": "Monotonicity under generalized inequalities"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 301,
+    "term": "ch03-convex-functions.html#pair-301",
+    "kind": "generalized",
+    "title": "Example 3.48 matrix convexity",
+    "body": "Learning note\\n\\n鐭╅樀鍑告€ц姹備笉绛夊紡鎸夊崐姝ｅ畾搴忔垚绔嬶紝姣旈€愬厓绱犲嚫鏇村己銆備竴涓疄鐢ㄥ垽鎹槸锛氬鎵€鏈夊悜閲?$z$锛屾爣閲忓嚱鏁?$z^Tf(x)z$ 鍑革紱杩欐妸鐭╅樀涓嶇瓑寮忔媺鍥炴爣閲忓嚫鎬с€?",
+    "source_summary": "Example 3.48 matrix convexity"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 312,
+    "term": "ch03-convex-functions.html#pair-312",
+    "kind": "generalized",
+    "title": "Example 3.49 quadratic matrix function",
+    "body": "Learning note\\n\\n杩欎釜渚嬪瓙鎶?$K$-鍑稿鍚堣鍒欏拰 $-\\\\log\\\\det$ 杩炴帴璧锋潵銆傚鏉傜煩闃佃〃杈惧紡鐨勫嚫鎬у線寰€涓嶆槸鐩存帴灞曞紑璇佹槑锛岃€屾槸璇嗗埆鍑哄崐姝ｅ畾搴忋€佺煩闃靛嚬鎬у拰鍗曡皟澶嶅悎銆?",
+    "source_summary": "Example 3.49 quadratic matrix function"
+  }
+]
