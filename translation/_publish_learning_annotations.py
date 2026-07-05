@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import sys
@@ -45,7 +46,27 @@ def graphql(token: str, query: str, variables: dict) -> dict:
 
 
 def build_discussion_title(entry: dict) -> str:
-    return f"{entry['term']} - {entry['title']}"
+    return entry["term"]
+
+
+def strict_hash_marker(term: str) -> str:
+    digest = hashlib.sha1(term.encode("utf-8")).hexdigest()
+    return f"<!-- sha1: {digest} -->"
+
+
+def build_discussion_body(entry: dict) -> str:
+    term = entry["term"]
+    return f"# {term}\n\n{strict_hash_marker(term)}"
+
+
+def synced_discussion_body(entry: dict, existing_body: str | None) -> str:
+    marker = strict_hash_marker(entry["term"])
+    body = (existing_body or "").strip()
+    if marker in body:
+        return body
+    if not body:
+        return build_discussion_body(entry)
+    return body + "\n\n" + marker
 
 
 def learning_note_body(entry: dict) -> str:
@@ -62,6 +83,11 @@ def plan_publication(entries: list[dict], existing: dict[str, dict]) -> list[dic
         desired = learning_note_body(entry)
         if not found:
             action = "create"
+        elif (
+            ("title" in found and found["title"] != entry["term"])
+            or ("body" in found and strict_hash_marker(entry["term"]) not in (found.get("body") or ""))
+        ):
+            action = "sync_discussion"
         elif not found.get("comment_id"):
             action = "comment"
         elif (found.get("comment_body") or "").strip() != desired.strip():
@@ -88,6 +114,7 @@ query($owner: String!, $name: String!, $cursor: String) {
       nodes {
         id
         title
+        body
         comments(first: 50) {
           nodes {
             id
@@ -139,6 +166,14 @@ UPDATE_COMMENT = """
 mutation($commentId: ID!, $body: String!) {
   updateDiscussionComment(input: {commentId: $commentId, body: $body}) {
     comment { id }
+  }
+}
+"""
+
+UPDATE_DISCUSSION = """
+mutation($discussionId: ID!, $title: String!, $body: String!) {
+  updateDiscussion(input: {discussionId: $discussionId, title: $title, body: $body}) {
+    discussion { id title }
   }
 }
 """
@@ -196,6 +231,8 @@ def fetch_existing_discussions(token: str, terms: set[str], graphql_fn=graphql) 
             marked = fetch_marked_comment(token, node["id"], node["comments"], graphql_fn=graphql_fn)
             existing[term] = {
                 "discussion_id": node["id"],
+                "title": node["title"],
+                "body": node.get("body", ""),
                 "comment_id": marked["id"] if marked else None,
                 "comment_body": marked["body"] if marked else None,
             }
@@ -222,11 +259,21 @@ def apply_plan(token: str, config: dict, repo_id: str, plan: list[dict], dry_run
                     "repositoryId": repo_id,
                     "categoryId": config["categoryId"],
                     "title": build_discussion_title(entry),
-                    "body": "Created for Giscus term " + entry["term"],
+                    "body": build_discussion_body(entry),
                 },
             )
             discussion_id = created["data"]["createDiscussion"]["discussion"]["id"]
             graphql(token, ADD_COMMENT, {"discussionId": discussion_id, "body": body})
+        elif action == "sync_discussion":
+            graphql(
+                token,
+                UPDATE_DISCUSSION,
+                {
+                    "discussionId": item["existing"]["discussion_id"],
+                    "title": build_discussion_title(entry),
+                    "body": synced_discussion_body(entry, item["existing"].get("body")),
+                },
+            )
         elif action == "comment":
             graphql(token, ADD_COMMENT, {"discussionId": item["existing"]["discussion_id"], "body": body})
         elif action == "update":

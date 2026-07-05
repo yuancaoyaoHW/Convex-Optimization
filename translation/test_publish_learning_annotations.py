@@ -4,10 +4,12 @@ from translation._publish_learning_annotations import (
     DISCUSSIONS_QUERY,
     DISCUSSION_COMMENTS_QUERY,
     MARKER,
+    build_discussion_body,
     build_discussion_title,
     fetch_existing_discussions,
     learning_note_body,
     plan_publication,
+    strict_hash_marker,
 )
 
 
@@ -24,8 +26,14 @@ class PublisherPlanningTests(unittest.TestCase):
         entry = {"term": "ch03-convex-functions.html#pair-13", "title": "Example 3.1 indicator function"}
         self.assertEqual(
             build_discussion_title(entry),
-            "ch03-convex-functions.html#pair-13 - Example 3.1 indicator function",
+            "ch03-convex-functions.html#pair-13",
         )
+
+    def test_build_discussion_body_includes_strict_hash_marker(self):
+        entry = {"term": "ch03-convex-functions.html#pair-13", "title": "Example 3.1 indicator function"}
+        body = build_discussion_body(entry)
+        self.assertIn("# ch03-convex-functions.html#pair-13", body)
+        self.assertIn(strict_hash_marker(entry["term"]), body)
 
     def test_learning_note_body_has_marker(self):
         entry = {"body": "Learning note\n\n鍐呭"}
@@ -45,6 +53,20 @@ class PublisherPlanningTests(unittest.TestCase):
         }
         plan = plan_publication(entries, existing)
         self.assertEqual([item["action"] for item in plan], ["create", "comment", "skip"])
+
+    def test_plan_publication_syncs_suffixed_title_and_missing_strict_hash(self):
+        entry = {"term": "ch03-convex-functions.html#pair-13", "title": "Example", "body": "Learning note\n\nA"}
+        existing = {
+            "ch03-convex-functions.html#pair-13": {
+                "discussion_id": "D_13",
+                "title": "ch03-convex-functions.html#pair-13 - Example",
+                "body": "Created for Giscus term ch03-convex-functions.html#pair-13",
+                "comment_id": "C_13",
+                "comment_body": learning_note_body(entry),
+            }
+        }
+        plan = plan_publication([entry], existing)
+        self.assertEqual([item["action"] for item in plan], ["sync_discussion"])
 
 
 class FetchExistingDiscussionsTests(unittest.TestCase):
