@@ -39,12 +39,47 @@ class ManifestValidationTests(unittest.TestCase):
         errors = validate_manifest(entries, {13: "Example 3.1"}, enforce_count=False)
         self.assertTrue(any("term must be" in error for error in errors))
 
+    def test_manifest_validation_rejects_non_string_term_and_kind(self):
+        entries = [{
+            "page": "ch03-convex-functions.html",
+            "pair": 13,
+            "term": [],
+            "kind": [],
+            "title": "Malformed fields",
+            "body": "Learning note\n\nMalformed manifest values should not crash validation.",
+            "source_summary": "Example 3.1"
+        }]
+        errors = validate_manifest(entries, {13: "Example 3.1"}, enforce_count=False)
+        self.assertTrue(any("term must be" in error for error in errors))
+        self.assertTrue(any("invalid kind" in error for error in errors))
+
+    def test_manifest_validation_rejects_bool_pair(self):
+        entries = [{
+            "page": "ch03-convex-functions.html",
+            "pair": True,
+            "term": "ch03-convex-functions.html#pair-True",
+            "kind": "example",
+            "title": "Bool pair",
+            "body": "Learning note\n\nBooleans should not be treated as pair numbers.",
+            "source_summary": "Example 3.1"
+        }]
+        errors = validate_manifest(entries, {1: "Example 3.1"}, enforce_count=False)
+        self.assertTrue(any("pair must be a positive integer" in error for error in errors))
+
     def test_load_manifest_requires_json_array(self):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "manifest.json"
             path.write_text(json.dumps({"entries": []}), encoding="utf-8")
             with self.assertRaises(ValueError):
                 load_manifest(str(path))
+
+    def test_load_manifest_rejects_invalid_json(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "manifest.json"
+            path.write_text("{", encoding="utf-8")
+            with self.assertRaises(ValueError) as ctx:
+                load_manifest(str(path))
+            self.assertIn("valid JSON", str(ctx.exception))
 
 
 if __name__ == "__main__":

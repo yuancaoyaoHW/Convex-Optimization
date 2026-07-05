@@ -74,7 +74,10 @@ def extract_pair_texts(html_path: str) -> dict[int, str]:
 
 
 def load_manifest(path: str) -> list[dict]:
-    data = json.loads(Path(path).read_text(encoding="utf-8"))
+    try:
+        data = json.loads(Path(path).read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        raise ValueError("manifest must be valid JSON") from exc
     if not isinstance(data, list):
         raise ValueError("manifest root must be a JSON array")
     return data
@@ -95,21 +98,26 @@ def validate_manifest(entries: list[dict], pair_texts: dict[int, str], enforce_c
 
         pair = entry["pair"]
         term = entry["term"]
-        expected_term = f"{TERM_PREFIX}{pair}"
+        kind = entry["kind"]
 
         if entry["page"] != PAGE:
             errors.append(f"entry {index}: page must be {PAGE}")
-        if not isinstance(pair, int) or pair < 1:
+        if type(pair) is not int or pair < 1:
             errors.append(f"entry {index}: pair must be a positive integer")
-        elif pair not in pair_texts:
-            errors.append(f"entry {index}: pair {pair} does not exist in {PAGE}")
-        if term != expected_term:
-            errors.append(f"entry {index}: term must be {expected_term}")
-        if term in seen_terms:
-            errors.append(f"entry {index}: duplicate term {term}")
-        seen_terms.add(term)
-        if entry["kind"] not in VALID_KINDS:
-            errors.append(f"entry {index}: invalid kind {entry['kind']}")
+        else:
+            expected_term = f"{TERM_PREFIX}{pair}"
+            if pair not in pair_texts:
+                errors.append(f"entry {index}: pair {pair} does not exist in {PAGE}")
+            if not isinstance(term, str):
+                errors.append(f"entry {index}: term must be {expected_term}")
+            elif term != expected_term:
+                errors.append(f"entry {index}: term must be {expected_term}")
+            else:
+                if term in seen_terms:
+                    errors.append(f"entry {index}: duplicate term {term}")
+                seen_terms.add(term)
+        if not isinstance(kind, str) or kind not in VALID_KINDS:
+            errors.append(f"entry {index}: invalid kind {kind}")
         if not str(entry["title"]).strip():
             errors.append(f"entry {index}: title is empty")
 
@@ -133,7 +141,7 @@ def main() -> int:
     try:
         entries = load_manifest(args.manifest)
         pair_texts = extract_pair_texts(args.html)
-    except FileNotFoundError as exc:
+    except (FileNotFoundError, ValueError) as exc:
         print(str(exc), file=sys.stderr)
         return 1
 
