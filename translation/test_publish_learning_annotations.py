@@ -68,6 +68,36 @@ class PublisherPlanningTests(unittest.TestCase):
         plan = plan_publication([entry], existing)
         self.assertEqual([item["action"] for item in plan], ["sync_discussion"])
 
+    def test_sync_discussion_plan_also_records_missing_comment_work(self):
+        entry = {"term": "ch03-convex-functions.html#pair-13", "title": "Example", "body": "Learning note\n\nA"}
+        existing = {
+            "ch03-convex-functions.html#pair-13": {
+                "discussion_id": "D_13",
+                "title": "ch03-convex-functions.html#pair-13 - Example",
+                "body": "Created for Giscus term ch03-convex-functions.html#pair-13",
+                "comment_id": None,
+                "comment_body": None,
+            }
+        }
+        plan = plan_publication([entry], existing)
+        self.assertEqual(plan[0]["action"], "sync_discussion")
+        self.assertEqual(plan[0]["comment_action"], "comment")
+
+    def test_sync_discussion_plan_also_records_stale_comment_work(self):
+        entry = {"term": "ch03-convex-functions.html#pair-13", "title": "Example", "body": "Learning note\n\nfresh"}
+        existing = {
+            "ch03-convex-functions.html#pair-13": {
+                "discussion_id": "D_13",
+                "title": "ch03-convex-functions.html#pair-13",
+                "body": "Created for Giscus term ch03-convex-functions.html#pair-13",
+                "comment_id": "C_13",
+                "comment_body": learning_note_body({"body": "Learning note\n\nstale"}),
+            }
+        }
+        plan = plan_publication([entry], existing)
+        self.assertEqual(plan[0]["action"], "sync_discussion")
+        self.assertEqual(plan[0]["comment_action"], "update")
+
 
 class FetchExistingDiscussionsTests(unittest.TestCase):
     def test_fetch_existing_discussions_matches_exact_title_term(self):

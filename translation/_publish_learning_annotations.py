@@ -83,18 +83,28 @@ def plan_publication(entries: list[dict], existing: dict[str, dict]) -> list[dic
         desired = learning_note_body(entry)
         if not found:
             action = "create"
+            comment_action = None
         elif (
             ("title" in found and found["title"] != entry["term"])
             or ("body" in found and strict_hash_marker(entry["term"]) not in (found.get("body") or ""))
         ):
             action = "sync_discussion"
+            if not found.get("comment_id"):
+                comment_action = "comment"
+            elif (found.get("comment_body") or "").strip() != desired.strip():
+                comment_action = "update"
+            else:
+                comment_action = None
         elif not found.get("comment_id"):
             action = "comment"
+            comment_action = None
         elif (found.get("comment_body") or "").strip() != desired.strip():
             action = "update"
+            comment_action = None
         else:
             action = "skip"
-        plan.append({"action": action, "entry": entry, "existing": found})
+            comment_action = None
+        plan.append({"action": action, "comment_action": comment_action, "entry": entry, "existing": found})
     return plan
 
 
@@ -274,6 +284,10 @@ def apply_plan(token: str, config: dict, repo_id: str, plan: list[dict], dry_run
                     "body": synced_discussion_body(entry, item["existing"].get("body")),
                 },
             )
+            if item.get("comment_action") == "comment":
+                graphql(token, ADD_COMMENT, {"discussionId": item["existing"]["discussion_id"], "body": body})
+            elif item.get("comment_action") == "update":
+                graphql(token, UPDATE_COMMENT, {"commentId": item["existing"]["comment_id"], "body": body})
         elif action == "comment":
             graphql(token, ADD_COMMENT, {"discussionId": item["existing"]["discussion_id"], "body": body})
         elif action == "update":
