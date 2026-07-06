@@ -1,0 +1,272 @@
+[
+  {
+    "page": "ch08-geometric-problems.html",
+    "pair": 2,
+    "term": "ch08-geometric-problems.html#pair-2",
+    "kind": "definition",
+    "title": "Distance and projection on a set",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 先固定点 $x_0$ 和集合 $C$。\n2. 距离定义为 $\\inf\\{\\|x_0-x\\|\\mid x\\in C\\}$。\n3. 若某个 $x^\\star\\in C$ 达到这个下确界, 它就是 $x_0$ 在 $C$ 上的投影。\n4. 若集合不闭, 下确界可能达不到, 投影可能不存在。\n5. 若范数和集合有额外凸性条件, 投影存在性和唯一性会更好处理。",
+    "source_summary": "Distance and projection definitions"
+  },
+  {
+    "page": "ch08-geometric-problems.html",
+    "pair": 8,
+    "term": "ch08-geometric-problems.html#pair-8",
+    "kind": "operation",
+    "title": "Projection on a convex set as optimization",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 用凸不等式和仿射等式描述集合 $C$。\n2. 投影问题写成 minimize $\\|x-x_0\\|$ subject to $x\\in C$。\n3. 范数是凸函数, $x-x_0$ 是仿射表达式。\n4. 约束定义凸集。\n5. 因此计算凸集投影就是一个凸优化问题。",
+    "source_summary": "Projection on a convex set"
+  },
+  {
+    "page": "ch08-geometric-problems.html",
+    "pair": 9,
+    "term": "ch08-geometric-problems.html#pair-9",
+    "kind": "example",
+    "title": "Euclidean projection on a polyhedron",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 多面体写成 $Ax\\preceq b$。\n2. 欧氏投影最小化 $\\|x-x_0\\|_2$。\n3. 平方目标 $\\|x-x_0\\|_2^2$ 与原目标等价。\n4. 平方目标是凸二次函数, 约束是线性不等式。\n5. 因此该投影可通过 QP 求解。",
+    "source_summary": "Euclidean projection on a polyhedron"
+  },
+  {
+    "page": "ch08-geometric-problems.html",
+    "pair": 15,
+    "term": "ch08-geometric-problems.html#pair-15",
+    "kind": "geometry",
+    "title": "Projection produces a separating hyperplane",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 若 $x_0\\notin C$, 投影点 $p=P_C(x_0)$ 与 $x_0$ 不同。\n2. 欧氏投影的一阶条件给出 $(x_0-p)^T(x-p)\\le0$ for all $x\\in C$。\n3. 因此以 $x_0-p$ 为法向量的超平面支撑 $C$ 于 $p$。\n4. 位于 $x_0$ 和 $p$ 中点的平行超平面严格分离 $x_0$ 与 $C$。\n5. 这把“最近点”问题转成了“分离证书”。",
+    "source_summary": "Separating a point and a convex set"
+  },
+  {
+    "page": "ch08-geometric-problems.html",
+    "pair": 18,
+    "term": "ch08-geometric-problems.html#pair-18",
+    "kind": "operation",
+    "title": "Dual construction of separation",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 把投影问题改写为变量 $x,y$, 约束 $x_0-x=y$。\n2. 目标是最小化 $\\|y\\|$。\n3. 对这个凸问题写拉格朗日对偶。\n4. 对偶变量会给出一个线性函数, 即分离超平面的法向量。\n5. 这种方法适用于任意范数, 不限于欧氏几何。",
+    "source_summary": "Projection and separation via duality"
+  },
+  {
+    "page": "ch08-geometric-problems.html",
+    "pair": 24,
+    "term": "ch08-geometric-problems.html#pair-24",
+    "kind": "definition",
+    "title": "Distance between two sets",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 集合间距离定义为所有点对距离的下确界。\n2. 变量分别是 $x\\in C$ 和 $y\\in D$。\n3. 目标是最小化 $\\|x-y\\|$。\n4. 若最小值为零, 两集合可能相交, 也可能只是闭包相交。\n5. 若集合闭且凸, 距离问题通常能稳定地作为凸优化处理。",
+    "source_summary": "Distance between sets"
+  },
+  {
+    "page": "ch08-geometric-problems.html",
+    "pair": 27,
+    "term": "ch08-geometric-problems.html#pair-27",
+    "kind": "operation",
+    "title": "Computing distance between convex sets",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 用凸不等式描述 $C$ 和 $D$。\n2. 建立变量 $x,y$, 分别约束在两个集合中。\n3. 最小化 $\\|x-y\\|$。\n4. 目标是凸函数与仿射差 $x-y$ 的复合。\n5. 两组约束都是凸约束, 所以得到凸优化问题。",
+    "source_summary": "Computing distance between convex sets"
+  },
+  {
+    "page": "ch08-geometric-problems.html",
+    "pair": 32,
+    "term": "ch08-geometric-problems.html#pair-32",
+    "kind": "geometry",
+    "title": "Separating convex sets via duality",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 集合间距离问题的对偶变量定义一个方向 $z$。\n2. 对偶可行性保证一个集合在该方向上的支撑值低于另一个集合。\n3. 若对偶目标为正, 两个支撑值之间有正间隔。\n4. 这正是存在严格分离超平面的条件。\n5. 强对偶成立时, 正距离和分离超平面互相对应。",
+    "source_summary": "Separating convex sets"
+  },
+  {
+    "page": "ch08-geometric-problems.html",
+    "pair": 40,
+    "term": "ch08-geometric-problems.html#pair-40",
+    "kind": "definition",
+    "title": "Gram matrix encodes geometry",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 把向量 $a_1,\\ldots,a_n$ 组成矩阵 $A$。\n2. Gram 矩阵定义为 $G=A^TA$。\n3. 元素 $G_{ij}=a_i^Ta_j$ 给出内积。\n4. 长度、距离和角度都可由内积表达。\n5. 因此几何配置问题可以转成关于 $G$ 的矩阵约束问题。",
+    "source_summary": "Gram matrix and realizability"
+  },
+  {
+    "page": "ch08-geometric-problems.html",
+    "pair": 44,
+    "term": "ch08-geometric-problems.html#pair-44",
+    "kind": "condition",
+    "title": "Realizability via positive semidefinite Gram matrix",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 若 $G=A^TA$, 则 $G$ 必为对称半正定矩阵。\n2. 反过来, 任意 $G\\succeq0$ 都可做 Cholesky 或特征分解。\n3. 写成 $G=A^TA$ 后, $A$ 的列就是一组实现该 Gram 矩阵的向量。\n4. 因此几何数据可实现当且仅当对应 $G\\succeq0$。\n5. 这是把距离角度问题转成 SDP 的核心。",
+    "source_summary": "Realizability of Gram matrices"
+  },
+  {
+    "page": "ch08-geometric-problems.html",
+    "pair": 58,
+    "term": "ch08-geometric-problems.html#pair-58",
+    "kind": "condition",
+    "title": "Correlation matrix for angle-only problems",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 只关心角度时, 可以忽略向量长度。\n2. 把每个向量归一化为单位向量。\n3. 相关矩阵 $C$ 的元素是 $C_{ij}=\\cos\\theta_{ij}$。\n4. 单位向量的 Gram 矩阵满足 $C\\succeq0$ 且 $C_{ii}=1$。\n5. 因此角度集合可实现当且仅当这样的相关矩阵半正定。",
+    "source_summary": "Angle-only problems and correlation matrices"
+  },
+  {
+    "page": "ch08-geometric-problems.html",
+    "pair": 67,
+    "term": "ch08-geometric-problems.html#pair-67",
+    "kind": "condition",
+    "title": "Euclidean distance matrix characterization",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 距离矩阵 $D$ 记录平方距离 $d_{ij}^2$。\n2. 必须有 $D_{ii}=0$ 且 $D_{ij}\\ge0$。\n3. 距离来自某组点当且仅当 $D$ 在 $\\mathbf{1}^\\perp$ 上负半定。\n4. 这是 Gram 矩阵半正定条件消去平移自由度后的形式。\n5. 因而 Euclidean 距离约束也可用线性矩阵不等式处理。",
+    "source_summary": "Euclidean distance matrix condition"
+  },
+  {
+    "page": "ch08-geometric-problems.html",
+    "pair": 72,
+    "term": "ch08-geometric-problems.html#pair-72",
+    "kind": "example",
+    "title": "Minimum volume covering ellipsoid",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 椭球可写成 $\\{x\\mid \\|Ax+b\\|_2\\le1\\}$ 或等价仿射形式。\n2. 覆盖有限点集要求每个点满足椭球不等式。\n3. 椭球体积与 $\\det A^{-1}$ 成正比。\n4. 最小体积等价于最小化 $\\log\\det A^{-1}$。\n5. 这些约束和目标可形成凸优化问题。",
+    "source_summary": "Minimum volume ellipsoid covering a finite set"
+  },
+  {
+    "page": "ch08-geometric-problems.html",
+    "pair": 83,
+    "term": "ch08-geometric-problems.html#pair-83",
+    "kind": "definition",
+    "title": "Maximum volume inscribed ellipsoid",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 目标是在凸集 $C$ 内找体积最大的椭球。\n2. 椭球通常写成 $\\{Bu+d\\mid \\|u\\|_2\\le1\\}$。\n3. 体积与 $\\det B$ 成正比。\n4. 最大化体积等价于最大化 $\\log\\det B$。\n5. 包含于 $C$ 的条件可对常见凸集转成凸约束。",
+    "source_summary": "Maximum volume ellipsoid inside a convex set"
+  },
+  {
+    "page": "ch08-geometric-problems.html",
+    "pair": 89,
+    "term": "ch08-geometric-problems.html#pair-89",
+    "kind": "operation",
+    "title": "Affine invariance of extremal ellipsoids",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 对集合施加可逆仿射变换 $T$。\n2. 任意覆盖 $C$ 的椭球会被映成覆盖 $TC$ 的椭球。\n3. 任意覆盖 $TC$ 的椭球也可逆映回覆盖 $C$ 的椭球。\n4. 体积只乘以固定因子 $|\\det T|$。\n5. 因此最小覆盖椭球和最大内接椭球都会随仿射变换一起变换。",
+    "source_summary": "Affine invariance of extremal volume ellipsoids"
+  },
+  {
+    "page": "ch08-geometric-problems.html",
+    "pair": 93,
+    "term": "ch08-geometric-problems.html#pair-93",
+    "kind": "definition",
+    "title": "Chebyshev center",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 点 $x$ 的深度定义为它到集合外部的距离。\n2. Chebyshev 中心是深度最大的点。\n3. 等价地, 它是集合内最大球的球心。\n4. 球半径就是该点到边界的最小距离。\n5. 这个中心强调最坏方向上的安全裕量。",
+    "source_summary": "Chebyshev center definition"
+  },
+  {
+    "page": "ch08-geometric-problems.html",
+    "pair": 96,
+    "term": "ch08-geometric-problems.html#pair-96",
+    "kind": "example",
+    "title": "Chebyshev center of a polyhedron",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 多面体为 $a_i^Tx\\le b_i$。\n2. 半径为 $R$ 的球 $x+Ru$ 要完全位于多面体内。\n3. 对每个约束, 最坏情形是最大化 $a_i^T(x+Ru)$ over $\\|u\\|_2\\le1$。\n4. 该最大值为 $a_i^Tx+R\\|a_i\\|_2$。\n5. 所以约束变为 $a_i^Tx+R\\|a_i\\|_2\\le b_i$, 最大化 $R$ 得到 SOCP/LP 形式。",
+    "source_summary": "Chebyshev center of a polyhedron"
+  },
+  {
+    "page": "ch08-geometric-problems.html",
+    "pair": 103,
+    "term": "ch08-geometric-problems.html#pair-103",
+    "kind": "definition",
+    "title": "Analytic center",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 对严格可行点, 每个不等式有松弛量 $-f_i(x)>0$。\n2. 解析中心最大化所有松弛量乘积, 等价于最小化 $-\\sum_i\\log(-f_i(x))$。\n3. 这个目标是对数障碍函数。\n4. 若 $f_i$ 是凸函数, 该障碍目标是凸的。\n5. 因此解析中心可以作为一个凸优化问题求解。",
+    "source_summary": "Analytic center of inequalities"
+  },
+  {
+    "page": "ch08-geometric-problems.html",
+    "pair": 119,
+    "term": "ch08-geometric-problems.html#pair-119",
+    "kind": "definition",
+    "title": "Linear discrimination",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 寻找仿射函数 $f(z)=a^Tz-b$。\n2. 要求第一类点满足 $f(x_i)>0$。\n3. 要求第二类点满足 $f(y_i)<0$。\n4. 这些都是关于 $a,b$ 的线性严格不等式。\n5. 因此线性可分性可以作为线性可行性问题研究。",
+    "source_summary": "Linear discrimination formulation"
+  },
+  {
+    "page": "ch08-geometric-problems.html",
+    "pair": 123,
+    "term": "ch08-geometric-problems.html#pair-123",
+    "kind": "geometry",
+    "title": "Robust separation and convex hull distance",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 鲁棒线性判别最大化两个类别之间的间隔。\n2. 对固定法向量归一化后, 间隔等于两类点到分离超平面的最小距离差。\n3. 最优间隔与两个凸包之间的距离相关。\n4. 支撑向量位于最接近的凸包边界上。\n5. 这解释了为什么分类问题可转成集合分离和距离问题。",
+    "source_summary": "Robust linear discrimination interpretation"
+  },
+  {
+    "page": "ch08-geometric-problems.html",
+    "pair": 126,
+    "term": "ch08-geometric-problems.html#pair-126",
+    "kind": "operation",
+    "title": "Approximate linear discrimination with slack",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 当两类点不可线性分离时, 原严格约束不可行。\n2. 引入非负松弛变量 $u_i,v_i$ 放宽分类约束。\n3. 松弛变量表示违反分类间隔的程度。\n4. 最小化松弛变量之和得到线性规划。\n5. 这给出一种近似线性判别方法。",
+    "source_summary": "Approximate linear discrimination via linear programming"
+  },
+  {
+    "page": "ch08-geometric-problems.html",
+    "pair": 132,
+    "term": "ch08-geometric-problems.html#pair-132",
+    "kind": "example",
+    "title": "Logistic modeling for classification",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 用 logistic 模型表示 $\\operatorname{prob}(z=1\\mid u)$。\n2. 参数是分类超平面的 $a,b$。\n3. 根据带标签样本写出对数似然。\n4. 负对数似然是凸函数, 可通过凸优化最小化。\n5. 得到的超平面 $a^Tu=b$ 对应两个类别概率相等的位置。",
+    "source_summary": "Approximate linear discrimination via logistic modeling"
+  },
+  {
+    "page": "ch08-geometric-problems.html",
+    "pair": 140,
+    "term": "ch08-geometric-problems.html#pair-140",
+    "kind": "example",
+    "title": "Quadratic discrimination",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 令分类函数为二次函数 $f(x)=x^TPx+q^Tx+r$。\n2. 对训练点施加 $f(x_i)>0$ 和 $f(y_i)<0$。\n3. 这些约束对参数 $P,q,r$ 是线性的。\n4. 还可加入 $P\\prec0$ 等形状约束。\n5. 因此许多二次判别设计仍可写成凸可行或凸优化问题。",
+    "source_summary": "Quadratic discrimination"
+  },
+  {
+    "page": "ch08-geometric-problems.html",
+    "pair": 151,
+    "term": "ch08-geometric-problems.html#pair-151",
+    "kind": "definition",
+    "title": "Linear facility location objective",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 每个节点位置是变量 $x_i$。\n2. 图的边表示需要连接的点对。\n3. 每条边的成本是距离 $\\|x_i-x_j\\|$。\n4. 总成本是所有边长的加权和。\n5. 因为范数是凸函数, 该布局目标是凸函数。",
+    "source_summary": "Linear facility location problems"
+  },
+  {
+    "page": "ch08-geometric-problems.html",
+    "pair": 160,
+    "term": "ch08-geometric-problems.html#pair-160",
+    "kind": "example",
+    "title": "Quadratic placement problem",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 非线性设施选址允许边长进入递增凸函数 $h$。\n2. 取 $h(z)=z^2$ 且使用欧氏范数。\n3. 每条边成本变为 $\\|x_i-x_j\\|_2^2$。\n4. 总目标是凸二次函数求和。\n5. 因而二次布局问题可用凸二次优化求解。",
+    "source_summary": "Quadratic placement"
+  },
+  {
+    "page": "ch08-geometric-problems.html",
+    "pair": 173,
+    "term": "ch08-geometric-problems.html#pair-173",
+    "kind": "operation",
+    "title": "Path constraints without enumerating paths",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 源到汇路径数量可能随图规模指数增长。\n2. 直接约束每条路径延迟会不可行。\n3. 对有向无环图, 可用动态规划定义每个节点到汇点的最大剩余延迟。\n4. 每条边只产生一个局部递推不等式。\n5. 这样用多项式数量约束替代指数数量路径约束。",
+    "source_summary": "Minimax delay placement reformulation"
+  },
+  {
+    "page": "ch08-geometric-problems.html",
+    "pair": 182,
+    "term": "ch08-geometric-problems.html#pair-182",
+    "kind": "condition",
+    "title": "Floor planning needs fixed relative positions",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 矩形不重叠要求每对矩形满足左、右、上、下四种关系之一。\n2. 这是析取约束, 会造成组合优化。\n3. 若预先固定相对位置关系, 每个析取选择就变成确定的线性不等式。\n4. 这消除了组合部分。\n5. 在此基础上, 尺寸和位置优化可转为凸优化或几何规划。",
+    "source_summary": "Floor planning combinatorial source"
+  },
+  {
+    "page": "ch08-geometric-problems.html",
+    "pair": 190,
+    "term": "ch08-geometric-problems.html#pair-190",
+    "kind": "operation",
+    "title": "Relative positioning graphs",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 水平关系用有向图 $H$ 表示。\n2. 垂直关系用有向图 $V$ 表示。\n3. 若图中存在从 $i$ 到 $j$ 的路径, 相应位置关系由传递性推出。\n4. 因此只需保留图的边对应的不等式。\n5. 这给出描述相对位置的最小线性约束集合。",
+    "source_summary": "Relative positioning constraints"
+  },
+  {
+    "page": "ch08-geometric-problems.html",
+    "pair": 200,
+    "term": "ch08-geometric-problems.html#pair-200",
+    "kind": "condition",
+    "title": "Minimum cell area as convex constraint",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 单元宽高为正变量 $w_i,h_i$。\n2. 最小面积要求 $w_ih_i\\ge A_i$。\n3. 直接看这是超曲线约束, 但在正变量上可写为 $A_i/w_i\\le h_i$。\n4. 函数 $A_i/w_i$ 在 $w_i>0$ 上凸。\n5. 因而该面积下界可作为凸不等式加入。",
+    "source_summary": "Minimum cell area constraint"
+  },
+  {
+    "page": "ch08-geometric-problems.html",
+    "pair": 213,
+    "term": "ch08-geometric-problems.html#pair-213",
+    "kind": "generalized",
+    "title": "Floor planning as geometric programming",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. GP 形式要求变量为正。\n2. floor planning 中宽、高、位置和外框尺寸天然为正变量。\n3. 许多布局约束左端是变量和或乘积幂函数和, 即 posynomial。\n4. 面积目标 $WH$ 是 monomial。\n5. 因此在相对位置固定时, floor planning 可转成几何规划求解。",
+    "source_summary": "Floor planning via geometric programming"
+  }
+]

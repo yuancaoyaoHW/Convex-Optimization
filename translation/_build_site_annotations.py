@@ -12,6 +12,7 @@ DEFAULT_MANIFESTS = [
     "docs/annotations/ch05-learning-annotations.json",
     "docs/annotations/ch06-learning-annotations.json",
     "docs/annotations/ch07-learning-annotations.json",
+    "docs/annotations/ch08-learning-annotations.json",
 ]
 
 
