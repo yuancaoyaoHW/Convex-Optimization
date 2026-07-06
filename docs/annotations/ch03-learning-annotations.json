@@ -5,7 +5,7 @@
     "term": "ch03-convex-functions.html#pair-3",
     "kind": "definition",
     "title": "Convex function definition",
-    "body": "Learning note\n\nProof steps\n\n1. ???????? $\\operatorname{dom} f$ ??????????? $\\theta x+(1-\\theta)y$ ?????????\n2. ??? $x,y\\in\\operatorname{dom} f$ ? $\\theta\\in[0,1]$?????? $z=\\theta x+(1-\\theta)y$?\n3. ??????? $f(z)\\le \\theta f(x)+(1-\\theta)f(y)$?????? $(x,f(x))$ ? $(y,f(y))$ ????\n4. ????????????????????Jensen ????????????????????",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 先检查定义域：必须有 $x,y\\in\\operatorname{dom} f$，且 $\\theta x+(1-\\theta)y\\in\\operatorname{dom} f$。\n2. 写出凸性要证的不等式：$f(\\theta x+(1-\\theta)y)\\le \\theta f(x)+(1-\\theta)f(y)$。\n3. 右侧是两端点函数值的线性插值，所以几何上等价于“弦在函数图像上方”。\n4. 后面的一阶条件、Jensen 不等式和上图判据，都是把这条不等式换一种形式使用。",
     "source_summary": "Convex function definition and chord interpretation"
   },
   {
@@ -14,7 +14,7 @@
     "term": "ch03-convex-functions.html#pair-5",
     "kind": "definition",
     "title": "Affine equality case",
-    "body": "Learning note\n\nProof steps\n\n1. ? $f(x)=a^Tx+b$?\n2. ??? $x,y$ ? $\\theta\\in[0,1]$??????$f(\\theta x+(1-\\theta)y)=\\theta a^Tx+(1-\\theta)a^Ty+b$?\n3. ?????? $\\theta b+(1-\\theta)b$??? $f(\\theta x+(1-\\theta)y)=\\theta f(x)+(1-\\theta)f(y)$?\n4. ????????????????????????????",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 设仿射函数 $f(x)=a^Tx+b$。\n2. 直接展开 $f(\\theta x+(1-\\theta)y)=a^T(\\theta x+(1-\\theta)y)+b$。\n3. 把常数项写成 $\\theta b+(1-\\theta)b$，得到 $f(\\theta x+(1-\\theta)y)=\\theta f(x)+(1-\\theta)f(y)$。\n4. 因为等号成立，所以它同时满足凸函数和凹函数的不等式。",
     "source_summary": "Affine equality case"
   },
   {
@@ -23,7 +23,7 @@
     "term": "ch03-convex-functions.html#pair-8",
     "kind": "definition",
     "title": "Restriction to lines",
-    "body": "Learning note\n\nProof steps\n\n1. ?????? $x(t)=x_0+tv$???? $x(t)\\in\\operatorname{dom}f$ ? $t$?\n2. ?????? $g(t)=f(x_0+tv)$?\n3. ? $f$ ?????? $s,t$?$g(\\theta s+(1-\\theta)t)=f(\\theta x(s)+(1-\\theta)x(t))\\le\\theta g(s)+(1-\\theta)g(t)$?\n4. ???????? $x,y$ ??????????????? $g$ ??????????????",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 固定一条直线 $x(t)=x_0+tv$，定义一维函数 $g(t)=f(x_0+tv)$。\n2. 若 $f$ 凸，则对任意 $s,t$，把 $x(s),x(t)$ 代入凸性定义。\n3. 得到 $g(\\theta s+(1-\\theta)t)\\le \\theta g(s)+(1-\\theta)g(t)$，所以每条直线限制都是凸的。\n4. 反过来，任意两点 $x,y$ 都落在一条直线上；若所有直线限制都凸，就恢复原来的凸性不等式。",
     "source_summary": "Restriction to lines"
   },
   {
@@ -32,7 +32,7 @@
     "term": "ch03-convex-functions.html#pair-13",
     "kind": "example",
     "title": "Example 3.1 indicator function",
-    "body": "Learning note\n\nProof steps\n\n1. ??????? $I_C(x)=0$?$x\\in C$?? $I_C(x)=\\infty$?$x\\notin C$??\n2. ? $C$ ?? $x,y\\in C$?? $\\theta x+(1-\\theta)y\\in C$?????? $0$????? $0$?\n3. ? $x$ ? $y$ ?? $C$????? $\\infty$???????????\n4. ?? $I_C$ ????? $C$ ??????? $\\min_{x\\in C} f(x)$ ???????? $\\min_x f(x)+I_C(x)$?",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 指示函数定义为：$I_C(x)=0$ 当 $x\\in C$，否则 $I_C(x)=\\infty$。\n2. 若 $C$ 凸且 $x,y\\in C$，则 $\\theta x+(1-\\theta)y\\in C$，凸性不等式两边都是 $0$。\n3. 若 $x$ 或 $y$ 不在 $C$，右侧包含 $\\infty$，不等式自动成立。\n4. 因此 $I_C$ 凸当且仅当 $C$ 凸；这也解释了为什么约束可写进目标函数。",
     "source_summary": "Example 3.1 indicator function"
   },
   {
@@ -41,7 +41,7 @@
     "term": "ch03-convex-functions.html#pair-17",
     "kind": "condition",
     "title": "First-order condition",
-    "body": "Learning note\n\nProof steps\n\n1. ???????????? $g(t)=f(x+t(y-x))$?\n2. ??????? $g(1)\\ge g(0)+g'(0)$?\n3. ?? $g'(0)=\\nabla f(x)^T(y-x)$??? $f(y)\\ge f(x)+\\nabla f(x)^T(y-x)$?\n4. ??? $x$ ??????????? $\\nabla f(x)=0$???? $f(y)\\ge f(x)$??? $x$ ???????",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 对可微凸函数，沿 $x$ 到 $y$ 的方向取 $g(t)=f(x+t(y-x))$。\n2. 一维凸函数满足 $g(1)\\ge g(0)+g'(0)$。\n3. 计算 $g'(0)=\\nabla f(x)^T(y-x)$。\n4. 代回得到 $f(y)\\ge f(x)+\\nabla f(x)^T(y-x)$，即切平面是全局下界。",
     "source_summary": "First-order condition"
   },
   {
@@ -50,7 +50,7 @@
     "term": "ch03-convex-functions.html#pair-30",
     "kind": "condition",
     "title": "Second-order condition",
-    "body": "Learning note\n\nProof steps\n\n1. ?? $f$ ??????????? $g(t)=f(x+tv)$?\n2. ? $g''(t)=v^T\\nabla^2 f(x+tv)v$?\n3. ? $\\nabla^2 f(z)\\succeq0$ ??? $z$ ???? $g''(t)\\ge0$???????????????\n4. ????????????? $f$ ???????? $v$ ????????? Hessian ????",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 假设 $f$ 二阶可微，仍沿任意直线看 $g(t)=f(x+tv)$。\n2. 计算二阶导：$g''(t)=v^T\\nabla^2 f(x+tv)v$。\n3. 若对所有点都有 $\\nabla^2 f\\succeq0$，则 $g''(t)\\ge0$，所以每条直线限制凸。\n4. 由“限制到直线”的判据推出 $f$ 凸；反向由任意方向 $v$ 的二阶导非负推出 Hessian 半正定。",
     "source_summary": "Second-order condition"
   },
   {
@@ -59,7 +59,7 @@
     "term": "ch03-convex-functions.html#pair-35",
     "kind": "example",
     "title": "Example 3.2 quadratic functions",
-    "body": "Learning note\n\nProof steps\n\n1. ? $f(x)=\\frac12x^TPx+q^Tx+r$?????? $P$ ??????\n2. ??? $\\nabla f(x)=Px+q$?? $P=P^T$??Hessian ? $\\nabla^2 f(x)=P$?\n3. ???????$f$ ????? $P\\succeq0$?\n4. ??? $q^Tx$ ??? $r$ ??? Hessian?????????",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 写 $f(x)=\\frac12x^TPx+q^Tx+r$，只需取 $P$ 的对称部分。\n2. 梯度为 $\\nabla f(x)=Px+q$，Hessian 为 $\\nabla^2 f(x)=P$。\n3. 用二阶条件，$f$ 凸等价于 $P\\succeq0$。\n4. 线性项 $q^Tx$ 和常数项 $r$ 不影响 Hessian，因此不影响凸性。",
     "source_summary": "Example 3.2 quadratic functions"
   },
   {
@@ -68,7 +68,7 @@
     "term": "ch03-convex-functions.html#pair-57",
     "kind": "geometry",
     "title": "Sublevel sets",
-    "body": "Learning note\n\nProof steps\n\n1. ??????? $S_\\alpha=\\{x\\mid f(x)\\le\\alpha\\}$?\n2. ? $x,y\\in S_\\alpha$?? $f(x)\\le\\alpha$ ? $f(y)\\le\\alpha$?\n3. ????$f(\\theta x+(1-\\theta)y)\\le\\theta f(x)+(1-\\theta)f(y)\\le\\alpha$?\n4. ?? $\\theta x+(1-\\theta)y\\in S_\\alpha$???????????????????????",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 下水平集定义为 $S_\\alpha=\\{x\\mid f(x)\\le\\alpha\\}$。\n2. 取 $x,y\\in S_\\alpha$，即 $f(x)\\le\\alpha$ 且 $f(y)\\le\\alpha$。\n3. 由凸性，$f(\\theta x+(1-\\theta)y)\\le \\theta f(x)+(1-\\theta)f(y)\\le\\alpha$。\n4. 所以凸组合仍在 $S_\\alpha$ 中，下水平集凸。",
     "source_summary": "Sublevel sets"
   },
   {
@@ -77,7 +77,7 @@
     "term": "ch03-convex-functions.html#pair-62",
     "kind": "geometry",
     "title": "Epigraph definition",
-    "body": "Learning note\n\nProof steps\n\n1. ????? $\\operatorname{epi} f=\\{(x,t)\\mid t\\ge f(x)\\}$?\n2. ? $f$ ??? $(x,t),(y,s)\\in\\operatorname{epi} f$?? $t\\ge f(x),s\\ge f(y)$?\n3. ? $\\theta t+(1-\\theta)s\\ge\\theta f(x)+(1-\\theta)f(y)\\ge f(\\theta x+(1-\\theta)y)$?\n4. ??????????????? $t=f(x),s=f(y)$ ?????????",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 上图定义为 $\\operatorname{epi} f=\\{(x,t)\\mid t\\ge f(x)\\}$。\n2. 取两个上图点 $(x,t)$ 和 $(y,s)$，所以 $t\\ge f(x)$、$s\\ge f(y)$。\n3. 凸组合的高度满足 $\\theta t+(1-\\theta)s\\ge \\theta f(x)+(1-\\theta)f(y)$。\n4. 若 $f$ 凸，右侧又不小于 $f(\\theta x+(1-\\theta)y)$，所以上图凸；反向取 $t=f(x),s=f(y)$ 即可。",
     "source_summary": "Epigraph definition"
   },
   {
@@ -86,7 +86,7 @@
     "term": "ch03-convex-functions.html#pair-65",
     "kind": "example",
     "title": "Example 3.4 matrix fractional function",
-    "body": "Learning note\n\nProof steps\n\n1. ?? $f(x,Y)=x^TY^{-1}x$ ????????$\\{(x,Y,t)\\mid Y\\succ0, x^TY^{-1}x\\le t\\}$?\n2. ? Schur ??$x^TY^{-1}x\\le t$ ?????? $\\begin{bmatrix}Y&x\\\\x^T&t\\end{bmatrix}\\succeq0$?\n3. ??????? $(Y,x,t)$ ?????????\n4. ???????????????????????????????",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 要证 $x^TY^{-1}x$ 凸，先写上图条件：$Y\\succ0$ 且 $x^TY^{-1}x\\le t$。\n2. 用 Schur 补把它改写为 $\\begin{bmatrix}Y&x\\\\x^T&t\\end{bmatrix}\\succeq0$。\n3. 这个块矩阵对变量 $(Y,x,t)$ 是仿射的。\n4. 半正定约束定义凸集，所以上图凸，函数凸。",
     "source_summary": "Example 3.4 matrix fractional function"
   },
   {
@@ -95,7 +95,7 @@
     "term": "ch03-convex-functions.html#pair-71",
     "kind": "condition",
     "title": "Jensen inequality",
-    "body": "Learning note\n\nProof steps\n\n1. ?????? $f(\\theta x+(1-\\theta)y)\\le\\theta f(x)+(1-\\theta)f(y)$?\n2. ???????? $\\sum_i\\theta_i x_i$ ?? $\\theta_1x_1+(1-\\theta_1)\\bar x$??? $\\bar x$ ??????????\n3. ?????????????? $\\bar x$ ?????\n4. ?? $f(\\sum_i\\theta_i x_i)\\le\\sum_i\\theta_i f(x_i)$??????? $f(E X)\\le E f(X)$?",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 二点凸性是 Jensen 不等式的基础情形。\n2. 对多个点，先把 $\\sum_i\\theta_i x_i$ 拆成一个点和其余点的加权平均。\n3. 对这个拆分使用二点凸性，再对其余点递归使用。\n4. 得到 $f(\\sum_i\\theta_i x_i)\\le\\sum_i\\theta_i f(x_i)$；概率写法就是 $f(EX)\\le E f(X)$。",
     "source_summary": "Jensen inequality"
   },
   {
@@ -104,7 +104,7 @@
     "term": "ch03-convex-functions.html#pair-78",
     "kind": "condition",
     "title": "AM-GM from Jensen",
-    "body": "Learning note\n\nProof steps\n\n1. ???? $\\phi(u)=-\\log u$????? $u>0$?\n2. Jensen ?? $-\\log(\\frac1n\\sum_i x_i)\\le\\frac1n\\sum_i -\\log x_i$?\n3. ???? $-1$ ????$\\log(\\frac1n\\sum_i x_i)\\ge\\frac1n\\sum_i\\log x_i$?\n4. ????? $\\frac1n\\sum_i x_i\\ge(\\prod_i x_i)^{1/n}$?? AM-GM?",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 选凸函数 $\\phi(u)=-\\log u$，定义域为 $u>0$。\n2. Jensen 给出 $-\\log(\\frac1n\\sum_i x_i)\\le \\frac1n\\sum_i -\\log x_i$。\n3. 两边乘以 $-1$ 后不等号反向：$\\log(\\frac1n\\sum_i x_i)\\ge \\frac1n\\sum_i\\log x_i$。\n4. 指数化得到 $\\frac1n\\sum_i x_i\\ge (\\prod_i x_i)^{1/n}$。",
     "source_summary": "AM-GM from Jensen"
   },
   {
@@ -113,7 +113,7 @@
     "term": "ch03-convex-functions.html#pair-90",
     "kind": "operation",
     "title": "Example 3.5 pointwise maximum",
-    "body": "Learning note\n\nProof steps\n\n1. ? $f(x)=\\max_i f_i(x)$????? $f_i$ ???\n2. ??? $x,y$?? $f_i(\\theta x+(1-\\theta)y)\\le\\theta f_i(x)+(1-\\theta)f_i(y)$?\n3. ?? $f_i(x)\\le f(x)$ ? $f_i(y)\\le f(y)$?\n4. ??? $i$ ????? $f(\\theta x+(1-\\theta)y)\\le\\theta f(x)+(1-\\theta)f(y)$?",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 设 $f(x)=\\max_i f_i(x)$，每个 $f_i$ 都凸。\n2. 对每个 $i$，有 $f_i(\\theta x+(1-\\theta)y)\\le \\theta f_i(x)+(1-\\theta)f_i(y)$。\n3. 又因为 $f_i(x)\\le f(x)$、$f_i(y)\\le f(y)$。\n4. 对 $i$ 取最大，得到 $f(\\theta x+(1-\\theta)y)\\le\\theta f(x)+(1-\\theta)f(y)$。",
     "source_summary": "Example 3.5 pointwise maximum"
   },
   {
@@ -122,7 +122,7 @@
     "term": "ch03-convex-functions.html#pair-92",
     "kind": "operation",
     "title": "Example 3.6 sum of largest components",
-    "body": "Learning note\n\nProof steps\n\n1. ??? $r$ ???????? $\\sum_{i=1}^r x_{[i]}=\\max_{|S|=r}\\sum_{i\\in S}x_i$?\n2. ????? $S$??? $x\\mapsto\\sum_{i\\in S}x_i$ ?????\n3. ?????????\n4. ????????????????????????",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 最大的 $r$ 个分量之和可写为 $\\max_{|S|=r}\\sum_{i\\in S}x_i$。\n2. 固定集合 $S$ 时，$x\\mapsto\\sum_{i\\in S}x_i$ 是线性函数。\n3. 线性函数是凸函数。\n4. 有限个凸函数的逐点最大值凸，所以该排序函数凸。",
     "source_summary": "Example 3.6 sum of largest components"
   },
   {
@@ -131,7 +131,7 @@
     "term": "ch03-convex-functions.html#pair-96",
     "kind": "operation",
     "title": "Example 3.7 support function",
-    "body": "Learning note\n\nProof steps\n\n1. ??????? $S_C(x)=\\sup_{y\\in C}x^Ty$?\n2. ??? $y$?$x\\mapsto x^Ty$ ??????\n3. ????????????????\n4. ?? $S_C$ ??????????? $C$ ??????????? $x$ ???????",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 支撑函数是 $S_C(x)=\\sup_{y\\in C}x^Ty$。\n2. 固定 $y$ 时，$x^Ty$ 是关于 $x$ 的线性函数。\n3. 线性函数族的逐点上确界保持凸性。\n4. 因此 $S_C$ 总是凸；这里不需要 $C$ 本身是凸集。",
     "source_summary": "Example 3.7 support function"
   },
   {
@@ -140,7 +140,7 @@
     "term": "ch03-convex-functions.html#pair-102",
     "kind": "example",
     "title": "Example 3.10 maximum eigenvalue",
-    "body": "Learning note\n\nProof steps\n\n1. ?????????? $\\lambda_{\\max}(X)=\\sup_{\\|u\\|_2=1}u^TXu$?\n2. ?? $u$ ??$X\\mapsto u^TXu=\\operatorname{tr}(Xuu^T)$ ? $X$ ??????\n3. ??????? $u$ ?????\n4. ????????????? $\\lambda_{\\max}$ ?????",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 使用变分表示：$\\lambda_{\\max}(X)=\\sup_{\\|u\\|_2=1}u^TXu$。\n2. 固定 $u$ 时，$u^TXu=\\operatorname{tr}(Xuu^T)$ 是 $X$ 的线性函数。\n3. 对所有单位向量 $u$ 取上确界。\n4. 线性函数族的上确界凸，所以 $\\lambda_{\\max}$ 凸。",
     "source_summary": "Example 3.10 maximum eigenvalue"
   },
   {
@@ -149,7 +149,7 @@
     "term": "ch03-convex-functions.html#pair-103",
     "kind": "example",
     "title": "Example 3.11 spectral norm",
-    "body": "Learning note\n\nProof steps\n\n1. ????? $\\|X\\|_2=\\sup_{\\|u\\|_2\\le1,\\|v\\|_2\\le1}u^TXv$?\n2. ?? $u,v$ ??$X\\mapsto u^TXv$ ??????\n3. ?????? $u,v$ ?????\n4. ??????????????????",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 谱范数可写成 $\\|X\\|_2=\\sup_{\\|u\\|_2\\le1,\\|v\\|_2\\le1}u^TXv$。\n2. 固定 $u,v$ 时，$u^TXv$ 是 $X$ 的线性函数。\n3. 对所有可行的 $u,v$ 取上确界。\n4. 线性函数族的上确界凸，因此谱范数凸。",
     "source_summary": "Example 3.11 spectral norm"
   },
   {
@@ -158,7 +158,7 @@
     "term": "ch03-convex-functions.html#pair-112",
     "kind": "operation",
     "title": "Composition rules motivation",
-    "body": "Learning note\n\nProof steps\n\n1. ?? $h(g(x))$ ???????? $g(\\theta x+(1-\\theta)y)\\le\\theta g(x)+(1-\\theta)g(y)$?\n2. ??? $h$ ?????????? $h$??? $h(g(\\theta x+(1-\\theta)y))\\le h(\\theta g(x)+(1-\\theta)g(y))$?\n3. ?? $h$ ????????? $\\theta h(g(x))+(1-\\theta)h(g(y))$?\n4. ? $h$ ????????????????????",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 若 $g$ 凸，则 $g(\\theta x+(1-\\theta)y)\\le\\theta g(x)+(1-\\theta)g(y)$。\n2. 若外层 $h$ 非减，可把这条不等式送入 $h$。\n3. 再用 $h$ 的凸性得到 $h(\\theta g(x)+(1-\\theta)g(y))\\le\\theta h(g(x))+(1-\\theta)h(g(y))$。\n4. 所以 $h\\circ g$ 凸；若 $h$ 非增，则内层需要凹性来保证方向正确。",
     "source_summary": "Composition rules motivation"
   },
   {
@@ -167,7 +167,7 @@
     "term": "ch03-convex-functions.html#pair-117",
     "kind": "operation",
     "title": "Scalar composition theorem",
-    "body": "Learning note\n\nProof steps\n\n1. ????$h$ ?????$g$ ???? $g$ ?????? $h$ ??????? $h$ ????\n2. ????$h$ ?????$g$ ???? $g(\\theta x+(1-\\theta)y)\\ge\\theta g(x)+(1-\\theta)g(y)$?\n3. ?? $h$ ????? $h$ ?????????????\n4. ??? $h$ ???????????????????????",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 情形一：$h$ 凸且非减，$g$ 凸；先用 $g$ 的凸性，再用 $h$ 的单调性，最后用 $h$ 的凸性。\n2. 情形二：$h$ 凸且非增，$g$ 凹；先由凹性得到反向不等式。\n3. 因为 $h$ 非增，代入 $h$ 后不等号再反向。\n4. 最后仍用 $h$ 的凸性收尾。关键是单调性不能省略。",
     "source_summary": "Scalar composition theorem"
   },
   {
@@ -176,7 +176,7 @@
     "term": "ch03-convex-functions.html#pair-126",
     "kind": "example",
     "title": "Example 3.13 simple composition",
-    "body": "Learning note\n\nProof steps\n\n1. ???????????? $h$ ??? $g$?\n2. ?? $h$ ???????????\n3. ?? $h$ ?????????????????????????\n4. ??????? $g$ ???????????????????????????????",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 先把表达式拆成外层 $h$ 和内层 $g$。\n2. 判断外层 $h$ 的曲率：凸、凹或仿射。\n3. 判断 $h$ 在内层值域上的单调性。\n4. 再按复合规则匹配内层曲率；若单调性不满足，就不能直接套规则。",
     "source_summary": "Example 3.13 simple composition"
   },
   {
@@ -185,7 +185,7 @@
     "term": "ch03-convex-functions.html#pair-130",
     "kind": "operation",
     "title": "Vector composition",
-    "body": "Learning note\n\nProof steps\n\n1. ?????? $h(g_1(x),\\ldots,g_k(x))$?\n2. ???????? $h$ ?????? $i$ ???????? $g_i$ ??????? $g_i$ ??\n3. ???? $g_i$ ??/??????????\n4. ?? $h$ ??????????????????????????????",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 写成 $h(g_1(x),\\ldots,g_k(x))$。\n2. 对每个坐标分别检查 $h$ 的单调性。\n3. 若第 $i$ 个坐标非减，则允许 $g_i$ 凸；若非增，则允许 $g_i$ 凹。\n4. 先得到向量分量上的不等式，再用 $h$ 的坐标单调性和凸性推出整体凸性。",
     "source_summary": "Vector composition"
   },
   {
@@ -194,7 +194,7 @@
     "term": "ch03-convex-functions.html#pair-141",
     "kind": "example",
     "title": "Example 3.15 Schur complement",
-    "body": "Learning note\n\nProof steps\n\n1. ??????? $f(x,y)$ ? $(x,y)$ ??????????????\n2. ??????? $g(x)=\\inf_y f(x,y)$?\n3. $g$ ???? $f$ ?????? $y$ ???????\n4. ???????????? $g$ ??Schur ?????????????????",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 先证明 $f(x,y)$ 对联合变量 $(x,y)$ 凸。\n2. 定义部分最小化 $g(x)=\\inf_y f(x,y)$。\n3. $g$ 的上图等于 $f$ 的上图在消去 $y$ 坐标后的投影。\n4. 凸集的投影仍然凸，所以 $g$ 凸；Schur 补常用来完成这种消元。",
     "source_summary": "Example 3.15 Schur complement"
   },
   {
@@ -203,7 +203,7 @@
     "term": "ch03-convex-functions.html#pair-146",
     "kind": "operation",
     "title": "Perspective function",
-    "body": "Learning note\n\nProof steps\n\n1. ??????? $g(x,t)=t f(x/t)$???? $t>0$?\n2. ???? $(x_1,t_1),(x_2,t_2)$?? $t=\\theta t_1+(1-\\theta)t_2$?\n3. ? $\\frac{\\theta x_1+(1-\\theta)x_2}{t}=\\alpha\\frac{x_1}{t_1}+(1-\\alpha)\\frac{x_2}{t_2}$??? $\\alpha=\\theta t_1/t$?\n4. ? $f$ ?????? $t$???????????",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 透视函数为 $g(x,t)=t f(x/t)$，定义域要求 $t>0$。\n2. 对两点 $(x_1,t_1),(x_2,t_2)$，令 $t=\\theta t_1+(1-\\theta)t_2$。\n3. 把新比值写成 $x/t$ 是 $x_1/t_1$ 和 $x_2/t_2$ 的某个凸组合。\n4. 对 $f$ 使用凸性，再乘回 $t$，得到透视函数的凸性。",
     "source_summary": "Perspective function"
   },
   {
@@ -212,7 +212,7 @@
     "term": "ch03-convex-functions.html#pair-148",
     "kind": "example",
     "title": "Example 3.18 norm squared perspective",
-    "body": "Learning note\n\nProof steps\n\n1. ? $f(x)=\\|x\\|_2^2$???????\n2. ??????? $g(x,t)=t\\|x/t\\|_2^2=\\|x\\|_2^2/t$?\n3. ??????????$g$ ? $t>0$ ???\n4. ???????? Hessian????????????????",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 取凸函数 $f(x)=\\|x\\|_2^2$。\n2. 它的透视函数是 $t f(x/t)=t\\|x/t\\|_2^2$。\n3. 化简得到 $\\|x\\|_2^2/t$。\n4. 因为透视保持凸性，所以该函数在 $t>0$ 上凸。",
     "source_summary": "Example 3.18 norm squared perspective"
   },
   {
@@ -221,7 +221,7 @@
     "term": "ch03-convex-functions.html#pair-150",
     "kind": "example",
     "title": "Example 3.19 negative log perspective",
-    "body": "Learning note\n\nProof steps\n\n1. ???? $f(u)=-\\log u$???? $u>0$?\n2. ????? $t f(x/t)=-t\\log(x/t)=t\\log(t/x)$?\n3. ??? $x>0,t>0$?\n4. ?????????????????KL divergence ??????????????",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 取凸函数 $f(u)=-\\log u$，定义域 $u>0$。\n2. 透视函数为 $t f(x/t)=-t\\log(x/t)$。\n3. 化简为 $t\\log(t/x)$，定义域为 $x>0,t>0$。\n4. 由透视保持凸性，得到相对熵型表达式的凸性。",
     "source_summary": "Example 3.19 negative log perspective"
   },
   {
@@ -230,7 +230,7 @@
     "term": "ch03-convex-functions.html#pair-162",
     "kind": "conjugate",
     "title": "Example 3.21 one-dimensional conjugates",
-    "body": "Learning note\n\nProof steps\n\n1. ????? $f^*(y)=\\sup_x(y^Tx-f(x))$?\n2. ?? $x$ ??$y\\mapsto y^Tx-f(x)$ ??????\n3. ????????????????????????$f^*$ ???\n4. ?????????????????????????????????? $\\infty$?",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 共轭定义为 $f^*(y)=\\sup_x(y^Tx-f(x))$。\n2. 固定 $x$ 时，$y^Tx-f(x)$ 是关于 $y$ 的仿射函数。\n3. 仿射函数族的逐点上确界是凸函数。\n4. 计算具体共轭时，还要检查上确界是否有限；若无界，结果就是 $\\infty$。",
     "source_summary": "Example 3.21 one-dimensional conjugates"
   },
   {
@@ -239,7 +239,7 @@
     "term": "ch03-convex-functions.html#pair-169",
     "kind": "conjugate",
     "title": "Example 3.24 indicator conjugate",
-    "body": "Learning note\n\nProof steps\n\n1. ??? $C$ ??????$I_C(x)=0$ ? $x\\in C$???? $\\infty$?\n2. ??? $I_C^*(y)=\\sup_x(y^Tx-I_C(x))$?\n3. ?????? $-\\infty$??????????? $\\sup_{x\\in C}y^Tx$?\n4. ??????? $S_C(y)$?",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 对集合 $C$ 的指示函数，$I_C(x)=0$ 当 $x\\in C$，否则为 $\\infty$。\n2. 写共轭：$I_C^*(y)=\\sup_x(y^Tx-I_C(x))$。\n3. 集合外的项等于 $-\\infty$，不会贡献上确界。\n4. 所以只剩 $\\sup_{x\\in C}y^Tx$，这正是支撑函数。",
     "source_summary": "Example 3.24 indicator conjugate"
   },
   {
@@ -248,7 +248,7 @@
     "term": "ch03-convex-functions.html#pair-170",
     "kind": "conjugate",
     "title": "Example 3.25 log-sum-exp conjugate",
-    "body": "Learning note\n\nProof steps\n\n1. ? $f(x)=\\log\\sum_i e^{x_i}$?? $f^*(y)=\\sup_x(y^Tx-f(x))$?\n2. ? $\\mathbf1^Ty\\ne1$?? $x+t\\mathbf1$ ???????????? $y_i<0$?????????????\n3. ????????????? $y\\ge0,\\mathbf1^Ty=1$?\n4. ?????????? $y_i=e^{x_i}/\\sum_j e^{x_j}$????? $f^*(y)=\\sum_i y_i\\log y_i$?",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 对 $f(x)=\\log\\sum_i e^{x_i}$，写 $f^*(y)=\\sup_x(y^Tx-f(x))$。\n2. 若 $\\mathbf1^Ty\\ne1$，沿 $x+t\\mathbf1$ 平移会使目标无界。\n3. 若某个 $y_i<0$，沿对应坐标方向也会无界，所以有效域是概率单纯形。\n4. 在 $y\\ge0,\\mathbf1^Ty=1$ 上，一阶条件给出 softmax 关系，代回得到 $f^*(y)=\\sum_i y_i\\log y_i$。",
     "source_summary": "Example 3.25 log-sum-exp conjugate"
   },
   {
@@ -257,7 +257,7 @@
     "term": "ch03-convex-functions.html#pair-174",
     "kind": "conjugate",
     "title": "Example 3.26 norm conjugate",
-    "body": "Learning note\n\nProof steps\n\n1. ? $f(x)=\\|x\\|$ ????$f^*(y)=\\sup_x(y^Tx-\\|x\\|)$?\n2. ? $\\|y\\|_*\\le1$?? H?lder ??? $y^Tx\\le\\|y\\|_*\\|x\\|\\le\\|x\\|$????????? $0$?? $x=0$ ?? $0$?\n3. ? $\\|y\\|_*>1$????? $u$ ? $y^Tu>\\|u\\|$?\n4. ? $tu$ ? $t\\to\\infty$????????????????????????",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 写共轭 $f^*(y)=\\sup_x(y^Tx-\\|x\\|)$。\n2. 若 $\\|y\\|_*\\le1$，由 Hölder 不等式有 $y^Tx\\le\\|x\\|$，所以上确界不超过 $0$；取 $x=0$ 得到 $0$。\n3. 若 $\\|y\\|_*>1$，存在方向 $u$ 使 $y^Tu>\\|u\\|$。\n4. 沿 $tu$ 令 $t\\to\\infty$，目标无界，所以共轭是对偶范数单位球的指示函数。",
     "source_summary": "Example 3.26 norm conjugate"
   },
   {
@@ -266,7 +266,7 @@
     "term": "ch03-convex-functions.html#pair-176",
     "kind": "conjugate",
     "title": "Example 3.27 norm squared conjugate",
-    "body": "Learning note\n\nProof steps\n\n1. ? $f(x)=\\frac12\\|x\\|^2$ ????\n2. ? Young ????$y^Tx\\le\\frac12\\|x\\|^2+\\frac12\\|y\\|_*^2$??? $y^Tx-f(x)\\le\\frac12\\|y\\|_*^2$?\n3. ????????????????????????\n4. ?? $f^*(y)=\\frac12\\|y\\|_*^2$???????? $\\frac12\\|y\\|_2^2$?",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 要算 $f(x)=\\frac12\\|x\\|^2$ 的共轭。\n2. 用 Young 不等式：$y^Tx\\le\\frac12\\|x\\|^2+\\frac12\\|y\\|_*^2$。\n3. 因此 $y^Tx-f(x)\\le\\frac12\\|y\\|_*^2$。\n4. 取达到对偶范数的方向并缩放，可达到上界，所以 $f^*(y)=\\frac12\\|y\\|_*^2$。",
     "source_summary": "Example 3.27 norm squared conjugate"
   },
   {
@@ -275,7 +275,7 @@
     "term": "ch03-convex-functions.html#pair-197",
     "kind": "quasiconvex",
     "title": "Quasiconvex definition",
-    "body": "Learning note\n\nProof steps\n\n1. ?????????????? $S_\\alpha=\\{x\\mid f(x)\\le\\alpha\\}$ ???\n2. ?????? $f(\\theta x+(1-\\theta)y)\\le\\max\\{f(x),f(y)\\}$?\n3. ?????? $\\alpha=\\max\\{f(x),f(y)\\}$?? $x,y\\in S_\\alpha$?????? $S_\\alpha$?\n4. ??????????????????????",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 拟凸定义为所有下水平集 $S_\\alpha=\\{x\\mid f(x)\\le\\alpha\\}$ 都凸。\n2. 取 $x,y$，令 $\\alpha=\\max\\{f(x),f(y)\\}$。\n3. 则 $x,y\\in S_\\alpha$，所以凸组合也在 $S_\\alpha$。\n4. 得到 $f(\\theta x+(1-\\theta)y)\\le\\max\\{f(x),f(y)\\}$；反向也由这条不等式推出下水平集凸。",
     "source_summary": "Quasiconvex definition"
   },
   {
@@ -284,7 +284,7 @@
     "term": "ch03-convex-functions.html#pair-208",
     "kind": "quasiconvex",
     "title": "Example 3.32 linear-fractional function",
-    "body": "Learning note\n\nProof steps\n\n1. ???????? $f(x)=\\frac{a^Tx+b}{c^Tx+d}$????? $c^Tx+d>0$?\n2. ????? $f(x)\\le\\alpha$?\n3. ????????? $(a-\\alpha c)^Tx+(b-\\alpha d)\\le0$???????\n4. ????????????????????????????????????",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 设 $f(x)=\\frac{a^Tx+b}{c^Tx+d}$，并限制在 $c^Tx+d>0$。\n2. 看下水平集 $f(x)\\le\\alpha$。\n3. 因分母为正，可等价变形为 $(a-\\alpha c)^Tx+(b-\\alpha d)\\le0$。\n4. 这是半空间，所以下水平集凸，函数拟凸；上水平集同理给出拟凹。",
     "source_summary": "Example 3.32 linear-fractional function"
   },
   {
@@ -293,7 +293,7 @@
     "term": "ch03-convex-functions.html#pair-226",
     "kind": "quasiconvex",
     "title": "First-order quasiconvex condition",
-    "body": "Learning note\n\nProof steps\n\n1. ??????????? $S_{f(x)}=\\{z\\mid f(z)\\le f(x)\\}$ ????\n2. ? $f(y)\\le f(x)$?? $y$ ?????????\n3. $x$ ???????????????????????\n4. ????? $\\nabla f(x)^T(y-x)\\le0$?????????????????????????",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 对可微拟凸函数，固定 $x$，考虑下水平集 $S=\\{z\\mid f(z)\\le f(x)\\}$。\n2. 若 $f(y)\\le f(x)$，则 $y\\in S$。\n3. $S$ 是凸集，且 $x$ 在其边界上；梯度方向给出支撑超平面。\n4. 因此必须有 $\\nabla f(x)^T(y-x)\\le0$。",
     "source_summary": "First-order quasiconvex condition"
   },
   {
@@ -302,7 +302,7 @@
     "term": "ch03-convex-functions.html#pair-253",
     "kind": "quasiconvex",
     "title": "Example 3.38 convex over concave",
-    "body": "Learning note\n\nProof steps\n\n1. ? $f(x)=p(x)/q(x)$??? $p$ ??$q$ ?? $q(x)>0$?\n2. ?????? $\\alpha$?????? $p(x)/q(x)\\le\\alpha$?\n3. ? $q(x)>0$???? $p(x)-\\alpha q(x)\\le0$?\n4. ? $\\alpha\\ge0$ ??$p-\\alpha q$ ??????????????? $p/q$ ???",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 设 $f(x)=p(x)/q(x)$，其中 $p$ 凸、$q$ 凹且 $q(x)>0$。\n2. 看下水平集 $p(x)/q(x)\\le\\alpha$。\n3. 因分母为正，等价于 $p(x)-\\alpha q(x)\\le0$。\n4. 当 $\\alpha\\ge0$ 时，$p-\\alpha q$ 是凸函数，因此它的下水平集凸，得到拟凸性。",
     "source_summary": "Example 3.38 convex over concave"
   },
   {
@@ -311,7 +311,7 @@
     "term": "ch03-convex-functions.html#pair-256",
     "kind": "log-concave",
     "title": "Log-concavity definition",
-    "body": "Learning note\n\nProof steps\n\n1. ?????? $\\log f$ ?????? $f(x)>0$?\n2. ???? $\\log f(\\theta x+(1-\\theta)y)\\ge\\theta\\log f(x)+(1-\\theta)\\log f(y)$?\n3. ????? $f(\\theta x+(1-\\theta)y)\\ge f(x)^\\theta f(y)^{1-\\theta}$?\n4. ????????????????????????????????????",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 对数凹定义为 $\\log f$ 是凹函数，且 $f>0$。\n2. 凹性给出 $\\log f(\\theta x+(1-\\theta)y)\\ge\\theta\\log f(x)+(1-\\theta)\\log f(y)$。\n3. 对两边取指数。\n4. 得到 $f(\\theta x+(1-\\theta)y)\\ge f(x)^\\theta f(y)^{1-\\theta}$。",
     "source_summary": "Log-concavity definition"
   },
   {
@@ -320,7 +320,7 @@
     "term": "ch03-convex-functions.html#pair-263",
     "kind": "log-concave",
     "title": "Example 3.40 log-concave densities",
-    "body": "Learning note\n\nProof steps\n\n1. ??????? $p(x)=c\\exp(-(x-\\mu)^T\\Sigma^{-1}(x-\\mu)/2)$?\n2. ????$\\log p(x)=\\log c-\\frac12(x-\\mu)^T\\Sigma^{-1}(x-\\mu)$?\n3. ? $\\Sigma^{-1}\\succeq0$?????????????????\n4. ?? $\\log p$ ??????????",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 高斯密度可写为 $p(x)=c\\exp(-(x-\\mu)^T\\Sigma^{-1}(x-\\mu)/2)$。\n2. 取对数得到 $\\log p(x)=\\log c-\\frac12(x-\\mu)^T\\Sigma^{-1}(x-\\mu)$。\n3. 因为 $\\Sigma^{-1}\\succeq0$，二次型是凸函数。\n4. 负的凸二次函数是凹函数，所以 $\\log p$ 凹，高斯密度对数凹。",
     "source_summary": "Example 3.40 log-concave densities"
   },
   {
@@ -329,7 +329,7 @@
     "term": "ch03-convex-functions.html#pair-278",
     "kind": "log-concave",
     "title": "Integration of log-concave functions",
-    "body": "Learning note\n\nProof steps\n\n1. Pr?kopa ????? $f(x,y)$ ? $(x,y)$ ??????? $g(x)=\\int f(x,y)\\,dy$ ????\n2. ?????????????? $f(\\theta x_1+(1-\\theta)x_2,\\theta y_1+(1-\\theta)y_2)$?\n3. ?? Brunn-Minkowski/Pr?kopa-Leindler ?????????????????\n4. ????????????????????????????????",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 目标是证明 $g(x)=\\int f(x,y)\\,dy$ 保持对数凹。\n2. 先对联合函数 $f(x,y)$ 使用对数凹不等式。\n3. 再用 Prékopa-Leindler 型积分不等式，把点态的几何平均关系提升到积分层面。\n4. 结论是边缘化后 $g$ 仍对数凹，这解释了概率密度积分后的保持性。",
     "source_summary": "Integration of log-concave functions"
   },
   {
@@ -338,7 +338,7 @@
     "term": "ch03-convex-functions.html#pair-289",
     "kind": "generalized",
     "title": "Monotonicity under generalized inequalities",
-    "body": "Learning note\n\nProof steps\n\n1. ??????? $K$ ???$x\\preceq_K y$ ???? $y-x\\in K$?\n2. $K$-????? $x\\preceq_K y$ ? $f(x)\\le f(y)$?\n3. ???????????????? $g(\\theta x+(1-\\theta)y)\\preceq_K \\theta g(x)+(1-\\theta)g(y)$?\n4. ??????? $K$ ?????????????????? $K$ ????????",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 用锥 $K$ 定义广义不等式：$x\\preceq_K y$ 当且仅当 $y-x\\in K$。\n2. $K$-单调性表示 $x\\preceq_K y$ 时 $f(x)\\le f(y)$。\n3. 证明复合规则时，先由内层函数得到关于 $\\preceq_K$ 的向量或矩阵不等式。\n4. 再用外层函数的 $K$-单调性和凸性，把它转成普通实值凸性不等式。",
     "source_summary": "Monotonicity under generalized inequalities"
   },
   {
@@ -347,7 +347,7 @@
     "term": "ch03-convex-functions.html#pair-301",
     "kind": "generalized",
     "title": "Example 3.48 matrix convexity",
-    "body": "Learning note\n\nProof steps\n\n1. ?????? $F(\\theta x+(1-\\theta)y)\\preceq \\theta F(x)+(1-\\theta)F(y)$?\n2. ??????????????? $z$ ?? $z^TF(x)z$?\n3. ??????? $z^TF(x)z$ ???? $z^T[\\theta F(x)+(1-\\theta)F(y)-F(\\theta x+(1-\\theta)y)]z\\ge0$?\n4. ??? $z$ ?????????????????????",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 矩阵凸性要证 $F(\\theta x+(1-\\theta)y)\\preceq \\theta F(x)+(1-\\theta)F(y)$。\n2. 对任意向量 $z$ 左右夹住，转成标量不等式。\n3. 若每个 $z^TF(x)z$ 都是凸函数，则夹住后的差非负。\n4. 对所有 $z$ 都非负等价于矩阵差半正定，所以得到矩阵凸性。",
     "source_summary": "Example 3.48 matrix convexity"
   },
   {
@@ -356,7 +356,7 @@
     "term": "ch03-convex-functions.html#pair-312",
     "kind": "generalized",
     "title": "Example 3.49 quadratic matrix function",
-    "body": "Learning note\n\nProof steps\n\n1. ??????? $h(X)=-\\log\\det X$??? $X\\succ0$ ???????????????$X\\succeq Y$ ? $h(X)\\le h(Y)$?\n2. ???????????????????\n3. ????????????????????????\n4. ?????????????????????????????????????",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 先识别外层函数 $h(X)=-\\log\\det X$，它在 $X\\succ0$ 上凸。\n2. 它对半正定序是反单调：若 $X\\succeq Y$，则 $h(X)\\le h(Y)$。\n3. 因此外层反单调时，内层需要给出矩阵凹性，才能让不等式方向正确。\n4. 最后使用广义复合规则推出整体凸性，不要直接展开行列式。",
     "source_summary": "Example 3.49 quadratic matrix function"
   }
 ]

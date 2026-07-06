@@ -81,6 +81,14 @@ class ManifestValidationTests(unittest.TestCase):
                 load_manifest(str(path))
             self.assertIn("valid JSON", str(ctx.exception))
 
+    def test_chapter_manifest_bodies_are_renderable_markdown(self):
+        entries = load_manifest("docs/annotations/ch03-learning-annotations.json")
+        for entry in entries:
+            with self.subTest(pair=entry["pair"]):
+                body = entry["body"]
+                self.assertNotIn("???", body)
+                self.assertTrue(body.startswith("### Learning note\n\n#### Proof steps\n\n"))
+
 
 if __name__ == "__main__":
     unittest.main()
