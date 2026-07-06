@@ -31,6 +31,7 @@ class BuildSiteAnnotationsTest(unittest.TestCase):
         self.assertIn("docs/annotations/ch06-learning-annotations.json", DEFAULT_MANIFESTS)
         self.assertIn("docs/annotations/ch07-learning-annotations.json", DEFAULT_MANIFESTS)
         self.assertIn("docs/annotations/ch08-learning-annotations.json", DEFAULT_MANIFESTS)
+        self.assertIn("docs/annotations/ch09-learning-annotations.json", DEFAULT_MANIFESTS)
 
 
 if __name__ == "__main__":

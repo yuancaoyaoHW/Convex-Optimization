@@ -1,0 +1,272 @@
+[
+  {
+    "page": "ch09-unconstrained.html",
+    "pair": 2,
+    "term": "ch09-unconstrained.html#pair-2",
+    "kind": "definition",
+    "title": "Unconstrained minimization problem",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 本章研究 minimize $f(x)$ 的问题, 没有显式约束。\n2. 变量 $x\\in\\mathbb R^n$, 但仍要求 $x\\in\\mathbf{dom}\\,f$。\n3. 假设 $f$ 是凸且可微, 因此局部信息可用于全局最优性判断。\n4. 无约束并不等于没有限制, 定义域和水平集仍决定算法能走到哪里。\n5. 后续算法都围绕“选方向”和“选步长”来降低 $f$。",
+    "source_summary": "Unconstrained minimization problem setup"
+  },
+  {
+    "page": "ch09-unconstrained.html",
+    "pair": 3,
+    "term": "ch09-unconstrained.html#pair-3",
+    "kind": "condition",
+    "title": "Gradient optimality condition",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 对可微凸函数, 一阶下界给出 $f(y)\\ge f(x)+\\nabla f(x)^T(y-x)$。\n2. 若 $\\nabla f(x^\\star)=0$, 则 $f(y)\\ge f(x^\\star)$ for all $y$。\n3. 因此 $x^\\star$ 是全局最优点。\n4. 反过来, 若 $x^\\star$ 是内点最优且可微, 任意方向导数都不能为负。\n5. 于是必须有 $\\nabla f(x^\\star)=0$。",
+    "source_summary": "Necessary and sufficient optimality condition"
+  },
+  {
+    "page": "ch09-unconstrained.html",
+    "pair": 5,
+    "term": "ch09-unconstrained.html#pair-5",
+    "kind": "condition",
+    "title": "Initial point and sublevel set",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 算法从 $x^{(0)}\\in\\mathbf{dom}\\,f$ 开始。\n2. 若每步都下降, 所有迭代点都留在初始水平集 $S=\\{x\\mid f(x)\\le f(x^{(0)})\\}$。\n3. 收敛分析只需要在这个集合上控制函数性质。\n4. 若 $S$ 闭且有界, 迭代不会逃到无穷远。\n5. 这就是为什么本章反复在水平集上假设强凸性和 Hessian 上界。",
+    "source_summary": "Starting point and sublevel set"
+  },
+  {
+    "page": "ch09-unconstrained.html",
+    "pair": 17,
+    "term": "ch09-unconstrained.html#pair-17",
+    "kind": "condition",
+    "title": "Strong convexity via Hessian lower bound",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 在水平集 $S$ 上假设 $\\nabla^2 f(x)\\succeq mI$。\n2. 这意味着任意方向的二阶曲率至少为 $m$。\n3. 几何上, $f$ 至少像一个二次碗那样弯曲。\n4. 因而最优点唯一, 水平集也不会太扁到无法控制。\n5. 收敛证明用这个下界把梯度大小和距离最优性联系起来。",
+    "source_summary": "Strong convexity assumption"
+  },
+  {
+    "page": "ch09-unconstrained.html",
+    "pair": 18,
+    "term": "ch09-unconstrained.html#pair-18",
+    "kind": "condition",
+    "title": "Gradient norm bounds suboptimality",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 强凸性给出二次下界 $f(y)\\ge f(x)+\\nabla f(x)^T(y-x)+(m/2)\\|y-x\\|_2^2$。\n2. 对右侧关于 $y$ 最小化。\n3. 最小值出现在 $y=x-(1/m)\\nabla f(x)$。\n4. 得到 $p^\\star\\ge f(x)-(1/(2m))\\|\\nabla f(x)\\|_2^2$。\n5. 整理得 $f(x)-p^\\star\\le \\|\\nabla f(x)\\|_2^2/(2m)$。",
+    "source_summary": "Suboptimality bound from gradient norm"
+  },
+  {
+    "page": "ch09-unconstrained.html",
+    "pair": 23,
+    "term": "ch09-unconstrained.html#pair-23",
+    "kind": "condition",
+    "title": "Condition number of sublevel sets",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. Hessian 下界 $mI$ 控制最小曲率。\n2. Hessian 上界 $MI$ 控制最大曲率。\n3. 比值 $\\kappa=M/m$ 衡量曲率各向异性的严重程度。\n4. $\\kappa$ 大时, 水平集通常很狭长。\n5. 梯度法在狭长水平集上会 zig-zag, 因而收敛慢。",
+    "source_summary": "Condition number from Hessian bounds"
+  },
+  {
+    "page": "ch09-unconstrained.html",
+    "pair": 33,
+    "term": "ch09-unconstrained.html#pair-33",
+    "kind": "operation",
+    "title": "General descent iteration",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 每次迭代从当前点 $x^{(k)}$ 出发。\n2. 先选择搜索方向 $\\Delta x^{(k)}$。\n3. 再选择正步长 $t^{(k)}$。\n4. 更新为 $x^{(k+1)}=x^{(k)}+t^{(k)}\\Delta x^{(k)}$。\n5. 算法设计的核心就是让方向和步长共同保证目标下降。",
+    "source_summary": "Descent method iteration form"
+  },
+  {
+    "page": "ch09-unconstrained.html",
+    "pair": 38,
+    "term": "ch09-unconstrained.html#pair-38",
+    "kind": "operation",
+    "title": "Exact line search",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 固定当前点 $x$ 和方向 $\\Delta x$。\n2. 只沿射线 $x+t\\Delta x$, $t\\ge0$ 搜索。\n3. 精确线搜索选择使 $f(x+t\\Delta x)$ 最小的 $t$。\n4. 这是一维优化问题。\n5. 它理论上简单, 但实际常比近似线搜索更贵。",
+    "source_summary": "Exact line search"
+  },
+  {
+    "page": "ch09-unconstrained.html",
+    "pair": 42,
+    "term": "ch09-unconstrained.html#pair-42",
+    "kind": "operation",
+    "title": "Backtracking line search",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 从 $t=1$ 开始尝试。\n2. 检查 Armijo 条件 $f(x+t\\Delta x)\\le f(x)+\\alpha t\\nabla f(x)^T\\Delta x$。\n3. 若不满足, 把 $t$ 乘以 $\\beta\\in(0,1)$。\n4. 重复直到条件满足。\n5. 因为下降方向满足 $\\nabla f(x)^T\\Delta x<0$, 足够小的 $t$ 总会通过检查。",
+    "source_summary": "Backtracking line search"
+  },
+  {
+    "page": "ch09-unconstrained.html",
+    "pair": 47,
+    "term": "ch09-unconstrained.html#pair-47",
+    "kind": "definition",
+    "title": "Gradient descent direction",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 一阶近似为 $f(x+v)\\approx f(x)+\\nabla f(x)^Tv$。\n2. 在欧氏单位球中, 让线性项下降最快的方向是 $-\\nabla f(x)$。\n3. 梯度下降取 $\\Delta x=-\\nabla f(x)$。\n4. 若梯度非零, 该方向满足 $\\nabla f(x)^T\\Delta x=-\\|\\nabla f(x)\\|_2^2<0$。\n5. 因此它确实是下降方向。",
+    "source_summary": "Gradient descent method"
+  },
+  {
+    "page": "ch09-unconstrained.html",
+    "pair": 55,
+    "term": "ch09-unconstrained.html#pair-55",
+    "kind": "condition",
+    "title": "Linear convergence of gradient descent",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 在 Hessian 上下界条件下, 每步下降量可由当前误差控制。\n2. 推导得到 $f(x^+)-p^\\star\\le c(f(x)-p^\\star)$。\n3. 其中 $0<c<1$。\n4. 递推后误差按 $c^k$ 衰减。\n5. 这称为线性收敛, 也就是误差像几何级数一样下降。",
+    "source_summary": "Linear convergence of gradient method"
+  },
+  {
+    "page": "ch09-unconstrained.html",
+    "pair": 79,
+    "term": "ch09-unconstrained.html#pair-79",
+    "kind": "condition",
+    "title": "Gradient method depends on condition number",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 梯度方向只使用局部一阶信息。\n2. 当水平集很狭长时, 负梯度常指向谷壁而不是谷底。\n3. 线搜索会导致路径在两侧来回摆动。\n4. 条件数越大, 这种 zig-zag 越严重。\n5. 因此梯度法迭代次数通常随条件数变坏而增加。",
+    "source_summary": "Gradient method and condition number"
+  },
+  {
+    "page": "ch09-unconstrained.html",
+    "pair": 87,
+    "term": "ch09-unconstrained.html#pair-87",
+    "kind": "definition",
+    "title": "Steepest descent direction",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 先选定一个范数来衡量步长大小。\n2. 在线性近似 $\\nabla f(x)^Tv$ 中寻找单位范数内下降最快的 $v$。\n3. 也就是最小化 $\\nabla f(x)^Tv$ subject to $\\|v\\|\\le1$。\n4. 得到的方向叫最速下降方向。\n5. 不同范数会给出不同的最速下降算法。",
+    "source_summary": "Steepest descent from first-order approximation"
+  },
+  {
+    "page": "ch09-unconstrained.html",
+    "pair": 91,
+    "term": "ch09-unconstrained.html#pair-91",
+    "kind": "example",
+    "title": "Euclidean steepest descent",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 取欧氏范数 $\\|\\cdot\\|_2$。\n2. Cauchy-Schwarz 给出 $\\nabla f(x)^Tv\\ge-\\|\\nabla f(x)\\|_2\\|v\\|_2$。\n3. 单位球上最小值由 $v=-\\nabla f(x)/\\|\\nabla f(x)\\|_2$ 达到。\n4. 未归一化方向就是 $-\\nabla f(x)$。\n5. 所以欧氏最速下降等于普通梯度下降。",
+    "source_summary": "Steepest descent for Euclidean norm"
+  },
+  {
+    "page": "ch09-unconstrained.html",
+    "pair": 93,
+    "term": "ch09-unconstrained.html#pair-93",
+    "kind": "example",
+    "title": "Quadratic norm steepest descent",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 二次范数为 $\\|z\\|_P=(z^TPz)^{1/2}$。\n2. 在该范数下的对偶范数由 $P^{-1}$ 给出。\n3. 最速下降方向与 $-P^{-1}\\nabla f(x)$ 成比例。\n4. 这相当于对梯度做预条件化。\n5. 若 $P$ 近似 Hessian, 可显著改善水平集条件数。",
+    "source_summary": "Steepest descent for quadratic norm"
+  },
+  {
+    "page": "ch09-unconstrained.html",
+    "pair": 100,
+    "term": "ch09-unconstrained.html#pair-100",
+    "kind": "example",
+    "title": "l1 steepest descent selects one coordinate",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. $\\ell_1$ 单位球的极点是坐标方向。\n2. 线性函数在多面体上的最小值在极点达到。\n3. 因此最速下降方向只沿一个坐标轴。\n4. 选择的坐标是梯度绝对值最大的分量。\n5. 这给出一种贪心坐标下降解释。",
+    "source_summary": "Steepest descent for l1 norm"
+  },
+  {
+    "page": "ch09-unconstrained.html",
+    "pair": 108,
+    "term": "ch09-unconstrained.html#pair-108",
+    "kind": "condition",
+    "title": "Norm choice changes convergence",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 最速下降方向由所选范数定义。\n2. 二次范数等价于线性坐标变换后的欧氏范数。\n3. 若变换后水平集更圆, 迭代会更快。\n4. 若变换后水平集更狭长, 迭代会更慢。\n5. 所以范数选择本质上是预条件器选择。",
+    "source_summary": "Choice of norm for steepest descent"
+  },
+  {
+    "page": "ch09-unconstrained.html",
+    "pair": 122,
+    "term": "ch09-unconstrained.html#pair-122",
+    "kind": "definition",
+    "title": "Newton step",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. Newton 步定义为 $\\Delta x_{\\mathrm{nt}}=-\\nabla^2 f(x)^{-1}\\nabla f(x)$。\n2. 它使用一阶梯度和二阶 Hessian 信息。\n3. Hessian 正定时该方向存在且唯一。\n4. 该方向满足 $\\nabla f(x)^T\\Delta x_{\\mathrm{nt}}<0$, 除非梯度为零。\n5. 因此非最优点处 Newton 步是下降方向。",
+    "source_summary": "Definition of the Newton step"
+  },
+  {
+    "page": "ch09-unconstrained.html",
+    "pair": 124,
+    "term": "ch09-unconstrained.html#pair-124",
+    "kind": "operation",
+    "title": "Newton step minimizes quadratic model",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 在 $x$ 处写二阶 Taylor 模型。\n2. 模型为 $f(x)+\\nabla f(x)^Tv+(1/2)v^T\\nabla^2 f(x)v$。\n3. 对 $v$ 求梯度并令其为零。\n4. 得到 $\\nabla f(x)+\\nabla^2 f(x)v=0$。\n5. 解得 $v=-\\nabla^2 f(x)^{-1}\\nabla f(x)$, 即 Newton 步。",
+    "source_summary": "Newton step as minimizer of second-order approximation"
+  },
+  {
+    "page": "ch09-unconstrained.html",
+    "pair": 130,
+    "term": "ch09-unconstrained.html#pair-130",
+    "kind": "operation",
+    "title": "Newton step from linearized optimality",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 最优性条件是 $\\nabla f(x^\\star)=0$。\n2. 在当前点 $x$ 附近线性化梯度。\n3. 得到 $\\nabla f(x+v)\\approx\\nabla f(x)+\\nabla^2 f(x)v$。\n4. 令近似梯度为零。\n5. 解出的 $v$ 正是 Newton 步。",
+    "source_summary": "Newton step as solution of linearized optimality condition"
+  },
+  {
+    "page": "ch09-unconstrained.html",
+    "pair": 133,
+    "term": "ch09-unconstrained.html#pair-133",
+    "kind": "condition",
+    "title": "Affine invariance of Newton step",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 做非奇异仿射变换 $x=Ty$。\n2. 新变量中的梯度和 Hessian 按链式法则变换。\n3. Newton 方程在新坐标中解出 $\\Delta y$。\n4. 映回原坐标得到 $T\\Delta y$。\n5. 这个向量等于原问题直接计算的 Newton 步。",
+    "source_summary": "Affine invariance of Newton step"
+  },
+  {
+    "page": "ch09-unconstrained.html",
+    "pair": 135,
+    "term": "ch09-unconstrained.html#pair-135",
+    "kind": "definition",
+    "title": "Newton decrement",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. Newton decrement 定义为 $\\lambda(x)=(\\nabla f(x)^T\\nabla^2 f(x)^{-1}\\nabla f(x))^{1/2}$。\n2. 它等于 Newton 步在 Hessian 范数下的长度。\n3. 也等于二次模型预期下降量的平方根尺度。\n4. 当 $\\lambda(x)$ 小时, 当前点通常已接近最优。\n5. 在自协调分析中, 它可直接作为停止准则。",
+    "source_summary": "Newton decrement"
+  },
+  {
+    "page": "ch09-unconstrained.html",
+    "pair": 141,
+    "term": "ch09-unconstrained.html#pair-141",
+    "kind": "condition",
+    "title": "Two phases of Newton convergence",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 远离最优点时, Newton 方法使用阻尼步长保证稳定下降。\n2. 这一阶段每步至少降低固定量。\n3. 接近最优点后, backtracking 会接受单位步长。\n4. 此时误差满足近似平方递推。\n5. 因而 Newton 收敛证明分为阻尼阶段和二次收敛阶段。",
+    "source_summary": "Outline of Newton convergence analysis"
+  },
+  {
+    "page": "ch09-unconstrained.html",
+    "pair": 167,
+    "term": "ch09-unconstrained.html#pair-167",
+    "kind": "condition",
+    "title": "Why Newton is faster than gradient methods",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 梯度法只利用一阶信息, 对尺度和条件数敏感。\n2. Newton 法用 Hessian 自动校正局部尺度。\n3. 它具有仿射不变性, 不受线性坐标变换影响。\n4. 接近最优点时出现二次收敛。\n5. 代价是每步需要求解 Newton 线性方程, 单步成本更高。",
+    "source_summary": "Summary of Newton method advantages"
+  },
+  {
+    "page": "ch09-unconstrained.html",
+    "pair": 173,
+    "term": "ch09-unconstrained.html#pair-173",
+    "kind": "definition",
+    "title": "Self-concordance in one dimension",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 自协调条件约束三阶导数和二阶导数的关系。\n2. 一维形式为 $|f'''(x)|\\le2f''(x)^{3/2}$。\n3. 它限制曲率变化速度不能相对曲率本身过快。\n4. 这比全局 Hessian Lipschitz 常数更适合 barrier 函数。\n5. 因而可给出不依赖未知强凸常数的 Newton 复杂度分析。",
+    "source_summary": "Self-concordance definition on R"
+  },
+  {
+    "page": "ch09-unconstrained.html",
+    "pair": 184,
+    "term": "ch09-unconstrained.html#pair-184",
+    "kind": "example",
+    "title": "Log barrier is self-concordant",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 基本函数 $-\\log x$ 是自协调的。\n2. 仿射函数 $b_i-a_i^Tx$ 与它复合仍保持自协调。\n3. 多个自协调项求和仍保持自协调。\n4. 因此 $-\\sum_i\\log(b_i-a_i^Tx)$ 是自协调函数。\n5. 这解释了线性不等式解析中心适合用 Newton 法分析。",
+    "source_summary": "Log barrier for linear inequalities"
+  },
+  {
+    "page": "ch09-unconstrained.html",
+    "pair": 192,
+    "term": "ch09-unconstrained.html#pair-192",
+    "kind": "condition",
+    "title": "Self-concordance gives local suboptimality bounds",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 强凸分析用固定常数 $m,M$ 控制误差。\n2. 自协调分析改用局部 Hessian 和 Newton decrement。\n3. 自协调性质控制沿 Newton 方向的曲率变化。\n4. 因而可用 $\\lambda(x)$ 估计次优性和步长安全性。\n5. 这使 Newton 法拥有更内在的停止准则。",
+    "source_summary": "Properties of self-concordant functions"
+  },
+  {
+    "page": "ch09-unconstrained.html",
+    "pair": 206,
+    "term": "ch09-unconstrained.html#pair-206",
+    "kind": "condition",
+    "title": "Self-concordant Newton complexity",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 总迭代数分成阻尼阶段和二次阶段。\n2. 阻尼阶段由 $f(x^{(0)})-p^\\star$ 除以固定下降量控制。\n3. 二次阶段误差每步近似平方。\n4. 因而达到精度 $\\epsilon$ 的额外步数是 $\\log\\log(1/\\epsilon)$ 量级。\n5. 这是自协调分析给出的核心复杂度结论。",
+    "source_summary": "Final complexity bound for self-concordant Newton method"
+  },
+  {
+    "page": "ch09-unconstrained.html",
+    "pair": 219,
+    "term": "ch09-unconstrained.html#pair-219",
+    "kind": "operation",
+    "title": "Pre-computation for line searches",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 线搜索会多次计算 $f(x+t\\Delta x)$。\n2. 若每次都从头计算, 成本可能很高。\n3. 对结构化目标, 可先预计算与 $x$ 和 $\\Delta x$ 有关的中间量。\n4. 不同 $t$ 下只更新低成本表达式。\n5. 这样能显著降低每次线搜索的总工作量。",
+    "source_summary": "Pre-computation for line searches"
+  },
+  {
+    "page": "ch09-unconstrained.html",
+    "pair": 226,
+    "term": "ch09-unconstrained.html#pair-226",
+    "kind": "operation",
+    "title": "Computing the Newton step dominates cost",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. Newton 步需要解线性方程 $H\\Delta x=-g$。\n2. 对一般稠密矩阵, 分解 $H$ 成本很高。\n3. 因此每步主要成本通常在求解 Newton 系统。\n4. 若 Hessian 有稀疏、带状或低秩结构, 应利用这些结构。\n5. 实现层面的效率往往决定 Newton 法能否用于大规模问题。",
+    "source_summary": "Computing the Newton step"
+  }
+]
