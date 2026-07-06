@@ -1,1 +1,242 @@
-[]
+[
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 3,
+    "title": "Convex function definition",
+    "body": "Learning note\n\n抓住这一定义时，先看两层：定义域本身要是凸集，函数值还要满足“中点不高于端点线性插值”。几何上就是弦在图像上方。后面一阶条件、Jensen 不等式、上图刻画都在重写同一个核心想法。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 5,
+    "title": "Affine equality case",
+    "body": "Learning note\n\n仿射函数既凸又凹，因为插值时函数值完全等于端点值的插值。这个例子是判断很多规则的基准：如果一个证明在仿射函数上不能退化成等号，通常说明方向或符号写反了。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 8,
+    "title": "Restriction to lines",
+    "body": "Learning note\n\n把多维凸性限制到任意直线，是把复杂问题降到一维的常用入口。实践中检查 Hessian、证明复合规则、研究拟凸性时，很多论证都是先沿直线看 $g(t)=f(x+tv)$。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 13,
+    "title": "Example 3.1 indicator function",
+    "body": "Learning note\n\n指示函数把“约束集合”变成“目标函数的一部分”：在集合内代价为 0，集合外代价为 $\\infty$。这让带约束最小化可以写成无约束形式 $f+I_C$，是后面对偶和近端方法里的基础语言。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 17,
+    "title": "First-order condition",
+    "body": "Learning note\n\n一阶条件说切平面是全局下界，而不只是局部近似。凸优化中“局部信息推出全局结论”的魔法基本从这里来：若 $\\nabla f(x)=0$，立刻得到 $x$ 是全局最小点。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 30,
+    "title": "Second-order condition",
+    "body": "Learning note\n\n二阶条件把凸性翻译成曲率非负：$\\nabla^2 f(x)\\succeq0$。注意严格凸不等于处处 Hessian 正定；正定是强而方便的充分条件，很多严格凸函数会在某些点曲率退化。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 35,
+    "title": "Example 3.2 quadratic functions",
+    "body": "Learning note\n\n二次函数是 Hessian 判据的标准样本：$f(x)=\\frac12x^TPx+q^Tx+r$ 的凸性只看 $P\\succeq0$。线性项和常数项会平移或倾斜图像，但不改变曲率。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 57,
+    "title": "Sublevel sets",
+    "body": "Learning note\n\n凸函数的下水平集一定凸，所以“函数凸”能推出“阈值以下的可行区域凸”。反过来不成立；所有下水平集凸只说明拟凸。这个区别在 3.4 节会正式出现。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 62,
+    "title": "Epigraph definition",
+    "body": "Learning note\n\n上图把函数问题变成集合问题：$\\mathrm{epi}\\,f$ 是图像以上的所有点。很多函数凸性的证明并不直接算不等式，而是证明上图是凸集。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 65,
+    "title": "Example 3.4 matrix fractional function",
+    "body": "Learning note\n\n矩阵分式函数 $x^TY^{-1}x$ 看起来非线性很强，但它的上图能通过 Schur 补写成线性矩阵不等式。这里展示了一个重要套路：把难函数转成半正定块矩阵条件。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 71,
+    "title": "Jensen inequality",
+    "body": "Learning note\n\nJensen 不等式是凸性定义的多点版本：函数作用在平均值上，不超过函数值的平均。它既是证明不等式的工具，也是概率期望形式 $f(E X)\\le E f(X)$ 的来源。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 78,
+    "title": "AM-GM from Jensen",
+    "body": "Learning note\n\n这里的重点不是 AM-GM 本身，而是选函数的眼光：用凸函数 $-\\log x$ 把乘积关系变成和的关系。很多经典不等式都可以看成“挑对凸函数后套 Jensen”。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 90,
+    "title": "Example 3.5 pointwise maximum",
+    "body": "Learning note\n\n若干仿射函数的逐点最大值是凸的，所以分段线性凸函数可以看成许多平面的上包络。支持向量机、最大损失、鲁棒约束里都会反复出现这种结构。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 92,
+    "title": "Example 3.6 sum of largest components",
+    "body": "Learning note\n\n“最大的 $r$ 个分量之和”凸，是因为它可以写成很多线性函数的最大值。这个例子训练一种视角：排序函数虽然不光滑，但常常能通过上确界或最大值证明凸性。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 96,
+    "title": "Example 3.7 support function",
+    "body": "Learning note\n\n支撑函数 $S_C(x)=\\sup_{y\\in C}x^Ty$ 把集合 $C$ 的方向宽度编码成函数。它总是凸的，即使 $C$ 本身不凸；因为对固定 $y$，$x^Ty$ 是仿射函数。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 102,
+    "title": "Example 3.10 maximum eigenvalue",
+    "body": "Learning note\n\n最大特征值可写成 Rayleigh 商的上确界：$\\lambda_{\\max}(X)=\\sup_{\\|u\\|=1}u^TXu$。对固定 $u$ 这是 $X$ 的线性函数，所以上确界给出凸性。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 103,
+    "title": "Example 3.11 spectral norm",
+    "body": "Learning note\n\n谱范数是最大奇异值，也能写成双线性表达的上确界。这个例子和最大特征值平行：矩阵函数的凸性常常不是靠展开元素，而是靠变分表示。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 112,
+    "title": "Composition rules motivation",
+    "body": "Learning note\n\n复合规则回答的是：已知 $h$ 和 $g$ 的曲率，什么时候 $h(g(x))$ 仍然凸？这里最容易错的是单调性条件；外层函数是否递增，决定内层凸性的不等式方向能否传递。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 117,
+    "title": "Scalar composition theorem",
+    "body": "Learning note\n\n标量复合的口诀：凸且非减的外函数可以吃凸函数；凸且非增的外函数可以吃凹函数。不要只记“凸套凸仍凸”，它少了关键的单调性限制。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 126,
+    "title": "Example 3.13 simple composition",
+    "body": "Learning note\n\n这些例子是复合规则的速查表。读时把每个函数拆成外层 $h$ 和内层 $g$，逐项检查“外层曲率、外层单调性、内层曲率”，比直接求 Hessian 更稳。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 130,
+    "title": "Vector composition",
+    "body": "Learning note\n\n向量复合把标量规则推广到多个内层函数 $g_i$。核心仍是外层 $h$ 对每个坐标的单调性：哪个坐标非减，就允许对应的 $g_i$ 是凸；哪个坐标非增，就允许对应的 $g_i$ 是凹。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 141,
+    "title": "Example 3.15 Schur complement",
+    "body": "Learning note\n\n这个例子把“对某个变量取下确界保持凸性”和 Schur 补连接起来。消去变量 $y$ 后得到的函数仍凸，背后是凸上图在投影下仍为凸集。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 146,
+    "title": "Perspective function",
+    "body": "Learning note\n\n透视函数 $g(x,t)=t f(x/t)$ 是把函数放到齐次坐标里看。许多分式形态的凸性都来自它，例如 $x^Tx/t$ 和相对熵。记住条件 $t>0$，否则表达式没有意义。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 148,
+    "title": "Example 3.18 norm squared perspective",
+    "body": "Learning note\n\n$\\|x\\|_2^2/t$ 的凸性不是偶然的，它是平方范数的透视函数。优化里这类项常出现在二阶锥、方差归一化和分式目标中。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 150,
+    "title": "Example 3.19 negative log perspective",
+    "body": "Learning note\n\n相对熵来自 $-\\log x$ 的透视函数。这个例子值得记：信息论里的 KL divergence 可以被凸分析统一处理，后面遇到熵正则化和概率模型时会很有用。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 162,
+    "title": "Example 3.21 one-dimensional conjugates",
+    "body": "Learning note\n\n共轭函数 $f^*(y)=\\sup_x(yx-f(x))$ 衡量线性函数 $yx$ 能超过 $f$ 多少。计算时最重要的是定义域：若上确界无界，结果就是 $\\infty$，不是“没有答案”。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 169,
+    "title": "Example 3.24 indicator conjugate",
+    "body": "Learning note\n\n集合指示函数的共轭就是支撑函数。这条关系把“约束集合”和“支持超平面”接起来，是对偶问题里约束变成支撑函数或共轭项的核心机制。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 170,
+    "title": "Example 3.25 log-sum-exp conjugate",
+    "body": "Learning note\n\nlog-sum-exp 的共轭把变量限制到概率单纯形，并产生负熵形式。这解释了为什么 softmax、熵和概率权重经常一起出现：它们是同一对共轭结构的两面。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 174,
+    "title": "Example 3.26 norm conjugate",
+    "body": "Learning note\n\n范数的共轭是对偶范数单位球的指示函数。直觉是：线性函数 $y^Tx$ 若被 $\\|x\\|$ 控住，需要 $\\|y\\|_*\\le1$；否则沿某个方向放大就会无界。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 176,
+    "title": "Example 3.27 norm squared conjugate",
+    "body": "Learning note\n\n平方范数的共轭仍是平方范数，只是换成对偶范数：$\\frac12\\|x\\|^2$ 对应 $\\frac12\\|y\\|_*^2$。这比范数本身更平滑，所以在正则化和对偶推导里更好用。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 197,
+    "title": "Quasiconvex definition",
+    "body": "Learning note\n\n拟凸函数不要求弦在图像上方，只要求所有下水平集是凸的。它保留了“低于某个阈值的可行区域好处理”这一点，因此常用于可行性二分和准凸优化。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 208,
+    "title": "Example 3.32 linear-fractional function",
+    "body": "Learning note\n\n线性分式函数同时拟凸和拟凹，因为它的下水平集和上水平集都能化成线性不等式。分式规划里常见的可处理性，很多就来自这种水平集视角。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 226,
+    "title": "First-order quasiconvex condition",
+    "body": "Learning note\n\n拟凸的一阶条件不是切平面全局下界，而是：若 $y$ 的函数值不高于 $x$，梯度方向不能指向 $y$。它描述的是下水平集边界的支撑超平面。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 253,
+    "title": "Example 3.38 convex over concave",
+    "body": "Learning note\n\n凸函数除以正的凹函数通常不是凸函数，但它是拟凸函数。证明看下水平集：$p(x)/q(x)\\le t$ 等价于 $p(x)-tq(x)\\le0$，这是凸函数的下水平集。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 256,
+    "title": "Log-concavity definition",
+    "body": "Learning note\n\n对数凹把乘法结构转成加法结构：$\\log f$ 凹意味着 $f$ 在几何平均意义下表现良好。概率密度、体积和良率问题常用它，因为积分和边缘化有很好的保持性。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 263,
+    "title": "Example 3.40 log-concave densities",
+    "body": "Learning note\n\n高斯密度对数凹，所以很多高斯概率区域会继承凸性或拟凸性性质。这里的重点是：概率模型的形状可以通过 $\\log f$ 的凹性进入凸优化工具箱。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 278,
+    "title": "Integration of log-concave functions",
+    "body": "Learning note\n\n对数凹函数在积分下的保持性很强：联合对数凹函数边缘化后仍对数凹。概率论里这意味着很多边缘分布、命中概率和体积函数仍保留可优化结构。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 289,
+    "title": "Monotonicity under generalized inequalities",
+    "body": "Learning note\n\n$K$-单调性把普通的“逐点变大”换成锥诱导的偏序。读这一节时先问：哪个锥定义了“更大”？在矩阵场景里，这个锥通常是半正定锥。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 301,
+    "title": "Example 3.48 matrix convexity",
+    "body": "Learning note\n\n矩阵凸性要求不等式按半正定序成立，比逐元素凸更强。一个实用判据是：对所有向量 $z$，标量函数 $z^Tf(x)z$ 凸；这把矩阵不等式拉回标量凸性。"
+  },
+  {
+    "page": "ch03-convex-functions.html",
+    "pair": 312,
+    "title": "Example 3.49 quadratic matrix function",
+    "body": "Learning note\n\n这个例子把 $K$-凸复合规则和 $-\\log\\det$ 连接起来。复杂矩阵表达式的凸性往往不是直接展开证明，而是识别出半正定序、矩阵凹性和单调复合。"
+  }
+]
