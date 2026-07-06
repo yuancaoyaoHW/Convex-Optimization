@@ -1,6 +1,6 @@
 import unittest
 
-from translation._build_site_annotations import build_site_annotations
+from translation._build_site_annotations import DEFAULT_MANIFESTS, build_site_annotations
 
 
 class BuildSiteAnnotationsTest(unittest.TestCase):
@@ -23,6 +23,10 @@ class BuildSiteAnnotationsTest(unittest.TestCase):
             "title": "Example 3.1 indicator function",
             "body": "Learning note\n\nConstraints become $I_C$.",
         }])
+
+    def test_default_manifests_include_chapter_four(self):
+        self.assertIn("docs/annotations/ch03-learning-annotations.json", DEFAULT_MANIFESTS)
+        self.assertIn("docs/annotations/ch04-learning-annotations.json", DEFAULT_MANIFESTS)
 
 
 if __name__ == "__main__":

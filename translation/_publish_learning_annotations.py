@@ -305,7 +305,7 @@ def main() -> int:
     args = parser.parse_args()
 
     entries = load_manifest(args.manifest)
-    errors = validate_manifest(entries, extract_pair_texts(args.html))
+    errors = validate_manifest(entries, extract_pair_texts(args.html), page=Path(args.html).name)
     if errors:
         for error in errors:
             print(error, file=sys.stderr)

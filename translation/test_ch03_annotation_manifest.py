@@ -26,6 +26,24 @@ class ManifestValidationTests(unittest.TestCase):
         errors = validate_manifest(entries, {13: "Example 3.1 Indicator function"}, enforce_count=False)
         self.assertEqual(errors, [])
 
+    def test_manifest_validation_accepts_chapter_four_entry(self):
+        entries = [{
+            "page": "ch04-convex-problems.html",
+            "pair": 5,
+            "term": "ch04-convex-problems.html#pair-5",
+            "kind": "definition",
+            "title": "Optimal value",
+            "body": "### Learning note\n\n#### Proof steps\n\n1. Write the feasible set.\n2. Take the infimum of the objective over that set.",
+            "source_summary": "Optimal value"
+        }]
+        errors = validate_manifest(
+            entries,
+            {5: "The optimal value"},
+            enforce_count=False,
+            page="ch04-convex-problems.html",
+        )
+        self.assertEqual(errors, [])
+
     def test_manifest_validation_rejects_bad_term(self):
         entries = [{
             "page": "ch03-convex-functions.html",
@@ -83,6 +101,21 @@ class ManifestValidationTests(unittest.TestCase):
 
     def test_chapter_manifest_bodies_are_renderable_markdown(self):
         entries = load_manifest("docs/annotations/ch03-learning-annotations.json")
+        for entry in entries:
+            with self.subTest(pair=entry["pair"]):
+                body = entry["body"]
+                self.assertNotIn("???", body)
+                self.assertTrue(body.startswith("### Learning note\n\n#### Proof steps\n\n"))
+
+    def test_chapter_four_manifest_has_renderable_markdown(self):
+        entries = load_manifest("docs/annotations/ch04-learning-annotations.json")
+        self.assertEqual(len(entries), 30)
+        errors = validate_manifest(
+            entries,
+            extract_pair_texts("translation/ch04-convex-problems.html"),
+            page="ch04-convex-problems.html",
+        )
+        self.assertEqual(errors, [])
         for entry in entries:
             with self.subTest(pair=entry["pair"]):
                 body = entry["body"]

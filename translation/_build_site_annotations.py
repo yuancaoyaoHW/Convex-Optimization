@@ -6,6 +6,11 @@ import argparse
 import json
 from pathlib import Path
 
+DEFAULT_MANIFESTS = [
+    "docs/annotations/ch03-learning-annotations.json",
+    "docs/annotations/ch04-learning-annotations.json",
+]
+
 
 def build_site_annotations(entries: list[dict]) -> list[dict]:
     annotations = []
@@ -34,7 +39,7 @@ def main() -> int:
     parser.add_argument(
         "manifests",
         nargs="*",
-        default=["docs/annotations/ch03-learning-annotations.json"],
+        default=DEFAULT_MANIFESTS,
     )
     parser.add_argument("--output", default="translation/annotations.json")
     args = parser.parse_args()

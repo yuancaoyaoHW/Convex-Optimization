@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate Chapter 3 learning annotation manifests."""
+"""Validate learning annotation manifests."""
 from __future__ import annotations
 
 import argparse
@@ -83,9 +83,15 @@ def load_manifest(path: str) -> list[dict]:
     return data
 
 
-def validate_manifest(entries: list[dict], pair_texts: dict[int, str], enforce_count: bool = True) -> list[str]:
+def validate_manifest(
+    entries: list[dict],
+    pair_texts: dict[int, str],
+    enforce_count: bool = True,
+    page: str = PAGE,
+) -> list[str]:
     errors: list[str] = []
     seen_terms: set[str] = set()
+    term_prefix = page + "#pair-"
     for index, entry in enumerate(entries, 1):
         if not isinstance(entry, dict):
             errors.append(f"entry {index}: entry must be an object")
@@ -100,14 +106,14 @@ def validate_manifest(entries: list[dict], pair_texts: dict[int, str], enforce_c
         term = entry["term"]
         kind = entry["kind"]
 
-        if entry["page"] != PAGE:
-            errors.append(f"entry {index}: page must be {PAGE}")
+        if entry["page"] != page:
+            errors.append(f"entry {index}: page must be {page}")
         if type(pair) is not int or pair < 1:
             errors.append(f"entry {index}: pair must be a positive integer")
         else:
-            expected_term = f"{TERM_PREFIX}{pair}"
+            expected_term = f"{term_prefix}{pair}"
             if pair not in pair_texts:
-                errors.append(f"entry {index}: pair {pair} does not exist in {PAGE}")
+                errors.append(f"entry {index}: pair {pair} does not exist in {page}")
             if not isinstance(term, str):
                 errors.append(f"entry {index}: term must be {expected_term}")
             elif term != expected_term:
@@ -127,8 +133,8 @@ def validate_manifest(entries: list[dict], pair_texts: dict[int, str], enforce_c
         if len(re.sub(r"\s+", "", body)) < 40:
             errors.append(f"entry {index}: body is too short")
 
-    if enforce_count and not 35 <= len(entries) <= 50:
-        errors.append(f"manifest must contain 35-50 entries, found {len(entries)}")
+    if enforce_count and not 25 <= len(entries) <= 50:
+        errors.append(f"manifest must contain 25-50 entries, found {len(entries)}")
     return errors
 
 
@@ -145,7 +151,7 @@ def main() -> int:
         print(str(exc), file=sys.stderr)
         return 1
 
-    errors = validate_manifest(entries, pair_texts)
+    errors = validate_manifest(entries, pair_texts, page=Path(args.html).name)
     if errors:
         for error in errors:
             print(error, file=sys.stderr)

@@ -238,5 +238,185 @@
     "pair": 312,
     "title": "Example 3.49 quadratic matrix function",
     "body": "### Learning note\n\n#### Proof steps\n\n1. 先识别外层函数 $h(X)=-\\log\\det X$，它在 $X\\succ0$ 上凸。\n2. 它对半正定序是反单调：若 $X\\succeq Y$，则 $h(X)\\le h(Y)$。\n3. 因此外层反单调时，内层需要给出矩阵凹性，才能让不等式方向正确。\n4. 最后使用广义复合规则推出整体凸性，不要直接展开行列式。"
+  },
+  {
+    "page": "ch04-convex-problems.html",
+    "pair": 3,
+    "title": "Standard optimization problem form",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 先识别变量 $x$，目标函数 $f_0(x)$，不等式约束 $f_i(x)\\le0$，等式约束 $h_i(x)=0$。\n2. 可行集是所有同时满足这些约束和定义域条件的 $x$。\n3. 问题的目标是在可行集上让 $f_0$ 尽可能小。\n4. 后面所有等价变换都要保持两件事：可行点对应关系不变，目标值顺序不变。"
+  },
+  {
+    "page": "ch04-convex-problems.html",
+    "pair": 5,
+    "title": "Optimal value",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 先写可行集 $\\mathcal F=\\{x\\mid f_i(x)\\le0, h_i(x)=0\\}$。\n2. 最优值定义为 $p^\\star=\\inf_{x\\in\\mathcal F} f_0(x)$。\n3. 用下确界而不是最小值，是因为可行集上可能没有点真正达到这个值。\n4. 若可行集为空，约定 $p^\\star=\\infty$；若目标可沿可行方向无界下降，则 $p^\\star=-\\infty$。"
+  },
+  {
+    "page": "ch04-convex-problems.html",
+    "pair": 7,
+    "title": "Optimal point and optimal set",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 先检查 $x^\\star$ 是否可行；不可行点不能称为最优点。\n2. 再检查目标值是否达到最优值：$f_0(x^\\star)=p^\\star$。\n3. 所有满足这两个条件的点组成最优解集 $\\mathcal X_{\\mathrm{opt}}$。\n4. 注意最优值可能存在但最优点不存在，例如下确界没有被达到。"
+  },
+  {
+    "page": "ch04-convex-problems.html",
+    "pair": 11,
+    "title": "Feasibility problems",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 可行性问题没有真正要优化的目标，只问是否存在满足约束的 $x$。\n2. 可把它写成最小化常数目标，例如 minimize $0$ subject to constraints。\n3. 若可行集非空，最优值为 $0$，每个可行点都是最优点。\n4. 若不可行，最优值按约定为 $\\infty$；这就是凸可行性在拟凸二分中的作用。"
+  },
+  {
+    "page": "ch04-convex-problems.html",
+    "pair": 15,
+    "title": "Box constraints",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 盒约束 $l_i\\le x_i\\le u_i$ 可拆成两个线性不等式：$x_i-u_i\\le0$ 和 $l_i-x_i\\le0$。\n2. 每个线性不等式的可行集是半空间。\n3. 盒子是有限个半空间的交集。\n4. 半空间凸，凸集交集仍凸，所以盒约束定义凸可行集。"
+  },
+  {
+    "page": "ch04-convex-problems.html",
+    "pair": 20,
+    "title": "Positive scaling equivalence",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 将目标替换为 $\\alpha_0 f_0(x)$，其中 $\\alpha_0>0$，不会改变目标值的大小顺序。\n2. 将不等式约束替换为 $\\alpha_i f_i(x)\\le0$，其中 $\\alpha_i>0$，与原约束等价。\n3. 将等式约束替换为 $\\beta_i h_i(x)=0$，其中 $\\beta_i\\ne0$，也与原约束等价。\n4. 所以可行集和最优解集不变，只是最优值按目标缩放。"
+  },
+  {
+    "page": "ch04-convex-problems.html",
+    "pair": 25,
+    "title": "Monotone transformations of objective and constraints",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 若 $\\psi_0$ 单调递增，则最小化 $f_0$ 与最小化 $\\psi_0(f_0)$ 有相同的最优点。\n2. 若 $\\psi_i(u)\\le0$ 当且仅当 $u\\le0$，则约束 $\\psi_i(f_i(x))\\le0$ 与 $f_i(x)\\le0$ 等价。\n3. 若 $\\psi(u)=0$ 当且仅当 $u=0$，则等式约束也保持等价。\n4. 这类变换用于把问题改写成更容易识别凸性的形式。"
+  },
+  {
+    "page": "ch04-convex-problems.html",
+    "pair": 31,
+    "title": "Eliminating linear equality constraints",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 线性等式 $Ax=b$ 的解集可写成 $x=Fz+x_0$，其中 $AF=0$ 且 $Ax_0=b$。\n2. 用新变量 $z$ 替换原变量 $x$。\n3. 把目标和不等式约束中的 $x$ 全部换成 $Fz+x_0$。\n4. 这样消去了等式约束；若原函数凸，仿射代入保持凸性。"
+  },
+  {
+    "page": "ch04-convex-problems.html",
+    "pair": 35,
+    "title": "Optimizing over some variables",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 把变量分成 $(x_1,x_2)$，只保留 $x_1$，对 $x_2$ 做部分最小化。\n2. 定义新目标 $g(x_1)=\\inf_{x_2} f_0(x_1,x_2)$。\n3. 新约束也可通过存在某个 $x_2$ 满足原约束来表示。\n4. 若联合函数凸，部分最小化保持凸性；几何上是凸上图或可行集的投影。"
+  },
+  {
+    "page": "ch04-convex-problems.html",
+    "pair": 40,
+    "title": "Epigraph form",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 引入新变量 $t$，把 minimize $f_0(x)$ 改成 minimize $t$。\n2. 添加约束 $f_0(x)\\le t$，即 $(x,t)$ 在 $f_0$ 的上图中。\n3. 对固定 $x$，最小可行 $t$ 正好是 $f_0(x)$。\n4. 因此两个问题的最优值相同，最优 $x$ 也对应；若 $f_0$ 凸，上图约束是凸约束。"
+  },
+  {
+    "page": "ch04-convex-problems.html",
+    "pair": 50,
+    "title": "Convex optimization problem in standard form",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 标准凸优化要求目标 $f_0$ 和不等式约束函数 $f_i$ 都是凸函数。\n2. 等式约束必须是仿射形式 $a_i^Tx=b_i$。\n3. 定义域交集也必须参与可行集；凸函数定义域凸，仿射等式集凸。\n4. 因此整个可行集是凸集，目标在凸集上最小化。"
+  },
+  {
+    "page": "ch04-convex-problems.html",
+    "pair": 60,
+    "title": "Local optimum is global in convex optimization",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 设 $x$ 是局部最优，但存在可行点 $y$ 使 $f_0(y)<f_0(x)$。\n2. 因可行集凸，线段 $x+\\theta(y-x)$ 在足够小的 $\\theta>0$ 下仍可行。\n3. 由目标凸性，$f_0(x+\\theta(y-x))\\le(1-\\theta)f_0(x)+\\theta f_0(y)<f_0(x)$。\n4. 这与局部最优矛盾，所以局部最优必为全局最优。"
+  },
+  {
+    "page": "ch04-convex-problems.html",
+    "pair": 65,
+    "title": "Proof of optimality condition",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 对可微凸目标，最优性可由一阶下界判断。\n2. 若对所有可行 $y$ 都有 $\\nabla f_0(x)^T(y-x)\\ge0$，则 $f_0(y)\\ge f_0(x)+\\nabla f_0(x)^T(y-x)\\ge f_0(x)$。\n3. 所以 $x$ 是全局最优。\n4. 反过来，若存在可行方向让内积为负，沿该方向小步移动会降低目标，矛盾。"
+  },
+  {
+    "page": "ch04-convex-problems.html",
+    "pair": 71,
+    "title": "Unconstrained quadratic optimization",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 对 $f_0(x)=\\frac12x^TPx+q^Tx+r$，其中 $P\\succeq0$。\n2. 无约束最优性条件是 $\\nabla f_0(x)=Px+q=0$。\n3. 若方程有解，任一解都是全局最优点。\n4. 若无解，说明 $q$ 不在 $P$ 的值域中，存在沿零曲率方向的线性下降，目标无下界。"
+  },
+  {
+    "page": "ch04-convex-problems.html",
+    "pair": 75,
+    "title": "Equality constrained differentiable optimum",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 对等式约束 $Ax=b$，可行方向 $v$ 必须满足 $Av=0$。\n2. 最优点处所有可行方向的一阶变化都不能为负，所以 $\\nabla f_0(x)^Tv=0$ 对所有 $v\\in\\mathcal N(A)$ 成立。\n3. 因此 $\\nabla f_0(x)$ 属于 $\\mathcal N(A)^\\perp=\\mathcal R(A^T)$。\n4. 所以存在 $\\nu$ 使 $\\nabla f_0(x)+A^T\\nu=0$。"
+  },
+  {
+    "page": "ch04-convex-problems.html",
+    "pair": 80,
+    "title": "Eliminating equality constraints in convex problems",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 对凸问题中的 $Ax=b$，先找一个特解 $x_0$。\n2. 再取 $F$ 的列张成 $\\mathcal N(A)$，写所有可行点为 $x=Fz+x_0$。\n3. 将目标和不等式约束做仿射代入。\n4. 凸函数与仿射映射复合仍凸，所以消元后的问题仍是凸优化问题。"
+  },
+  {
+    "page": "ch04-convex-problems.html",
+    "pair": 90,
+    "title": "Partial minimization preserves convexity in problems",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 若 $f_0(x_1,x_2)$ 对联合变量凸，则 $g(x_1)=\\inf_{x_2} f_0(x_1,x_2)$ 凸。\n2. 约束函数也可用同样的投影视角处理。\n3. 投影凸集仍凸，所以消去变量后的可行集保持凸性。\n4. 因此对部分变量优化不会破坏凸优化结构。"
+  },
+  {
+    "page": "ch04-convex-problems.html",
+    "pair": 92,
+    "title": "Quasiconvex optimization standard form",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 拟凸优化允许目标 $f_0$ 拟凸，而不要求它凸。\n2. 不等式约束函数仍要求凸，等式约束仍要求仿射。\n3. 对任意水平值 $t$，集合 $\\{x\\mid f_0(x)\\le t\\}$ 是凸集。\n4. 因而固定目标上界后，问题可转化为凸可行性问题。"
+  },
+  {
+    "page": "ch04-convex-problems.html",
+    "pair": 100,
+    "title": "Bisection via convex feasibility",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 给定候选值 $t$，检查是否存在 $x$ 满足 $f_0(x)\\le t$ 和原约束。\n2. 因 $f_0$ 拟凸，新增约束 $f_0(x)\\le t$ 定义凸集。\n3. 所以每次检查都是凸可行性问题。\n4. 若可行，说明 $p^\\star\\le t$；若不可行，说明 $p^\\star>t$，于是可用二分逼近最优值。"
+  },
+  {
+    "page": "ch04-convex-problems.html",
+    "pair": 104,
+    "title": "Linear program",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. LP 的目标函数是仿射函数 $c^Tx+d$。\n2. 不等式和等式约束也都是仿射的。\n3. 仿射不等式定义半空间，仿射等式定义仿射集。\n4. 半空间和仿射集的交是多面体，因此 LP 是凸优化问题。"
+  },
+  {
+    "page": "ch04-convex-problems.html",
+    "pair": 115,
+    "title": "Largest ball in a polyhedron",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 球心为 $x_c$、半径为 $r$ 的球完全位于半空间 $a_i^Tx\\le b_i$ 内，当且仅当最坏点也满足约束。\n2. 最坏点让 $a_i^Tx$ 最大，因此最大值为 $a_i^Tx_c+r\\|a_i\\|_2$。\n3. 得到线性约束 $a_i^Tx_c+r\\|a_i\\|_2\\le b_i$。\n4. 最大化 $r$ 加上线性约束，可写成 LP。"
+  },
+  {
+    "page": "ch04-convex-problems.html",
+    "pair": 120,
+    "title": "Probability distribution as linear constraints",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 离散分布用向量 $p$ 表示，约束为 $p_i\\ge0$ 和 $\\mathbf1^Tp=1$。\n2. 这些都是线性不等式或线性等式。\n3. 期望约束如 $E x=\\sum_i p_i u_i$ 也是 $p$ 的线性函数。\n4. 因此许多关于离散分布的优化可直接写成 LP。"
+  },
+  {
+    "page": "ch04-convex-problems.html",
+    "pair": 131,
+    "title": "Quadratic program",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. QP 的目标是凸二次函数 $\\frac12x^TPx+q^Tx+r$，其中 $P\\succeq0$。\n2. 约束函数都是仿射函数。\n3. 二次目标的 Hessian 是 $P$，半正定保证目标凸。\n4. 仿射约束定义凸可行集，所以 QP 是凸优化问题。"
+  },
+  {
+    "page": "ch04-convex-problems.html",
+    "pair": 135,
+    "title": "Least squares as QP",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 展开 $\\|Ax-b\\|_2^2=(Ax-b)^T(Ax-b)$。\n2. 得到 $x^TA^TAx-2b^TAx+b^Tb$。\n3. Hessian 为 $2A^TA\\succeq0$。\n4. 因此最小二乘是无约束 QP；若再加仿射约束，仍是 QP。"
+  },
+  {
+    "page": "ch04-convex-problems.html",
+    "pair": 147,
+    "title": "Robust linear programming",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 鲁棒约束要求 $a^Tx\\le b$ 对不确定集合中的所有 $a$ 成立。\n2. 等价写成 $\\sup_{a\\in\\mathcal U} a^Tx\\le b$。\n3. 若不确定集合是欧氏球，支撑函数给出 $\\bar a^Tx+\\rho\\|x\\|_2\\le b$。\n4. 这是二阶锥约束，所以鲁棒 LP 可转为 SOCP。"
+  },
+  {
+    "page": "ch04-convex-problems.html",
+    "pair": 150,
+    "title": "Chance constraint with Gaussian uncertainty",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 若 $a_i$ 是高斯随机向量，则 $a_i^Tx$ 是一维高斯随机变量。\n2. 它的均值是 $\\bar a_i^Tx$，标准差是 $\\|\\Sigma_i^{1/2}x\\|_2$。\n3. 概率约束 $\\Pr(a_i^Tx\\le b_i)\\ge\\eta$ 可用高斯分位数改写。\n4. 得到 $\\bar a_i^Tx+\\Phi^{-1}(\\eta)\\|\\Sigma_i^{1/2}x\\|_2\\le b_i$，这是二阶锥约束。"
+  },
+  {
+    "page": "ch04-convex-problems.html",
+    "pair": 155,
+    "title": "Geometric programming transformation idea",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. GP 的自然变量是正变量，许多表达式是 monomial 或 posynomial。\n2. 令新变量 $y_i=\\log x_i$，把乘法结构变成加法结构。\n3. monomial 取对数后变成仿射函数。\n4. posynomial 取对数后变成 log-sum-exp，因此是凸函数。"
+  },
+  {
+    "page": "ch04-convex-problems.html",
+    "pair": 160,
+    "title": "Geometric program",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. GP 中目标和不等式约束是 posynomial，等式约束是 monomial。\n2. 变量要求为正，便于做 $x_i=e^{y_i}$ 的对数变换。\n3. 不等式 $f_i(x)\\le1$ 取对数变成 $\\log f_i(e^y)\\le0$。\n4. monomial 等式取对数变成仿射等式，所以变换后得到凸问题。"
+  },
+  {
+    "page": "ch04-convex-problems.html",
+    "pair": 164,
+    "title": "Geometric program in convex form",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 对每个正变量取 $x_i=e^{y_i}$。\n2. 对目标和不等式约束取对数。\n3. posynomial 变成 $\\log\\sum_k \\exp(a_k^Ty+b_k)$，即 log-sum-exp 形式。\n4. log-sum-exp 凸，monomial 等式变成仿射等式，所以整个问题成为凸优化问题。"
+  },
+  {
+    "page": "ch04-convex-problems.html",
+    "pair": 170,
+    "title": "Cantilever beam design as GP",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 设计变量是每段梁的宽度、高度等正量。\n2. 质量、应力、挠度等工程约束通常可写成 monomial 或 posynomial 不等式。\n3. 因变量全为正，可使用对数变量变换。\n4. 于是结构设计问题可转成 GP 的凸形式，用凸优化方法求解。"
   }
 ]
