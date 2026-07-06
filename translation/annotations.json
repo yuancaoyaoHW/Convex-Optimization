@@ -1318,5 +1318,185 @@
     "pair": 226,
     "title": "Computing the Newton step dominates cost",
     "body": "### Learning note\n\n#### Proof steps\n\n1. Newton 步需要解线性方程 $H\\Delta x=-g$。\n2. 对一般稠密矩阵, 分解 $H$ 成本很高。\n3. 因此每步主要成本通常在求解 Newton 系统。\n4. 若 Hessian 有稀疏、带状或低秩结构, 应利用这些结构。\n5. 实现层面的效率往往决定 Newton 法能否用于大规模问题。"
+  },
+  {
+    "page": "ch10-equality-constrained.html",
+    "pair": 2,
+    "title": "Equality constrained minimization",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 本章问题是 minimize $f(x)$ subject to $Ax=b$。\n2. 目标函数 $f$ 仍是凸函数, 约束是仿射等式。\n3. 可行点必须同时满足 $x\\in\\mathbf{dom}\\,f$ 和 $Ax=b$。\n4. 等式约束把搜索空间限制在一个仿射子空间中。\n5. 后续算法的核心是既沿这个子空间移动, 又保持 Newton 型下降。"
+  },
+  {
+    "page": "ch10-equality-constrained.html",
+    "pair": 3,
+    "title": "KKT optimality conditions",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 等式约束问题的 Lagrangian 为 $L(x,\\nu)=f(x)+\\nu^T(Ax-b)$。\n2. 对 $x$ 求一阶条件得到 $\\nabla f(x^\\star)+A^T\\nu^\\star=0$。\n3. 原始可行性要求 $Ax^\\star=b$。\n4. 因为问题凸且只有仿射等式约束, 这些条件也是充分的。\n5. 因此求最优解可转化为求解这组 KKT 方程。"
+  },
+  {
+    "page": "ch10-equality-constrained.html",
+    "pair": 9,
+    "title": "Quadratic problem KKT system",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 二次目标的梯度是 $Px+q$。\n2. KKT 条件写成 $Ax^\\star=b$ 和 $Px^\\star+q+A^T\\nu^\\star=0$。\n3. 把未知量 $x^\\star,\\nu^\\star$ 合并成一个向量。\n4. 两组线性方程合并为块矩阵系统。\n5. 这说明等式约束二次规划可直接通过 KKT 线性方程求解。"
+  },
+  {
+    "page": "ch10-equality-constrained.html",
+    "pair": 12,
+    "title": "Nonsingular KKT matrix",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. KKT 矩阵非奇异意味着原始和对偶变量由方程唯一确定。\n2. 条件 $\\mathcal N(P)\\cap\\mathcal N(A)=\\{0\\}$ 排除了既无二次曲率又不改变约束的方向。\n3. 若存在这样的非零方向, 沿它移动既不改变约束也不改变二次项曲率。\n4. 这会造成 KKT 系统无法唯一确定解。\n5. 因而公共零空间条件正是非奇异性的几何含义。"
+  },
+  {
+    "page": "ch10-equality-constrained.html",
+    "pair": 14,
+    "title": "Eliminating equality constraints",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 先找一个特解 $\\hat x$ 满足 $A\\hat x=b$。\n2. 再找矩阵 $F$, 使其列空间等于 $\\mathcal N(A)$。\n3. 所有可行点都可写成 $x=Fz+\\hat x$。\n4. 原问题转为无约束问题 minimize $f(Fz+\\hat x)$。\n5. 这样可复用第 9 章的无约束 Newton 方法。"
+  },
+  {
+    "page": "ch10-equality-constrained.html",
+    "pair": 15,
+    "title": "Recovering the dual variable",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 消去后求得的 $x^\\star$ 已满足 $Ax^\\star=b$。\n2. 还需要构造 $\\nu^\\star$ 使 $\\nabla f(x^\\star)+A^T\\nu^\\star=0$。\n3. 若 $A$ 行满秩, 则 $AA^T$ 可逆。\n4. 取 $\\nu^\\star=-(AA^T)^{-1}A\\nabla f(x^\\star)$。\n5. 代回可验证梯度在 $\\mathcal R(A^T)$ 方向上被完全抵消。"
+  },
+  {
+    "page": "ch10-equality-constrained.html",
+    "pair": 20,
+    "title": "Solving via the dual",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 对偶函数来自对 $x$ 最小化 Lagrangian。\n2. 其中 $f(x)+\\nu^TAx$ 可用共轭函数表示。\n3. 得到 $g(\\nu)=-b^T\\nu-f^*(-A^T\\nu)$。\n4. 先最大化对偶函数可得到 $\\nu^\\star$。\n5. 再由最小化 Lagrangian 的条件恢复对应的 $x^\\star$。"
+  },
+  {
+    "page": "ch10-equality-constrained.html",
+    "pair": 23,
+    "title": "Equality constrained Newton method",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 方法仍是 Newton 法, 但迭代点必须始终可行。\n2. 起点要求 $x\\in\\mathbf{dom}\\,f$ 且 $Ax=b$。\n3. 搜索方向还必须满足 $A\\Delta x=0$。\n4. 线搜索只在可行仿射子空间内进行。\n5. 因此它是第 9 章 Newton 法在等式约束子空间上的版本。"
+  },
+  {
+    "page": "ch10-equality-constrained.html",
+    "pair": 26,
+    "title": "Newton step from quadratic approximation",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 在当前可行点 $x$ 处用二阶 Taylor 模型近似 $f$。\n2. 约束对方向变为 $A(x+v)=b$。\n3. 因为 $Ax=b$, 方向约束化简为 $Av=0$。\n4. 因此 Newton 步是二次模型在 $Av=0$ 下的最小点。\n5. 这把非线性目标的局部更新转成等式约束二次规划。"
+  },
+  {
+    "page": "ch10-equality-constrained.html",
+    "pair": 27,
+    "title": "Newton step KKT equations",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 对二阶模型写 KKT 条件。\n2. 梯度方程给出 $\\nabla^2f(x)\\Delta x_{\\rm nt}+\\nabla f(x)+A^Tw=0$。\n3. 可行方向方程给出 $A\\Delta x_{\\rm nt}=0$。\n4. 两式合并成 KKT 块线性系统。\n5. 解这个系统即可得到 Newton 方向和相应乘子修正。"
+  },
+  {
+    "page": "ch10-equality-constrained.html",
+    "pair": 29,
+    "title": "Linearized optimality conditions",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 最优性条件是 $Ax^\\star=b$ 和 $\\nabla f(x^\\star)+A^T\\nu^\\star=0$。\n2. 用 $x+\\Delta x$ 近似 $x^\\star$。\n3. 对梯度方程在 $x$ 处线性化。\n4. 得到与二阶模型 KKT 条件相同的线性系统。\n5. 因此 Newton 步也可理解为求解线性化后的 KKT 方程。"
+  },
+  {
+    "page": "ch10-equality-constrained.html",
+    "pair": 31,
+    "title": "Newton decrement with equality constraints",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 等式约束情形中定义 $\\lambda(x)^2=\\Delta x_{\\rm nt}^T\\nabla^2 f(x)\\Delta x_{\\rm nt}$。\n2. 它衡量 Newton 步在局部 Hessian 范数下的长度。\n3. 该定义只看可行方向上的二阶模型。\n4. 当 $\\lambda(x)$ 小时, 可行子空间内的一阶误差也小。\n5. 因而它仍可作为停止准则。"
+  },
+  {
+    "page": "ch10-equality-constrained.html",
+    "pair": 32,
+    "title": "Directional derivative equals minus decrement squared",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 从 Newton 方程有 $\\nabla f(x)^T\\Delta x_{\\rm nt}+\\Delta x_{\\rm nt}^T\\nabla^2f(x)\\Delta x_{\\rm nt}=0$。\n2. 因为 $A\\Delta x_{\\rm nt}=0$, 乘子项不贡献内积。\n3. 所以 $\\nabla f(x)^T\\Delta x_{\\rm nt}=-\\lambda(x)^2$。\n4. 若 $\\lambda(x)>0$, 方向导数严格为负。\n5. 因此 Newton 方向是可行下降方向。"
+  },
+  {
+    "page": "ch10-equality-constrained.html",
+    "pair": 34,
+    "title": "Feasible descent direction",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 若当前点满足 $Ax=b$, 方向 $v$ 可行要求 $Av=0$。\n2. 此时 $A(x+tv)=Ax+tAv=b$。\n3. 所以沿该方向任意小步仍保持等式约束。\n4. 若同时 $\\nabla f(x)^Tv<0$, 小正步长会降低目标。\n5. Newton 法寻找的正是这种可行下降方向。"
+  },
+  {
+    "page": "ch10-equality-constrained.html",
+    "pair": 39,
+    "title": "Algorithm for feasible Newton method",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 从可行起点开始。\n2. 每步求解 KKT 系统得到 $\\Delta x_{\\rm nt}$ 和 $\\lambda(x)$。\n3. 若 $\\lambda(x)^2/2\\le\\epsilon$, 停止。\n4. 否则用 backtracking 选步长 $t$。\n5. 更新 $x:=x+t\\Delta x_{\\rm nt}$, 可行性由 $A\\Delta x_{\\rm nt}=0$ 保持。"
+  },
+  {
+    "page": "ch10-equality-constrained.html",
+    "pair": 42,
+    "title": "Newton method equals elimination method",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 令所有可行点写成 $x=Fz+\\hat x$。\n2. 对 reduced objective $\\tilde f(z)=f(Fz+\\hat x)$ 应用无约束 Newton 法。\n3. reduced Newton 方向映回原空间为 $F\\Delta z_{\\rm nt}$。\n4. 这个方向满足 $A(F\\Delta z_{\\rm nt})=0$。\n5. 可证明它与直接求等式约束 KKT 系统得到的方向相同。"
+  },
+  {
+    "page": "ch10-equality-constrained.html",
+    "pair": 48,
+    "title": "Convergence assumptions on feasible sublevel set",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 收敛分析只考虑初始可行水平集 $S$。\n2. 集合 $S$ 同时包含目标上界和等式约束。\n3. 闭性保证极限点不会跑出可行域或定义域。\n4. 在 $S$ 上还需要 Hessian Lipschitz 和 KKT 逆矩阵有界。\n5. 这些假设对应无约束 Newton 分析中的强凸性和光滑性控制。"
+  },
+  {
+    "page": "ch10-equality-constrained.html",
+    "pair": 55,
+    "title": "Self-concordant constrained Newton complexity",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 若 $f$ 自协调, 则 $\\tilde f(z)=f(Fz+\\hat x)$ 仍自协调。\n2. 等式约束 Newton 与消去后的 Newton 迭代一致。\n3. 因而可直接继承第 9 章的自协调复杂度结论。\n4. 阻尼阶段保证稳定下降。\n5. 进入局部区域后仍有二次收敛。"
+  },
+  {
+    "page": "ch10-equality-constrained.html",
+    "pair": 59,
+    "title": "Infeasible Newton step",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 不可行起点方法不要求当前 $x$ 满足 $Ax=b$。\n2. 仍从 KKT 条件出发。\n3. 当前残差包括 $r_{\\rm pri}=Ax-b$ 和 $r_{\\rm dual}=\\nabla f(x)+A^T\\nu$。\n4. 对这两个残差方程做 Newton 线性化。\n5. 得到同时修正 $x$ 和 $\\nu$ 的 primal-dual Newton 步。"
+  },
+  {
+    "page": "ch10-equality-constrained.html",
+    "pair": 63,
+    "title": "Primal-dual residual equation",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 定义残差 $r(x,\\nu)=(r_{\\rm dual},r_{\\rm pri})$。\n2. Newton 法对方程 $r(x,\\nu)=0$ 做线性化。\n3. 线性方程为 $Dr(x,\\nu)\\Delta y=-r(x,\\nu)$。\n4. 这里 $Dr$ 正是 KKT 块矩阵。\n5. 因此不可行起点方法是对 KKT 残差方程的 Newton 法。"
+  },
+  {
+    "page": "ch10-equality-constrained.html",
+    "pair": 65,
+    "title": "Infeasible step need not descend objective",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 不可行点处的 Newton 方向首先服务于减少 KKT 残差。\n2. 由于 $A\\Delta x$ 不再等于零, 方向可能主要修正可行性。\n3. 因而 $\\nabla f(x)^T\\Delta x$ 不一定为负。\n4. 目标函数可能在某些迭代中上升。\n5. 线搜索应基于残差范数而不是单纯基于 $f$。"
+  },
+  {
+    "page": "ch10-equality-constrained.html",
+    "pair": 67,
+    "title": "Full step reaches feasibility",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 不可行 Newton 方程的第二块含有 $Ax-b$。\n2. 它强制 $A\\Delta x_{\\rm nt}=-(Ax-b)$。\n3. 因此 $A(x+\\Delta x_{\\rm nt})=Ax-(Ax-b)=b$。\n4. 若步长取 $t=1$, 下一点立即满足等式约束。\n5. 小于 1 的阻尼步则逐步降低原始残差。"
+  },
+  {
+    "page": "ch10-equality-constrained.html",
+    "pair": 70,
+    "title": "Infeasible start Newton algorithm",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 起点只需在 $\\mathbf{dom}\\,f$ 中, 不必满足 $Ax=b$。\n2. 每步同时计算 $\\Delta x_{\\rm nt}$ 和 $\\Delta\\nu_{\\rm nt}$。\n3. 停止准则检查残差范数是否足够小。\n4. backtracking 用残差范数下降来选步长。\n5. 更新原始和对偶变量, 直到 KKT 残差接近零。"
+  },
+  {
+    "page": "ch10-equality-constrained.html",
+    "pair": 79,
+    "title": "Residual sublevel set assumptions",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 不可行起点分析在残差水平集上进行。\n2. 集合由 $\\|r(x,\\nu)\\|_2\\le\\|r(x^{(0)},\\nu^{(0)})\\|_2$ 定义。\n3. 闭性保证残差下降序列不会逃出分析区域。\n4. KKT Jacobian 逆有界保证 Newton 方程稳定可解。\n5. Lipschitz 条件控制线性化误差。"
+  },
+  {
+    "page": "ch10-equality-constrained.html",
+    "pair": 84,
+    "title": "Basic residual inequality",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 用积分形式展开 $r(y+t\\Delta y_{\\rm nt})$。\n2. Newton 方程给出 $Dr(y)\\Delta y_{\\rm nt}=-r(y)$。\n3. 一阶项因此变成 $(1-t)r(y)$。\n4. 剩余积分项由 $Dr$ 的 Lipschitz 连续性控制。\n5. 得到残差范数的基本上界, 后续收敛证明都基于它。"
+  },
+  {
+    "page": "ch10-equality-constrained.html",
+    "pair": 88,
+    "title": "Quadratic convergence phase",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 当残差足够小时, 基本不等式允许取全步。\n2. 令 $t=1$ 后一阶残差项消失。\n3. 剩下的误差主要是二阶线性化误差。\n4. 因此新残差被旧残差平方量级控制。\n5. 这就是不可行起点 Newton 法的二次收敛阶段。"
+  },
+  {
+    "page": "ch10-equality-constrained.html",
+    "pair": 116,
+    "title": "Solving KKT systems by block elimination",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. KKT 方程为 $Hv+A^Tw=-g$, $Av=h$。\n2. 若 $H\\succ0$, 可先由第一式表示 $v=-H^{-1}(A^Tw+g)$。\n3. 代入第二式得到关于 $w$ 的 Schur complement 方程。\n4. 解出 $w$ 后再回代求 $v$。\n5. 当 $H$ 结构简单时, 这种消去比直接分解完整 KKT 矩阵更便宜。"
+  },
+  {
+    "page": "ch10-equality-constrained.html",
+    "pair": 122,
+    "title": "Elimination with singular Hessian",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 当 $H$ 奇异时, 不能直接使用 $H^{-1}$。\n2. 但 KKT 矩阵仍可能非奇异。\n3. 关键条件是 $H$ 在 $\\mathcal N(A)$ 上没有非零零曲率方向。\n4. 可以通过变形的消去或正则化块来求解。\n5. 这说明 Newton 系统可解性不要求 Hessian 在整个空间正定。"
+  },
+  {
+    "page": "ch10-equality-constrained.html",
+    "pair": 136,
+    "title": "Optimal control as equality constrained optimization",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 状态 $z(t)$ 和输入 $u(t)$ 是优化变量。\n2. 动力学方程 $z(t+1)=A_tz(t)+B_tu(t)$ 是线性等式约束。\n3. 目标是各时刻状态成本和控制成本之和。\n4. 因此最优控制问题可写成大规模等式约束凸优化。\n5. 约束只连接相邻时刻, KKT 矩阵具有块稀疏结构。"
+  },
+  {
+    "page": "ch10-equality-constrained.html",
+    "pair": 142,
+    "title": "LMI analytic center block elimination",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. LMI 解析中心的 Newton 方程变量是对称矩阵增量 $\\Delta X$。\n2. KKT 第一式可把 $\\Delta X$ 表示为乘子 $w_i$ 的线性组合。\n3. 将该表达式代入等式约束 $\\operatorname{tr}(A_i\\Delta X)=0$。\n4. 得到只关于 $w$ 的较小线性系统。\n5. 解出 $w$ 后回代得到 $\\Delta X$, 从而避免直接处理巨大 KKT 系统。"
   }
 ]
