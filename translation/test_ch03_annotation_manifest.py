@@ -122,6 +122,21 @@ class ManifestValidationTests(unittest.TestCase):
                 self.assertNotIn("???", body)
                 self.assertTrue(body.startswith("### Learning note\n\n#### Proof steps\n\n"))
 
+    def test_chapter_five_manifest_has_renderable_markdown(self):
+        entries = load_manifest("docs/annotations/ch05-learning-annotations.json")
+        self.assertEqual(len(entries), 30)
+        errors = validate_manifest(
+            entries,
+            extract_pair_texts("translation/ch05-duality.html"),
+            page="ch05-duality.html",
+        )
+        self.assertEqual(errors, [])
+        for entry in entries:
+            with self.subTest(pair=entry["pair"]):
+                body = entry["body"]
+                self.assertNotIn("???", body)
+                self.assertTrue(body.startswith("### Learning note\n\n#### Proof steps\n\n"))
+
 
 if __name__ == "__main__":
     unittest.main()

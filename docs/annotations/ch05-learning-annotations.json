@@ -1,0 +1,272 @@
+[
+  {
+    "page": "ch05-duality.html",
+    "pair": 4,
+    "term": "ch05-duality.html#pair-4",
+    "kind": "definition",
+    "title": "Lagrangian construction",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 从标准问题出发, 把不等式约束写成 $f_i(x)\\le0$, 等式约束写成 $h_i(x)=0$。\n2. 给每个不等式约束配乘子 $\\lambda_i$, 给每个等式约束配乘子 $\\nu_i$。\n3. 构造 $L(x,\\lambda,\\nu)=f_0(x)+\\sum_i\\lambda_i f_i(x)+\\sum_i\\nu_i h_i(x)$。\n4. 这一步不是消去约束, 而是把约束违反量线性地加进目标函数。\n5. 后面要求 $\\lambda\\succeq0$, 是为了让可行点上的不等式项只会降低或不增加下界论证。",
+    "source_summary": "Definition of the Lagrangian"
+  },
+  {
+    "page": "ch05-duality.html",
+    "pair": 6,
+    "term": "ch05-duality.html#pair-6",
+    "kind": "definition",
+    "title": "Dual function as an infimum",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 固定乘子 $(\\lambda,\\nu)$, 先只把 $L$ 看成 $x$ 的函数。\n2. 对所有 $x$ 取下确界, 得到 $g(\\lambda,\\nu)=\\inf_x L(x,\\lambda,\\nu)$。\n3. 若某个方向能让 $L$ 无界下降, 则 $g(\\lambda,\\nu)=-\\infty$。\n4. 因为 $g$ 是一族关于 $(\\lambda,\\nu)$ 的仿射函数的逐点下确界, 所以即使原问题非凸, $g$ 也是凹函数。\n5. 对偶函数的价值在于: 它把原问题的信息压缩成一个可优化的下界函数。",
+    "source_summary": "Definition and concavity of the Lagrange dual function"
+  },
+  {
+    "page": "ch05-duality.html",
+    "pair": 8,
+    "term": "ch05-duality.html#pair-8",
+    "kind": "condition",
+    "title": "Why the dual function gives lower bounds",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 任取原问题可行点 $\\tilde x$, 它满足 $f_i(\\tilde x)\\le0$ 和 $h_i(\\tilde x)=0$。\n2. 若 $\\lambda\\succeq0$, 则 $\\sum_i\\lambda_i f_i(\\tilde x)\\le0$。\n3. 等式约束项为 $\\sum_i\\nu_i h_i(\\tilde x)=0$。\n4. 因此 $L(\\tilde x,\\lambda,\\nu)\\le f_0(\\tilde x)$。\n5. 又因为 $g(\\lambda,\\nu)=\\inf_x L(x,\\lambda,\\nu)\\le L(\\tilde x,\\lambda,\\nu)$。\n6. 对所有可行 $\\tilde x$ 取下确界, 得到 $g(\\lambda,\\nu)\\le p^\\star$。",
+    "source_summary": "Proof of the lower bound property"
+  },
+  {
+    "page": "ch05-duality.html",
+    "pair": 12,
+    "term": "ch05-duality.html#pair-12",
+    "kind": "geometry",
+    "title": "Linear approximation view of multipliers",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 原问题可以看成无约束最小化: 目标加上约束集合的示性函数。\n2. 对不等式 $f_i(x)\\le0$, 示性函数是 $I_-(f_i(x))$。\n3. 用线性函数 $\\lambda_i f_i(x)$ 替换它时, 必须取 $\\lambda_i\\ge0$, 才能在可行侧形成下界。\n4. 对等式 $h_i(x)=0$, 用 $\\nu_i h_i(x)$ 替换, $\\nu_i$ 可以取任意符号。\n5. 替换后的目标正是拉格朗日函数; 对 $x$ 最小化就得到一个线性近似产生的下界。",
+    "source_summary": "Linear approximation interpretation of the Lagrangian"
+  },
+  {
+    "page": "ch05-duality.html",
+    "pair": 17,
+    "term": "ch05-duality.html#pair-17",
+    "kind": "example",
+    "title": "Least-squares equality example",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 问题是最小化 $x^Tx$, 约束为 $Ax=b$。\n2. 拉格朗日函数为 $L(x,\\nu)=x^Tx+\\nu^T(Ax-b)$。\n3. 对 $x$ 求驻点: $2x+A^T\\nu=0$, 所以 $x=-(1/2)A^T\\nu$。\n4. 把这个 $x$ 代回 $L$, 得到关于 $\\nu$ 的二次凹函数。\n5. 这个例子展示了对偶函数常由“先固定乘子, 再消去原变量”得到。",
+    "source_summary": "Dual function for equality constrained least squares"
+  },
+  {
+    "page": "ch05-duality.html",
+    "pair": 18,
+    "term": "ch05-duality.html#pair-18",
+    "kind": "example",
+    "title": "Standard form LP dual function",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 标准型 LP 有约束 $Ax=b$ 和 $x\\succeq0$, 后者可写成 $-x_i\\le0$。\n2. 拉格朗日函数整理为 $L(x,\\lambda,\\nu)=-b^T\\nu+x^T(c-A^T\\nu-\\lambda)$。\n3. 对无约束的 $x$ 取下确界时, 若线性系数不为零, 下确界为 $-\\infty$。\n4. 因此必须有 $c-A^T\\nu-\\lambda=0$。\n5. 再结合 $\\lambda\\succeq0$, 得到显式对偶约束 $A^T\\nu\\preceq c$。",
+    "source_summary": "Lagrange dual function for standard form LP"
+  },
+  {
+    "page": "ch05-duality.html",
+    "pair": 21,
+    "term": "ch05-duality.html#pair-21",
+    "kind": "example",
+    "title": "Lower bound for two-way partitioning",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 两路划分问题含有非凸约束 $x_i^2=1$, 直接求解困难。\n2. 对等式约束引入乘子 $\\nu_i$, 拉格朗日函数包含 $x^T(W+\\operatorname{diag}\\nu)x-\\mathbf{1}^T\\nu$。\n3. 若 $W+\\operatorname{diag}\\nu\\succeq0$, 对 $x$ 的下确界有限, 对偶函数给出有效下界。\n4. 取 $\\nu=-\\lambda_{\\min}(W)\\mathbf{1}$ 可保证半正定。\n5. 因而即使原问题非凸, 对偶函数仍能给出可计算的全局下界。",
+    "source_summary": "Dual lower bound for a nonconvex partitioning problem"
+  },
+  {
+    "page": "ch05-duality.html",
+    "pair": 23,
+    "term": "ch05-duality.html#pair-23",
+    "kind": "conjugate",
+    "title": "Dual function through conjugates",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 共轭函数定义为 $f^*(y)=\\sup_x(y^Tx-f(x))$。\n2. 对偶函数常含有 $\\inf_x(f_0(x)+a^Tx)$ 这样的项。\n3. 把下确界改写为负的上确界: $\\inf_x(f_0(x)+a^Tx)=-f_0^*(-a)$。\n4. 因此很多对偶函数可以直接由目标或约束函数的共轭写出。\n5. 这解释了第 3 章共轭函数为什么会在对偶理论中反复出现。",
+    "source_summary": "Relationship between Lagrange dual functions and conjugates"
+  },
+  {
+    "page": "ch05-duality.html",
+    "pair": 28,
+    "term": "ch05-duality.html#pair-28",
+    "kind": "definition",
+    "title": "The Lagrange dual problem",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 每个对偶可行 $(\\lambda,\\nu)$ 都给出一个下界 $g(\\lambda,\\nu)$。\n2. 最好的下界就是最大化这个函数。\n3. 因为弱对偶要求 $\\lambda\\succeq0$, 对偶问题写成 maximize $g(\\lambda,\\nu)$ subject to $\\lambda\\succeq0$。\n4. 对偶问题总是凸优化问题: 最大化凹函数等价于最小化凸函数 $-g$。\n5. 原问题是否凸不影响对偶问题的凸性, 只影响间隙是否可能为零。",
+    "source_summary": "Definition of the Lagrange dual problem"
+  },
+  {
+    "page": "ch05-duality.html",
+    "pair": 30,
+    "term": "ch05-duality.html#pair-30",
+    "kind": "operation",
+    "title": "Making dual constraints explicit",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 对偶函数的定义域是 $\\mathbf{dom}\\,g=\\{(\\lambda,\\nu)\\mid g(\\lambda,\\nu)>-\\infty\\}$。\n2. 实际推导时, 先对 $x$ 取下确界。\n3. 如果某些线性或二次系数会导致下确界为 $-\\infty$, 就把避免这种情况的条件写成约束。\n4. 这些条件就是“显式化”的对偶约束。\n5. 做完这一步后, 对偶问题通常变成 LP, QP, SDP 或其他标准凸问题。",
+    "source_summary": "How domain restrictions become explicit dual constraints"
+  },
+  {
+    "page": "ch05-duality.html",
+    "pair": 34,
+    "term": "ch05-duality.html#pair-34",
+    "kind": "condition",
+    "title": "Weak duality",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 定义 $d^\\star$ 为对偶问题的最优值, 即所有下界中的最大者。\n2. 每个对偶可行点都满足 $g(\\lambda,\\nu)\\le p^\\star$。\n3. 对所有对偶可行点取上确界, 仍有 $d^\\star\\le p^\\star$。\n4. 这就是弱对偶。\n5. 它不依赖原问题凸性, 只依赖 $\\lambda\\succeq0$ 和拉格朗日下界构造。",
+    "source_summary": "Weak duality proof"
+  },
+  {
+    "page": "ch05-duality.html",
+    "pair": 37,
+    "term": "ch05-duality.html#pair-37",
+    "kind": "condition",
+    "title": "Strong duality",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 弱对偶只保证 $d^\\star\\le p^\\star$。\n2. 若进一步有 $d^\\star=p^\\star$, 对偶下界达到原问题最优值, 称为强对偶。\n3. 此时最优对偶间隙 $p^\\star-d^\\star$ 为零。\n4. 对凸问题, Slater 条件是常用的强对偶充分条件。\n5. 强对偶是后面 KKT 条件、灵敏度分析和通过对偶恢复原问题解的关键前提。",
+    "source_summary": "Strong duality and zero duality gap"
+  },
+  {
+    "page": "ch05-duality.html",
+    "pair": 38,
+    "term": "ch05-duality.html#pair-38",
+    "kind": "condition",
+    "title": "Refined Slater condition",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 普通 Slater 条件要求存在严格满足所有非仿射不等式的点。\n2. 若某些 $f_i$ 是仿射函数, 严格不等式对这些约束不是必要的。\n3. 精化版本只要求非仿射凸不等式严格满足, 仿射不等式允许取等号。\n4. 等式约束仍需满足 $Ax=b$。\n5. 这样做的原因是仿射约束的边界不会破坏分离超平面证明所需的相对内部条件。",
+    "source_summary": "Refined Slater constraint qualification"
+  },
+  {
+    "page": "ch05-duality.html",
+    "pair": 42,
+    "term": "ch05-duality.html#pair-42",
+    "kind": "example",
+    "title": "QCQP dual via quadratic lower bounds",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. QCQP 的目标和约束都是二次函数。\n2. 拉格朗日函数把这些二次项合并, 得到关于 $x$ 的一个二次函数。\n3. 对 $x$ 取下确界时, 二次项矩阵必须半正定, 否则下确界为 $-\\infty$。\n4. 若半正定条件成立, 通过完成平方或一阶条件得到有限的 $g(\\lambda)$。\n5. 因此 QCQP 的对偶约束通常表现为一个半正定矩阵条件。",
+    "source_summary": "Lagrange dual of a QCQP"
+  },
+  {
+    "page": "ch05-duality.html",
+    "pair": 52,
+    "term": "ch05-duality.html#pair-52",
+    "kind": "geometry",
+    "title": "Set of values interpretation",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 把每个 $x$ 映射到向量 $(f_1(x),\\ldots,f_m(x),h_1(x),\\ldots,h_p(x),f_0(x))$。\n2. 所有这些向量组成集合 $G$。\n3. 原问题可行性对应于 $u\\preceq0$ 和 $v=0$。\n4. 原问题最优值是在这些可行切片中能达到的最小 $t$。\n5. 对偶函数则是在 $G$ 上最小化线性函数 $(\\lambda,\\nu,1)^T(u,v,t)$。\n6. 因而对偶下界可以看作支撑超平面对 $G$ 的线性支撑。",
+    "source_summary": "Geometric set of values interpretation"
+  },
+  {
+    "page": "ch05-duality.html",
+    "pair": 59,
+    "term": "ch05-duality.html#pair-59",
+    "kind": "condition",
+    "title": "Strong duality proof setup",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 在凸问题和 Slater 条件下, 构造集合 $A$ 表示可被目标值和约束松弛支配的点。\n2. 构造集合 $B$ 表示比 $p^\\star$ 更低的目标水平且约束满足的点。\n3. $A$ 是凸集, $B$ 与 $A$ 不相交。\n4. 用分离超平面定理分离 $A$ 和 $B$。\n5. 分离向量的分量会变成对偶乘子, 从而把几何分离转化为强对偶证明。",
+    "source_summary": "Setup for the separating hyperplane proof of strong duality"
+  },
+  {
+    "page": "ch05-duality.html",
+    "pair": 60,
+    "term": "ch05-duality.html#pair-60",
+    "kind": "condition",
+    "title": "Separating hyperplane yields multipliers",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 分离定理给出非零向量 $(\\tilde\\lambda,\\tilde\\nu,\\mu)$。\n2. 由于集合 $A$ 对不等式松弛方向向上封闭, 可推出 $\\tilde\\lambda\\succeq0$。\n3. 由于目标值方向也向上封闭, 可推出 $\\mu\\ge0$。\n4. 若能证明 $\\mu>0$, 就可以归一化令 $\\mu=1$。\n5. 归一化后的分离不等式正好给出一个对偶可行点, 且其对偶值达到 $p^\\star$。",
+    "source_summary": "How separation produces dual multipliers"
+  },
+  {
+    "page": "ch05-duality.html",
+    "pair": 68,
+    "term": "ch05-duality.html#pair-68",
+    "kind": "operation",
+    "title": "Max-min form of primal and dual",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 暂不考虑等式约束, 拉格朗日函数为 $L(x,\\lambda)=f_0(x)+\\sum_i\\lambda_i f_i(x)$。\n2. 对固定 $x$, 若 $x$ 可行, 则 $\\sup_{\\lambda\\succeq0}L(x,\\lambda)=f_0(x)$。\n3. 若 $x$ 违反某个不等式, 可令对应 $\\lambda_i\\to\\infty$, 使上确界为 $+\\infty$。\n4. 所以原问题等于 $\\inf_x\\sup_{\\lambda\\succeq0}L(x,\\lambda)$。\n5. 对偶问题则是 $\\sup_{\\lambda\\succeq0}\\inf_x L(x,\\lambda)$。\n6. 弱对偶就是一般的 max-min 小于等于 min-max。",
+    "source_summary": "Symmetric max-min characterization"
+  },
+  {
+    "page": "ch05-duality.html",
+    "pair": 71,
+    "term": "ch05-duality.html#pair-71",
+    "kind": "geometry",
+    "title": "Saddle point condition",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 鞍点要求 $f(\\tilde w,z)\\le f(\\tilde w,\\tilde z)\\le f(w,\\tilde z)$ 对所有 $w,z$ 成立。\n2. 左边表示在固定 $\\tilde w$ 时, $\\tilde z$ 是使函数尽量大的选择。\n3. 右边表示在固定 $\\tilde z$ 时, $\\tilde w$ 是使函数尽量小的选择。\n4. 对拉格朗日函数, 鞍点意味着同一对 $(x^\\star,\\lambda^\\star)$ 同时解决原问题和对偶问题。\n5. 因此鞍点存在通常对应零对偶间隙和最优解达到。",
+    "source_summary": "Saddle point interpretation of strong duality"
+  },
+  {
+    "page": "ch05-duality.html",
+    "pair": 81,
+    "term": "ch05-duality.html#pair-81",
+    "kind": "condition",
+    "title": "Duality gap as a certificate",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 若 $x$ 原可行, 则 $f_0(x)$ 是原问题最优值的上界。\n2. 若 $(\\lambda,\\nu)$ 对偶可行, 则 $g(\\lambda,\\nu)$ 是 $p^\\star$ 的下界。\n3. 因此 $f_0(x)-g(\\lambda,\\nu)$ 同时夹住当前点与最优值的差距。\n4. 若这个差距小于 $\\epsilon$, 则 $x$ 至多比最优值差 $\\epsilon$。\n5. 这给算法停止准则提供了非启发式证明。",
+    "source_summary": "Certificate of suboptimality from primal and dual feasible points"
+  },
+  {
+    "page": "ch05-duality.html",
+    "pair": 84,
+    "term": "ch05-duality.html#pair-84",
+    "kind": "condition",
+    "title": "Complementary slackness",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 假设原最优和对偶最优都达到, 且强对偶成立。\n2. 对原最优 $x^\\star$ 和对偶最优 $(\\lambda^\\star,\\nu^\\star)$, 弱对偶证明中的一串不等式首尾相等。\n3. 因此中间每个不等式也必须取等号。\n4. 特别地, $\\sum_i\\lambda_i^\\star f_i(x^\\star)=0$。\n5. 因为每项满足 $\\lambda_i^\\star\\ge0$ 且 $f_i(x^\\star)\\le0$, 每项都必须为零: $\\lambda_i^\\star f_i(x^\\star)=0$。",
+    "source_summary": "Complementary slackness derivation"
+  },
+  {
+    "page": "ch05-duality.html",
+    "pair": 89,
+    "term": "ch05-duality.html#pair-89",
+    "kind": "condition",
+    "title": "KKT sufficiency for convex problems",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 设 $x^\\star$ 与 $(\\lambda^\\star,\\nu^\\star)$ 满足 KKT 条件。\n2. 原可行性和对偶可行性给出可比较的原值与对偶下界。\n3. 驻点条件说明 $x^\\star$ 最小化 $L(x,\\lambda^\\star,\\nu^\\star)$, 因为凸问题中拉格朗日函数对 $x$ 凸。\n4. 互补松弛把 $L(x^\\star,\\lambda^\\star,\\nu^\\star)$ 化回 $f_0(x^\\star)$。\n5. 所以 $g(\\lambda^\\star,\\nu^\\star)=f_0(x^\\star)$, 原对偶值相等, $x^\\star$ 最优。",
+    "source_summary": "KKT conditions are sufficient under convexity"
+  },
+  {
+    "page": "ch05-duality.html",
+    "pair": 90,
+    "term": "ch05-duality.html#pair-90",
+    "kind": "condition",
+    "title": "KKT necessity under Slater",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 凸问题满足 Slater 条件时, 强对偶成立且在适当条件下存在对偶最优解。\n2. 取原最优 $x^\\star$ 和对偶最优 $(\\lambda^\\star,\\nu^\\star)$。\n3. 强对偶给出零对偶间隙。\n4. 零间隙推出互补松弛, 并推出 $x^\\star$ 最小化对应拉格朗日函数。\n5. 若函数可微, 最小化拉格朗日函数的一阶条件就是 KKT 的驻点条件。\n6. 因此 KKT 在 Slater 条件下既必要又充分。",
+    "source_summary": "Necessary and sufficient KKT conditions under Slater"
+  },
+  {
+    "page": "ch05-duality.html",
+    "pair": 102,
+    "term": "ch05-duality.html#pair-102",
+    "kind": "operation",
+    "title": "Recovering primal solutions from the dual",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 先求一个对偶最优解 $(\\lambda^\\star,\\nu^\\star)$。\n2. 在强对偶下, 原最优点必须最小化 $L(x,\\lambda^\\star,\\nu^\\star)$。\n3. 因此先解无约束问题 $\\inf_x L(x,\\lambda^\\star,\\nu^\\star)$, 得到候选 $x$。\n4. 再检查原可行性和互补松弛。\n5. 若候选满足这些条件, 就得到原问题最优解。\n6. 这就是“通过对偶求原问题”的逻辑。",
+    "source_summary": "Solving the primal problem via the dual"
+  },
+  {
+    "page": "ch05-duality.html",
+    "pair": 110,
+    "term": "ch05-duality.html#pair-110",
+    "kind": "condition",
+    "title": "Global perturbation inequality",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 设原问题强对偶成立, 且 $(\\lambda^\\star,\\nu^\\star)$ 是对偶最优。\n2. 对扰动问题, 约束变为 $f_i(x)\\le u_i$ 和 $h_i(x)=v_i$。\n3. 对任意扰动可行点 $x$, 有 $f_i(x)-u_i\\le0$ 和 $h_i(x)-v_i=0$。\n4. 用同一个乘子做弱对偶下界, 得到 $f_0(x)\\ge p^\\star-(\\lambda^\\star)^Tu-(\\nu^\\star)^Tv$。\n5. 对扰动可行点取下确界, 得到 $p^\\star(u,v)\\ge p^\\star-(\\lambda^\\star)^Tu-(\\nu^\\star)^Tv$。",
+    "source_summary": "Global lower bound for perturbed optimal value"
+  },
+  {
+    "page": "ch05-duality.html",
+    "pair": 116,
+    "term": "ch05-duality.html#pair-116",
+    "kind": "condition",
+    "title": "Local sensitivity derivatives",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 假设 $p^\\star(u,v)$ 在 $(0,0)$ 可微, 且强对偶成立。\n2. 全局不等式给出 $p^\\star(te_i,0)-p^\\star(0,0)\\ge-\\lambda_i^\\star t$。\n3. 对 $t>0$ 和 $t<0$ 分别除以 $t$, 再令 $t\\to0$, 得到一阶导数被同一个数夹住。\n4. 因而 $\\partial p^\\star(0,0)/\\partial u_i=-\\lambda_i^\\star$。\n5. 同理, 对等式扰动 $v_i$ 有 $\\partial p^\\star(0,0)/\\partial v_i=-\\nu_i^\\star$。\n6. 这说明最优乘子就是约束右端扰动的边际价格。",
+    "source_summary": "Proof of local sensitivity formula"
+  },
+  {
+    "page": "ch05-duality.html",
+    "pair": 122,
+    "term": "ch05-duality.html#pair-122",
+    "kind": "operation",
+    "title": "Adding equality variables changes the dual",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 原无约束问题 minimize $f_0(Ax+b)$ 的拉格朗日对偶信息很少。\n2. 引入新变量 $y=Ax+b$, 把问题改写为 minimize $f_0(y)$ subject to $y=Ax+b$。\n3. 这个改写不改变原问题最优值和原变量解。\n4. 但拉格朗日函数变成 $f_0(y)+\\nu^T(Ax+b-y)$。\n5. 分别对 $x$ 和 $y$ 取下确界会产生 $A^T\\nu=0$ 和共轭函数项。\n6. 所以等价原问题可以有更有用的对偶问题。",
+    "source_summary": "Reformulating with new equality constraints"
+  },
+  {
+    "page": "ch05-duality.html",
+    "pair": 135,
+    "term": "ch05-duality.html#pair-135",
+    "kind": "condition",
+    "title": "Alternatives from infeasibility",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 把系统 $f_i(x)\\le0$, $h_i(x)=0$ 看成一个可行性问题。\n2. 若系统可行, 对任意 $\\lambda\\succeq0$ 有 $\\sum_i\\lambda_i f_i(x)+\\sum_i\\nu_i h_i(x)\\le0$。\n3. 因此若存在 $(\\lambda,\\nu)$ 使对偶函数 $g(\\lambda,\\nu)>0$, 原系统不可能可行。\n4. 这给出一个不可行证书。\n5. “替代定理”的核心就是: 原系统可行与某个对偶证书存在, 在适当条件下二者恰有一个成立。",
+    "source_summary": "Weak alternatives via the dual function"
+  },
+  {
+    "page": "ch05-duality.html",
+    "pair": 151,
+    "term": "ch05-duality.html#pair-151",
+    "kind": "generalized",
+    "title": "Generalized inequality multipliers",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 广义不等式写成 $f_i(x)\\preceq_{K_i}0$。\n2. 与它配对的乘子不是标量, 而是向量 $\\lambda_i$。\n3. 为了保持弱对偶下界, 乘子必须属于对偶锥 $K_i^*$。\n4. 拉格朗日项写成 $\\lambda_i^T f_i(x)$。\n5. 若 $f_i(x)\\preceq_{K_i}0$ 且 $\\lambda_i\\in K_i^*$, 则 $\\lambda_i^T f_i(x)\\le0$。\n6. 这正是标量不等式中 $\\lambda_i\\ge0$ 的锥推广。",
+    "source_summary": "Lagrange duality for generalized inequalities"
+  },
+  {
+    "page": "ch05-duality.html",
+    "pair": 156,
+    "term": "ch05-duality.html#pair-156",
+    "kind": "generalized",
+    "title": "Complementary slackness for cones",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 广义不等式的可行性给出 $f_i(x^\\star)\\preceq_{K_i}0$。\n2. 对偶可行性给出 $\\lambda_i^\\star\\in K_i^*$。\n3. 因此每个配对内积满足 $(\\lambda_i^\\star)^T f_i(x^\\star)\\le0$。\n4. 强对偶和零间隙要求这些项的总和为零。\n5. 由于每项都非正, 每项都必须为零。\n6. 所以锥约束下的互补松弛是 $(\\lambda_i^\\star)^T f_i(x^\\star)=0$。",
+    "source_summary": "Complementary slackness for generalized inequalities"
+  }
+]
