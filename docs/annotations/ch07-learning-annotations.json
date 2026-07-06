@@ -1,0 +1,272 @@
+[
+  {
+    "page": "ch07-statistical-estimation.html",
+    "pair": 5,
+    "term": "ch07-statistical-estimation.html#pair-5",
+    "kind": "definition",
+    "title": "Maximum likelihood estimate",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 假设观测值 $y$ 来自以参数 $x$ 标记的分布族。\n2. 对固定观测 $y$, 把密度 $p_x(y)$ 看作参数 $x$ 的函数。\n3. 最大似然估计选择让该观测最“可能”出现的参数。\n4. 因为 $\\log$ 单调递增, 最大化 $p_x(y)$ 等价于最大化 $\\log p_x(y)$。\n5. 使用对数似然还能把独立样本的乘积似然转成求和形式。",
+    "source_summary": "Maximum likelihood estimation from one observation"
+  },
+  {
+    "page": "ch07-statistical-estimation.html",
+    "pair": 7,
+    "term": "ch07-statistical-estimation.html#pair-7",
+    "kind": "condition",
+    "title": "When ML is convex optimization",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 最大似然问题通常写成 maximize $l(x)$ subject to $x\\in C$。\n2. 若 $l$ 是凹函数, 最大化凹函数就是凸优化的标准形式。\n3. 若约束集合 $C$ 可由凸约束描述, 可行集也是凸的。\n4. 因此该 ML 问题是凸优化问题。\n5. 这说明统计估计能否高效求解, 关键常在于对数似然的凹性。",
+    "source_summary": "Convexity condition for maximum likelihood estimation"
+  },
+  {
+    "page": "ch07-statistical-estimation.html",
+    "pair": 9,
+    "term": "ch07-statistical-estimation.html#pair-9",
+    "kind": "definition",
+    "title": "Linear measurements with IID noise",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 观测模型写成 $y_i=a_i^Tx+v_i$。\n2. 参数 $x$ 是未知量, $a_i$ 和 $y_i$ 是已知数据。\n3. 噪声 $v_i$ 独立同分布, 使联合密度可以分解为各项乘积。\n4. 对数似然因此成为 $\\sum_i \\log p_v(y_i-a_i^Tx)$。\n5. 这把统计假设转成关于残差的优化目标。",
+    "source_summary": "Linear measurement model with IID noise"
+  },
+  {
+    "page": "ch07-statistical-estimation.html",
+    "pair": 10,
+    "term": "ch07-statistical-estimation.html#pair-10",
+    "kind": "example",
+    "title": "Noise densities induce loss functions",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 高斯噪声的负对数密度与 $z^2$ 成正比, 导出最小二乘。\n2. Laplace 噪声的负对数密度与 $|z|$ 成正比, 导出 $\\ell_1$ 逼近。\n3. 均匀噪声会给出残差必须落在区间内的可行性约束。\n4. 因此选择噪声模型等价于选择残差罚函数。\n5. 这解释了第 6 章各种逼近目标的统计来源。",
+    "source_summary": "ML estimation for common noise densities"
+  },
+  {
+    "page": "ch07-statistical-estimation.html",
+    "pair": 12,
+    "term": "ch07-statistical-estimation.html#pair-12",
+    "kind": "operation",
+    "title": "Penalty approximation as ML",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 给定罚函数问题 minimize $\\sum_i\\phi(b_i-a_i^Tx)$。\n2. 构造噪声密度 $p_v(u)=c\\exp(-\\phi(u))$, 其中 $c$ 是归一化常数。\n3. 在线性测量模型下, 负对数似然等于常数加 $\\sum_i\\phi(b_i-a_i^Tx)$。\n4. 所以该罚函数逼近问题就是这个噪声模型下的 ML 估计。\n5. 罚函数的凸性对应负对数密度的凸性, 也就是 log-concave 噪声。",
+    "source_summary": "ML interpretation of penalty function approximation"
+  },
+  {
+    "page": "ch07-statistical-estimation.html",
+    "pair": 15,
+    "term": "ch07-statistical-estimation.html#pair-15",
+    "kind": "example",
+    "title": "Poisson counting model",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 计数型观测常建模为 Poisson 随机变量。\n2. Poisson 分布由均值 $\\mu>0$ 决定。\n3. 若 $\\mu$ 是解释变量的仿射函数, 参数估计就变成选择该仿射模型。\n4. 对数似然包含 $y_i\\log\\mu_i-\\mu_i$。\n5. 在合适的正性约束下, 负对数似然是凸函数, 可形成凸优化问题。",
+    "source_summary": "Counting problems with Poisson distribution"
+  },
+  {
+    "page": "ch07-statistical-estimation.html",
+    "pair": 20,
+    "term": "ch07-statistical-estimation.html#pair-20",
+    "kind": "example",
+    "title": "Logistic regression model",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 二元响应 $y\\in\\{0,1\\}$ 用概率 $p$ 描述。\n2. logistic 模型令 $p=\\exp(a^Tu+b)/(1+\\exp(a^Tu+b))$。\n3. 参数 $a,b$ 决定解释变量 $u$ 如何影响成功概率。\n4. 把所有样本的 Bernoulli 似然相乘, 再取负对数。\n5. 得到的目标由 log-sum-exp 项组成, 因而是凸函数。",
+    "source_summary": "Logistic regression"
+  },
+  {
+    "page": "ch07-statistical-estimation.html",
+    "pair": 26,
+    "term": "ch07-statistical-estimation.html#pair-26",
+    "kind": "example",
+    "title": "Gaussian covariance estimation",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 对零均值高斯变量, 协方差为 $R$, 信息矩阵为 $S=R^{-1}$。\n2. 用样本协方差 $Y$ 汇总观测。\n3. 对数似然可化为 $\\log\\det S-\\operatorname{tr}(SY)$ 加常数。\n4. 最大化该凹函数, 并加上 $S\\succ0$ 与其他凸约束。\n5. 因此带先验结构的协方差估计可写成凸优化问题。",
+    "source_summary": "ML covariance estimation with information matrix"
+  },
+  {
+    "page": "ch07-statistical-estimation.html",
+    "pair": 32,
+    "term": "ch07-statistical-estimation.html#pair-32",
+    "kind": "definition",
+    "title": "MAP estimation",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. MAP 在似然之外加入参数 $x$ 的先验密度。\n2. 观测前, $p_x(x)$ 表示对 $x$ 的已有认识。\n3. 观测后, 后验密度 $p_{x|y}(x,y)$ 结合了先验和观测。\n4. MAP 选择使后验密度最大的 $x$。\n5. 它是 ML 的 Bayes 版本: ML 只看数据, MAP 同时看数据和先验。",
+    "source_summary": "Maximum a posteriori probability estimation"
+  },
+  {
+    "page": "ch07-statistical-estimation.html",
+    "pair": 36,
+    "term": "ch07-statistical-estimation.html#pair-36",
+    "kind": "operation",
+    "title": "MAP objective decomposition",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. Bayes 公式给出后验密度与似然和先验的乘积成正比。\n2. 对后验取对数, 乘积变成求和。\n3. MAP 目标成为 $\\log p_{y|x}(x,y)+\\log p_x(x)$。\n4. 第一项奖励解释观测数据的能力。\n5. 第二项奖励符合先验的参数值, 在优化中表现为正则化项。",
+    "source_summary": "MAP estimate as likelihood plus prior"
+  },
+  {
+    "page": "ch07-statistical-estimation.html",
+    "pair": 37,
+    "term": "ch07-statistical-estimation.html#pair-37",
+    "kind": "condition",
+    "title": "MAP as regularized ML",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. ML 最大化对数似然。\n2. MAP 最大化对数似然加对数先验。\n3. 等价地, 最小化负对数似然加负对数先验。\n4. 若先验是高斯, 负对数先验是二次正则项。\n5. 因此许多正则化估计可以解释为某个先验下的 MAP 估计。",
+    "source_summary": "MAP differs from ML by a prior term"
+  },
+  {
+    "page": "ch07-statistical-estimation.html",
+    "pair": 42,
+    "term": "ch07-statistical-estimation.html#pair-42",
+    "kind": "example",
+    "title": "MAP with perfect linear measurements",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 精确线性测量给出约束 $Ax=y$。\n2. 没有噪声时, 似然只允许满足该等式的参数。\n3. MAP 因此在可行集 $Ax=y$ 上最大化先验密度。\n4. 等价地, 最小化负对数先验 subject to $Ax=y$。\n5. 若先验可分离且 log-concave, 这就是一个凸的 least-penalty 问题。",
+    "source_summary": "MAP with perfect linear measurements"
+  },
+  {
+    "page": "ch07-statistical-estimation.html",
+    "pair": 47,
+    "term": "ch07-statistical-estimation.html#pair-47",
+    "kind": "definition",
+    "title": "Finite distribution simplex",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 随机变量只取有限个值 $\\alpha_1,\\ldots,\\alpha_n$。\n2. 分布由概率向量 $p$ 完全描述。\n3. 概率必须满足 $p\\succeq0$。\n4. 总概率为一, 即 $\\mathbf{1}^Tp=1$。\n5. 因此所有可能分布构成概率单纯形, 这是凸集。",
+    "source_summary": "Distribution on a finite set"
+  },
+  {
+    "page": "ch07-statistical-estimation.html",
+    "pair": 50,
+    "term": "ch07-statistical-estimation.html#pair-50",
+    "kind": "operation",
+    "title": "Prior information as linear constraints",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 对有限分布, 期望 $\\mathbf E f(X)$ 等于 $\\sum_i p_i f(\\alpha_i)$。\n2. 令 $c_i=f(\\alpha_i)$, 期望就是 $c^Tp$。\n3. 因此已知均值、矩、集合概率等先验信息常可写成线性等式或不等式。\n4. 这些约束与概率单纯形相交仍是凸集。\n5. 后续估计就是在这个凸集合中选择一个分布。",
+    "source_summary": "Prior information for nonparametric distribution estimation"
+  },
+  {
+    "page": "ch07-statistical-estimation.html",
+    "pair": 58,
+    "term": "ch07-statistical-estimation.html#pair-58",
+    "kind": "operation",
+    "title": "Bounding probabilities by optimization",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 把先验信息汇总为 $p\\in\\mathcal P$。\n2. 要给某个概率或期望上界, 把对应量写成 $c^Tp$。\n3. 求最大值: maximize $c^Tp$ subject to $p\\in\\mathcal P$。\n4. 求最小值则改为 minimize $c^Tp$。\n5. 这样概率界问题变成线性或凸优化问题。",
+    "source_summary": "Bounding probabilities and expected values"
+  },
+  {
+    "page": "ch07-statistical-estimation.html",
+    "pair": 62,
+    "term": "ch07-statistical-estimation.html#pair-62",
+    "kind": "condition",
+    "title": "Maximum entropy distribution",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 熵为 $-\\sum_i p_i\\log p_i$。\n2. 最大熵等价于最小化 $\\sum_i p_i\\log p_i$。\n3. 函数 $u\\log u$ 是凸函数。\n4. 因此目标是凸函数求和。\n5. 在凸先验集合 $\\mathcal P$ 上求解, 得到与先验一致且额外假设最少的分布。",
+    "source_summary": "Maximum entropy estimation"
+  },
+  {
+    "page": "ch07-statistical-estimation.html",
+    "pair": 64,
+    "term": "ch07-statistical-estimation.html#pair-64",
+    "kind": "condition",
+    "title": "Minimum KL divergence",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 给定先验分布 $q$, 用 KL 散度衡量 $p$ 偏离 $q$ 的程度。\n2. 目标为 $D_{\\mathrm{kl}}(p\\|q)=\\sum_i p_i\\log(p_i/q_i)$。\n3. 在 $q_i>0$ 时, 该函数对 $p$ 凸。\n4. 约束仍是 $p\\in\\mathcal P$。\n5. 所以最小 KL 估计是在满足先验约束的分布中选择最接近 $q$ 的一个。",
+    "source_summary": "Minimum Kullback-Leibler divergence"
+  },
+  {
+    "page": "ch07-statistical-estimation.html",
+    "pair": 78,
+    "term": "ch07-statistical-estimation.html#pair-78",
+    "kind": "definition",
+    "title": "Deterministic detector",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 观测值 $X$ 只能取有限个值。\n2. 假设编号 $\\theta$ 也来自有限集合。\n3. 确定性检测器是函数 $\\psi(X)$, 每个观测值只输出一个假设。\n4. 它可以看成把每个观测类别分配给一个假设类别。\n5. 后续随机检测器会把这个“硬分配”放松为概率分配。",
+    "source_summary": "Deterministic detector definition"
+  },
+  {
+    "page": "ch07-statistical-estimation.html",
+    "pair": 83,
+    "term": "ch07-statistical-estimation.html#pair-83",
+    "kind": "operation",
+    "title": "Detection probability matrix",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 矩阵 $P$ 给出每个假设下观测值的分布。\n2. 矩阵 $T$ 给出每个观测值下检测器输出的分布。\n3. 二者相乘 $D=TP$。\n4. 元素 $D_{ij}$ 表示真实假设为 $j$ 时输出 $i$ 的概率。\n5. 因为 $D$ 是 $T$ 的线性函数, 关于 $D$ 的线性或凸目标也能转成关于 $T$ 的凸优化。",
+    "source_summary": "Detection probability matrix"
+  },
+  {
+    "page": "ch07-statistical-estimation.html",
+    "pair": 86,
+    "term": "ch07-statistical-estimation.html#pair-86",
+    "kind": "condition",
+    "title": "Convex detector design objectives",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 检测器设计变量是随机矩阵 $T$。\n2. 检测概率矩阵 $D=TP$ 是 $T$ 的仿射函数。\n3. 许多目标, 如错误概率上界、最大错误概率、加权错误概率, 都是 $D$ 的线性或分段线性凸函数。\n4. 约束也通常是关于 $D$ 或 $T$ 的线性约束。\n5. 因此最优检测器设计可写成 LP 或其他凸优化问题。",
+    "source_summary": "Optimal detector design as convex optimization"
+  },
+  {
+    "page": "ch07-statistical-estimation.html",
+    "pair": 90,
+    "term": "ch07-statistical-estimation.html#pair-90",
+    "kind": "example",
+    "title": "Minimax detector design",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 对每个假设 $j$, 定义错误概率 $P^e_j$。\n2. minimax 目标是最小化最坏错误概率 $\\max_j P^e_j$。\n3. 引入变量 $t$, 加约束 $P^e_j\\le t$ for all $j$。\n4. 目标变成 minimize $t$。\n5. 因为 $P^e_j$ 是 $D$ 的线性函数, 该问题是线性规划。",
+    "source_summary": "Minimax detector design"
+  },
+  {
+    "page": "ch07-statistical-estimation.html",
+    "pair": 101,
+    "term": "ch07-statistical-estimation.html#pair-101",
+    "kind": "operation",
+    "title": "Scalarizing detector trade-offs",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 多目标检测器设计同时考虑许多误判概率。\n2. 选择权重矩阵 $W$。\n3. 加权和目标写成 $\\sum_{ij}W_{ij}D_{ij}=\\operatorname{tr}(W^TD)$。\n4. 因为 $D=TP$, 该目标对 $T$ 是线性的。\n5. 改变权重可在不同 Pareto 最优检测器之间移动。",
+    "source_summary": "Multicriterion scalarization for detector design"
+  },
+  {
+    "page": "ch07-statistical-estimation.html",
+    "pair": 107,
+    "term": "ch07-statistical-estimation.html#pair-107",
+    "kind": "condition",
+    "title": "MAP and ML detectors",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. Bayes 检测器使用先验概率 $q_i$。\n2. 对观测 $X=k$, MAP 选择最大化 $q_jp_{kj}$ 的假设 $j$。\n3. 若先验均匀, $q_j$ 对所有 $j$ 相同。\n4. 此时最大化 $q_jp_{kj}$ 等价于最大化 $p_{kj}$。\n5. 因而均匀先验下 MAP 检测器退化为 ML 检测器。",
+    "source_summary": "MAP detector reduces to ML under uniform prior"
+  },
+  {
+    "page": "ch07-statistical-estimation.html",
+    "pair": 121,
+    "term": "ch07-statistical-estimation.html#pair-121",
+    "kind": "example",
+    "title": "Robust minimax detector for finite uncertainty",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 若可能的观测分布矩阵是有限集合 $P_1,\\ldots,P_k$。\n2. 对每个 $P_l$, 检测概率矩阵为 $D_l=TP_l$。\n3. 最坏错误概率要求同时约束所有 $l$ 和所有假设。\n4. 引入变量 $t$, 加线性约束使每种情形的错误概率不超过 $t$。\n5. 因此有限不确定集合下的鲁棒 minimax 检测器可写成 LP。",
+    "source_summary": "Robust minimax detector for finite uncertainty set"
+  },
+  {
+    "page": "ch07-statistical-estimation.html",
+    "pair": 132,
+    "term": "ch07-statistical-estimation.html#pair-132",
+    "kind": "condition",
+    "title": "Chebyshev upper bound idea",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 想上界 $\\operatorname{prob}(X\\in C)$。\n2. 找一个函数 $f$ 满足 $f(z)\\ge\\mathbf{1}_C(z)$ for all $z\\in S$。\n3. 对两边取期望, 得到 $\\mathbf E f(X)\\ge\\operatorname{prob}(X\\in C)$。\n4. 若 $\\mathbf E f(X)$ 可由已知矩信息计算, 它就是一个有效上界。\n5. 优化 Chebyshev 界就是在可选函数族中寻找期望最小的上界函数。",
+    "source_summary": "Chebyshev bound via majorizing indicator functions"
+  },
+  {
+    "page": "ch07-statistical-estimation.html",
+    "pair": 144,
+    "term": "ch07-statistical-estimation.html#pair-144",
+    "kind": "condition",
+    "title": "Chernoff bound",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 对事件 $X\\ge u$, 取任意 $\\lambda\\ge0$。\n2. 若 $X\\ge u$, 则 $e^{\\lambda(X-u)}\\ge1$。\n3. 因此指示函数满足 $\\mathbf{1}_{X\\ge u}\\le e^{\\lambda(X-u)}$。\n4. 对两边取期望, 得到概率上界。\n5. 再对 $\\lambda\\ge0$ 取最小, 得到 Chernoff 界。",
+    "source_summary": "Chernoff bound derivation"
+  },
+  {
+    "page": "ch07-statistical-estimation.html",
+    "pair": 147,
+    "term": "ch07-statistical-estimation.html#pair-147",
+    "kind": "operation",
+    "title": "General Chernoff bound as convex optimization",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 用指数函数 $f(z)=e^{\\lambda^Tz+\\mu}$ 上界集合 $C$ 的指示函数。\n2. 条件 $f(z)\\ge1$ on $C$ 等价于 $\\lambda^Tz+\\mu\\ge0$ on $C$。\n3. 概率上界为 $\\mathbf E e^{\\lambda^TX+\\mu}$。\n4. 取对数后目标是 $\\mu+\\log\\mathbf E e^{\\lambda^TX}$。\n5. 对许多分布, log moment generating function 是凸函数, 因而得到凸优化问题。",
+    "source_summary": "General Chernoff bound formulation"
+  },
+  {
+    "page": "ch07-statistical-estimation.html",
+    "pair": 166,
+    "term": "ch07-statistical-estimation.html#pair-166",
+    "kind": "definition",
+    "title": "Basic experiment design problem",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 候选实验由向量 $v_1,\\ldots,v_p$ 给出。\n2. 设计变量决定每种实验做多少次。\n3. 信息矩阵由各实验贡献的外积加权求和得到。\n4. 误差协方差与信息矩阵的逆相关。\n5. 因此实验设计是在预算内选择实验组合, 让估计误差矩阵尽可能小。",
+    "source_summary": "Basic experiment design"
+  },
+  {
+    "page": "ch07-statistical-estimation.html",
+    "pair": 170,
+    "term": "ch07-statistical-estimation.html#pair-170",
+    "kind": "condition",
+    "title": "Relaxed experiment design is convex",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 原实验次数 $m_i$ 是整数, 会导致组合优化。\n2. 松弛后使用连续权重 $\\lambda_i\\ge0$。\n3. 加约束 $\\mathbf{1}^T\\lambda=1$ 表示实验比例。\n4. 信息矩阵是 $\\lambda$ 的仿射函数。\n5. 常见误差矩阵目标在半正定序下保持凸性, 所以松弛问题是凸优化问题。",
+    "source_summary": "Relaxed experiment design problem"
+  },
+  {
+    "page": "ch07-statistical-estimation.html",
+    "pair": 175,
+    "term": "ch07-statistical-estimation.html#pair-175",
+    "kind": "example",
+    "title": "D-optimal design",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. D-最优设计最小化误差协方差矩阵的行列式。\n2. 行列式对应置信椭球体积的平方尺度。\n3. 等价地, 常写成最大化信息矩阵的 $\\log\\det$。\n4. $\\log\\det$ 对正定矩阵是凹函数, 因此最大化它是凸优化形式。\n5. 该准则倾向于整体缩小估计不确定性的体积。",
+    "source_summary": "D-optimal experiment design"
+  }
+]
