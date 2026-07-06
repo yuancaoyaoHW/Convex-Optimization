@@ -1,0 +1,272 @@
+[
+  {
+    "page": "ch11-interior-point.html",
+    "pair": 2,
+    "term": "ch11-interior-point.html#pair-2",
+    "kind": "definition",
+    "title": "Inequality constrained minimization",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 本章处理 minimize $f_0(x)$ subject to $f_i(x)\\le0$ 和 $Ax=b$。\n2. 目标和不等式函数都是凸且二阶可微。\n3. 等式约束仍是仿射约束。\n4. 不等式约束使可行域有边界, Newton 法不能直接跨过边界。\n5. 内点法的思想是在严格可行域内部逐步逼近最优点。",
+    "source_summary": "Inequality constrained convex optimization problem"
+  },
+  {
+    "page": "ch11-interior-point.html",
+    "pair": 3,
+    "term": "ch11-interior-point.html#pair-3",
+    "kind": "condition",
+    "title": "Strict feasibility and Slater condition",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 严格可行性要求存在 $x$ 满足 $Ax=b$ 且 $f_i(x)<0$。\n2. 这正是本章问题的 Slater 条件。\n3. Slater 条件保证强对偶性。\n4. 因而存在最优对偶变量 $\\lambda^\\star,\\nu^\\star$。\n5. 后续用对偶间隙衡量精度时依赖这个性质。",
+    "source_summary": "Strict feasibility assumption and Slater condition"
+  },
+  {
+    "page": "ch11-interior-point.html",
+    "pair": 4,
+    "term": "ch11-interior-point.html#pair-4",
+    "kind": "operation",
+    "title": "Interior-point method strategy",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 内点法不直接求解原始 KKT 条件。\n2. 它构造一系列等式约束问题或修正 KKT 方程。\n3. 每个子问题可用 Newton 法高效求解。\n4. 参数逐步变化, 子问题解沿中心路径移动。\n5. 当参数足够大时, 中心点接近原问题最优解。",
+    "source_summary": "Interior-point methods via Newton steps"
+  },
+  {
+    "page": "ch11-interior-point.html",
+    "pair": 5,
+    "term": "ch11-interior-point.html#pair-5",
+    "kind": "condition",
+    "title": "Hierarchy of optimization algorithms",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 等式约束二次问题的 KKT 条件是线性方程。\n2. 无约束光滑问题可用 Newton 法求解非线性最优性条件。\n3. 等式约束问题把 Newton 法扩展到 KKT 系统。\n4. 不等式约束问题再引入 barrier 或修正互补条件。\n5. 内点法可看作这一层层推广的下一步。",
+    "source_summary": "Interior-point methods as a hierarchy"
+  },
+  {
+    "page": "ch11-interior-point.html",
+    "pair": 13,
+    "term": "ch11-interior-point.html#pair-13",
+    "kind": "definition",
+    "title": "Logarithmic barrier approximation",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 原约束可用指示函数 $I_-(f_i(x))$ 表示。\n2. barrier 方法用 $-(1/t)\\log(-u)$ 近似 $I_-(u)$。\n3. 当 $u\\uparrow0$ 时, 对数项趋于 $+\\infty$。\n4. 因此迭代点会被推离约束边界。\n5. 参数 $t$ 越大, barrier 越接近原来的硬约束。",
+    "source_summary": "Logarithmic barrier approximation to indicator function"
+  },
+  {
+    "page": "ch11-interior-point.html",
+    "pair": 15,
+    "term": "ch11-interior-point.html#pair-15",
+    "kind": "operation",
+    "title": "Barrier subproblem",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 将每个不等式的指示函数替换为 log barrier。\n2. 得到目标 $f_0(x)-(1/t)\\sum_i\\log(-f_i(x))$。\n3. 等式约束 $Ax=b$ 保留。\n4. 新问题只在严格可行域内有定义。\n5. 因而可用等式约束 Newton 法求解这个光滑近似问题。",
+    "source_summary": "Barrier approximation as equality constrained problem"
+  },
+  {
+    "page": "ch11-interior-point.html",
+    "pair": 16,
+    "term": "ch11-interior-point.html#pair-16",
+    "kind": "definition",
+    "title": "Log barrier domain",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. log barrier 定义为 $\\phi(x)=-\\sum_i\\log(-f_i(x))$。\n2. 它的定义域是所有满足 $f_i(x)<0$ 的点。\n3. 接近边界 $f_i(x)=0$ 时, 对应项趋于 $+\\infty$。\n4. 这让 Newton 步倾向于留在严格可行域内部。\n5. barrier 的定义域正是不等式约束的严格内部。",
+    "source_summary": "Definition and domain of logarithmic barrier"
+  },
+  {
+    "page": "ch11-interior-point.html",
+    "pair": 18,
+    "term": "ch11-interior-point.html#pair-18",
+    "kind": "operation",
+    "title": "Gradient and Hessian of log barrier",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 对单项 $-\\log(-f_i(x))$ 用链式法则求导。\n2. 梯度为 $\\nabla f_i(x)/(-f_i(x))$。\n3. Hessian 包含外积项 $\\nabla f_i(x)\\nabla f_i(x)^T/f_i(x)^2$。\n4. 还包含曲率项 $\\nabla^2 f_i(x)/(-f_i(x))$。\n5. 这些表达式构成 centering Newton 步的线性系统。",
+    "source_summary": "Gradient and Hessian formulas for log barrier"
+  },
+  {
+    "page": "ch11-interior-point.html",
+    "pair": 20,
+    "term": "ch11-interior-point.html#pair-20",
+    "kind": "definition",
+    "title": "Central path",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 对每个 $t>0$, 考虑 minimize $t f_0(x)+\\phi(x)$ subject to $Ax=b$。\n2. 该问题的解记为 $x^\\star(t)$。\n3. 随 $t$ 变化得到一条曲线。\n4. 这条曲线称为中心路径。\n5. 当 $t\\to\\infty$ 时, 原目标权重增大, 中心点逼近原问题最优点。",
+    "source_summary": "Definition of the central path"
+  },
+  {
+    "page": "ch11-interior-point.html",
+    "pair": 21,
+    "term": "ch11-interior-point.html#pair-21",
+    "kind": "example",
+    "title": "LP log barrier",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 不等式形式 LP 的约束是 $a_i^Tx\\le b_i$。\n2. 写成 $f_i(x)=a_i^Tx-b_i\\le0$。\n3. 对每个约束添加 $-\\log(b_i-a_i^Tx)$。\n4. 所有项求和得到 LP 的 log barrier。\n5. 该 barrier 只在所有松弛量 $b_i-a_i^Tx$ 为正时有定义。",
+    "source_summary": "Log barrier for inequality form linear programming"
+  },
+  {
+    "page": "ch11-interior-point.html",
+    "pair": 24,
+    "term": "ch11-interior-point.html#pair-24",
+    "kind": "condition",
+    "title": "Dual points from the central path",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 中心点满足 $t\\nabla f_0(x)+\\nabla\\phi(x)+A^T\\nu=0$。\n2. 展开 $\\nabla\\phi$ 后, 每个约束项系数为 $1/(-f_i(x))$。\n3. 定义 $\\lambda_i=-1/(t f_i(x))$。\n4. 因为 $f_i(x)<0$, 所以 $\\lambda_i>0$。\n5. 代回即可得到对偶可行性和一个原始-对偶下界证书。",
+    "source_summary": "Dual feasible point induced by central path"
+  },
+  {
+    "page": "ch11-interior-point.html",
+    "pair": 27,
+    "term": "ch11-interior-point.html#pair-27",
+    "kind": "condition",
+    "title": "Perturbed KKT interpretation",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 原 KKT 条件包含可行性、对偶可行性和互补性 $\\lambda_i f_i(x)=0$。\n2. 中心路径保留原始和对偶可行性。\n3. 但互补性改为 $\\lambda_i f_i(x)=-1/t$。\n4. 当 $t$ 增大时, $-1/t$ 逼近 0。\n5. 因此中心路径可看作 KKT 条件的连续扰动。",
+    "source_summary": "Central path as perturbed KKT conditions"
+  },
+  {
+    "page": "ch11-interior-point.html",
+    "pair": 29,
+    "term": "ch11-interior-point.html#pair-29",
+    "kind": "geometry",
+    "title": "Force field interpretation",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 每个不等式约束在边界附近产生向内的 barrier force。\n2. 越接近边界, $1/(-f_i(x))$ 越大, 排斥力越强。\n3. 目标函数产生朝下降方向的 force。\n4. 中心点处这些力与等式约束法向力达到平衡。\n5. 随 $t$ 增大, 目标 force 变强, 平衡点向最优边界移动。",
+    "source_summary": "Mechanical force interpretation of the central path"
+  },
+  {
+    "page": "ch11-interior-point.html",
+    "pair": 33,
+    "term": "ch11-interior-point.html#pair-33",
+    "kind": "condition",
+    "title": "Duality gap from barrier parameter",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 中心点 $x^\\star(t)$ 可构造对偶可行点。\n2. 由扰动互补性有 $\\lambda_i(t)(-f_i(x^\\star(t)))=1/t$。\n3. 对所有 $m$ 个约束求和得到总互补量 $m/t$。\n4. 这个量正是可用于证明的对偶间隙上界。\n5. 因而 $m/t\\le\\epsilon$ 给出自然停止准则。",
+    "source_summary": "Suboptimality and certificate from central path"
+  },
+  {
+    "page": "ch11-interior-point.html",
+    "pair": 35,
+    "term": "ch11-interior-point.html#pair-35",
+    "kind": "operation",
+    "title": "Solving a sequence of centering problems",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. barrier 方法不是一次取极大的 $t$。\n2. 它先解一个较容易的 centering problem。\n3. 然后用当前中心点作为下一次 Newton 法的起点。\n4. 每轮把 $t$ 乘以因子 $\\mu$。\n5. 这种 warm start 让一系列子问题的总成本保持可控。",
+    "source_summary": "Barrier method as sequence of centering problems"
+  },
+  {
+    "page": "ch11-interior-point.html",
+    "pair": 36,
+    "term": "ch11-interior-point.html#pair-36",
+    "kind": "operation",
+    "title": "Barrier method algorithm",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 从严格可行点和初始 $t$ 开始。\n2. centering step 求解 minimize $t f_0+\\phi$ subject to $Ax=b$。\n3. 若 $m/t\\le\\epsilon$, 返回当前点。\n4. 否则令 $t:=\\mu t$。\n5. 重复后对偶间隙按外层迭代几何下降。",
+    "source_summary": "Algorithm 11.1 barrier method"
+  },
+  {
+    "page": "ch11-interior-point.html",
+    "pair": 41,
+    "term": "ch11-interior-point.html#pair-41",
+    "kind": "condition",
+    "title": "Choice of barrier update factor",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. $\\mu$ 小时, 每次 $t$ 增长少。\n2. 相邻中心点很近, 每个 centering problem 只需少量 Newton 步。\n3. 但外层迭代次数会增加。\n4. $\\mu$ 大时外层少, 但相邻中心点距离大, 内层 Newton 步更多。\n5. 所以 $\\mu$ 的选择是在内外层迭代之间折中。",
+    "source_summary": "Trade-off in choosing mu"
+  },
+  {
+    "page": "ch11-interior-point.html",
+    "pair": 44,
+    "term": "ch11-interior-point.html#pair-44",
+    "kind": "condition",
+    "title": "Choice of initial barrier parameter",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 初始 $t^{(0)}$ 太大, 第一次 centering 离起点远。\n2. 这会导致第一轮 Newton 迭代过多。\n3. 初始 $t^{(0)}$ 太小, 对偶间隙 $m/t$ 很大。\n4. 外层需要更多次放大 $t$ 才能达到精度。\n5. 因而初始参数也存在启动成本和外层次数的折中。",
+    "source_summary": "Trade-off in choosing initial t"
+  },
+  {
+    "page": "ch11-interior-point.html",
+    "pair": 46,
+    "term": "ch11-interior-point.html#pair-46",
+    "kind": "operation",
+    "title": "Infeasible-start centering",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 标准 barrier 方法要求起点严格可行且满足 $Ax=b$。\n2. 变体只要求满足不等式严格可行和定义域条件。\n3. centering step 用第 10 章的不可行起点 Newton 法。\n4. 该方法同时降低等式残差和最优性残差。\n5. 这样可减少寻找等式可行初始点的负担。",
+    "source_summary": "Using infeasible start Newton method for centering"
+  },
+  {
+    "page": "ch11-interior-point.html",
+    "pair": 62,
+    "term": "ch11-interior-point.html#pair-62",
+    "kind": "condition",
+    "title": "Barrier method iteration complexity",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 初始 centering 后的对偶间隙为 $m/t^{(0)}$。\n2. 每次外层迭代把 $t$ 乘以 $\\mu$。\n3. 第 $k$ 次后间隙为 $m/(\\mu^k t^{(0)})$。\n4. 要使它不超过 $\\epsilon$, 需 $\\mu^k\\ge m/(\\epsilon t^{(0)})$。\n5. 因此外层次数是 $\\lceil\\log(m/(\\epsilon t^{(0)}))/\\log\\mu\\rceil$。",
+    "source_summary": "Convergence analysis for barrier method"
+  },
+  {
+    "page": "ch11-interior-point.html",
+    "pair": 64,
+    "term": "ch11-interior-point.html#pair-64",
+    "kind": "operation",
+    "title": "Newton step for barrier KKT system",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. centering problem 的目标是 $t f_0+\\phi$。\n2. 其 Hessian 是 $t\\nabla^2 f_0+\\nabla^2\\phi$。\n3. 等式约束带来 KKT 块矩阵。\n4. 右端由 $t\\nabla f_0+\\nabla\\phi$ 和等式残差组成。\n5. 解这个系统得到 barrier centering 的 Newton 步。",
+    "source_summary": "Newton equations for centering problem"
+  },
+  {
+    "page": "ch11-interior-point.html",
+    "pair": 65,
+    "term": "ch11-interior-point.html#pair-65",
+    "kind": "operation",
+    "title": "Modified KKT equations",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 修正 KKT 方程包含变量 $x,\\lambda,\\nu$。\n2. 互补条件替换为 $-\\lambda_i f_i(x)=1/t$。\n3. 可先消去 $\\lambda_i=-1/(t f_i(x))$。\n4. 代入对偶可行性后得到只含 $x,\\nu$ 的方程。\n5. 对这些方程做 Newton 步与 centering Newton 步一致。",
+    "source_summary": "Newton step for modified KKT equations"
+  },
+  {
+    "page": "ch11-interior-point.html",
+    "pair": 67,
+    "term": "ch11-interior-point.html#pair-67",
+    "kind": "definition",
+    "title": "Phase I method",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. barrier 方法需要严格可行起点。\n2. 若起点未知, 先运行 phase I。\n3. phase I 的目标是找到严格可行点或证明不可行。\n4. 找到的严格可行点作为 phase II barrier 方法起点。\n5. 因此 phase I 是内点法的初始化阶段。",
+    "source_summary": "Phase I stage for finding strictly feasible point"
+  },
+  {
+    "page": "ch11-interior-point.html",
+    "pair": 69,
+    "term": "ch11-interior-point.html#pair-69",
+    "kind": "operation",
+    "title": "Basic phase I formulation",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 引入标量松弛变量 $s$。\n2. 将约束改写为 $f_i(x)\\le s$。\n3. 最小化 $s$ 并保留 $Ax=b$。\n4. 若最优 $s$ 为负, 则所有原约束都严格满足。\n5. 这样原可行性问题转成一个凸优化问题。",
+    "source_summary": "Basic phase I problem with maximum infeasibility"
+  },
+  {
+    "page": "ch11-interior-point.html",
+    "pair": 70,
+    "term": "ch11-interior-point.html#pair-70",
+    "kind": "condition",
+    "title": "Interpreting phase I optimal value",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 若 phase I 最优值 $\\bar p^\\star<0$, 存在 $s<0$ 的可行解。\n2. 此时 $f_i(x)<0$, 原问题严格可行。\n3. 若 $\\bar p^\\star>0$, 即使允许正松弛也无法让最大违反量降到 0。\n4. 因而原不等式系统不可行。\n5. $\\bar p^\\star=0$ 是边界情形, 数值上只能近似判断。",
+    "source_summary": "Three cases for phase I optimal value"
+  },
+  {
+    "page": "ch11-interior-point.html",
+    "pair": 73,
+    "term": "ch11-interior-point.html#pair-73",
+    "kind": "operation",
+    "title": "Sum of infeasibilities phase I",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 基本 phase I 最小化最大违反量。\n2. 另一种做法为每个约束引入 $s_i$。\n3. 目标改为最小化 $\\mathbf1^Ts$。\n4. 这衡量总不可行度而不是最坏不可行度。\n5. 不同 phase I 目标会给出不同的不可行性诊断点。",
+    "source_summary": "Phase I based on sum of infeasibilities"
+  },
+  {
+    "page": "ch11-interior-point.html",
+    "pair": 77,
+    "term": "ch11-interior-point.html#pair-77",
+    "kind": "condition",
+    "title": "Phase I central path meets phase II",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 可以设计 phase I barrier 问题, 使其中心路径与原问题中心路径相交。\n2. 当 phase I 路径到达交点时, 已得到严格可行点。\n3. 这个点同时接近 phase II 的中心路径。\n4. 因而切换到原 barrier 方法时不需要重新远距离 centering。\n5. 这减少了初始化和正式求解之间的损耗。",
+    "source_summary": "Terminating phase I near the phase II central path"
+  },
+  {
+    "page": "ch11-interior-point.html",
+    "pair": 79,
+    "term": "ch11-interior-point.html#pair-79",
+    "kind": "operation",
+    "title": "Phase I via infeasible-start Newton",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 也可用不可行起点 Newton 法完成 phase I。\n2. 做法是把原问题改写成带松弛变量的等价形式。\n3. 初始点不必满足所有等式或原始约束。\n4. Newton 步同时修正残差和推进可行性。\n5. 若成功找到严格可行点, 再进入标准 barrier 方法。",
+    "source_summary": "Phase I using infeasible start Newton method"
+  },
+  {
+    "page": "ch11-interior-point.html",
+    "pair": 84,
+    "term": "ch11-interior-point.html#pair-84",
+    "kind": "example",
+    "title": "Cost near feasibility boundary",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 当问题明显可行或明显不可行时, phase I 通常很快。\n2. 难点出现在接近可行性边界时。\n3. 这时严格可行点或不可行证书都更难区分。\n4. Newton 迭代次数会明显增加。\n5. 因而 phase I 成本主要受问题离可行性边界的距离影响。",
+    "source_summary": "Feasibility example near boundary"
+  },
+  {
+    "page": "ch11-interior-point.html",
+    "pair": 86,
+    "term": "ch11-interior-point.html#pair-86",
+    "kind": "example",
+    "title": "Feasibility with slack log barrier",
+    "body": "### Learning note\n\n#### Proof steps\n\n1. 线性不等式可写成 $Ax+s=b(\\gamma)$ 并要求 $s>0$。\n2. 对 slack 变量使用目标 $-\\sum_i\\log s_i$。\n3. 等式由不可行起点 Newton 法逐步满足。\n4. 若找到正 slack, 就得到原不等式的严格可行点。\n5. 这展示了 barrier 与不可行起点 Newton 法结合处理可行性。",
+    "source_summary": "Feasibility problem solved with infeasible start Newton method"
+  }
+]
