@@ -239,25 +239,27 @@ main.index {
 .pair.fig-block .fig-caption .figref { font-weight: 700; color: var(--accent); }
 
 /* ---------- column splitter (全局竖向分隔条, JS 注入) ---------- */
+/* 平时透明: 只保留 col-resize 命中区, 让两栏间显示 .en 原生的 1px border-right;
+   hover/drag 时才显示 accent 色高亮条, 这样也不会遮挡全宽的 .pair.fig-block 图片 */
 .cv-splitter {
   position: absolute;
   top: 0;
   bottom: 0;
   width: var(--splitter-w);
   margin-left: calc(var(--splitter-w) / -2);
-  background: var(--splitter-color);
+  background: transparent;
   cursor: col-resize;
   z-index: 30;
   user-select: none;
   -webkit-user-select: none;
-  transition: background .15s ease;
+  transition: background .12s ease;
 }
 .cv-splitter::after {
   content: "";
   position: absolute;
   top: 0; bottom: 0;
-  left: calc(var(--splitter-w) / -2 - 3px);
-  width: calc(var(--splitter-w) + 6px);
+  left: calc(var(--splitter-w) / -2 - 4px);
+  width: calc(var(--splitter-w) + 8px);
 }
 .cv-splitter:hover,
 .cv-splitter.is-dragging {
