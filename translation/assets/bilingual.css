@@ -13,6 +13,13 @@
   --ok: #166534;
   --en-bg: #f6f3ed;
   --zh-bg: #ffffff;
+  /* 可拖动分隔条: en 列占比 (0.2 ~ 0.8), zh 列占余量 */
+  --col-en: 1fr;
+  --col-zh: 1fr;
+  --col-en-pct: 50;
+  --splitter-w: 6px;
+  --splitter-color: var(--rule);
+  --splitter-hover: var(--accent);
   font-family: "Segoe UI", "Noto Sans SC", "Source Han Sans SC", Arial, sans-serif;
 }
 
@@ -80,8 +87,13 @@ main.doc {
 /* ---------- bilingual pair ---------- */
 .pair {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: var(--col-en) var(--col-zh);
   border-bottom: 1px solid var(--rule-soft);
+  /* 性能: 让每个 pair 的列宽变化不向上冒泡触发整页重排;
+     拖动 splitter 时只有 pair 内部 grid track 重排, 主布局不变 */
+  contain: layout style;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 120px;
 }
 .pair > .en, .pair > .zh {
   padding: 16px 22px;
@@ -225,3 +237,37 @@ main.index {
   padding-left: 16px;
 }
 .pair.fig-block .fig-caption .figref { font-weight: 700; color: var(--accent); }
+
+/* ---------- column splitter (全局竖向分隔条, JS 注入) ---------- */
+.cv-splitter {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--splitter-w);
+  margin-left: calc(var(--splitter-w) / -2);
+  background: var(--splitter-color);
+  cursor: col-resize;
+  z-index: 30;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: background .15s ease;
+}
+.cv-splitter::after {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0;
+  left: calc(var(--splitter-w) / -2 - 3px);
+  width: calc(var(--splitter-w) + 6px);
+}
+.cv-splitter:hover,
+.cv-splitter.is-dragging {
+  background: var(--splitter-hover);
+}
+.cv-splitter.is-dragging {
+  cursor: ew-resize;
+}
+body.cv-dragging { cursor: col-resize !important; user-select: none; }
+body.cv-dragging iframe { pointer-events: none; }
+@media (max-width: 760px) {
+  .cv-splitter { display: none; }
+}
